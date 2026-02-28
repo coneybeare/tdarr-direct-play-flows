@@ -1,0 +1,52 @@
+name: Bug Report
+description: A flow is behaving incorrectly or producing unexpected output
+labels: [bug]
+body:
+  - type: dropdown
+    id: flow
+    attributes:
+      label: Which flow?
+      options:
+        - "01 - Direct Play Optimizer (Full Pipeline)"
+        - "02 - Audio Fix: Stereo AAC 2.0 + EAC3 5.1"
+        - "03 - HDR-Aware Transcode"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the unexpected behavior. Include what node failed, what the output was, and what you expected instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: source_file
+    attributes:
+      label: Source file details
+      description: "Output of `ffprobe -v quiet -print_format json -show_streams YOUR_FILE` (remove personal paths)"
+      render: json
+
+  - type: textarea
+    id: tdarr_log
+    attributes:
+      label: Tdarr worker log (relevant excerpt)
+      description: Paste the relevant section of the Tdarr worker log for this file.
+      render: text
+
+  - type: input
+    id: tdarr_version
+    attributes:
+      label: Tdarr version
+      placeholder: "e.g. 2.26.01"
+    validations:
+      required: true
+
+  - type: input
+    id: hardware
+    attributes:
+      label: GPU / hardware
+      placeholder: "e.g. NVIDIA T400, Intel Arc, software only"
+    validations:
+      required: true

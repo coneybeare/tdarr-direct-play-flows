@@ -1,5 +1,7 @@
 # tdarr-direct-play-flows
 
+[![Validate Flows](https://github.com/coneybeare/tdarr-direct-play-flows/actions/workflows/test.yml/badge.svg)](https://github.com/coneybeare/tdarr-direct-play-flows/actions/workflows/test.yml)
+
 Tdarr flows optimized to maximize direct-play compatibility on iOS, macOS, Plex, and web (video.js) clients — while reducing file size using HEVC (H.265).
 
 Designed for a **Synology NAS** with an **NVIDIA T400 GPU** running Tdarr in Docker via Portainer, but adaptable to any NVENC-capable system.

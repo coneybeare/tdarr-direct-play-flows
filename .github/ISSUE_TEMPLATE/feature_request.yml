@@ -1,0 +1,38 @@
+name: Feature Request
+description: Suggest an improvement or new flow variant
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the use case or limitation you're running into.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: Describe what you'd like to see — a new flow, a new node, a configuration option, etc.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Have you tried working around this? What did you try?
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - New flow variant
+        - Change to an existing flow
+        - Documentation improvement
+        - Test improvement
+        - Other
+    validations:
+      required: true
