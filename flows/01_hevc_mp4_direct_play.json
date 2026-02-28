@@ -1,0 +1,1003 @@
+{
+  "name": "01 - Direct Play Optimizer (Full Pipeline)",
+  "description": "Full pipeline: HEVC/MP4 with stereo AAC 2.0 + EAC3 5.1 surround, hvc1 tag, faststart, resolution-tiered quality, NVENC GPU with software fallback, health check, duration validation, optional Plex/arr notifications. Configure via the top config variable nodes.",
+  "tags": "hevc,mp4,direct-play,nvenc,aac,eac3,hvc1,faststart,synology",
+  "flowPlugins": [
+
+    {
+      "name": "Input File",
+      "sourceRepo": "Community",
+      "pluginName": "inputFile",
+      "version": "1.0.0",
+      "id": "inp_001",
+      "position": { "x": 0, "y": 0 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── CONFIGURATION ─────────────────────────────\nAll user-configurable options are set here as\nflow variables. Edit the VALUE field of each\n'Set Variable' node below to configure:\n\n  remove_commentary  (true/false)\n    Remove director commentary, audio description,\n    and hearing-impaired audio tracks.\n    Default: true  ★ Opinionated — set false to keep.\n\n  enable_plex_notify  (true/false)\n    Trigger a Plex library refresh after each file\n    is replaced. Requires Plex URL+token in the\n    'Notify Plex' webRequest node near the bottom.\n    Default: false  ★ Must configure URL+token first.\n\n  enable_arr_notify  (true/false)\n    Notify Radarr/Sonarr after file replacement.\n    Requires API key in the 'Notify Arr' node.\n    Default: false  ★ Must configure API key first.",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_config",
+      "position": { "x": 0, "y": 200 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Set Variable: remove_commentary\n★ Change value to 'false' to keep commentary tracks",
+      "sourceRepo": "Community",
+      "pluginName": "setFlowVariable",
+      "version": "1.0.0",
+      "id": "var_rm_commentary",
+      "position": { "x": 0, "y": 430 },
+      "inputsDB": {
+        "variable": "remove_commentary",
+        "value": "true"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Set Variable: enable_plex_notify\n★ Change value to 'true' after configuring\n  the 'Notify Plex' node URL + token below",
+      "sourceRepo": "Community",
+      "pluginName": "setFlowVariable",
+      "version": "1.0.0",
+      "id": "var_enable_plex",
+      "position": { "x": 0, "y": 660 },
+      "inputsDB": {
+        "variable": "enable_plex_notify",
+        "value": "false"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Set Variable: enable_arr_notify\n★ Change value to 'true' after configuring\n  the 'Notify Arr' node API key + host below",
+      "sourceRepo": "Community",
+      "pluginName": "setFlowVariable",
+      "version": "1.0.0",
+      "id": "var_enable_arr",
+      "position": { "x": 0, "y": 890 },
+      "inputsDB": {
+        "variable": "enable_arr_notify",
+        "value": "false"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── GUARD CHECKS ──────────────────────────────\nSkips files already optimal for direct play.\nAll 4 checks must pass to skip processing:\n\n  1. Container is MP4 or M4V\n  2. Video codec is HEVC\n  3. Has at least one AAC audio stream\n  4. Has at least one 2-channel (stereo) stream\n\nAny failure → processing pipeline.\nAll pass → mark done (no re-encode).",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_guards",
+      "position": { "x": 0, "y": 1120 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "GUARD 1 of 4 — Container is MP4/M4V?\n★ CONFIGURE: add extensions as needed",
+      "sourceRepo": "Community",
+      "pluginName": "checkFileExtension",
+      "version": "1.0.0",
+      "id": "grd_ext",
+      "position": { "x": 0, "y": 1350 },
+      "inputsDB": { "extensions": "mp4,m4v" },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "GUARD 2 of 4 — Video codec is HEVC?",
+      "sourceRepo": "Community",
+      "pluginName": "checkVideoCodec",
+      "version": "1.0.0",
+      "id": "grd_vid",
+      "position": { "x": 0, "y": 1580 },
+      "inputsDB": { "codec": "hevc" },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "GUARD 3 of 4 — Has AAC audio stream?",
+      "sourceRepo": "Community",
+      "pluginName": "checkStreamProperty",
+      "version": "1.0.0",
+      "id": "grd_aud",
+      "position": { "x": 0, "y": 1810 },
+      "inputsDB": {
+        "streamType": "audio",
+        "propertyToCheck": "codec_name",
+        "valuesToMatch": "aac",
+        "condition": "includes"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "GUARD 4 of 4 — Has 2-channel (stereo) stream?",
+      "sourceRepo": "Community",
+      "pluginName": "checkChannelCount",
+      "version": "1.0.0",
+      "id": "grd_ch",
+      "position": { "x": 0, "y": 2040 },
+      "inputsDB": { "channelCount": "2" },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "✅ FILE ALREADY OPTIMAL\nAll guards passed. Marking as processed.",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_optimal",
+      "position": { "x": -600, "y": 2270 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Replace Original File\n(no-op: marks file done, nothing changed)",
+      "sourceRepo": "Community",
+      "pluginName": "replaceOriginalFile",
+      "version": "1.0.0",
+      "id": "fl_noop",
+      "position": { "x": -600, "y": 2500 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "🔧 NEEDS PROCESSING\nOne or more guards failed. Running full pipeline.",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_proc",
+      "position": { "x": 0, "y": 2270 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── PRE-CHECK 1: LOW BITRATE SKIP ─────────────\nSkips files with overall bitrate ≤ 1 Mbps.\n\nWhy: Very low-bitrate files are typically trailers,\nextras, featurettes, or already heavily compressed\ncontent. Re-encoding HEVC at very low bitrates:\n  • Produces worse quality than the source\n  • Wastes GPU encode sessions on tiny files\n  • NVENC performs poorly near its quality floor\n\nOutput 1 (>1 Mbps): proceed to processing\nOutput 2 (≤1 Mbps): mark done without re-encoding\n\n★ CONFIGURE: greaterThan=1 (Mbps)\n  Increase to 2 or 3 to also skip low-res trailers.\n  Delete this node and its comment to disable\n  the skip and process ALL files regardless.",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_lowbit",
+      "position": { "x": 0, "y": 2500 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Check Overall Bitrate > 1 Mbps\n★ Config: greaterThan=1 (Mbps) | lessThan=500",
+      "sourceRepo": "Community",
+      "pluginName": "checkOverallBitrate",
+      "version": "1.0.0",
+      "id": "chk_lowbit",
+      "position": { "x": 0, "y": 2730 },
+      "inputsDB": {
+        "unit": "mbps",
+        "greaterThan": "1",
+        "lessThan": "500"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "⏭ SKIP: Bitrate ≤ 1 Mbps\nFile too small/compressed to benefit from HEVC.\nMarking as processed without changes.",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_skip_lowbit",
+      "position": { "x": -600, "y": 2960 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Replace Original File\n(no-op: low-bitrate skip, no changes made)",
+      "sourceRepo": "Community",
+      "pluginName": "replaceOriginalFile",
+      "version": "1.0.0",
+      "id": "fl_skip_lowbit",
+      "position": { "x": -600, "y": 3190 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── PRE-CHECK 2: SOURCE FILE HEALTH CHECK ─────\nRuns a quick integrity check on the source file\nbefore spending GPU time encoding it.\n\nCatches: corrupt containers, missing keyframes,\ntruncated files, unreadable streams.\n\ntype: 'quick' uses HandBrake --scan (fast, ~1s).\n  If HandBrake is not in your Tdarr container,\n  change to 'thorough' (uses FFmpeg, much slower).\ntype: 'thorough' does a full decode pass (minutes).\n\n★ CONFIGURE: type = 'quick' or 'thorough'\n  Delete this node and its comment to disable\n  health checking entirely.",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_health",
+      "position": { "x": 0, "y": 2960 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Health Check Source File\n★ Config: type='quick' (HandBrake) or 'thorough' (FFmpeg)",
+      "sourceRepo": "Community",
+      "pluginName": "runHealthCheck",
+      "version": "1.0.0",
+      "id": "chk_health",
+      "position": { "x": 0, "y": 3190 },
+      "inputsDB": { "type": "quick" },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Begin FFmpeg Command\n(initializes stream map from ffprobe data;\nall downstream nodes modify this command)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandStart",
+      "version": "1.0.0",
+      "id": "ffs_001",
+      "position": { "x": 0, "y": 3420 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── STEP 1: SET CONTAINER → MP4 ───────────────\nforceConform=true auto-removes MP4-incompatible\nstreams: PGS image subtitles, attachments (fonts),\nEIA-608, timed_id3, and mov_text data.\n\n★ CONFIGURE: container = 'mp4' or 'mkv'\n  forceConform = 'true' (recommended) or 'false'",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_mp4",
+      "position": { "x": 0, "y": 3650 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Set Container → MP4\n★ Config: container=mp4 | forceConform=true",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandSetContainer",
+      "version": "1.0.0",
+      "id": "cmd_mp4",
+      "position": { "x": 0, "y": 3880 },
+      "inputsDB": {
+        "container": "mp4",
+        "forceConform": "true"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── STEP 2: REMOVE ALL SUBTITLES ──────────────\nRemoves ALL subtitle streams for maximum direct\nplay compatibility.\n\nRationale: PGS/image subtitles always force\ntranscoding on iOS/Plex/web. Text subs (ASS/SRT)\ncause transcoding on many clients. Removing all\nsubs is the safest option for direct play.\n\n★ OPINIONATED — To keep text subtitles instead:\n  1. Delete this comment and the RemoveSubtitles\n     node below.\n  2. Add RemoveStreamByProperty targeting:\n     codec_name = hdmv_pgs_subtitle,pgssub,\n     dvd_subtitle,dvb_subtitle,dvb_teletext",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_subs",
+      "position": { "x": 0, "y": 4110 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Remove All Subtitles",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRemoveSubtitles",
+      "version": "1.0.0",
+      "id": "cmd_rmsub",
+      "position": { "x": 0, "y": 4340 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── STEP 3: COMMENTARY TRACK REMOVAL ─────────\nControlled by the 'remove_commentary' variable\nset at the top of this flow.\n\n★ Opt-in (default: true). To DISABLE:\n  Change var_rm_commentary value to 'false'.\n\nWhat gets removed (case-insensitive title match):\n  • 'commentary' — director/cast commentary\n  • 'description' — audio descriptions for blind\n  • 'descriptive' — descriptive audio service\n  • 'sdh' — subtitles for deaf/hard of hearing audio\n  • 'hearing impaired' — hearing impaired audio\n  • 'hearing-impaired' — alternate tag form\n\nThese tracks are common in Blu-ray rips and\ntypically never used by home media viewers.\nRemoving them saves space and reduces audio\ntrack confusion in client players.",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_commentary",
+      "position": { "x": 0, "y": 4570 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Check: remove_commentary == 'true'?\n(YES → remove commentary tracks)\n(NO  → skip, keep all audio tracks)",
+      "sourceRepo": "Community",
+      "pluginName": "checkFlowVariable",
+      "version": "1.0.0",
+      "id": "chk_rm_commentary",
+      "position": { "x": 0, "y": 4800 },
+      "inputsDB": {
+        "variable": "remove_commentary",
+        "value": "true",
+        "condition": "=="
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Remove Commentary/Description Audio Tracks\n(matches by stream title tag, case-insensitive)\n★ Edit valuesToRemove to add/remove patterns",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRemoveStreamByProperty",
+      "version": "1.0.0",
+      "id": "cmd_rmcommentary",
+      "position": { "x": 600, "y": 5030 },
+      "inputsDB": {
+        "propertyToCheck": "tags.title",
+        "valuesToRemove": "commentary,comment,description,descriptive,sdh,hearing impaired,hearing-impaired,audio description",
+        "condition": "includes"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── STEP 4: REMOVE DATA STREAMS ───────────────\nRemoves data streams (teletext, SCTE markers,\nchapter data streams, broadcast metadata).\nThese are incompatible with MP4 and unused.",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_data",
+      "position": { "x": 0, "y": 5030 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Remove Data Streams",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRemoveDataStreams",
+      "version": "1.0.0",
+      "id": "cmd_rmdata",
+      "position": { "x": 0, "y": 5260 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── STEP 5: NVENC GPU AVAILABILITY CHECK ──────\nVerifies NVIDIA NVENC (hevc_nvenc) is accessible\nbefore attempting GPU encoding.\n\nOutput 1 (NVENC available):\n  → Resolution-tiered NVENC encoding\n  → Different QP per resolution for optimal\n    quality/size ratio on T400\n\nOutput 2 (NVENC unavailable):\n  → Software libx265 fallback at CRF 22\n  → Much slower but same output format\n  → Common causes: GPU sessions exhausted\n    (T400 limit: 4 simultaneous), driver issue,\n    container missing nvidia runtime\n\n★ CONFIGURE: hardwareEncoder = 'hevc_nvenc'\n  Change to 'hevc_qsv' for Intel QSV, etc.",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_nvenc",
+      "position": { "x": 0, "y": 5490 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Check: NVENC GPU Available?\n★ Config: hardwareEncoder=hevc_nvenc",
+      "sourceRepo": "Community",
+      "pluginName": "checkNodeHardwareEncoder",
+      "version": "1.0.0",
+      "id": "chk_nvenc",
+      "position": { "x": 0, "y": 5720 },
+      "inputsDB": { "hardwareEncoder": "hevc_nvenc" },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── STEP 5a: RESOLUTION-TIERED NVENC ENCODING ─\nDifferent QP (Quantization Parameter) per\nresolution tier for optimal quality/size balance.\nT400 uses QP mode (not CRF like software x265).\n\n  SD / 720p  →  QP 26  (looser compression OK;\n                          content has less detail)\n  1080p      →  QP 24  (sweet spot for HEVC/NVENC)\n  1440p / 4K →  QP 28  (4K has more redundant data;\n                          QP 28 still looks great;\n                          avoids huge file sizes)\n  Unknown    →  QP 24  (safe default)\n\nAll paths use:\n  forceEncoding=false → stream-copy existing HEVC\n  hardwareDecoding=true → NVDEC for decode\n  preset=slow → NVENC p6 (best NVENC quality)\n\n★ CONFIGURE: ffmpegQuality in each encoder node.\n  Lower QP = better quality, larger file.\n  NVENC recommended range: 20 (high) to 30 (small)",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_resolution",
+      "position": { "x": 0, "y": 5950 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Check Video Resolution\n(outputs 1-9: 480p, 576p, 720p, 1080p, 1440p,\n4K UHD, DCI 4K, 8K, Other/Unknown)",
+      "sourceRepo": "Community",
+      "pluginName": "checkVideoResolution",
+      "version": "1.0.0",
+      "id": "chk_resolution",
+      "position": { "x": 0, "y": 6180 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "NVENC Encoder — SD / 720p  (QP 26)\n★ Config: ffmpegQuality=26 (range 20-30)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandSetVideoEncoder",
+      "version": "1.0.0",
+      "id": "cmd_hevc_sd",
+      "position": { "x": -500, "y": 6410 },
+      "inputsDB": {
+        "outputCodec": "hevc",
+        "ffmpegPresetEnabled": "true",
+        "ffmpegPreset": "slow",
+        "ffmpegQualityEnabled": "true",
+        "ffmpegQuality": "26",
+        "hardwareEncoding": "true",
+        "hardwareType": "nvenc",
+        "hardwareDecoding": "true",
+        "forceEncoding": "false"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "NVENC Encoder — 1080p  (QP 24)\n★ Config: ffmpegQuality=24 (range 20-28)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandSetVideoEncoder",
+      "version": "1.0.0",
+      "id": "cmd_hevc_1080",
+      "position": { "x": 0, "y": 6410 },
+      "inputsDB": {
+        "outputCodec": "hevc",
+        "ffmpegPresetEnabled": "true",
+        "ffmpegPreset": "slow",
+        "ffmpegQualityEnabled": "true",
+        "ffmpegQuality": "24",
+        "hardwareEncoding": "true",
+        "hardwareType": "nvenc",
+        "hardwareDecoding": "true",
+        "forceEncoding": "false"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "NVENC Encoder — 4K / 1440p  (QP 28)\n★ Config: ffmpegQuality=28 (range 24-32)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandSetVideoEncoder",
+      "version": "1.0.0",
+      "id": "cmd_hevc_4k",
+      "position": { "x": 500, "y": 6410 },
+      "inputsDB": {
+        "outputCodec": "hevc",
+        "ffmpegPresetEnabled": "true",
+        "ffmpegPreset": "slow",
+        "ffmpegQualityEnabled": "true",
+        "ffmpegQuality": "28",
+        "hardwareEncoding": "true",
+        "hardwareType": "nvenc",
+        "hardwareDecoding": "true",
+        "forceEncoding": "false"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── STEP 5b: SOFTWARE FALLBACK (no NVENC) ─────\nNVENC was not available. Falling back to\nsoftware libx265 encoding.\n\nSettings: CRF 22, preset slow.\nCRF 22 for libx265 is approximately equivalent\nto NVENC QP 24-26 in perceptual quality.\n\nThis will be significantly slower than GPU\nencoding. Consider:\n  • Reducing concurrent workers\n  • Fixing NVENC availability (check docker runtime)\n  • Increasing Tdarr worker timeout\n\n★ CONFIGURE: ffmpegQuality = CRF value (18-28)",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_sw",
+      "position": { "x": 1000, "y": 5950 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Software Encoder — libx265 CRF 22 (NVENC fallback)\n★ Config: ffmpegQuality=22 (CRF, range 18-28)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandSetVideoEncoder",
+      "version": "1.0.0",
+      "id": "cmd_hevc_sw",
+      "position": { "x": 1000, "y": 6180 },
+      "inputsDB": {
+        "outputCodec": "hevc",
+        "ffmpegPresetEnabled": "true",
+        "ffmpegPreset": "slow",
+        "ffmpegQualityEnabled": "true",
+        "ffmpegQuality": "22",
+        "hardwareEncoding": "false",
+        "hardwareType": "auto",
+        "hardwareDecoding": "false",
+        "forceEncoding": "false"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── STEP 6: HVC1 TAG + FASTSTART ──────────────\n  -tag:v hvc1\n    Required for iOS/iPadOS/macOS/tvOS native HEVC\n    hardware decoding. FFmpeg defaults to 'hev1'.\n    Works with both stream-copy and re-encoded HEVC.\n\n  -movflags +faststart\n    Moves MP4 moov atom to file start for web\n    streaming and Plex progressive download.\n\n★ CONFIGURE: outputArguments field",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_tags",
+      "position": { "x": 0, "y": 6640 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Add hvc1 Tag + Faststart\n★ outputArguments: -tag:v hvc1 -movflags +faststart",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandCustomArguments",
+      "version": "1.0.0",
+      "id": "cmd_tags",
+      "position": { "x": 0, "y": 6870 },
+      "inputsDB": {
+        "inputArguments": "",
+        "outputArguments": "-tag:v hvc1 -movflags +faststart"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── STEP 7: AUDIO — STEREO AAC 2.0 ───────────\nAdds stereo AAC 2.0 downmix if not present.\nThis is the universal fallback track that plays\non ALL clients without transcoding.\n\nTwo passes:\n  eng: targets English-tagged audio streams\n  und: targets untagged/undefined audio\n  (add more nodes for other languages)\n\nPlugin is idempotent: if 2ch AAC already exists,\nit's a no-op. Won't add duplicates.\n\n★ CONFIGURE:\n  - bitrate: 192k (128k-256k reasonable)\n  - language: 'eng' / 'und' (add more as needed)\n  - channels: 2 (don't change for stereo)",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_audio",
+      "position": { "x": 0, "y": 7100 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Ensure Stereo AAC 2.0 — Pass 1 (lang: eng)\n★ Config: bitrate=192k | channels=2 | lang=eng",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandEnsureAudioStream",
+      "version": "1.0.0",
+      "id": "cmd_ens_eng",
+      "position": { "x": 0, "y": 7330 },
+      "inputsDB": {
+        "audioEncoder": "aac",
+        "language": "eng",
+        "channels": "2",
+        "enableBitrate": "true",
+        "bitrate": "192k",
+        "enableSamplerate": "false",
+        "samplerate": "48000"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Ensure Stereo AAC 2.0 — Pass 2 (lang: und)\n★ Config: bitrate=192k | channels=2 | lang=und",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandEnsureAudioStream",
+      "version": "1.0.0",
+      "id": "cmd_ens_und",
+      "position": { "x": 0, "y": 7560 },
+      "inputsDB": {
+        "audioEncoder": "aac",
+        "language": "und",
+        "channels": "2",
+        "enableBitrate": "true",
+        "bitrate": "192k",
+        "enableSamplerate": "false",
+        "samplerate": "48000"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── STEP 8: AUDIO — EAC3 5.1 SURROUND ────────\nAdds Dolby Digital Plus (EAC3) 5.1 surround if\nno EAC3 5.1 track exists. This replaces DTS as\nthe surround format (DTS is removed in Step 9).\n\nWhy EAC3 instead of keeping DTS:\n  • DTS (dca) causes Plex to TRANSCODE on iOS\n    even when stereo AAC is present as track 1\n  • EAC3 is MP4-compatible and Plex iOS direct-plays\n    it natively — no transcoding needed\n  • AC3/EAC3 are the Dolby formats Apple devices\n    support natively for surround\n\nTwo passes: eng and und (same as AAC stereo).\nPlugin is idempotent — no-op if EAC3 5.1 exists.\nPlugin creates 5.1 from the best available source\n(DTS 7.1 → EAC3 5.1 downmix, TrueHD → EAC3 5.1).\n\nNote: Files with existing AC3 5.1 will get an\nadditional EAC3 5.1 track. Both are kept (AC3\nfor legacy receiver compat). This is fine but\nslightly redundant — add 'ac3' to Step 9 removal\nlist if you want to eliminate AC3 and keep EAC3 only.\n\n★ OPINIONATED — To skip EAC3 conversion entirely\n  and instead just remove DTS:\n  1. Delete these two EnsureAudioStream nodes\n     and their comment.\n  2. Add 'dca' to valuesToRemove in Step 9.\n  Result: files get AAC stereo only (no surround).\n\n★ CONFIGURE:\n  - bitrate: 384k (EAC3 5.1 recommended: 256k-640k)\n  - channels: 6 (5.1). For 7.1 preservation, add\n    two more nodes with channels=8.",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_eac3",
+      "position": { "x": 0, "y": 7790 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Ensure EAC3 5.1 Surround — Pass 1 (lang: eng)\n★ Config: bitrate=384k | channels=6 | lang=eng",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandEnsureAudioStream",
+      "version": "1.0.0",
+      "id": "cmd_eac3_eng",
+      "position": { "x": 0, "y": 8020 },
+      "inputsDB": {
+        "audioEncoder": "eac3",
+        "language": "eng",
+        "channels": "6",
+        "enableBitrate": "true",
+        "bitrate": "384k",
+        "enableSamplerate": "false",
+        "samplerate": "48000"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Ensure EAC3 5.1 Surround — Pass 2 (lang: und)\n★ Config: bitrate=384k | channels=6 | lang=und",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandEnsureAudioStream",
+      "version": "1.0.0",
+      "id": "cmd_eac3_und",
+      "position": { "x": 0, "y": 8250 },
+      "inputsDB": {
+        "audioEncoder": "eac3",
+        "language": "und",
+        "channels": "6",
+        "enableBitrate": "true",
+        "bitrate": "384k",
+        "enableSamplerate": "false",
+        "samplerate": "48000"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── STEP 9: REMOVE INCOMPATIBLE AUDIO CODECS ──\nRemoves codecs that:\n  a) Cannot be stored in MP4 containers, OR\n  b) Cause client transcoding (now replaced by EAC3)\n\n  REMOVED:\n    truehd  - Dolby TrueHD/Atmos (not MP4-compatible;\n              now replaced by EAC3 5.1 from Step 8)\n    mlp     - Meridian Lossless Packing (TrueHD base)\n    dca     - DTS/DTS-HD (causes iOS Plex transcoding;\n              now replaced by EAC3 5.1 from Step 8)\n    flac    - Lossless, not MP4-compatible\n    vorbis  - Not standard in MP4\n    opus    - Not standard in MP4\n    wma/wmav2/wmapro - Windows Media (no value here)\n\n  KEPT:\n    aac   - Universal stereo (added in Step 7)\n    eac3  - Dolby Digital Plus surround (added Step 8)\n    ac3   - Dolby Digital (legacy compat, kept)\n    mp3   - Legacy but widely compatible\n\n★ CONFIGURE: Add 'ac3' to valuesToRemove if you\n  want to keep ONLY EAC3+AAC (removes legacy AC3).",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_rmaudio",
+      "position": { "x": 0, "y": 8480 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Remove Incompatible/Replaced Audio Codecs\n(truehd,mlp,dca,flac,vorbis,opus,wma variants)\n★ Add 'ac3' to also remove legacy Dolby Digital",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRemoveStreamByProperty",
+      "version": "1.0.0",
+      "id": "cmd_rmaudio",
+      "position": { "x": 0, "y": 8710 },
+      "inputsDB": {
+        "propertyToCheck": "codec_name",
+        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca",
+        "condition": "includes"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── STEP 10: REORDER STREAMS ──────────────────\nFinal stream order:\n  [0] Video (HEVC)\n  [1] Stereo AAC 2.0  ← FIRST (universal compat)\n  [2] EAC3 5.1        ← surround for capable clients\n  [3] AC3 5.1         ← if originally present\n  [4+] Any remaining text subtitles\n\nWhy stereo AAC first: video.js, basic iOS apps,\nand many web players use the FIRST audio track.\nPutting stereo AAC first ensures universal playback.\n\n★ CONFIGURE:\n  - channels: '2,6,8' = stereo before surround\n  - codecs: 'aac,eac3,ac3,mp3' = preference order\n  - languages: 'eng,und' = add your primary lang",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_reorder",
+      "position": { "x": 0, "y": 8940 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Reorder Streams\n(stereo AAC → EAC3 surround → AC3 → subtitles)\n★ Config: channels=2,6,8 | codecs=aac,eac3,ac3,mp3",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRorderStreams",
+      "version": "1.0.0",
+      "id": "cmd_reorder",
+      "position": { "x": 0, "y": 9170 },
+      "inputsDB": {
+        "processOrder": "codecs,channels,streamTypes",
+        "languages": "eng,und",
+        "channels": "2,6,8",
+        "codecs": "aac,eac3,ac3,mp3",
+        "streamTypes": "video,audio,subtitle"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── STEP 11: EXECUTE FFMPEG ───────────────────\nRuns the assembled FFmpeg command.\nOutput goes to Tdarr cache; validated before replace.",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_exec",
+      "position": { "x": 0, "y": 9400 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Execute FFmpeg Command",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandExecute",
+      "version": "1.0.0",
+      "id": "ffe_001",
+      "position": { "x": 0, "y": 9630 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── STEP 12: VALIDATE OUTPUT FILE SIZE ─────────\nOutput must be within 0-120% of original size.\nHEVC should almost always be smaller.\n>120% indicates a problem (misconfigured QP,\nalready-compressed source, very short clip).\n\n→ OK: proceed to duration check\n→ FAIL: send to Review queue, keep original\n\n★ CONFIGURE: lessThan = '120' (120% of original)\n  Increase to 150 if you see false positives.",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_size",
+      "position": { "x": 0, "y": 9860 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Validate: Output Size ≤ 120% of Original\n★ Config: lessThan=120 | greaterThan=0",
+      "sourceRepo": "Community",
+      "pluginName": "compareFileSizeRatio",
+      "version": "1.0.0",
+      "id": "fl_size",
+      "position": { "x": 0, "y": 10090 },
+      "inputsDB": {
+        "greaterThan": "0",
+        "lessThan": "120"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "⚠ OUTPUT TOO LARGE (size check failed)\nFile exceeded 120% of original size.\nSending to Review. Original preserved.\n\nCheck: Tdarr → Files → Needs Review.\nCommon causes: very short clip, already-\ncompressed source, QP too low for content.\n★ Fix: increase ffmpegQuality in encoder nodes.",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_toobig",
+      "position": { "x": 800, "y": 10090 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── STEP 13: VALIDATE OUTPUT DURATION ─────────\nOutput duration must be within 98-102% of source.\nCatches: truncated audio, dropped frames, corrupt\ntranscodes that pass the size check.\n\nFor stream-copy operations the duration should\nbe exactly 100% — any deviation is suspicious.\nFor re-encoded content, small rounding differences\n(fractional frames) keep this within 99-101%.\n\n→ OK: proceed to replace original\n→ FAIL: send to Review queue, keep original\n\n★ CONFIGURE: greaterThan=98, lessThan=102\n  Widen to 95/105 if you have intentionally\n  trimmed or padded content in your library.",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_duration",
+      "position": { "x": 0, "y": 10320 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Validate: Output Duration within 98-102% of Original\n★ Config: greaterThan=98 | lessThan=102",
+      "sourceRepo": "Community",
+      "pluginName": "compareFileDurationRatio",
+      "version": "1.0.0",
+      "id": "fl_duration",
+      "position": { "x": 0, "y": 10550 },
+      "inputsDB": {
+        "greaterThan": "98",
+        "lessThan": "102"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "⚠ DURATION MISMATCH (duration check failed)\nOutput duration deviates >2% from original.\nPossible corrupt transcode. Original preserved.\n\nCheck: Tdarr → Files → Needs Review.\nInspect both files with ffprobe before deciding.",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_duration_fail",
+      "position": { "x": 800, "y": 10550 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Flag for Review\n(original preserved; check Needs Review queue)",
+      "sourceRepo": "Community",
+      "pluginName": "requireReview",
+      "version": "1.0.0",
+      "id": "fl_review",
+      "position": { "x": 800, "y": 10780 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── STEP 14: REPLACE ORIGINAL ─────────────────\nBoth validations passed. Replacing original file.",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_replace",
+      "position": { "x": 0, "y": 10780 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Replace Original File with Transcoded MP4",
+      "sourceRepo": "Community",
+      "pluginName": "replaceOriginalFile",
+      "version": "1.0.0",
+      "id": "fl_replace",
+      "position": { "x": 0, "y": 11010 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── STEP 15: POST-PROCESSING NOTIFICATIONS ────\nOptional notifications after file replacement.\nControlled by variables set at the top of the flow.\n\nPlex Notify (enable_plex_notify = 'true'):\n  Triggers a Plex library refresh so Plex\n  immediately picks up the new file/codec info.\n  ★ Configure the 'Notify Plex' webRequest node:\n    - Update the URL with your Plex server IP\n    - Replace YOUR_PLEX_TOKEN with your token\n    - Get your token: Plex Settings → Account\n      → Privacy → 'Show' Plex Token\n\nRadarr/Sonarr Notify (enable_arr_notify = 'true'):\n  Notifies *arr to refresh metadata and check\n  the file against its expected quality profile.\n  ★ Configure the 'Notify Arr' node:\n    - arr: 'radarr' or 'sonarr'\n    - arr_host: your *arr URL\n    - arr_api_key: Settings → General → API Key\n  To notify BOTH Radarr and Sonarr, duplicate\n  the 'Notify Arr' node and update each one.",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_notify",
+      "position": { "x": 0, "y": 11240 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Check: enable_plex_notify == 'true'?\n(YES → send Plex refresh request)\n(NO  → skip to arr check)",
+      "sourceRepo": "Community",
+      "pluginName": "checkFlowVariable",
+      "version": "1.0.0",
+      "id": "chk_plex_notify",
+      "position": { "x": 0, "y": 11470 },
+      "inputsDB": {
+        "variable": "enable_plex_notify",
+        "value": "true",
+        "condition": "=="
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Notify Plex — Refresh Library\n★ CONFIGURE: Update URL with your Plex IP + token\n  URL format: http://PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=TOKEN\n  method: GET",
+      "sourceRepo": "Community",
+      "pluginName": "webRequest",
+      "version": "1.0.0",
+      "id": "web_plex",
+      "position": { "x": 500, "y": 11700 },
+      "inputsDB": {
+        "url": "http://YOUR_PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=YOUR_PLEX_TOKEN",
+        "method": "GET"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Check: enable_arr_notify == 'true'?\n(YES → notify Radarr/Sonarr)\n(NO  → done)",
+      "sourceRepo": "Community",
+      "pluginName": "checkFlowVariable",
+      "version": "1.0.0",
+      "id": "chk_arr_notify",
+      "position": { "x": 0, "y": 11700 },
+      "inputsDB": {
+        "variable": "enable_arr_notify",
+        "value": "true",
+        "condition": "=="
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Notify Radarr/Sonarr\n★ CONFIGURE:\n  arr: 'radarr' or 'sonarr'\n  arr_host: 'http://YOUR_IP:7878' (Radarr)\n             'http://YOUR_IP:8989' (Sonarr)\n  arr_api_key: Settings → General → API Key\n  Duplicate this node to notify BOTH services.",
+      "sourceRepo": "Community",
+      "pluginName": "notifyRadarrOrSonarr",
+      "version": "1.0.0",
+      "id": "arr_notify",
+      "position": { "x": 0, "y": 11930 },
+      "inputsDB": {
+        "arr": "radarr",
+        "arr_host": "http://YOUR_RADARR_IP:7878",
+        "arr_api_key": "YOUR_RADARR_API_KEY"
+      },
+      "fpEnabled": true
+    },
+
+    {
+      "name": "── ERROR HANDLING ────────────────────────────\nGlobal error handler — catches all unhandled\nerrors from any node in this flow.\nOriginal file is NOT modified on error.",
+      "sourceRepo": "Community",
+      "pluginName": "onFlowError",
+      "version": "1.0.0",
+      "id": "err_on",
+      "position": { "x": 1500, "y": 0 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Reset Flow Error State",
+      "sourceRepo": "Community",
+      "pluginName": "resetFlowError",
+      "version": "1.0.0",
+      "id": "err_reset",
+      "position": { "x": 1500, "y": 230 },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+
+    {
+      "name": "Fail Flow\n(file marked as Error in Tdarr; original preserved)",
+      "sourceRepo": "Community",
+      "pluginName": "failFlow",
+      "version": "1.0.0",
+      "id": "err_fail",
+      "position": { "x": 1500, "y": 460 },
+      "inputsDB": {},
+      "fpEnabled": true
+    }
+
+  ],
+
+  "flowEdges": [
+    { "source": "inp_001",          "sourceHandle": "1", "target": "cmt_config",       "targetHandle": null, "id": "e_inp_config" },
+    { "source": "cmt_config",       "sourceHandle": "1", "target": "var_rm_commentary", "targetHandle": null, "id": "e_config_var1" },
+    { "source": "var_rm_commentary","sourceHandle": "1", "target": "var_enable_plex",   "targetHandle": null, "id": "e_var1_var2" },
+    { "source": "var_enable_plex",  "sourceHandle": "1", "target": "var_enable_arr",    "targetHandle": null, "id": "e_var2_var3" },
+    { "source": "var_enable_arr",   "sourceHandle": "1", "target": "cmt_guards",        "targetHandle": null, "id": "e_var3_guards" },
+
+    { "source": "cmt_guards",       "sourceHandle": "1", "target": "grd_ext",           "targetHandle": null, "id": "e_guards_ext" },
+    { "source": "grd_ext",          "sourceHandle": "1", "target": "grd_vid",           "targetHandle": null, "id": "e_ext_yes" },
+    { "source": "grd_ext",          "sourceHandle": "2", "target": "cmt_proc",          "targetHandle": null, "id": "e_ext_no" },
+    { "source": "grd_vid",          "sourceHandle": "1", "target": "grd_aud",           "targetHandle": null, "id": "e_vid_yes" },
+    { "source": "grd_vid",          "sourceHandle": "2", "target": "cmt_proc",          "targetHandle": null, "id": "e_vid_no" },
+    { "source": "grd_aud",          "sourceHandle": "1", "target": "grd_ch",            "targetHandle": null, "id": "e_aud_yes" },
+    { "source": "grd_aud",          "sourceHandle": "2", "target": "cmt_proc",          "targetHandle": null, "id": "e_aud_no" },
+    { "source": "grd_ch",           "sourceHandle": "1", "target": "cmt_optimal",       "targetHandle": null, "id": "e_ch_yes" },
+    { "source": "grd_ch",           "sourceHandle": "2", "target": "cmt_proc",          "targetHandle": null, "id": "e_ch_no" },
+    { "source": "cmt_optimal",      "sourceHandle": "1", "target": "fl_noop",           "targetHandle": null, "id": "e_optimal_noop" },
+
+    { "source": "cmt_proc",         "sourceHandle": "1", "target": "cmt_lowbit",        "targetHandle": null, "id": "e_proc_lowbit" },
+    { "source": "cmt_lowbit",       "sourceHandle": "1", "target": "chk_lowbit",        "targetHandle": null, "id": "e_cmt_lowbit_chk" },
+    { "source": "chk_lowbit",       "sourceHandle": "1", "target": "cmt_health",        "targetHandle": null, "id": "e_lowbit_ok" },
+    { "source": "chk_lowbit",       "sourceHandle": "2", "target": "cmt_skip_lowbit",   "targetHandle": null, "id": "e_lowbit_skip" },
+    { "source": "cmt_skip_lowbit",  "sourceHandle": "1", "target": "fl_skip_lowbit",    "targetHandle": null, "id": "e_skip_lowbit_noop" },
+
+    { "source": "cmt_health",       "sourceHandle": "1", "target": "chk_health",        "targetHandle": null, "id": "e_cmt_health_chk" },
+    { "source": "chk_health",       "sourceHandle": "1", "target": "ffs_001",           "targetHandle": null, "id": "e_health_start" },
+
+    { "source": "ffs_001",          "sourceHandle": "1", "target": "cmt_mp4",           "targetHandle": null, "id": "e_start_mp4" },
+    { "source": "cmt_mp4",          "sourceHandle": "1", "target": "cmd_mp4",           "targetHandle": null, "id": "e_cmt_mp4_cmd" },
+    { "source": "cmd_mp4",          "sourceHandle": "1", "target": "cmt_subs",          "targetHandle": null, "id": "e_mp4_subs" },
+    { "source": "cmt_subs",         "sourceHandle": "1", "target": "cmd_rmsub",         "targetHandle": null, "id": "e_cmt_subs_cmd" },
+    { "source": "cmd_rmsub",        "sourceHandle": "1", "target": "cmt_commentary",    "targetHandle": null, "id": "e_rmsub_commentary" },
+
+    { "source": "cmt_commentary",   "sourceHandle": "1", "target": "chk_rm_commentary", "targetHandle": null, "id": "e_cmt_commentary_chk" },
+    { "source": "chk_rm_commentary","sourceHandle": "1", "target": "cmd_rmcommentary",  "targetHandle": null, "id": "e_commentary_yes" },
+    { "source": "chk_rm_commentary","sourceHandle": "2", "target": "cmt_data",          "targetHandle": null, "id": "e_commentary_no" },
+    { "source": "cmd_rmcommentary", "sourceHandle": "1", "target": "cmt_data",          "targetHandle": null, "id": "e_rmcommentary_data" },
+
+    { "source": "cmt_data",         "sourceHandle": "1", "target": "cmd_rmdata",        "targetHandle": null, "id": "e_cmt_data_cmd" },
+    { "source": "cmd_rmdata",       "sourceHandle": "1", "target": "cmt_nvenc",         "targetHandle": null, "id": "e_rmdata_nvenc" },
+
+    { "source": "cmt_nvenc",        "sourceHandle": "1", "target": "chk_nvenc",         "targetHandle": null, "id": "e_cmt_nvenc_chk" },
+    { "source": "chk_nvenc",        "sourceHandle": "1", "target": "cmt_resolution",    "targetHandle": null, "id": "e_nvenc_yes" },
+    { "source": "chk_nvenc",        "sourceHandle": "2", "target": "cmt_sw",            "targetHandle": null, "id": "e_nvenc_no" },
+
+    { "source": "cmt_resolution",   "sourceHandle": "1", "target": "chk_resolution",    "targetHandle": null, "id": "e_cmt_res_chk" },
+    { "source": "chk_resolution",   "sourceHandle": "1", "target": "cmd_hevc_sd",       "targetHandle": null, "id": "e_res_480p" },
+    { "source": "chk_resolution",   "sourceHandle": "2", "target": "cmd_hevc_sd",       "targetHandle": null, "id": "e_res_576p" },
+    { "source": "chk_resolution",   "sourceHandle": "3", "target": "cmd_hevc_sd",       "targetHandle": null, "id": "e_res_720p" },
+    { "source": "chk_resolution",   "sourceHandle": "4", "target": "cmd_hevc_1080",     "targetHandle": null, "id": "e_res_1080p" },
+    { "source": "chk_resolution",   "sourceHandle": "5", "target": "cmd_hevc_4k",       "targetHandle": null, "id": "e_res_1440p" },
+    { "source": "chk_resolution",   "sourceHandle": "6", "target": "cmd_hevc_4k",       "targetHandle": null, "id": "e_res_4k" },
+    { "source": "chk_resolution",   "sourceHandle": "7", "target": "cmd_hevc_4k",       "targetHandle": null, "id": "e_res_dci4k" },
+    { "source": "chk_resolution",   "sourceHandle": "8", "target": "cmd_hevc_4k",       "targetHandle": null, "id": "e_res_8k" },
+    { "source": "chk_resolution",   "sourceHandle": "9", "target": "cmd_hevc_1080",     "targetHandle": null, "id": "e_res_other" },
+
+    { "source": "cmd_hevc_sd",      "sourceHandle": "1", "target": "cmt_tags",          "targetHandle": null, "id": "e_hevc_sd_tags" },
+    { "source": "cmd_hevc_1080",    "sourceHandle": "1", "target": "cmt_tags",          "targetHandle": null, "id": "e_hevc_1080_tags" },
+    { "source": "cmd_hevc_4k",      "sourceHandle": "1", "target": "cmt_tags",          "targetHandle": null, "id": "e_hevc_4k_tags" },
+
+    { "source": "cmt_sw",           "sourceHandle": "1", "target": "cmd_hevc_sw",       "targetHandle": null, "id": "e_cmt_sw_cmd" },
+    { "source": "cmd_hevc_sw",      "sourceHandle": "1", "target": "cmt_tags",          "targetHandle": null, "id": "e_hevc_sw_tags" },
+
+    { "source": "cmt_tags",         "sourceHandle": "1", "target": "cmd_tags",          "targetHandle": null, "id": "e_cmt_tags_cmd" },
+    { "source": "cmd_tags",         "sourceHandle": "1", "target": "cmt_audio",         "targetHandle": null, "id": "e_tags_audio" },
+    { "source": "cmt_audio",        "sourceHandle": "1", "target": "cmd_ens_eng",       "targetHandle": null, "id": "e_cmt_audio_eng" },
+    { "source": "cmd_ens_eng",      "sourceHandle": "1", "target": "cmd_ens_und",       "targetHandle": null, "id": "e_ens_eng_und" },
+    { "source": "cmd_ens_und",      "sourceHandle": "1", "target": "cmt_eac3",          "targetHandle": null, "id": "e_ens_und_eac3" },
+    { "source": "cmt_eac3",         "sourceHandle": "1", "target": "cmd_eac3_eng",      "targetHandle": null, "id": "e_cmt_eac3_eng" },
+    { "source": "cmd_eac3_eng",     "sourceHandle": "1", "target": "cmd_eac3_und",      "targetHandle": null, "id": "e_eac3_eng_und" },
+    { "source": "cmd_eac3_und",     "sourceHandle": "1", "target": "cmt_rmaudio",       "targetHandle": null, "id": "e_eac3_und_rmaudio" },
+    { "source": "cmt_rmaudio",      "sourceHandle": "1", "target": "cmd_rmaudio",       "targetHandle": null, "id": "e_cmt_rmaudio_cmd" },
+    { "source": "cmd_rmaudio",      "sourceHandle": "1", "target": "cmt_reorder",       "targetHandle": null, "id": "e_rmaudio_reorder" },
+    { "source": "cmt_reorder",      "sourceHandle": "1", "target": "cmd_reorder",       "targetHandle": null, "id": "e_cmt_reorder_cmd" },
+    { "source": "cmd_reorder",      "sourceHandle": "1", "target": "cmt_exec",          "targetHandle": null, "id": "e_reorder_exec" },
+    { "source": "cmt_exec",         "sourceHandle": "1", "target": "ffe_001",           "targetHandle": null, "id": "e_cmt_exec_cmd" },
+    { "source": "ffe_001",          "sourceHandle": "1", "target": "cmt_size",          "targetHandle": null, "id": "e_exec_size" },
+
+    { "source": "cmt_size",         "sourceHandle": "1", "target": "fl_size",           "targetHandle": null, "id": "e_cmt_size_cmd" },
+    { "source": "fl_size",          "sourceHandle": "1", "target": "cmt_duration",      "targetHandle": null, "id": "e_size_ok" },
+    { "source": "fl_size",          "sourceHandle": "2", "target": "cmt_toobig",        "targetHandle": null, "id": "e_size_fail" },
+    { "source": "cmt_toobig",       "sourceHandle": "1", "target": "fl_review",         "targetHandle": null, "id": "e_toobig_review" },
+
+    { "source": "cmt_duration",     "sourceHandle": "1", "target": "fl_duration",       "targetHandle": null, "id": "e_cmt_duration_cmd" },
+    { "source": "fl_duration",      "sourceHandle": "1", "target": "cmt_replace",       "targetHandle": null, "id": "e_duration_ok" },
+    { "source": "fl_duration",      "sourceHandle": "2", "target": "cmt_duration_fail", "targetHandle": null, "id": "e_duration_fail" },
+    { "source": "cmt_duration_fail","sourceHandle": "1", "target": "fl_review",         "targetHandle": null, "id": "e_duration_review" },
+
+    { "source": "cmt_replace",      "sourceHandle": "1", "target": "fl_replace",        "targetHandle": null, "id": "e_cmt_replace_cmd" },
+    { "source": "fl_replace",       "sourceHandle": "1", "target": "cmt_notify",        "targetHandle": null, "id": "e_replace_notify" },
+
+    { "source": "cmt_notify",       "sourceHandle": "1", "target": "chk_plex_notify",   "targetHandle": null, "id": "e_notify_plex_chk" },
+    { "source": "chk_plex_notify",  "sourceHandle": "1", "target": "web_plex",          "targetHandle": null, "id": "e_plex_yes" },
+    { "source": "chk_plex_notify",  "sourceHandle": "2", "target": "chk_arr_notify",    "targetHandle": null, "id": "e_plex_no" },
+    { "source": "web_plex",         "sourceHandle": "1", "target": "chk_arr_notify",    "targetHandle": null, "id": "e_plex_done_arr" },
+    { "source": "chk_arr_notify",   "sourceHandle": "1", "target": "arr_notify",        "targetHandle": null, "id": "e_arr_yes" },
+
+    { "source": "err_on",           "sourceHandle": "1", "target": "err_reset",         "targetHandle": null, "id": "e_err_reset" },
+    { "source": "err_reset",        "sourceHandle": "1", "target": "err_fail",          "targetHandle": null, "id": "e_err_fail" }
+  ]
+}
