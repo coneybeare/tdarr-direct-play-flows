@@ -69,7 +69,15 @@
     "hdrpath",
     "sdrpath",
     "downmixed",
-    "timecodes"
+    "timecodes",
+    "ssim",
+    "SSIM",
+    "vmaf",
+    "VMAF",
+    "lanczos",
+    "hwaccel",
+    "hwdownload",
+    "checkSSIMScore"
   ],
   "ignorePaths": [
     "node_modules",
