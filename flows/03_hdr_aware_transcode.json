@@ -3,126 +3,146 @@
   "description": "HDR-safe variant of the full pipeline. Detects HDR (HDR10, HLG, Dolby Vision) and routes appropriately: HDR files are stream-copied with container/audio/EAC3 fixes only. SDR files get full HEVC NVENC transcode with resolution-tiered quality and software fallback. Both paths support commentary removal, EAC3 5.1 surround, and Plex/arr notifications. Configure via the top variable nodes.",
   "tags": "hdr,dolby-vision,hevc,mp4,direct-play,nvenc,aac,eac3,4k,hdr10",
   "flowPlugins": [
-
     {
       "name": "Input File",
       "sourceRepo": "Community",
       "pluginName": "inputFile",
       "version": "1.0.0",
       "id": "inp_001",
-      "position": { "x": 0, "y": 0 },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "── CONFIGURATION ─────────────────────────────\nAll user-configurable options are set here as\nflow variables. Edit the VALUE field of each\n'Set Variable' node below to configure:\n\n  remove_commentary  (true/false)\n    Remove director commentary, audio description,\n    and hearing-impaired audio tracks.\n    Default: true  ★ Opinionated — set false to keep.\n\n  enable_plex_notify  (true/false)\n    Trigger a Plex library refresh after each file\n    is replaced. Requires Plex URL+token in the\n    'Notify Plex' webRequest node near the bottom.\n    Default: false  ★ Must configure URL+token first.\n\n  enable_arr_notify  (true/false)\n    Notify Radarr/Sonarr after file replacement.\n    Requires API key in the 'Notify Arr' node.\n    Default: false  ★ Must configure API key first.",
+      "name": "Configuration",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_config",
-      "position": { "x": 0, "y": 200 },
+      "position": {
+        "x": 0,
+        "y": 120
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Set Variable: remove_commentary\n★ Change value to 'false' to keep commentary tracks",
+      "name": "Set: remove_commentary",
       "sourceRepo": "Community",
       "pluginName": "setFlowVariable",
       "version": "1.0.0",
       "id": "var_rm_commentary",
-      "position": { "x": 0, "y": 430 },
+      "position": {
+        "x": 0,
+        "y": 260
+      },
       "inputsDB": {
         "variable": "remove_commentary",
         "value": "true"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Set Variable: enable_plex_notify\n★ Change value to 'true' to enable Plex refresh\n   (also configure the webRequest node below)",
+      "name": "Set: enable_plex_notify",
       "sourceRepo": "Community",
       "pluginName": "setFlowVariable",
       "version": "1.0.0",
       "id": "var_enable_plex",
-      "position": { "x": 0, "y": 660 },
+      "position": {
+        "x": 0,
+        "y": 380
+      },
       "inputsDB": {
         "variable": "enable_plex_notify",
         "value": "false"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Set Variable: enable_arr_notify\n★ Change value to 'true' to enable Radarr/Sonarr notify\n   (also configure the notifyRadarrOrSonarr node below)",
+      "name": "Set: enable_arr_notify",
       "sourceRepo": "Community",
       "pluginName": "setFlowVariable",
       "version": "1.0.0",
       "id": "var_enable_arr",
-      "position": { "x": 0, "y": 890 },
+      "position": {
+        "x": 0,
+        "y": 500
+      },
       "inputsDB": {
         "variable": "enable_arr_notify",
         "value": "false"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "── ABOUT THIS FLOW ───────────────────────────\nHDR-AWARE variant of the Full Pipeline (Flow 01).\n\nProblem this solves:\nHDR video contains color metadata (HDR10 tone-\nmapping curves, Dolby Vision RPU layers) that\nMUST be preserved. Re-encoding strips this data,\ncausing washed-out colors or broken HDR display.\n\nThis flow's HDR strategy:\n  HDR detected → STREAM COPY video only\n    (MP4 container + audio fixed; no re-encode)\n  SDR detected → Full HEVC NVENC transcode\n    (same as Flow 01, with resolution-tiered QP)\n\nBoth paths:\n  ✓ Remove commentary tracks (opt-in)\n  ✓ Add EAC3 5.1 surround + stereo AAC 2.0\n  ✓ Remove DTS + incompatible audio codecs\n  ✓ Reorder streams (stereo AAC first)\n  ✓ Validate output duration\n  ✓ Optional Plex/arr notifications\n\n★ IMPORTANT NOTES:\n  • hvc1 tag and faststart work with stream copy\n  • DV profile 5/8: stream copy is correct\n  • DV profile 4/7 (dual-layer MKV): needs dovi_tool\n    for full fidelity — stream copy still works but\n    loses the enhancement layer\n  • 10-bit SDR: follows the transcode path (correct)",
+      "name": "About this flow",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_about",
-      "position": { "x": 0, "y": 1120 },
+      "position": {
+        "x": 0,
+        "y": 620
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "── GUARD CHECKS ──────────────────────────────\nChecks if the file is already fully optimal.\nAll 4 must pass to skip processing entirely.\n\n  1. Container: MP4/M4V\n  2. Video: HEVC codec\n  3. Audio: Has AAC stream\n  4. Audio: Has 2-channel stream\n\n→ ALL PASS: mark as processed, no action\n→ ANY FAIL: route through health check and\n  HDR detection into the appropriate path",
+      "name": "Guard checks",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_guards",
-      "position": { "x": 0, "y": 1350 },
+      "position": {
+        "x": 0,
+        "y": 760
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "GUARD 1 of 4\nCheck: Container is MP4 or M4V?\n\nOutputs: YES → Guard 2 | NO → Health Check",
+      "name": "Check: MP4/M4V?",
       "sourceRepo": "Community",
       "pluginName": "checkFileExtension",
       "version": "1.0.0",
       "id": "grd_ext",
-      "position": { "x": 0, "y": 1580 },
+      "position": {
+        "x": 0,
+        "y": 900
+      },
       "inputsDB": {
         "extensions": "mp4,m4v"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "GUARD 2 of 4\nCheck: Video codec is HEVC?\n\nOutputs: YES → Guard 3 | NO → Health Check",
+      "name": "Check: HEVC video?",
       "sourceRepo": "Community",
       "pluginName": "checkVideoCodec",
       "version": "1.0.0",
       "id": "grd_vid",
-      "position": { "x": 0, "y": 1810 },
+      "position": {
+        "x": 0,
+        "y": 1020
+      },
       "inputsDB": {
         "codec": "hevc"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "GUARD 3 of 4\nCheck: Has AAC audio stream?\n\nOutputs: YES → Guard 4 | NO → Health Check",
+      "name": "Check: AAC audio?",
       "sourceRepo": "Community",
       "pluginName": "checkStreamProperty",
       "version": "1.0.0",
       "id": "grd_aud",
-      "position": { "x": 0, "y": 2040 },
+      "position": {
+        "x": 0,
+        "y": 1140
+      },
       "inputsDB": {
         "streamType": "audio",
         "propertyToCheck": "codec_name",
@@ -131,175 +151,205 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "GUARD 4 of 4\nCheck: Has 2-channel (stereo) audio stream?\n\nOutputs: YES → Already Optimal | NO → Health Check",
+      "name": "Check: 2-ch stereo?",
       "sourceRepo": "Community",
       "pluginName": "checkChannelCount",
       "version": "1.0.0",
       "id": "grd_ch",
-      "position": { "x": 0, "y": 2270 },
+      "position": {
+        "x": 0,
+        "y": 1260
+      },
       "inputsDB": {
         "channelCount": "2"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "✅ FILE ALREADY OPTIMAL\nAll guard checks passed. No action needed.\nMarking as processed.",
+      "name": "Already optimal",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_optimal",
-      "position": { "x": -600, "y": 2500 },
+      "position": {
+        "x": -750,
+        "y": 1380
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Replace Original File\n(no-op: marks file as processed, no changes)",
+      "name": "No-op (mark done)",
       "sourceRepo": "Community",
       "pluginName": "replaceOriginalFile",
       "version": "1.0.0",
       "id": "fl_noop",
-      "position": { "x": -600, "y": 2730 },
+      "position": {
+        "x": -750,
+        "y": 1520
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "── HEALTH CHECK ──────────────────────────────\nRuns a quick health check on the source file\nbefore processing. Catches corrupt or unreadable\nfiles early.\n\nOutputs: PASS → HDR Detection | FAIL → Fail flow",
+      "name": "Health check",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_health",
-      "position": { "x": 0, "y": 2500 },
+      "position": {
+        "x": 0,
+        "y": 1380
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Health Check (quick)\n(detects corrupt/unreadable source files)",
+      "name": "Health check (quick)",
       "sourceRepo": "Community",
       "pluginName": "runHealthCheck",
       "version": "1.0.0",
       "id": "chk_health",
-      "position": { "x": 0, "y": 2730 },
+      "position": {
+        "x": 0,
+        "y": 1520
+      },
       "inputsDB": {
         "type": "quick"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "⚠ HEALTH CHECK FAILED\nSource file appears corrupt or unreadable.\nFailing this file for manual review.\nOriginal file is NOT modified.",
+      "name": "Health check failed",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_health_fail",
-      "position": { "x": 600, "y": 2730 },
+      "position": {
+        "x": 750,
+        "y": 1640
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Fail Flow (health check failed)",
+      "name": "Fail: health check",
       "sourceRepo": "Community",
       "pluginName": "failFlow",
       "version": "1.0.0",
       "id": "err_health",
-      "position": { "x": 600, "y": 2960 },
+      "position": {
+        "x": 750,
+        "y": 1780
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "── HDR DETECTION ─────────────────────────────\nDetects HDR content to route appropriately.\n\nThe checkHdr plugin checks for:\n  • HDR10: SMPTE ST 2084 (PQ) transfer function\n    + BT.2020 color primaries + TV color range\n  • HLG: Hybrid Log-Gamma (arib-std-b67)\n  • Dolby Vision: codec tags dvhe, dvav, dav1, dvh1\n\nOutputs:\n  → HDR DETECTED (1): stream-copy video path\n  → SDR DETECTED (2): full NVENC transcode path\n\n⚠ 10-BIT SDR NOTE:\n  10-bit files that are NOT HDR (e.g., high-\n  quality SDR masters) will follow the transcode\n  path. NVENC handles 10-bit HEVC correctly.",
+      "name": "HDR detection",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_hdr_detect",
-      "position": { "x": 0, "y": 2960 },
+      "position": {
+        "x": 0,
+        "y": 1640
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Detect HDR Video\n(checks HDR10, HLG, Dolby Vision metadata)\n\nOutputs: YES=HDR (1) → stream-copy path\n         NO=SDR  (2) → NVENC transcode path",
+      "name": "Check: HDR stream?",
       "sourceRepo": "Community",
       "pluginName": "checkHdr",
       "version": "1.0.0",
       "id": "chk_hdr",
-      "position": { "x": 0, "y": 3190 },
+      "position": {
+        "x": 0,
+        "y": 1780
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "── HDR PATH: VIDEO STREAM COPY ───────────────\nHDR content detected. Stream-copying video to\npreserve all HDR metadata perfectly.\n\nThis path:\n  ✓ Sets container to MP4\n  ✓ Removes subtitles (all)\n  ✓ Removes data streams\n  ✓ Removes commentary tracks (opt-in)\n  ✓ Applies hvc1 tag + faststart\n  ✓ Adds EAC3 5.1 surround (eng + und)\n  ✓ Adds stereo AAC 2.0 (eng + und)\n  ✓ Removes DTS + incompatible audio\n  ✓ Reorders streams\n  ✓ Validates output duration\n\nIt does NOT:\n  ✗ Re-encode video (stream copy only)\n  ✗ Validate file size (expected to change\n    when remuxing MKV→MP4)",
+      "name": "HDR path",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_hdr_path",
-      "position": { "x": -900, "y": 3420 },
+      "position": {
+        "x": -1100,
+        "y": 1900
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Begin FFmpeg Command (HDR path)\n(video stream-copied by default;\nno video encoder set in this path)",
+      "name": "Begin FFmpeg (HDR)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandStart",
       "version": "1.0.0",
       "id": "ffs_hdr",
-      "position": { "x": -900, "y": 3650 },
+      "position": {
+        "x": -1100,
+        "y": 2040
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Set Container → MP4 (HDR path)\n(forceConform removes PGS subs + attachments;\nvideo bitstream preserved exactly)",
+      "name": "Set container: MP4",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandSetContainer",
       "version": "1.0.0",
       "id": "cmd_hdr_mp4",
-      "position": { "x": -900, "y": 3880 },
+      "position": {
+        "x": -1100,
+        "y": 2160
+      },
       "inputsDB": {
         "container": "mp4",
         "forceConform": "true"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Remove All Subtitles (HDR path)\n(image-based subs force server transcoding;\ntext subs cause issues on many clients)\n★ OPINIONATED: see README for keeping text subs",
+      "name": "Remove subtitles",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveSubtitles",
       "version": "1.0.0",
       "id": "cmd_hdr_rmsub",
-      "position": { "x": -900, "y": 4110 },
+      "position": {
+        "x": -1100,
+        "y": 2280
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Remove Data Streams (HDR path)\n(fonts, cover art, metadata attachments;\nnot compatible with MP4 containers)",
+      "name": "Remove data streams",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveDataStreams",
       "version": "1.0.0",
       "id": "cmd_hdr_rmdata",
-      "position": { "x": -900, "y": 4340 },
+      "position": {
+        "x": -1100,
+        "y": 2400
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Check: remove_commentary == 'true'? (HDR path)\n(YES → remove commentary | NO → skip)",
+      "name": "Check: remove_commentary?",
       "sourceRepo": "Community",
       "pluginName": "checkFlowVariable",
       "version": "1.0.0",
       "id": "chk_hdr_rm_commentary",
-      "position": { "x": -900, "y": 4570 },
+      "position": {
+        "x": -1100,
+        "y": 2520
+      },
       "inputsDB": {
         "variable": "remove_commentary",
         "value": "true",
@@ -307,14 +357,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Remove Commentary / Description / SDH Tracks (HDR path)",
+      "name": "Remove commentary tracks",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveStreamByProperty",
       "version": "1.0.0",
       "id": "cmd_hdr_rmcommentary",
-      "position": { "x": -1400, "y": 4800 },
+      "position": {
+        "x": -1650,
+        "y": 2640
+      },
       "inputsDB": {
         "propertyToCheck": "tags.title",
         "valuesToRemove": "commentary,comment,description,descriptive,sdh,hearing impaired,hearing-impaired,audio description",
@@ -322,28 +374,47 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Add hvc1 Tag + Faststart (HDR path)\n(-tag:v hvc1 works with stream copy)\n(-movflags +faststart for web streaming)",
+      "name": "Set: hvc1 + faststart",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandCustomArguments",
       "version": "1.0.0",
       "id": "cmd_hdr_tags",
-      "position": { "x": -900, "y": 4800 },
+      "position": {
+        "x": -1100,
+        "y": 2760
+      },
       "inputsDB": {
         "inputArguments": "",
         "outputArguments": "-tag:v hvc1 -movflags +faststart"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Ensure EAC3 5.1 Surround - Pass 1 (HDR, lang: eng)\n★ Config: bitrate=384k | channels=6 | lang=eng",
+      "name": "Guard: 6+ ch surround?",
+      "sourceRepo": "Community",
+      "pluginName": "checkChannelCount",
+      "version": "1.0.0",
+      "position": {
+        "x": -1100,
+        "y": 2880
+      },
+      "inputsDB": {
+        "channelCount": "6"
+      },
+      "fpEnabled": true,
+      "id": "grd_hdr_eac3_ch"
+    },
+    {
+      "name": "Ensure EAC3 5.1 (eng)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandEnsureAudioStream",
       "version": "1.0.0",
       "id": "cmd_hdr_eac3_eng",
-      "position": { "x": -900, "y": 5030 },
+      "position": {
+        "x": -1100,
+        "y": 3000
+      },
       "inputsDB": {
         "audioEncoder": "eac3",
         "language": "eng",
@@ -355,14 +426,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Ensure EAC3 5.1 Surround - Pass 2 (HDR, lang: und)",
+      "name": "Ensure EAC3 5.1 (und)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandEnsureAudioStream",
       "version": "1.0.0",
       "id": "cmd_hdr_eac3_und",
-      "position": { "x": -900, "y": 5260 },
+      "position": {
+        "x": -1100,
+        "y": 3120
+      },
       "inputsDB": {
         "audioEncoder": "eac3",
         "language": "und",
@@ -374,14 +447,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Ensure Stereo AAC 2.0 - Pass 1 (HDR, lang: eng)\n★ Config: bitrate=192k | channels=2 | lang=eng",
+      "name": "Ensure AAC 2.0 (eng)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandEnsureAudioStream",
       "version": "1.0.0",
       "id": "cmd_hdr_ens_eng",
-      "position": { "x": -900, "y": 5490 },
+      "position": {
+        "x": -1100,
+        "y": 3240
+      },
       "inputsDB": {
         "audioEncoder": "aac",
         "language": "eng",
@@ -393,14 +468,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Ensure Stereo AAC 2.0 - Pass 2 (HDR, lang: und)",
+      "name": "Ensure AAC 2.0 (und)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandEnsureAudioStream",
       "version": "1.0.0",
       "id": "cmd_hdr_ens_und",
-      "position": { "x": -900, "y": 5720 },
+      "position": {
+        "x": -1100,
+        "y": 3360
+      },
       "inputsDB": {
         "audioEncoder": "aac",
         "language": "und",
@@ -412,14 +489,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Remove Incompatible Audio (HDR path)\n(includes DTS — converted to EAC3 above)\n★ Config: remove 'dca' to keep DTS instead",
+      "name": "Remove: truehd, flac, dca...",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveStreamByProperty",
       "version": "1.0.0",
       "id": "cmd_hdr_rmaudio",
-      "position": { "x": -900, "y": 5950 },
+      "position": {
+        "x": -1100,
+        "y": 3480
+      },
       "inputsDB": {
         "propertyToCheck": "codec_name",
         "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca",
@@ -427,14 +506,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Reorder Streams (HDR path)\n(stereo AAC first)",
+      "name": "Reorder (stereo first)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRorderStreams",
       "version": "1.0.0",
       "id": "cmd_hdr_reorder",
-      "position": { "x": -900, "y": 6180 },
+      "position": {
+        "x": -1100,
+        "y": 3600
+      },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
         "languages": "eng,und",
@@ -444,130 +525,152 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Execute FFmpeg (HDR path)\n(stream-copies video; encodes/reorders audio)",
+      "name": "Execute FFmpeg (HDR)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandExecute",
       "version": "1.0.0",
       "id": "ffe_hdr",
-      "position": { "x": -900, "y": 6410 },
+      "position": {
+        "x": -1100,
+        "y": 3720
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Validate Output Duration (HDR path)\n★ Config: greaterThan=98, lessThan=102\n(stream copy should preserve duration exactly)",
+      "name": "Check: duration ratio",
       "sourceRepo": "Community",
       "pluginName": "compareFileDurationRatio",
       "version": "1.0.0",
       "id": "fl_hdr_duration",
-      "position": { "x": -900, "y": 6640 },
+      "position": {
+        "x": -1100,
+        "y": 3840
+      },
       "inputsDB": {
         "greaterThan": "98",
         "lessThan": "102"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "⚠ HDR DURATION MISMATCH — SENDING TO REVIEW\nOutput duration outside 98–102% of source.\nOriginal file preserved.",
+      "name": "Duration mismatch",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_hdr_dur_fail",
-      "position": { "x": -1400, "y": 6640 },
+      "position": {
+        "x": -1650,
+        "y": 3960
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Flag for Review (HDR duration mismatch)",
+      "name": "Flag for review",
       "sourceRepo": "Community",
       "pluginName": "requireReview",
       "version": "1.0.0",
       "id": "fl_hdr_dur_review",
-      "position": { "x": -1400, "y": 6870 },
+      "position": {
+        "x": -1650,
+        "y": 4100
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Replace Original File (HDR path)",
+      "name": "Replace original file",
       "sourceRepo": "Community",
       "pluginName": "replaceOriginalFile",
       "version": "1.0.0",
       "id": "fl_hdr_replace",
-      "position": { "x": -900, "y": 6870 },
+      "position": {
+        "x": -1100,
+        "y": 3960
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "── SDR PATH: FULL HEVC NVENC TRANSCODE ───────\nSDR content detected. Full transcode pipeline.\n\nNVENC availability is checked first:\n  NVENC available → resolution-tiered QP encoding\n  NVENC unavailable → software libx265 fallback\n\nResolution-tiered quality (NVENC QP values):\n  SD (≤720p)  → QP 26  (efficient for smaller res)\n  1080p       → QP 24  (balanced quality/size)\n  4K+         → QP 28  (efficient; 4K is very detailed)\n  Unknown res → QP 24  (safe default)\n\n★ CONFIGURE (click each encoder node):\n  - ffmpegQuality: QP value (20=high, 28=efficient)\n  - ffmpegPreset: slow (maps to NVENC p6)\n  - forceEncoding: false (stream-copies HEVC)\n  - SW fallback: ffmpegQuality=22 (libx265 CRF)\n\nSize limit: output rejected if >120% of source.",
+      "name": "SDR path",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_sdr_path",
-      "position": { "x": 900, "y": 3420 },
+      "position": {
+        "x": 1100,
+        "y": 1900
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Begin FFmpeg Command (SDR path)",
+      "name": "Begin FFmpeg (SDR)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandStart",
       "version": "1.0.0",
       "id": "ffs_sdr",
-      "position": { "x": 900, "y": 3650 },
+      "position": {
+        "x": 1100,
+        "y": 2040
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Set Container → MP4 (SDR path)",
+      "name": "Set container: MP4",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandSetContainer",
       "version": "1.0.0",
       "id": "cmd_sdr_mp4",
-      "position": { "x": 900, "y": 3880 },
+      "position": {
+        "x": 1100,
+        "y": 2160
+      },
       "inputsDB": {
         "container": "mp4",
         "forceConform": "true"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Remove All Subtitles (SDR path)\n★ OPINIONATED: see README for keeping text subs",
+      "name": "Remove subtitles",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveSubtitles",
       "version": "1.0.0",
       "id": "cmd_sdr_rmsub",
-      "position": { "x": 900, "y": 4110 },
+      "position": {
+        "x": 1100,
+        "y": 2280
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Remove Data Streams (SDR path)\n(fonts, cover art, metadata attachments)",
+      "name": "Remove data streams",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveDataStreams",
       "version": "1.0.0",
       "id": "cmd_sdr_rmdata",
-      "position": { "x": 900, "y": 4340 },
+      "position": {
+        "x": 1100,
+        "y": 2400
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Check: remove_commentary == 'true'? (SDR path)\n(YES → remove commentary | NO → skip)",
+      "name": "Check: remove_commentary?",
       "sourceRepo": "Community",
       "pluginName": "checkFlowVariable",
       "version": "1.0.0",
       "id": "chk_sdr_rm_commentary",
-      "position": { "x": 900, "y": 4570 },
+      "position": {
+        "x": 1100,
+        "y": 2520
+      },
       "inputsDB": {
         "variable": "remove_commentary",
         "value": "true",
@@ -575,14 +678,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Remove Commentary / Description / SDH Tracks (SDR path)",
+      "name": "Remove commentary tracks",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveStreamByProperty",
       "version": "1.0.0",
       "id": "cmd_sdr_rmcommentary",
-      "position": { "x": 1400, "y": 4800 },
+      "position": {
+        "x": 1700,
+        "y": 2640
+      },
       "inputsDB": {
         "propertyToCheck": "tags.title",
         "valuesToRemove": "commentary,comment,description,descriptive,sdh,hearing impaired,hearing-impaired,audio description",
@@ -590,60 +695,70 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "── NVENC AVAILABILITY CHECK (SDR) ────────────\nChecks if the NVENC GPU encoder is available\non this Tdarr worker node.\n\nOutputs:\n  YES (1) → NVENC available → resolution-tiered encode\n  NO  (2) → NVENC unavailable → software libx265\n\nThis prevents hard failures when:\n  • The T400 GPU session limit (4) is reached\n  • Running on a CPU-only worker node\n  • GPU driver/runtime not accessible",
+      "name": "NVENC check",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_sdr_nvenc",
-      "position": { "x": 900, "y": 4800 },
+      "position": {
+        "x": 1100,
+        "y": 2760
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Check: NVENC Encoder Available?\n(hevc_nvenc on this worker node)\n\nOutputs: YES → Resolution tiers | NO → SW fallback",
+      "name": "Check: NVENC?",
       "sourceRepo": "Community",
       "pluginName": "checkNodeHardwareEncoder",
       "version": "1.0.0",
       "id": "chk_nvenc",
-      "position": { "x": 900, "y": 5030 },
+      "position": {
+        "x": 1100,
+        "y": 2900
+      },
       "inputsDB": {
         "hardwareEncoder": "hevc_nvenc"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "── RESOLUTION-TIERED QUALITY (SDR) ───────────\nRoutes to different QP values based on resolution.\n\nOutputs from checkVideoResolution:\n  1=480p  → SD encoder (QP 26)\n  2=576p  → SD encoder (QP 26)\n  3=720p  → SD encoder (QP 26)\n  4=1080p → 1080p encoder (QP 24)\n  5=1440p → 4K encoder (QP 28)\n  6=4K    → 4K encoder (QP 28)\n  7=DCI4K → 4K encoder (QP 28)\n  8=8K    → 4K encoder (QP 28)\n  9=Other → 1080p encoder (QP 24, safe default)\n\n★ Configure QP in each encoder node below.",
+      "name": "Resolution tier",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_sdr_resolution",
-      "position": { "x": 900, "y": 5260 },
+      "position": {
+        "x": 1100,
+        "y": 3020
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Check Video Resolution\n(routes to appropriate quality tier)",
+      "name": "Check: resolution?",
       "sourceRepo": "Community",
       "pluginName": "checkVideoResolution",
       "version": "1.0.0",
       "id": "chk_resolution",
-      "position": { "x": 900, "y": 5490 },
+      "position": {
+        "x": 1100,
+        "y": 3160
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Set Video Encoder → HEVC NVENC (SD: ≤720p)\n★ Config: ffmpegQuality=26 | ffmpegPreset=slow\n  forceEncoding=false (stream-copies existing HEVC)",
+      "name": "Encode: SD (NVENC)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandSetVideoEncoder",
       "version": "1.0.0",
       "id": "cmd_hevc_sd",
-      "position": { "x": 300, "y": 5720 },
+      "position": {
+        "x": 500,
+        "y": 3280
+      },
       "inputsDB": {
         "outputCodec": "hevc",
         "ffmpegPresetEnabled": "true",
@@ -657,14 +772,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Set Video Encoder → HEVC NVENC (1080p / Unknown)\n★ Config: ffmpegQuality=24 | ffmpegPreset=slow\n  forceEncoding=false (stream-copies existing HEVC)",
+      "name": "Encode: 1080p (NVENC)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandSetVideoEncoder",
       "version": "1.0.0",
       "id": "cmd_hevc_1080",
-      "position": { "x": 900, "y": 5720 },
+      "position": {
+        "x": 1100,
+        "y": 3280
+      },
       "inputsDB": {
         "outputCodec": "hevc",
         "ffmpegPresetEnabled": "true",
@@ -678,14 +795,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Set Video Encoder → HEVC NVENC (4K+)\n★ Config: ffmpegQuality=28 | ffmpegPreset=slow\n  forceEncoding=false (stream-copies existing HEVC)",
+      "name": "Encode: 4K (NVENC)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandSetVideoEncoder",
       "version": "1.0.0",
       "id": "cmd_hevc_4k",
-      "position": { "x": 1500, "y": 5720 },
+      "position": {
+        "x": 1700,
+        "y": 3280
+      },
       "inputsDB": {
         "outputCodec": "hevc",
         "ffmpegPresetEnabled": "true",
@@ -699,25 +818,29 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "── SOFTWARE FALLBACK ENCODER (SDR) ───────────\nNVENC is NOT available on this worker.\nFalling back to libx265 software encoding.\n\nlibx265 uses CRF (Constant Rate Factor):\n  CRF 22 = visually near-lossless quality\n  CRF 28 = efficient, slight quality reduction\n\nSoftware encoding is much slower than NVENC\nbut produces the same output format.\n\n★ Config: ffmpegQuality=22 (CRF 22)",
+      "name": "Software fallback",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_sdr_sw",
-      "position": { "x": 1700, "y": 5260 },
+      "position": {
+        "x": 2150,
+        "y": 3020
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Set Video Encoder → HEVC Software (libx265)\n★ Config: ffmpegQuality=22 (CRF) | ffmpegPreset=slow",
+      "name": "Encode: libx265 (SW)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandSetVideoEncoder",
       "version": "1.0.0",
       "id": "cmd_hevc_sw",
-      "position": { "x": 1700, "y": 5490 },
+      "position": {
+        "x": 2150,
+        "y": 3160
+      },
       "inputsDB": {
         "outputCodec": "hevc",
         "ffmpegPresetEnabled": "true",
@@ -731,28 +854,47 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Add hvc1 Tag + Faststart (SDR path)\n(-tag:v hvc1 required for Apple device HEVC decode)\n(-movflags +faststart for web streaming)",
+      "name": "Set: hvc1 + faststart",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandCustomArguments",
       "version": "1.0.0",
       "id": "cmd_sdr_tags",
-      "position": { "x": 900, "y": 5950 },
+      "position": {
+        "x": 1100,
+        "y": 3400
+      },
       "inputsDB": {
         "inputArguments": "",
         "outputArguments": "-tag:v hvc1 -movflags +faststart"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Ensure EAC3 5.1 Surround - Pass 1 (SDR, lang: eng)\n★ Config: bitrate=384k | channels=6 | lang=eng",
+      "name": "Guard: 6+ ch surround?",
+      "sourceRepo": "Community",
+      "pluginName": "checkChannelCount",
+      "version": "1.0.0",
+      "position": {
+        "x": 1100,
+        "y": 3520
+      },
+      "inputsDB": {
+        "channelCount": "6"
+      },
+      "fpEnabled": true,
+      "id": "grd_sdr_eac3_ch"
+    },
+    {
+      "name": "Ensure EAC3 5.1 (eng)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandEnsureAudioStream",
       "version": "1.0.0",
       "id": "cmd_sdr_eac3_eng",
-      "position": { "x": 900, "y": 6180 },
+      "position": {
+        "x": 1100,
+        "y": 3640
+      },
       "inputsDB": {
         "audioEncoder": "eac3",
         "language": "eng",
@@ -764,14 +906,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Ensure EAC3 5.1 Surround - Pass 2 (SDR, lang: und)",
+      "name": "Ensure EAC3 5.1 (und)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandEnsureAudioStream",
       "version": "1.0.0",
       "id": "cmd_sdr_eac3_und",
-      "position": { "x": 900, "y": 6410 },
+      "position": {
+        "x": 1100,
+        "y": 3760
+      },
       "inputsDB": {
         "audioEncoder": "eac3",
         "language": "und",
@@ -783,14 +927,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Ensure Stereo AAC 2.0 - Pass 1 (SDR, lang: eng)\n★ Config: bitrate=192k | channels=2 | lang=eng",
+      "name": "Ensure AAC 2.0 (eng)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandEnsureAudioStream",
       "version": "1.0.0",
       "id": "cmd_sdr_ens_eng",
-      "position": { "x": 900, "y": 6640 },
+      "position": {
+        "x": 1100,
+        "y": 3880
+      },
       "inputsDB": {
         "audioEncoder": "aac",
         "language": "eng",
@@ -802,14 +948,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Ensure Stereo AAC 2.0 - Pass 2 (SDR, lang: und)",
+      "name": "Ensure AAC 2.0 (und)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandEnsureAudioStream",
       "version": "1.0.0",
       "id": "cmd_sdr_ens_und",
-      "position": { "x": 900, "y": 6870 },
+      "position": {
+        "x": 1100,
+        "y": 4000
+      },
       "inputsDB": {
         "audioEncoder": "aac",
         "language": "und",
@@ -821,14 +969,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Remove Incompatible Audio (SDR path)\n(includes DTS — converted to EAC3 above)\n★ Config: remove 'dca' to keep DTS instead",
+      "name": "Remove: truehd, flac, dca...",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveStreamByProperty",
       "version": "1.0.0",
       "id": "cmd_sdr_rmaudio",
-      "position": { "x": 900, "y": 7100 },
+      "position": {
+        "x": 1100,
+        "y": 4120
+      },
       "inputsDB": {
         "propertyToCheck": "codec_name",
         "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca",
@@ -836,14 +986,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Reorder Streams (SDR path)\n(stereo AAC first)",
+      "name": "Reorder (stereo first)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRorderStreams",
       "version": "1.0.0",
       "id": "cmd_sdr_reorder",
-      "position": { "x": 900, "y": 7330 },
+      "position": {
+        "x": 1100,
+        "y": 4240
+      },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
         "languages": "eng,und",
@@ -853,119 +1005,139 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Execute FFmpeg (SDR path)\n(NVENC or SW encodes video; audio encoded/reordered)",
+      "name": "Execute FFmpeg (SDR)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandExecute",
       "version": "1.0.0",
       "id": "ffe_sdr",
-      "position": { "x": 900, "y": 7560 },
+      "position": {
+        "x": 1100,
+        "y": 4360
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Validate File Size Ratio (SDR path)\n★ Config: lessThan=120 (allows up to 20% growth)\n  Increase to 150 for short clips or noisy sources",
+      "name": "Check: file size ratio",
       "sourceRepo": "Community",
       "pluginName": "compareFileSizeRatio",
       "version": "1.0.0",
       "id": "fl_sdr_size",
-      "position": { "x": 900, "y": 7790 },
+      "position": {
+        "x": 1100,
+        "y": 4480
+      },
       "inputsDB": {
         "greaterThan": "0",
         "lessThan": "120"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "⚠ SDR OUTPUT TOO LARGE — SENDING TO REVIEW\nOutput exceeds 120% of original size.\nOriginal file preserved.",
+      "name": "Too big — review",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_sdr_toobig",
-      "position": { "x": 1500, "y": 7790 },
+      "position": {
+        "x": 1700,
+        "y": 4600
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Flag for Review\n(SDR file too large after transcode)",
+      "name": "Flag for review",
       "sourceRepo": "Community",
       "pluginName": "requireReview",
       "version": "1.0.0",
       "id": "fl_sdr_review",
-      "position": { "x": 1500, "y": 8020 },
+      "position": {
+        "x": 1700,
+        "y": 4880
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Validate Output Duration (SDR path)\n★ Config: greaterThan=98, lessThan=102\n(output must be 98–102% of source duration)",
+      "name": "Check: duration ratio",
       "sourceRepo": "Community",
       "pluginName": "compareFileDurationRatio",
       "version": "1.0.0",
       "id": "fl_sdr_duration",
-      "position": { "x": 900, "y": 8020 },
+      "position": {
+        "x": 1100,
+        "y": 4600
+      },
       "inputsDB": {
         "greaterThan": "98",
         "lessThan": "102"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "⚠ SDR DURATION MISMATCH — SENDING TO REVIEW\nOutput duration outside 98–102% of source.\nOriginal file preserved.",
+      "name": "Duration mismatch",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_sdr_dur_fail",
-      "position": { "x": 1500, "y": 8020 },
+      "position": {
+        "x": 1700,
+        "y": 4740
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Flag for Review (SDR duration mismatch)",
+      "name": "Flag for review",
       "sourceRepo": "Community",
       "pluginName": "requireReview",
       "version": "1.0.0",
       "id": "fl_sdr_dur_review",
-      "position": { "x": 1500, "y": 8250 },
+      "position": {
+        "x": 1700,
+        "y": 5000
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Replace Original File (SDR path)",
+      "name": "Replace original file",
       "sourceRepo": "Community",
       "pluginName": "replaceOriginalFile",
       "version": "1.0.0",
       "id": "fl_sdr_replace",
-      "position": { "x": 900, "y": 8250 },
+      "position": {
+        "x": 1100,
+        "y": 4720
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "── POST-PROCESSING NOTIFICATIONS ─────────────\nOptional notifications after file replacement.\nBoth HDR and SDR paths converge here.\nControlled by variables set at the top of the flow.\n\nPlex Notify (enable_plex_notify = 'true'):\n  Triggers a Plex library refresh.\n  ★ Configure the 'Notify Plex' webRequest node.\n\nRadarr/Sonarr Notify (enable_arr_notify = 'true'):\n  Notifies *arr to refresh metadata.\n  ★ Configure the 'Notify Arr' node.",
+      "name": "Notifications",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_notify",
-      "position": { "x": 0, "y": 8480 },
+      "position": {
+        "x": 0,
+        "y": 4840
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Check: enable_plex_notify == 'true'?\n(YES → send Plex refresh | NO → skip)",
+      "name": "Check: plex notify?",
       "sourceRepo": "Community",
       "pluginName": "checkFlowVariable",
       "version": "1.0.0",
       "id": "chk_plex_notify",
-      "position": { "x": 0, "y": 8710 },
+      "position": {
+        "x": 0,
+        "y": 4980
+      },
       "inputsDB": {
         "variable": "enable_plex_notify",
         "value": "true",
@@ -973,28 +1145,32 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Notify Plex: Refresh Library\n★ CONFIGURE: Update URL with your Plex IP and token\n  URL format: http://PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=TOKEN",
+      "name": "Notify Plex",
       "sourceRepo": "Community",
       "pluginName": "webRequest",
       "version": "1.0.0",
       "id": "web_plex",
-      "position": { "x": 0, "y": 8940 },
+      "position": {
+        "x": 750,
+        "y": 5100
+      },
       "inputsDB": {
         "url": "http://YOUR_PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=YOUR_PLEX_TOKEN",
         "method": "GET"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Check: enable_arr_notify == 'true'?\n(YES → notify Radarr/Sonarr | NO → skip)",
+      "name": "Check: arr notify?",
       "sourceRepo": "Community",
       "pluginName": "checkFlowVariable",
       "version": "1.0.0",
       "id": "chk_arr_notify",
-      "position": { "x": 0, "y": 9170 },
+      "position": {
+        "x": 0,
+        "y": 5220
+      },
       "inputsDB": {
         "variable": "enable_arr_notify",
         "value": "true",
@@ -1002,14 +1178,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Notify Radarr or Sonarr\n★ CONFIGURE: Set arr, arr_host, and arr_api_key\n  arr: 'radarr' or 'sonarr'\n  arr_host: http://YOUR_ARR_IP:PORT\n  arr_api_key: from Settings → General → API Key\n  (Duplicate this node to notify both apps)",
+      "name": "Notify Radarr/Sonarr",
       "sourceRepo": "Community",
       "pluginName": "notifyRadarrOrSonarr",
       "version": "1.0.0",
       "id": "arr_notify",
-      "position": { "x": 0, "y": 9400 },
+      "position": {
+        "x": 0,
+        "y": 5340
+      },
       "inputsDB": {
         "arr": "radarr",
         "arr_host": "http://YOUR_RADARR_IP:7878",
@@ -1017,146 +1195,711 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "── ERROR HANDLING ────────────────────────────\nGlobal error handler. Original preserved on error.",
+      "name": "On flow error",
       "sourceRepo": "Community",
       "pluginName": "onFlowError",
       "version": "1.0.0",
       "id": "err_on",
-      "position": { "x": 2200, "y": 0 },
+      "position": {
+        "x": 2600,
+        "y": 0
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Reset Flow Error State",
+      "name": "Reset error",
       "sourceRepo": "Community",
       "pluginName": "resetFlowError",
       "version": "1.0.0",
       "id": "err_reset",
-      "position": { "x": 2200, "y": 230 },
+      "position": {
+        "x": 2600,
+        "y": 120
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Fail Flow\n(file marked as Error; original preserved)",
+      "name": "Fail flow",
       "sourceRepo": "Community",
       "pluginName": "failFlow",
       "version": "1.0.0",
       "id": "err_fail",
-      "position": { "x": 2200, "y": 460 },
+      "position": {
+        "x": 2600,
+        "y": 240
+      },
       "inputsDB": {},
       "fpEnabled": true
     }
-
   ],
-
   "flowEdges": [
-
-    { "source": "inp_001",              "sourceHandle": "1", "target": "cmt_config",           "targetHandle": null, "id": "e_inp_config" },
-    { "source": "cmt_config",           "sourceHandle": "1", "target": "var_rm_commentary",    "targetHandle": null, "id": "e_config_var1" },
-    { "source": "var_rm_commentary",    "sourceHandle": "1", "target": "var_enable_plex",      "targetHandle": null, "id": "e_var1_var2" },
-    { "source": "var_enable_plex",      "sourceHandle": "1", "target": "var_enable_arr",       "targetHandle": null, "id": "e_var2_var3" },
-    { "source": "var_enable_arr",       "sourceHandle": "1", "target": "cmt_about",            "targetHandle": null, "id": "e_var3_about" },
-    { "source": "cmt_about",            "sourceHandle": "1", "target": "cmt_guards",           "targetHandle": null, "id": "e_about_guards" },
-    { "source": "cmt_guards",           "sourceHandle": "1", "target": "grd_ext",             "targetHandle": null, "id": "e_guards_ext" },
-
-    { "source": "grd_ext",              "sourceHandle": "1", "target": "grd_vid",             "targetHandle": null, "id": "e_ext_yes" },
-    { "source": "grd_ext",              "sourceHandle": "2", "target": "cmt_health",          "targetHandle": null, "id": "e_ext_no" },
-
-    { "source": "grd_vid",              "sourceHandle": "1", "target": "grd_aud",             "targetHandle": null, "id": "e_vid_yes" },
-    { "source": "grd_vid",              "sourceHandle": "2", "target": "cmt_health",          "targetHandle": null, "id": "e_vid_no" },
-
-    { "source": "grd_aud",              "sourceHandle": "1", "target": "grd_ch",              "targetHandle": null, "id": "e_aud_yes" },
-    { "source": "grd_aud",              "sourceHandle": "2", "target": "cmt_health",          "targetHandle": null, "id": "e_aud_no" },
-
-    { "source": "grd_ch",               "sourceHandle": "1", "target": "cmt_optimal",         "targetHandle": null, "id": "e_ch_yes" },
-    { "source": "grd_ch",               "sourceHandle": "2", "target": "cmt_health",          "targetHandle": null, "id": "e_ch_no" },
-
-    { "source": "cmt_optimal",          "sourceHandle": "1", "target": "fl_noop",             "targetHandle": null, "id": "e_optimal_noop" },
-
-    { "source": "cmt_health",           "sourceHandle": "1", "target": "chk_health",          "targetHandle": null, "id": "e_health_chk" },
-    { "source": "chk_health",           "sourceHandle": "1", "target": "cmt_hdr_detect",      "targetHandle": null, "id": "e_health_ok" },
-    { "source": "chk_health",           "sourceHandle": "2", "target": "cmt_health_fail",     "targetHandle": null, "id": "e_health_fail" },
-    { "source": "cmt_health_fail",      "sourceHandle": "1", "target": "err_health",          "targetHandle": null, "id": "e_health_fail_err" },
-
-    { "source": "cmt_hdr_detect",       "sourceHandle": "1", "target": "chk_hdr",             "targetHandle": null, "id": "e_detect_chk" },
-    { "source": "chk_hdr",              "sourceHandle": "1", "target": "cmt_hdr_path",        "targetHandle": null, "id": "e_hdr_yes" },
-    { "source": "chk_hdr",              "sourceHandle": "2", "target": "cmt_sdr_path",        "targetHandle": null, "id": "e_hdr_no" },
-
-    { "source": "cmt_hdr_path",         "sourceHandle": "1", "target": "ffs_hdr",             "targetHandle": null, "id": "e_hdrpath_start" },
-    { "source": "ffs_hdr",              "sourceHandle": "1", "target": "cmd_hdr_mp4",         "targetHandle": null, "id": "e_hdr_mp4" },
-    { "source": "cmd_hdr_mp4",          "sourceHandle": "1", "target": "cmd_hdr_rmsub",       "targetHandle": null, "id": "e_hdr_mp4_sub" },
-    { "source": "cmd_hdr_rmsub",        "sourceHandle": "1", "target": "cmd_hdr_rmdata",      "targetHandle": null, "id": "e_hdr_sub_data" },
-    { "source": "cmd_hdr_rmdata",       "sourceHandle": "1", "target": "chk_hdr_rm_commentary","targetHandle": null, "id": "e_hdr_data_commentary" },
-    { "source": "chk_hdr_rm_commentary","sourceHandle": "1", "target": "cmd_hdr_rmcommentary","targetHandle": null, "id": "e_hdr_commentary_yes" },
-    { "source": "chk_hdr_rm_commentary","sourceHandle": "2", "target": "cmd_hdr_tags",        "targetHandle": null, "id": "e_hdr_commentary_no" },
-    { "source": "cmd_hdr_rmcommentary", "sourceHandle": "1", "target": "cmd_hdr_tags",        "targetHandle": null, "id": "e_hdr_rmcommentary_tags" },
-    { "source": "cmd_hdr_tags",         "sourceHandle": "1", "target": "cmd_hdr_eac3_eng",    "targetHandle": null, "id": "e_hdr_tags_eac3" },
-    { "source": "cmd_hdr_eac3_eng",     "sourceHandle": "1", "target": "cmd_hdr_eac3_und",    "targetHandle": null, "id": "e_hdr_eac3_eng_und" },
-    { "source": "cmd_hdr_eac3_und",     "sourceHandle": "1", "target": "cmd_hdr_ens_eng",     "targetHandle": null, "id": "e_hdr_eac3_und_ens" },
-    { "source": "cmd_hdr_ens_eng",      "sourceHandle": "1", "target": "cmd_hdr_ens_und",     "targetHandle": null, "id": "e_hdr_eng_und" },
-    { "source": "cmd_hdr_ens_und",      "sourceHandle": "1", "target": "cmd_hdr_rmaudio",     "targetHandle": null, "id": "e_hdr_und_rmaudio" },
-    { "source": "cmd_hdr_rmaudio",      "sourceHandle": "1", "target": "cmd_hdr_reorder",     "targetHandle": null, "id": "e_hdr_rmaudio_reorder" },
-    { "source": "cmd_hdr_reorder",      "sourceHandle": "1", "target": "ffe_hdr",             "targetHandle": null, "id": "e_hdr_reorder_exec" },
-    { "source": "ffe_hdr",              "sourceHandle": "1", "target": "fl_hdr_duration",     "targetHandle": null, "id": "e_hdr_exec_duration" },
-    { "source": "fl_hdr_duration",      "sourceHandle": "1", "target": "fl_hdr_replace",      "targetHandle": null, "id": "e_hdr_duration_ok" },
-    { "source": "fl_hdr_duration",      "sourceHandle": "2", "target": "cmt_hdr_dur_fail",    "targetHandle": null, "id": "e_hdr_duration_fail" },
-    { "source": "cmt_hdr_dur_fail",     "sourceHandle": "1", "target": "fl_hdr_dur_review",   "targetHandle": null, "id": "e_hdr_dur_review" },
-    { "source": "fl_hdr_replace",       "sourceHandle": "1", "target": "cmt_notify",          "targetHandle": null, "id": "e_hdr_replace_notify" },
-
-    { "source": "cmt_sdr_path",         "sourceHandle": "1", "target": "ffs_sdr",             "targetHandle": null, "id": "e_sdrpath_start" },
-    { "source": "ffs_sdr",              "sourceHandle": "1", "target": "cmd_sdr_mp4",         "targetHandle": null, "id": "e_sdr_mp4" },
-    { "source": "cmd_sdr_mp4",          "sourceHandle": "1", "target": "cmd_sdr_rmsub",       "targetHandle": null, "id": "e_sdr_mp4_sub" },
-    { "source": "cmd_sdr_rmsub",        "sourceHandle": "1", "target": "cmd_sdr_rmdata",      "targetHandle": null, "id": "e_sdr_sub_data" },
-    { "source": "cmd_sdr_rmdata",       "sourceHandle": "1", "target": "chk_sdr_rm_commentary","targetHandle": null, "id": "e_sdr_data_commentary" },
-    { "source": "chk_sdr_rm_commentary","sourceHandle": "1", "target": "cmd_sdr_rmcommentary","targetHandle": null, "id": "e_sdr_commentary_yes" },
-    { "source": "chk_sdr_rm_commentary","sourceHandle": "2", "target": "cmt_sdr_nvenc",       "targetHandle": null, "id": "e_sdr_commentary_no" },
-    { "source": "cmd_sdr_rmcommentary", "sourceHandle": "1", "target": "cmt_sdr_nvenc",       "targetHandle": null, "id": "e_sdr_rmcommentary_nvenc" },
-    { "source": "cmt_sdr_nvenc",        "sourceHandle": "1", "target": "chk_nvenc",           "targetHandle": null, "id": "e_cmt_nvenc_chk" },
-    { "source": "chk_nvenc",            "sourceHandle": "1", "target": "cmt_sdr_resolution",  "targetHandle": null, "id": "e_nvenc_yes" },
-    { "source": "chk_nvenc",            "sourceHandle": "2", "target": "cmt_sdr_sw",          "targetHandle": null, "id": "e_nvenc_no" },
-    { "source": "cmt_sdr_resolution",   "sourceHandle": "1", "target": "chk_resolution",      "targetHandle": null, "id": "e_cmt_resolution_chk" },
-    { "source": "chk_resolution",       "sourceHandle": "1", "target": "cmd_hevc_sd",         "targetHandle": null, "id": "e_res_480p" },
-    { "source": "chk_resolution",       "sourceHandle": "2", "target": "cmd_hevc_sd",         "targetHandle": null, "id": "e_res_576p" },
-    { "source": "chk_resolution",       "sourceHandle": "3", "target": "cmd_hevc_sd",         "targetHandle": null, "id": "e_res_720p" },
-    { "source": "chk_resolution",       "sourceHandle": "4", "target": "cmd_hevc_1080",       "targetHandle": null, "id": "e_res_1080p" },
-    { "source": "chk_resolution",       "sourceHandle": "5", "target": "cmd_hevc_4k",         "targetHandle": null, "id": "e_res_1440p" },
-    { "source": "chk_resolution",       "sourceHandle": "6", "target": "cmd_hevc_4k",         "targetHandle": null, "id": "e_res_4k" },
-    { "source": "chk_resolution",       "sourceHandle": "7", "target": "cmd_hevc_4k",         "targetHandle": null, "id": "e_res_dci4k" },
-    { "source": "chk_resolution",       "sourceHandle": "8", "target": "cmd_hevc_4k",         "targetHandle": null, "id": "e_res_8k" },
-    { "source": "chk_resolution",       "sourceHandle": "9", "target": "cmd_hevc_1080",       "targetHandle": null, "id": "e_res_other" },
-    { "source": "cmd_hevc_sd",          "sourceHandle": "1", "target": "cmd_sdr_tags",        "targetHandle": null, "id": "e_hevc_sd_tags" },
-    { "source": "cmd_hevc_1080",        "sourceHandle": "1", "target": "cmd_sdr_tags",        "targetHandle": null, "id": "e_hevc_1080_tags" },
-    { "source": "cmd_hevc_4k",          "sourceHandle": "1", "target": "cmd_sdr_tags",        "targetHandle": null, "id": "e_hevc_4k_tags" },
-    { "source": "cmt_sdr_sw",           "sourceHandle": "1", "target": "cmd_hevc_sw",         "targetHandle": null, "id": "e_cmt_sw_cmd" },
-    { "source": "cmd_hevc_sw",          "sourceHandle": "1", "target": "cmd_sdr_tags",        "targetHandle": null, "id": "e_hevc_sw_tags" },
-    { "source": "cmd_sdr_tags",         "sourceHandle": "1", "target": "cmd_sdr_eac3_eng",    "targetHandle": null, "id": "e_sdr_tags_eac3" },
-    { "source": "cmd_sdr_eac3_eng",     "sourceHandle": "1", "target": "cmd_sdr_eac3_und",    "targetHandle": null, "id": "e_sdr_eac3_eng_und" },
-    { "source": "cmd_sdr_eac3_und",     "sourceHandle": "1", "target": "cmd_sdr_ens_eng",     "targetHandle": null, "id": "e_sdr_eac3_und_ens" },
-    { "source": "cmd_sdr_ens_eng",      "sourceHandle": "1", "target": "cmd_sdr_ens_und",     "targetHandle": null, "id": "e_sdr_eng_und" },
-    { "source": "cmd_sdr_ens_und",      "sourceHandle": "1", "target": "cmd_sdr_rmaudio",     "targetHandle": null, "id": "e_sdr_und_rmaudio" },
-    { "source": "cmd_sdr_rmaudio",      "sourceHandle": "1", "target": "cmd_sdr_reorder",     "targetHandle": null, "id": "e_sdr_rmaudio_reorder" },
-    { "source": "cmd_sdr_reorder",      "sourceHandle": "1", "target": "ffe_sdr",             "targetHandle": null, "id": "e_sdr_reorder_exec" },
-    { "source": "ffe_sdr",              "sourceHandle": "1", "target": "fl_sdr_size",         "targetHandle": null, "id": "e_sdr_exec_size" },
-    { "source": "fl_sdr_size",          "sourceHandle": "1", "target": "fl_sdr_duration",     "targetHandle": null, "id": "e_sdr_size_ok" },
-    { "source": "fl_sdr_size",          "sourceHandle": "2", "target": "cmt_sdr_toobig",      "targetHandle": null, "id": "e_sdr_size_fail" },
-    { "source": "cmt_sdr_toobig",       "sourceHandle": "1", "target": "fl_sdr_review",       "targetHandle": null, "id": "e_sdr_toobig_review" },
-    { "source": "fl_sdr_duration",      "sourceHandle": "1", "target": "fl_sdr_replace",      "targetHandle": null, "id": "e_sdr_duration_ok" },
-    { "source": "fl_sdr_duration",      "sourceHandle": "2", "target": "cmt_sdr_dur_fail",    "targetHandle": null, "id": "e_sdr_duration_fail" },
-    { "source": "cmt_sdr_dur_fail",     "sourceHandle": "1", "target": "fl_sdr_dur_review",   "targetHandle": null, "id": "e_sdr_dur_review" },
-    { "source": "fl_sdr_replace",       "sourceHandle": "1", "target": "cmt_notify",          "targetHandle": null, "id": "e_sdr_replace_notify" },
-
-    { "source": "cmt_notify",           "sourceHandle": "1", "target": "chk_plex_notify",     "targetHandle": null, "id": "e_notify_plex_chk" },
-    { "source": "chk_plex_notify",      "sourceHandle": "1", "target": "web_plex",            "targetHandle": null, "id": "e_plex_yes" },
-    { "source": "chk_plex_notify",      "sourceHandle": "2", "target": "chk_arr_notify",      "targetHandle": null, "id": "e_plex_no" },
-    { "source": "web_plex",             "sourceHandle": "1", "target": "chk_arr_notify",      "targetHandle": null, "id": "e_plex_done" },
-    { "source": "chk_arr_notify",       "sourceHandle": "1", "target": "arr_notify",          "targetHandle": null, "id": "e_arr_yes" },
-
-    { "source": "err_on",               "sourceHandle": "1", "target": "err_reset",           "targetHandle": null, "id": "e_err_reset" },
-    { "source": "err_reset",            "sourceHandle": "1", "target": "err_fail",            "targetHandle": null, "id": "e_err_fail" }
-
+    {
+      "source": "inp_001",
+      "sourceHandle": "1",
+      "target": "cmt_config",
+      "targetHandle": null,
+      "id": "e_inp_config"
+    },
+    {
+      "source": "cmt_config",
+      "sourceHandle": "1",
+      "target": "var_rm_commentary",
+      "targetHandle": null,
+      "id": "e_config_var1"
+    },
+    {
+      "source": "var_rm_commentary",
+      "sourceHandle": "1",
+      "target": "var_enable_plex",
+      "targetHandle": null,
+      "id": "e_var1_var2"
+    },
+    {
+      "source": "var_enable_plex",
+      "sourceHandle": "1",
+      "target": "var_enable_arr",
+      "targetHandle": null,
+      "id": "e_var2_var3"
+    },
+    {
+      "source": "var_enable_arr",
+      "sourceHandle": "1",
+      "target": "cmt_about",
+      "targetHandle": null,
+      "id": "e_var3_about"
+    },
+    {
+      "source": "cmt_about",
+      "sourceHandle": "1",
+      "target": "cmt_guards",
+      "targetHandle": null,
+      "id": "e_about_guards"
+    },
+    {
+      "source": "cmt_guards",
+      "sourceHandle": "1",
+      "target": "grd_ext",
+      "targetHandle": null,
+      "id": "e_guards_ext"
+    },
+    {
+      "source": "grd_ext",
+      "sourceHandle": "1",
+      "target": "grd_vid",
+      "targetHandle": null,
+      "id": "e_ext_yes"
+    },
+    {
+      "source": "grd_ext",
+      "sourceHandle": "2",
+      "target": "cmt_health",
+      "targetHandle": null,
+      "id": "e_ext_no"
+    },
+    {
+      "source": "grd_vid",
+      "sourceHandle": "1",
+      "target": "grd_aud",
+      "targetHandle": null,
+      "id": "e_vid_yes"
+    },
+    {
+      "source": "grd_vid",
+      "sourceHandle": "2",
+      "target": "cmt_health",
+      "targetHandle": null,
+      "id": "e_vid_no"
+    },
+    {
+      "source": "grd_aud",
+      "sourceHandle": "1",
+      "target": "grd_ch",
+      "targetHandle": null,
+      "id": "e_aud_yes"
+    },
+    {
+      "source": "grd_aud",
+      "sourceHandle": "2",
+      "target": "cmt_health",
+      "targetHandle": null,
+      "id": "e_aud_no"
+    },
+    {
+      "source": "grd_ch",
+      "sourceHandle": "1",
+      "target": "cmt_optimal",
+      "targetHandle": null,
+      "id": "e_ch_yes"
+    },
+    {
+      "source": "grd_ch",
+      "sourceHandle": "2",
+      "target": "cmt_health",
+      "targetHandle": null,
+      "id": "e_ch_no"
+    },
+    {
+      "source": "cmt_optimal",
+      "sourceHandle": "1",
+      "target": "fl_noop",
+      "targetHandle": null,
+      "id": "e_optimal_noop"
+    },
+    {
+      "source": "cmt_health",
+      "sourceHandle": "1",
+      "target": "chk_health",
+      "targetHandle": null,
+      "id": "e_health_chk"
+    },
+    {
+      "source": "chk_health",
+      "sourceHandle": "1",
+      "target": "cmt_hdr_detect",
+      "targetHandle": null,
+      "id": "e_health_ok"
+    },
+    {
+      "source": "chk_health",
+      "sourceHandle": "2",
+      "target": "cmt_health_fail",
+      "targetHandle": null,
+      "id": "e_health_fail"
+    },
+    {
+      "source": "cmt_health_fail",
+      "sourceHandle": "1",
+      "target": "err_health",
+      "targetHandle": null,
+      "id": "e_health_fail_err"
+    },
+    {
+      "source": "cmt_hdr_detect",
+      "sourceHandle": "1",
+      "target": "chk_hdr",
+      "targetHandle": null,
+      "id": "e_detect_chk"
+    },
+    {
+      "source": "chk_hdr",
+      "sourceHandle": "1",
+      "target": "cmt_hdr_path",
+      "targetHandle": null,
+      "id": "e_hdr_yes"
+    },
+    {
+      "source": "chk_hdr",
+      "sourceHandle": "2",
+      "target": "cmt_sdr_path",
+      "targetHandle": null,
+      "id": "e_hdr_no"
+    },
+    {
+      "source": "cmt_hdr_path",
+      "sourceHandle": "1",
+      "target": "ffs_hdr",
+      "targetHandle": null,
+      "id": "e_hdrpath_start"
+    },
+    {
+      "source": "ffs_hdr",
+      "sourceHandle": "1",
+      "target": "cmd_hdr_mp4",
+      "targetHandle": null,
+      "id": "e_hdr_mp4"
+    },
+    {
+      "source": "cmd_hdr_mp4",
+      "sourceHandle": "1",
+      "target": "cmd_hdr_rmsub",
+      "targetHandle": null,
+      "id": "e_hdr_mp4_sub"
+    },
+    {
+      "source": "cmd_hdr_rmsub",
+      "sourceHandle": "1",
+      "target": "cmd_hdr_rmdata",
+      "targetHandle": null,
+      "id": "e_hdr_sub_data"
+    },
+    {
+      "source": "cmd_hdr_rmdata",
+      "sourceHandle": "1",
+      "target": "chk_hdr_rm_commentary",
+      "targetHandle": null,
+      "id": "e_hdr_data_commentary"
+    },
+    {
+      "source": "chk_hdr_rm_commentary",
+      "sourceHandle": "1",
+      "target": "cmd_hdr_rmcommentary",
+      "targetHandle": null,
+      "id": "e_hdr_commentary_yes"
+    },
+    {
+      "source": "chk_hdr_rm_commentary",
+      "sourceHandle": "2",
+      "target": "cmd_hdr_tags",
+      "targetHandle": null,
+      "id": "e_hdr_commentary_no"
+    },
+    {
+      "source": "cmd_hdr_rmcommentary",
+      "sourceHandle": "1",
+      "target": "cmd_hdr_tags",
+      "targetHandle": null,
+      "id": "e_hdr_rmcommentary_tags"
+    },
+    {
+      "source": "cmd_hdr_eac3_eng",
+      "sourceHandle": "1",
+      "target": "cmd_hdr_eac3_und",
+      "targetHandle": null,
+      "id": "e_hdr_eac3_eng_und"
+    },
+    {
+      "source": "cmd_hdr_eac3_und",
+      "sourceHandle": "1",
+      "target": "cmd_hdr_ens_eng",
+      "targetHandle": null,
+      "id": "e_hdr_eac3_und_ens"
+    },
+    {
+      "source": "cmd_hdr_ens_eng",
+      "sourceHandle": "1",
+      "target": "cmd_hdr_ens_und",
+      "targetHandle": null,
+      "id": "e_hdr_eng_und"
+    },
+    {
+      "source": "cmd_hdr_ens_und",
+      "sourceHandle": "1",
+      "target": "cmd_hdr_rmaudio",
+      "targetHandle": null,
+      "id": "e_hdr_und_rmaudio"
+    },
+    {
+      "source": "cmd_hdr_rmaudio",
+      "sourceHandle": "1",
+      "target": "cmd_hdr_reorder",
+      "targetHandle": null,
+      "id": "e_hdr_rmaudio_reorder"
+    },
+    {
+      "source": "cmd_hdr_reorder",
+      "sourceHandle": "1",
+      "target": "ffe_hdr",
+      "targetHandle": null,
+      "id": "e_hdr_reorder_exec"
+    },
+    {
+      "source": "ffe_hdr",
+      "sourceHandle": "1",
+      "target": "fl_hdr_duration",
+      "targetHandle": null,
+      "id": "e_hdr_exec_duration"
+    },
+    {
+      "source": "fl_hdr_duration",
+      "sourceHandle": "1",
+      "target": "fl_hdr_replace",
+      "targetHandle": null,
+      "id": "e_hdr_duration_ok"
+    },
+    {
+      "source": "fl_hdr_duration",
+      "sourceHandle": "2",
+      "target": "cmt_hdr_dur_fail",
+      "targetHandle": null,
+      "id": "e_hdr_duration_fail"
+    },
+    {
+      "source": "cmt_hdr_dur_fail",
+      "sourceHandle": "1",
+      "target": "fl_hdr_dur_review",
+      "targetHandle": null,
+      "id": "e_hdr_dur_review"
+    },
+    {
+      "source": "fl_hdr_replace",
+      "sourceHandle": "1",
+      "target": "cmt_notify",
+      "targetHandle": null,
+      "id": "e_hdr_replace_notify"
+    },
+    {
+      "source": "cmt_sdr_path",
+      "sourceHandle": "1",
+      "target": "ffs_sdr",
+      "targetHandle": null,
+      "id": "e_sdrpath_start"
+    },
+    {
+      "source": "ffs_sdr",
+      "sourceHandle": "1",
+      "target": "cmd_sdr_mp4",
+      "targetHandle": null,
+      "id": "e_sdr_mp4"
+    },
+    {
+      "source": "cmd_sdr_mp4",
+      "sourceHandle": "1",
+      "target": "cmd_sdr_rmsub",
+      "targetHandle": null,
+      "id": "e_sdr_mp4_sub"
+    },
+    {
+      "source": "cmd_sdr_rmsub",
+      "sourceHandle": "1",
+      "target": "cmd_sdr_rmdata",
+      "targetHandle": null,
+      "id": "e_sdr_sub_data"
+    },
+    {
+      "source": "cmd_sdr_rmdata",
+      "sourceHandle": "1",
+      "target": "chk_sdr_rm_commentary",
+      "targetHandle": null,
+      "id": "e_sdr_data_commentary"
+    },
+    {
+      "source": "chk_sdr_rm_commentary",
+      "sourceHandle": "1",
+      "target": "cmd_sdr_rmcommentary",
+      "targetHandle": null,
+      "id": "e_sdr_commentary_yes"
+    },
+    {
+      "source": "chk_sdr_rm_commentary",
+      "sourceHandle": "2",
+      "target": "cmt_sdr_nvenc",
+      "targetHandle": null,
+      "id": "e_sdr_commentary_no"
+    },
+    {
+      "source": "cmd_sdr_rmcommentary",
+      "sourceHandle": "1",
+      "target": "cmt_sdr_nvenc",
+      "targetHandle": null,
+      "id": "e_sdr_rmcommentary_nvenc"
+    },
+    {
+      "source": "cmt_sdr_nvenc",
+      "sourceHandle": "1",
+      "target": "chk_nvenc",
+      "targetHandle": null,
+      "id": "e_cmt_nvenc_chk"
+    },
+    {
+      "source": "chk_nvenc",
+      "sourceHandle": "1",
+      "target": "cmt_sdr_resolution",
+      "targetHandle": null,
+      "id": "e_nvenc_yes"
+    },
+    {
+      "source": "chk_nvenc",
+      "sourceHandle": "2",
+      "target": "cmt_sdr_sw",
+      "targetHandle": null,
+      "id": "e_nvenc_no"
+    },
+    {
+      "source": "cmt_sdr_resolution",
+      "sourceHandle": "1",
+      "target": "chk_resolution",
+      "targetHandle": null,
+      "id": "e_cmt_resolution_chk"
+    },
+    {
+      "source": "chk_resolution",
+      "sourceHandle": "1",
+      "target": "cmd_hevc_sd",
+      "targetHandle": null,
+      "id": "e_res_480p"
+    },
+    {
+      "source": "chk_resolution",
+      "sourceHandle": "2",
+      "target": "cmd_hevc_sd",
+      "targetHandle": null,
+      "id": "e_res_576p"
+    },
+    {
+      "source": "chk_resolution",
+      "sourceHandle": "3",
+      "target": "cmd_hevc_sd",
+      "targetHandle": null,
+      "id": "e_res_720p"
+    },
+    {
+      "source": "chk_resolution",
+      "sourceHandle": "4",
+      "target": "cmd_hevc_1080",
+      "targetHandle": null,
+      "id": "e_res_1080p"
+    },
+    {
+      "source": "chk_resolution",
+      "sourceHandle": "5",
+      "target": "cmd_hevc_4k",
+      "targetHandle": null,
+      "id": "e_res_1440p"
+    },
+    {
+      "source": "chk_resolution",
+      "sourceHandle": "6",
+      "target": "cmd_hevc_4k",
+      "targetHandle": null,
+      "id": "e_res_4k"
+    },
+    {
+      "source": "chk_resolution",
+      "sourceHandle": "7",
+      "target": "cmd_hevc_4k",
+      "targetHandle": null,
+      "id": "e_res_dci4k"
+    },
+    {
+      "source": "chk_resolution",
+      "sourceHandle": "8",
+      "target": "cmd_hevc_4k",
+      "targetHandle": null,
+      "id": "e_res_8k"
+    },
+    {
+      "source": "chk_resolution",
+      "sourceHandle": "9",
+      "target": "cmd_hevc_1080",
+      "targetHandle": null,
+      "id": "e_res_other"
+    },
+    {
+      "source": "cmd_hevc_sd",
+      "sourceHandle": "1",
+      "target": "cmd_sdr_tags",
+      "targetHandle": null,
+      "id": "e_hevc_sd_tags"
+    },
+    {
+      "source": "cmd_hevc_1080",
+      "sourceHandle": "1",
+      "target": "cmd_sdr_tags",
+      "targetHandle": null,
+      "id": "e_hevc_1080_tags"
+    },
+    {
+      "source": "cmd_hevc_4k",
+      "sourceHandle": "1",
+      "target": "cmd_sdr_tags",
+      "targetHandle": null,
+      "id": "e_hevc_4k_tags"
+    },
+    {
+      "source": "cmt_sdr_sw",
+      "sourceHandle": "1",
+      "target": "cmd_hevc_sw",
+      "targetHandle": null,
+      "id": "e_cmt_sw_cmd"
+    },
+    {
+      "source": "cmd_hevc_sw",
+      "sourceHandle": "1",
+      "target": "cmd_sdr_tags",
+      "targetHandle": null,
+      "id": "e_hevc_sw_tags"
+    },
+    {
+      "source": "cmd_sdr_eac3_eng",
+      "sourceHandle": "1",
+      "target": "cmd_sdr_eac3_und",
+      "targetHandle": null,
+      "id": "e_sdr_eac3_eng_und"
+    },
+    {
+      "source": "cmd_sdr_eac3_und",
+      "sourceHandle": "1",
+      "target": "cmd_sdr_ens_eng",
+      "targetHandle": null,
+      "id": "e_sdr_eac3_und_ens"
+    },
+    {
+      "source": "cmd_sdr_ens_eng",
+      "sourceHandle": "1",
+      "target": "cmd_sdr_ens_und",
+      "targetHandle": null,
+      "id": "e_sdr_eng_und"
+    },
+    {
+      "source": "cmd_sdr_ens_und",
+      "sourceHandle": "1",
+      "target": "cmd_sdr_rmaudio",
+      "targetHandle": null,
+      "id": "e_sdr_und_rmaudio"
+    },
+    {
+      "source": "cmd_sdr_rmaudio",
+      "sourceHandle": "1",
+      "target": "cmd_sdr_reorder",
+      "targetHandle": null,
+      "id": "e_sdr_rmaudio_reorder"
+    },
+    {
+      "source": "cmd_sdr_reorder",
+      "sourceHandle": "1",
+      "target": "ffe_sdr",
+      "targetHandle": null,
+      "id": "e_sdr_reorder_exec"
+    },
+    {
+      "source": "ffe_sdr",
+      "sourceHandle": "1",
+      "target": "fl_sdr_size",
+      "targetHandle": null,
+      "id": "e_sdr_exec_size"
+    },
+    {
+      "source": "fl_sdr_size",
+      "sourceHandle": "1",
+      "target": "fl_sdr_duration",
+      "targetHandle": null,
+      "id": "e_sdr_size_ok"
+    },
+    {
+      "source": "fl_sdr_size",
+      "sourceHandle": "2",
+      "target": "cmt_sdr_toobig",
+      "targetHandle": null,
+      "id": "e_sdr_size_fail"
+    },
+    {
+      "source": "cmt_sdr_toobig",
+      "sourceHandle": "1",
+      "target": "fl_sdr_review",
+      "targetHandle": null,
+      "id": "e_sdr_toobig_review"
+    },
+    {
+      "source": "fl_sdr_duration",
+      "sourceHandle": "1",
+      "target": "fl_sdr_replace",
+      "targetHandle": null,
+      "id": "e_sdr_duration_ok"
+    },
+    {
+      "source": "fl_sdr_duration",
+      "sourceHandle": "2",
+      "target": "cmt_sdr_dur_fail",
+      "targetHandle": null,
+      "id": "e_sdr_duration_fail"
+    },
+    {
+      "source": "cmt_sdr_dur_fail",
+      "sourceHandle": "1",
+      "target": "fl_sdr_dur_review",
+      "targetHandle": null,
+      "id": "e_sdr_dur_review"
+    },
+    {
+      "source": "fl_sdr_replace",
+      "sourceHandle": "1",
+      "target": "cmt_notify",
+      "targetHandle": null,
+      "id": "e_sdr_replace_notify"
+    },
+    {
+      "source": "cmt_notify",
+      "sourceHandle": "1",
+      "target": "chk_plex_notify",
+      "targetHandle": null,
+      "id": "e_notify_plex_chk"
+    },
+    {
+      "source": "chk_plex_notify",
+      "sourceHandle": "1",
+      "target": "web_plex",
+      "targetHandle": null,
+      "id": "e_plex_yes"
+    },
+    {
+      "source": "chk_plex_notify",
+      "sourceHandle": "2",
+      "target": "chk_arr_notify",
+      "targetHandle": null,
+      "id": "e_plex_no"
+    },
+    {
+      "source": "web_plex",
+      "sourceHandle": "1",
+      "target": "chk_arr_notify",
+      "targetHandle": null,
+      "id": "e_plex_done"
+    },
+    {
+      "source": "chk_arr_notify",
+      "sourceHandle": "1",
+      "target": "arr_notify",
+      "targetHandle": null,
+      "id": "e_arr_yes"
+    },
+    {
+      "source": "err_on",
+      "sourceHandle": "1",
+      "target": "err_reset",
+      "targetHandle": null,
+      "id": "e_err_reset"
+    },
+    {
+      "source": "err_reset",
+      "sourceHandle": "1",
+      "target": "err_fail",
+      "targetHandle": null,
+      "id": "e_err_fail"
+    },
+    {
+      "source": "cmd_hdr_tags",
+      "sourceHandle": "1",
+      "target": "grd_hdr_eac3_ch",
+      "targetHandle": null,
+      "id": "e_hdr_eac3_cmt_guard"
+    },
+    {
+      "source": "grd_hdr_eac3_ch",
+      "sourceHandle": "1",
+      "target": "cmd_hdr_eac3_eng",
+      "targetHandle": null,
+      "id": "e_hdr_eac3_guard_yes"
+    },
+    {
+      "source": "grd_hdr_eac3_ch",
+      "sourceHandle": "2",
+      "target": "cmd_hdr_ens_eng",
+      "targetHandle": null,
+      "id": "e_hdr_eac3_guard_no"
+    },
+    {
+      "source": "cmd_sdr_tags",
+      "sourceHandle": "1",
+      "target": "grd_sdr_eac3_ch",
+      "targetHandle": null,
+      "id": "e_sdr_eac3_cmt_guard"
+    },
+    {
+      "source": "grd_sdr_eac3_ch",
+      "sourceHandle": "1",
+      "target": "cmd_sdr_eac3_eng",
+      "targetHandle": null,
+      "id": "e_sdr_eac3_guard_yes"
+    },
+    {
+      "source": "grd_sdr_eac3_ch",
+      "sourceHandle": "2",
+      "target": "cmd_sdr_ens_eng",
+      "targetHandle": null,
+      "id": "e_sdr_eac3_guard_no"
+    }
   ]
 }
