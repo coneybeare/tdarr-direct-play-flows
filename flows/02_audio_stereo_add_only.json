@@ -3,148 +3,172 @@
   "description": "Lightweight audio-only fix flow. For files already in MP4+HEVC format that are missing a stereo AAC 2.0 track. Adds stereo AAC 2.0 and EAC3 5.1 surround (where a surround source exists), removes commentary tracks (opt-in), removes DTS and other incompatible audio, reorders streams, and validates output duration. Does NOT re-encode video. Configure via the top variable nodes.",
   "tags": "audio,aac,eac3,stereo,direct-play,mp4,no-video-reencode",
   "flowPlugins": [
-
     {
       "name": "Input File",
       "sourceRepo": "Community",
       "pluginName": "inputFile",
       "version": "1.0.0",
       "id": "inp_001",
-      "position": { "x": 0, "y": 0 },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "── CONFIGURATION ─────────────────────────────\nAll user-configurable options are set here as\nflow variables. Edit the VALUE field of each\n'Set Variable' node below to configure:\n\n  remove_commentary  (true/false)\n    Remove director commentary, audio description,\n    and hearing-impaired audio tracks.\n    Default: true  ★ Opinionated — set false to keep.\n\n  enable_plex_notify  (true/false)\n    Trigger a Plex library refresh after each file\n    is replaced. Requires Plex URL+token in the\n    'Notify Plex' webRequest node near the bottom.\n    Default: false  ★ Must configure URL+token first.\n\n  enable_arr_notify  (true/false)\n    Notify Radarr/Sonarr after file replacement.\n    Requires API key in the 'Notify Arr' node.\n    Default: false  ★ Must configure API key first.",
+      "name": "Configuration",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_config",
-      "position": { "x": 0, "y": 200 },
+      "position": {
+        "x": 0,
+        "y": 120
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Set Variable: remove_commentary\n★ Change value to 'false' to keep commentary tracks",
+      "name": "Set: remove_commentary",
       "sourceRepo": "Community",
       "pluginName": "setFlowVariable",
       "version": "1.0.0",
       "id": "var_rm_commentary",
-      "position": { "x": 0, "y": 430 },
+      "position": {
+        "x": 0,
+        "y": 260
+      },
       "inputsDB": {
         "variable": "remove_commentary",
         "value": "true"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Set Variable: enable_plex_notify\n★ Change value to 'true' to enable Plex refresh\n   (also configure the webRequest node below)",
+      "name": "Set: enable_plex_notify",
       "sourceRepo": "Community",
       "pluginName": "setFlowVariable",
       "version": "1.0.0",
       "id": "var_enable_plex",
-      "position": { "x": 0, "y": 660 },
+      "position": {
+        "x": 0,
+        "y": 380
+      },
       "inputsDB": {
         "variable": "enable_plex_notify",
         "value": "false"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Set Variable: enable_arr_notify\n★ Change value to 'true' to enable Radarr/Sonarr notify\n   (also configure the notifyRadarrOrSonarr node below)",
+      "name": "Set: enable_arr_notify",
       "sourceRepo": "Community",
       "pluginName": "setFlowVariable",
       "version": "1.0.0",
       "id": "var_enable_arr",
-      "position": { "x": 0, "y": 890 },
+      "position": {
+        "x": 0,
+        "y": 500
+      },
       "inputsDB": {
         "variable": "enable_arr_notify",
         "value": "false"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "── ABOUT THIS FLOW ───────────────────────────\nLIGHTWEIGHT audio-only fix flow.\nDoes NOT re-encode video — very fast.\n\nPurpose: Add stereo AAC 2.0 and EAC3 5.1 to files\nthat already have correct video (MP4+HEVC) but\nmay be missing the stereo audio track.\n\nThis flow:\n  • Removes commentary/description tracks (opt-in)\n  • Adds EAC3 5.1 surround (if surround source exists)\n    → better Plex iOS direct play for surround audio\n  • Adds stereo AAC 2.0 (universal fallback)\n  • Removes DTS + other MP4-incompatible audio codecs\n  • Reorders: stereo AAC first\n  • Validates output duration\n  • Optionally notifies Plex/Radarr/Sonarr\n  • Stream-copies video (fast, no quality loss)\n\n★ PREREQUISITE GUARDS:\n  Files must already be MP4 + HEVC.\n  Non-MP4 or non-HEVC files are skipped\n  (use Flow 01 for those instead).\n\n  NOTE: Files that already pass the stereo AAC\n  guard will be skipped. To add EAC3 to files\n  that already have stereo AAC, use Flow 01.",
+      "name": "About this flow",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_about",
-      "position": { "x": 0, "y": 1120 },
+      "position": {
+        "x": 0,
+        "y": 620
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "── PREREQUISITE GUARDS ───────────────────────\nEnsures this flow only runs on files that\nneed audio processing.\n\nGuard 1: Must be MP4/M4V container\n  → If not: flow ends, use Flow 01 instead\nGuard 2: Must have HEVC video\n  → If not: flow ends, use Flow 01 instead\n\nThen checks if audio fix is needed:\nGuard 3: Has AAC audio stream?\nGuard 4: Has 2-channel (stereo) stream?\n  → BOTH pass: already has stereo AAC, skip\n  → EITHER fails: route to processing pipeline",
+      "name": "Guard checks",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_guards",
-      "position": { "x": 0, "y": 1350 },
+      "position": {
+        "x": 0,
+        "y": 760
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "PREREQUISITE 1 of 2\nCheck: Container is MP4 or M4V?\n\nOutputs: YES → Prereq 2 | NO → Skip (use Flow 01)",
+      "name": "Check: MP4/M4V?",
       "sourceRepo": "Community",
       "pluginName": "checkFileExtension",
       "version": "1.0.0",
       "id": "pre_ext",
-      "position": { "x": 0, "y": 1580 },
+      "position": {
+        "x": 0,
+        "y": 900
+      },
       "inputsDB": {
         "extensions": "mp4,m4v"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "⏭ SKIP: Not MP4\nThis file needs container conversion.\nProcess with Flow 01 (Full Pipeline) instead.\n\nFlow ends here without modifying the file.",
+      "name": "Skip: not MP4",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_skip_ext",
-      "position": { "x": -600, "y": 1810 },
+      "position": {
+        "x": -750,
+        "y": 1020
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "PREREQUISITE 2 of 2\nCheck: Video codec is HEVC?\n\nOutputs: YES → Audio guards | NO → Skip (use Flow 01)",
+      "name": "Check: HEVC video?",
       "sourceRepo": "Community",
       "pluginName": "checkVideoCodec",
       "version": "1.0.0",
       "id": "pre_vid",
-      "position": { "x": 0, "y": 1810 },
+      "position": {
+        "x": 0,
+        "y": 1020
+      },
       "inputsDB": {
         "codec": "hevc"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "⏭ SKIP: Not HEVC\nThis file needs video transcoding.\nProcess with Flow 01 (Full Pipeline) instead.\n\nFlow ends here without modifying the file.",
+      "name": "Skip: not HEVC",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_skip_vid",
-      "position": { "x": -600, "y": 2040 },
+      "position": {
+        "x": -750,
+        "y": 1160
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "AUDIO GUARD 1 of 2\nCheck: File has at least one AAC audio stream?\n\nOutputs: YES → Audio Guard 2 | NO → Need audio fix",
+      "name": "Check: AAC audio?",
       "sourceRepo": "Community",
       "pluginName": "checkStreamProperty",
       "version": "1.0.0",
       "id": "grd_aud",
-      "position": { "x": 0, "y": 2040 },
+      "position": {
+        "x": 0,
+        "y": 1140
+      },
       "inputsDB": {
         "streamType": "audio",
         "propertyToCheck": "codec_name",
@@ -153,128 +177,150 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "AUDIO GUARD 2 of 2\nCheck: File has a 2-channel (stereo) audio stream?\n\nOutputs: YES → Already has stereo AAC, skip\n         NO  → Need audio fix",
+      "name": "Check: 2-ch stereo?",
       "sourceRepo": "Community",
       "pluginName": "checkChannelCount",
       "version": "1.0.0",
       "id": "grd_ch",
-      "position": { "x": 0, "y": 2270 },
+      "position": {
+        "x": 0,
+        "y": 1260
+      },
       "inputsDB": {
         "channelCount": "2"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "✅ FILE ALREADY HAS STEREO AAC\n──────────────────────────────────────────────\nBoth audio guards passed:\n  • Has AAC audio stream ✓\n  • Has 2-channel (stereo) stream ✓\n\nFile already has stereo AAC 2.0.\nMarking as processed without modification.\n\nNote: EAC3 5.1 will NOT be added here.\nTo add EAC3 to these files, use Flow 01.",
+      "name": "Already optimal",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_optimal",
-      "position": { "x": -600, "y": 2500 },
+      "position": {
+        "x": -750,
+        "y": 1380
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Replace Original File\n(no-op: marks file as processed, no changes made)",
+      "name": "No-op (mark done)",
       "sourceRepo": "Community",
       "pluginName": "replaceOriginalFile",
       "version": "1.0.0",
       "id": "fl_noop",
-      "position": { "x": -600, "y": 2730 },
+      "position": {
+        "x": -750,
+        "y": 1520
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "🔧 AUDIO FIX PIPELINE STARTS HERE\n──────────────────────────────────────────────\nFile needs audio processing.\nVideo will be STREAM COPIED (not re-encoded).\n\nSteps:\n  1. Health check (quick)\n  2. Remove commentary tracks (if enabled)\n  3. Add EAC3 5.1 surround (eng + und passes)\n  4. Add stereo AAC 2.0 (eng + und passes)\n  5. Remove DTS + incompatible audio codecs\n  6. Reorder: stereo AAC first\n  7. Execute FFmpeg (stream-copy video)\n  8. Validate output duration\n  9. Replace original\n  10. Notify Plex/arr (if enabled)",
+      "name": "Processing pipeline",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_proc",
-      "position": { "x": 0, "y": 2500 },
+      "position": {
+        "x": 0,
+        "y": 1380
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "── HEALTH CHECK ──────────────────────────────\nRuns a quick health check on the source file\nbefore processing. Catches corrupt or unreadable\nfiles early so they're marked as Error rather\nthan silently failing mid-transcode.\n\nOutputs: PASS → Continue | FAIL → Fail flow",
+      "name": "Health check",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_health",
-      "position": { "x": 0, "y": 2730 },
+      "position": {
+        "x": 0,
+        "y": 1520
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Health Check (quick)\n(detects corrupt/unreadable source files)",
+      "name": "Health check (quick)",
       "sourceRepo": "Community",
       "pluginName": "runHealthCheck",
       "version": "1.0.0",
       "id": "chk_health",
-      "position": { "x": 0, "y": 2960 },
+      "position": {
+        "x": 0,
+        "y": 1660
+      },
       "inputsDB": {
         "type": "quick"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "⚠ HEALTH CHECK FAILED\nSource file appears corrupt or unreadable.\nFailing this file so it appears in Tdarr's\nError list for manual review.\n\nOriginal file is NOT modified.",
+      "name": "Health check failed",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_health_fail",
-      "position": { "x": 600, "y": 2960 },
+      "position": {
+        "x": 750,
+        "y": 1780
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Fail Flow (health check failed)",
+      "name": "Fail: health check",
       "sourceRepo": "Community",
       "pluginName": "failFlow",
       "version": "1.0.0",
       "id": "err_health",
-      "position": { "x": 600, "y": 3190 },
+      "position": {
+        "x": 750,
+        "y": 1920
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Begin FFmpeg Command\n(video and existing audio set to stream copy\nby default; only new audio streams get encoded)",
+      "name": "Begin FFmpeg",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandStart",
       "version": "1.0.0",
       "id": "ffs_001",
-      "position": { "x": 0, "y": 3190 },
+      "position": {
+        "x": 0,
+        "y": 1780
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "── STEP 1: COMMENTARY TRACK REMOVAL ──────────\nControlled by the 'remove_commentary' variable\nset at the top of this flow.\n\n★ Opt-in (default: true). To DISABLE:\n  Change var_rm_commentary value to 'false'.\n\nWhat gets removed (case-insensitive title match):\n  • 'commentary' — director/cast commentary\n  • 'description' — audio descriptions for blind\n  • 'descriptive' — descriptive audio service\n  • 'sdh' — hearing-impaired audio\n  • 'hearing impaired' — hearing impaired audio\n  • 'hearing-impaired' — alternate tag form\n  • 'audio description' — AD tracks\n\nThese tracks add confusion and consume space\nwithout being used by most home viewers.",
+      "name": "Commentary removal",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_commentary",
-      "position": { "x": 0, "y": 3420 },
+      "position": {
+        "x": 0,
+        "y": 1900
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Check: remove_commentary == 'true'?\n(YES → remove commentary tracks)\n(NO  → skip, keep all audio tracks)",
+      "name": "Check: remove_commentary?",
       "sourceRepo": "Community",
       "pluginName": "checkFlowVariable",
       "version": "1.0.0",
       "id": "chk_rm_commentary",
-      "position": { "x": 0, "y": 3650 },
+      "position": {
+        "x": 0,
+        "y": 2040
+      },
       "inputsDB": {
         "variable": "remove_commentary",
         "value": "true",
@@ -282,14 +328,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Remove Commentary / Description / SDH Audio Tracks\n(checks stream title for keywords, case-insensitive)\n★ To add more keywords: edit valuesToRemove",
+      "name": "Remove commentary tracks",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveStreamByProperty",
       "version": "1.0.0",
       "id": "cmd_rmcommentary",
-      "position": { "x": -600, "y": 3880 },
+      "position": {
+        "x": -750,
+        "y": 2160
+      },
       "inputsDB": {
         "propertyToCheck": "tags.title",
         "valuesToRemove": "commentary,comment,description,descriptive,sdh,hearing impaired,hearing-impaired,audio description",
@@ -297,25 +345,44 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "── STEP 2: ADD EAC3 5.1 SURROUND ─────────────\nAdds a 5.1 EAC3 (Dolby Digital Plus) surround\ntrack if a suitable surround source exists.\n\nWhy EAC3 instead of keeping DTS:\n  • DTS (dca) causes Plex iOS to transcode audio\n  • EAC3 direct-plays on Plex iOS, Apple TV, etc.\n  • EAC3 is natively supported in MP4 containers\n  • AC3/EAC3 kept by Plex iOS without transcoding\n\nTwo passes:\n  Pass 1 (eng): targets English-tagged audio\n  Pass 2 (und): targets untagged/undefined audio\n\nPlugin is idempotent — skips if EAC3 6ch already\nexists. Only downmixes from higher-channel sources.\n\n★ CONFIGURE:\n  - bitrate: 384k (320k=smaller, 448k=better)\n  - language: change for non-English libraries\n  - channels: 6 (5.1 — change to 8 for 7.1)\n\n★ OPINIONATED: This replaces DTS with EAC3.\n  If you want to keep DTS, remove the 'dca'\n  entry from the audio removal node's\n  valuesToRemove field below.",
+      "name": "EAC3 5.1 surround",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_eac3",
-      "position": { "x": 0, "y": 3880 },
+      "position": {
+        "x": 0,
+        "y": 2280
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Ensure EAC3 5.1 Surround - Pass 1 (language: eng)\n★ Config: bitrate=384k | channels=6 | lang=eng",
+      "name": "Guard: 6+ ch surround?",
+      "sourceRepo": "Community",
+      "pluginName": "checkChannelCount",
+      "version": "1.0.0",
+      "position": {
+        "x": 0,
+        "y": 2420
+      },
+      "inputsDB": {
+        "channelCount": "6"
+      },
+      "fpEnabled": true,
+      "id": "grd_eac3_ch"
+    },
+    {
+      "name": "Ensure EAC3 5.1 (eng)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandEnsureAudioStream",
       "version": "1.0.0",
       "id": "cmd_eac3_eng",
-      "position": { "x": 0, "y": 4110 },
+      "position": {
+        "x": 0,
+        "y": 2540
+      },
       "inputsDB": {
         "audioEncoder": "eac3",
         "language": "eng",
@@ -327,14 +394,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Ensure EAC3 5.1 Surround - Pass 2 (language: und)\n(catches files with untagged audio streams)\n★ Config: same as Pass 1 but language=und",
+      "name": "Ensure EAC3 5.1 (und)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandEnsureAudioStream",
       "version": "1.0.0",
       "id": "cmd_eac3_und",
-      "position": { "x": 0, "y": 4340 },
+      "position": {
+        "x": 0,
+        "y": 2660
+      },
       "inputsDB": {
         "audioEncoder": "eac3",
         "language": "und",
@@ -346,25 +415,29 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "── STEP 3: ENSURE STEREO AAC 2.0 ─────────────\nAdds a 2-channel AAC downmix track if one\ndoes not already exist.\n\nTwo passes for different language tags:\n  Pass 1 (eng): targets English-tagged audio\n  Pass 2 (und): targets untagged/undefined audio\n\nThe plugin finds the highest-channel-count stream\nmatching the language tag and downmixes it to\n2-channel AAC at 192k bitrate.\n\nIf a 2ch AAC already exists, the plugin skips\naddition (idempotent — safe to run multiple times).\n\n★ CONFIGURE:\n  - bitrate: 192k (128k=smaller, 256k=better)\n  - language: change for non-English libraries\n  - channels: 2 (stereo — don't change)\n  - Add more nodes for additional languages",
+      "name": "Stereo AAC 2.0",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_ensure",
-      "position": { "x": 0, "y": 4570 },
+      "position": {
+        "x": 0,
+        "y": 2780
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Ensure Stereo AAC 2.0 - Pass 1 (language: eng)\n★ Config: bitrate=192k | channels=2 | lang=eng",
+      "name": "Ensure AAC 2.0 (eng)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandEnsureAudioStream",
       "version": "1.0.0",
       "id": "cmd_ens_eng",
-      "position": { "x": 0, "y": 4800 },
+      "position": {
+        "x": 0,
+        "y": 2920
+      },
       "inputsDB": {
         "audioEncoder": "aac",
         "language": "eng",
@@ -376,14 +449,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Ensure Stereo AAC 2.0 - Pass 2 (language: und)\n(catches files with untagged audio streams)\n★ Config: same as Pass 1 but language=und",
+      "name": "Ensure AAC 2.0 (und)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandEnsureAudioStream",
       "version": "1.0.0",
       "id": "cmd_ens_und",
-      "position": { "x": 0, "y": 5030 },
+      "position": {
+        "x": 0,
+        "y": 3040
+      },
       "inputsDB": {
         "audioEncoder": "aac",
         "language": "und",
@@ -395,25 +470,29 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "── STEP 4: REMOVE INCOMPATIBLE AUDIO ──────────\nRemoves audio codecs that are problematic for\nMP4 containers or Plex iOS direct play.\n\n  REMOVED (now includes DTS):\n    truehd — Dolby TrueHD (not MP4 compatible)\n    mlp    — Meridian Lossless Packing (same)\n    flac   — FLAC lossless (not MP4 compatible)\n    vorbis — Ogg Vorbis (not MP4 compatible)\n    opus   — Opus (limited MP4 support)\n    wma,wmav2,wmapro — Windows Media Audio\n    dca    — DTS (causes Plex iOS transcoding)\n\n  KEPT: aac, ac3, eac3 (and any EAC3 we just added)\n\n★ CONFIGURE: Remove 'dca' from valuesToRemove\n  if you want to keep DTS surround tracks.\n  (DTS will cause Plex iOS to transcode audio.)",
+      "name": "Remove incompatible audio",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_rmaudio",
-      "position": { "x": 0, "y": 5260 },
+      "position": {
+        "x": 0,
+        "y": 3160
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Remove Incompatible Audio Codecs (incl. DTS)\n★ Config: add/remove codecs from valuesToRemove",
+      "name": "Remove: truehd, flac, dca...",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveStreamByProperty",
       "version": "1.0.0",
       "id": "cmd_rmaudio",
-      "position": { "x": 0, "y": 5490 },
+      "position": {
+        "x": 0,
+        "y": 3300
+      },
       "inputsDB": {
         "propertyToCheck": "codec_name",
         "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca",
@@ -421,25 +500,29 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "── STEP 5: REORDER STREAMS ───────────────────\nPuts stereo AAC first for maximum compatibility.\n\nFinal stream order:\n  [0] Video (HEVC — stream copied)\n  [1] Stereo AAC 2.0  ← FIRST audio track\n  [2] EAC3 5.1 surround (if present)\n  [3+] AC3 surround (if present)\n\nThis ensures video.js, Plex Web, and basic\nplayers default to the compatible stereo track.\n\n★ CONFIGURE:\n  - languages: add your library's primary language\n  - channels: '2,6,8' keeps stereo first",
+      "name": "Reorder streams",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_reorder",
-      "position": { "x": 0, "y": 5720 },
+      "position": {
+        "x": 0,
+        "y": 3420
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Reorder Streams (stereo AAC first)\n★ Config: channels=2,6,8 | langs=eng,und",
+      "name": "Reorder (stereo first)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRorderStreams",
       "version": "1.0.0",
       "id": "cmd_reorder",
-      "position": { "x": 0, "y": 5950 },
+      "position": {
+        "x": 0,
+        "y": 3560
+      },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
         "languages": "eng,und",
@@ -449,116 +532,136 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "── STEP 6: EXECUTE ───────────────────────────\nRuns FFmpeg with stream-copy for all existing\nstreams plus the new audio tracks.\n\nThis is much faster than full transcoding:\n  • Video: stream-copied (no quality loss)\n  • Existing compatible audio: stream-copied\n  • New EAC3 5.1: encoded from surround source\n  • New stereo AAC: encoded from surround source\n  • Processing time: seconds to low minutes",
+      "name": "Execute FFmpeg",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_exec",
-      "position": { "x": 0, "y": 6180 },
+      "position": {
+        "x": 0,
+        "y": 3680
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Execute FFmpeg Command\n(stream-copies video; encodes new audio only)",
+      "name": "Execute FFmpeg",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandExecute",
       "version": "1.0.0",
       "id": "ffe_001",
-      "position": { "x": 0, "y": 6410 },
+      "position": {
+        "x": 0,
+        "y": 3820
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "── STEP 7: DURATION VALIDATION ───────────────\nVerifies the output duration is within 2% of\nthe source duration.\n\nWhy check duration?\n  A corrupt FFmpeg encode can sometimes produce\n  a file that plays but is truncated or extended.\n  Duration validation catches these silently\n  broken outputs before replacing the original.\n\nNote: File size is NOT checked here since adding\naudio tracks will always increase size slightly.\nThis is expected and acceptable.\n\n★ CONFIGURE:\n  - greaterThan: 98 (minimum 98% of source duration)\n  - lessThan: 102 (maximum 102% of source duration)",
+      "name": "Duration check",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_duration",
-      "position": { "x": 0, "y": 6640 },
+      "position": {
+        "x": 0,
+        "y": 3940
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Validate Output Duration\n★ Config: greaterThan=98, lessThan=102\n(output must be 98–102% of source duration)",
+      "name": "Check: duration ratio",
       "sourceRepo": "Community",
       "pluginName": "compareFileDurationRatio",
       "version": "1.0.0",
       "id": "fl_duration",
-      "position": { "x": 0, "y": 6870 },
+      "position": {
+        "x": 0,
+        "y": 4080
+      },
       "inputsDB": {
         "greaterThan": "98",
         "lessThan": "102"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "⚠ DURATION MISMATCH — SENDING TO REVIEW\nOutput duration is outside the 98–102% range.\nOriginal file is preserved unchanged.\n\nLikely causes:\n  • Corrupt source file (see health check)\n  • FFmpeg error during audio encode\n  • Very short clip with container overhead",
+      "name": "Duration mismatch",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_duration_fail",
-      "position": { "x": 600, "y": 6870 },
+      "position": {
+        "x": 750,
+        "y": 4200
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Flag for Review\n(duration outside expected range; original preserved)",
+      "name": "Flag for review",
       "sourceRepo": "Community",
       "pluginName": "requireReview",
       "version": "1.0.0",
       "id": "fl_duration_review",
-      "position": { "x": 600, "y": 7100 },
+      "position": {
+        "x": 750,
+        "y": 4340
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "── STEP 8: REPLACE ORIGINAL ──────────────────\nReplaces the original file with the audio-fixed\nversion (new AAC/EAC3 tracks + reordered streams).",
+      "name": "Replace original",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_replace",
-      "position": { "x": 0, "y": 7100 },
+      "position": {
+        "x": 0,
+        "y": 4200
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Replace Original File with Audio-Fixed Version",
+      "name": "Replace original file",
       "sourceRepo": "Community",
       "pluginName": "replaceOriginalFile",
       "version": "1.0.0",
       "id": "fl_replace",
-      "position": { "x": 0, "y": 7330 },
+      "position": {
+        "x": 0,
+        "y": 4340
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "── STEP 9: POST-PROCESSING NOTIFICATIONS ──────\nOptional notifications after file replacement.\nControlled by variables set at the top of the flow.\n\nPlex Notify (enable_plex_notify = 'true'):\n  Triggers a Plex library refresh so Plex\n  immediately picks up the new file/codec info.\n  ★ Configure the 'Notify Plex' webRequest node:\n    - Update the URL with your Plex server IP\n    - Replace YOUR_PLEX_TOKEN with your token\n\nRadarr/Sonarr Notify (enable_arr_notify = 'true'):\n  Notifies *arr to refresh metadata.\n  ★ Configure the 'Notify Arr' node:\n    - arr: 'radarr' or 'sonarr'\n    - arr_host: your *arr URL\n    - arr_api_key: Settings → General → API Key",
+      "name": "Notifications",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "id": "cmt_notify",
-      "position": { "x": 0, "y": 7560 },
+      "position": {
+        "x": 0,
+        "y": 4460
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Check: enable_plex_notify == 'true'?\n(YES → send Plex refresh | NO → skip)",
+      "name": "Check: plex notify?",
       "sourceRepo": "Community",
       "pluginName": "checkFlowVariable",
       "version": "1.0.0",
       "id": "chk_plex_notify",
-      "position": { "x": 0, "y": 7790 },
+      "position": {
+        "x": 0,
+        "y": 4600
+      },
       "inputsDB": {
         "variable": "enable_plex_notify",
         "value": "true",
@@ -566,28 +669,32 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Notify Plex: Refresh Library\n★ CONFIGURE: Update URL with your Plex IP and token\n  URL format: http://PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=TOKEN",
+      "name": "Notify Plex",
       "sourceRepo": "Community",
       "pluginName": "webRequest",
       "version": "1.0.0",
       "id": "web_plex",
-      "position": { "x": 0, "y": 8020 },
+      "position": {
+        "x": 750,
+        "y": 4720
+      },
       "inputsDB": {
         "url": "http://YOUR_PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=YOUR_PLEX_TOKEN",
         "method": "GET"
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Check: enable_arr_notify == 'true'?\n(YES → notify Radarr/Sonarr | NO → skip)",
+      "name": "Check: arr notify?",
       "sourceRepo": "Community",
       "pluginName": "checkFlowVariable",
       "version": "1.0.0",
       "id": "chk_arr_notify",
-      "position": { "x": 0, "y": 8250 },
+      "position": {
+        "x": 0,
+        "y": 4840
+      },
       "inputsDB": {
         "variable": "enable_arr_notify",
         "value": "true",
@@ -595,14 +702,16 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "Notify Radarr or Sonarr\n★ CONFIGURE: Set arr, arr_host, and arr_api_key\n  arr: 'radarr' or 'sonarr'\n  arr_host: http://YOUR_ARR_IP:PORT\n  arr_api_key: from Settings → General → API Key\n  (Duplicate this node to notify both apps)",
+      "name": "Notify Radarr/Sonarr",
       "sourceRepo": "Community",
       "pluginName": "notifyRadarrOrSonarr",
       "version": "1.0.0",
       "id": "arr_notify",
-      "position": { "x": 0, "y": 8480 },
+      "position": {
+        "x": 0,
+        "y": 4960
+      },
       "inputsDB": {
         "arr": "radarr",
         "arr_host": "http://YOUR_RADARR_IP:7878",
@@ -610,112 +719,417 @@
       },
       "fpEnabled": true
     },
-
     {
-      "name": "── ERROR HANDLING ────────────────────────────\nCatches unexpected FFmpeg failures.\nOriginal file is NOT modified on error.",
+      "name": "On flow error",
       "sourceRepo": "Community",
       "pluginName": "onFlowError",
       "version": "1.0.0",
       "id": "err_on",
-      "position": { "x": 1200, "y": 0 },
+      "position": {
+        "x": 1350,
+        "y": 0
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Reset Flow Error State",
+      "name": "Reset error",
       "sourceRepo": "Community",
       "pluginName": "resetFlowError",
       "version": "1.0.0",
       "id": "err_reset",
-      "position": { "x": 1200, "y": 230 },
+      "position": {
+        "x": 1350,
+        "y": 120
+      },
       "inputsDB": {},
       "fpEnabled": true
     },
-
     {
-      "name": "Fail Flow\n(file marked as Error; original preserved)",
+      "name": "Fail flow",
       "sourceRepo": "Community",
       "pluginName": "failFlow",
       "version": "1.0.0",
       "id": "err_fail",
-      "position": { "x": 1200, "y": 460 },
+      "position": {
+        "x": 1350,
+        "y": 240
+      },
       "inputsDB": {},
       "fpEnabled": true
     }
-
   ],
-
   "flowEdges": [
-
-    { "source": "inp_001",            "sourceHandle": "1", "target": "cmt_config",         "targetHandle": null, "id": "e_inp_config" },
-    { "source": "cmt_config",         "sourceHandle": "1", "target": "var_rm_commentary",  "targetHandle": null, "id": "e_config_var1" },
-    { "source": "var_rm_commentary",  "sourceHandle": "1", "target": "var_enable_plex",    "targetHandle": null, "id": "e_var1_var2" },
-    { "source": "var_enable_plex",    "sourceHandle": "1", "target": "var_enable_arr",     "targetHandle": null, "id": "e_var2_var3" },
-    { "source": "var_enable_arr",     "sourceHandle": "1", "target": "cmt_about",          "targetHandle": null, "id": "e_var3_about" },
-    { "source": "cmt_about",          "sourceHandle": "1", "target": "cmt_guards",         "targetHandle": null, "id": "e_about_guards" },
-    { "source": "cmt_guards",         "sourceHandle": "1", "target": "pre_ext",            "targetHandle": null, "id": "e_guards_ext" },
-
-    { "source": "pre_ext",            "sourceHandle": "1", "target": "pre_vid",            "targetHandle": null, "id": "e_ext_yes" },
-    { "source": "pre_ext",            "sourceHandle": "2", "target": "cmt_skip_ext",       "targetHandle": null, "id": "e_ext_no" },
-
-    { "source": "pre_vid",            "sourceHandle": "1", "target": "grd_aud",            "targetHandle": null, "id": "e_vid_yes" },
-    { "source": "pre_vid",            "sourceHandle": "2", "target": "cmt_skip_vid",       "targetHandle": null, "id": "e_vid_no" },
-
-    { "source": "grd_aud",            "sourceHandle": "1", "target": "grd_ch",             "targetHandle": null, "id": "e_aud_yes" },
-    { "source": "grd_aud",            "sourceHandle": "2", "target": "cmt_proc",           "targetHandle": null, "id": "e_aud_no" },
-
-    { "source": "grd_ch",             "sourceHandle": "1", "target": "cmt_optimal",        "targetHandle": null, "id": "e_ch_yes" },
-    { "source": "grd_ch",             "sourceHandle": "2", "target": "cmt_proc",           "targetHandle": null, "id": "e_ch_no" },
-
-    { "source": "cmt_optimal",        "sourceHandle": "1", "target": "fl_noop",            "targetHandle": null, "id": "e_optimal_noop" },
-
-    { "source": "cmt_proc",           "sourceHandle": "1", "target": "cmt_health",         "targetHandle": null, "id": "e_proc_health" },
-    { "source": "cmt_health",         "sourceHandle": "1", "target": "chk_health",         "targetHandle": null, "id": "e_health_chk" },
-    { "source": "chk_health",         "sourceHandle": "1", "target": "ffs_001",            "targetHandle": null, "id": "e_health_ok" },
-    { "source": "chk_health",         "sourceHandle": "2", "target": "cmt_health_fail",    "targetHandle": null, "id": "e_health_fail" },
-    { "source": "cmt_health_fail",    "sourceHandle": "1", "target": "err_health",         "targetHandle": null, "id": "e_health_fail_err" },
-
-    { "source": "ffs_001",            "sourceHandle": "1", "target": "cmt_commentary",     "targetHandle": null, "id": "e_start_commentary" },
-    { "source": "cmt_commentary",     "sourceHandle": "1", "target": "chk_rm_commentary",  "targetHandle": null, "id": "e_cmt_commentary_chk" },
-    { "source": "chk_rm_commentary",  "sourceHandle": "1", "target": "cmd_rmcommentary",   "targetHandle": null, "id": "e_commentary_yes" },
-    { "source": "chk_rm_commentary",  "sourceHandle": "2", "target": "cmt_eac3",           "targetHandle": null, "id": "e_commentary_no" },
-    { "source": "cmd_rmcommentary",   "sourceHandle": "1", "target": "cmt_eac3",           "targetHandle": null, "id": "e_rmcommentary_eac3" },
-
-    { "source": "cmt_eac3",           "sourceHandle": "1", "target": "cmd_eac3_eng",       "targetHandle": null, "id": "e_cmt_eac3_eng" },
-    { "source": "cmd_eac3_eng",       "sourceHandle": "1", "target": "cmd_eac3_und",       "targetHandle": null, "id": "e_eac3_eng_und" },
-    { "source": "cmd_eac3_und",       "sourceHandle": "1", "target": "cmt_ensure",         "targetHandle": null, "id": "e_eac3_und_ensure" },
-
-    { "source": "cmt_ensure",         "sourceHandle": "1", "target": "cmd_ens_eng",        "targetHandle": null, "id": "e_ensure_eng" },
-    { "source": "cmd_ens_eng",        "sourceHandle": "1", "target": "cmd_ens_und",        "targetHandle": null, "id": "e_eng_und" },
-    { "source": "cmd_ens_und",        "sourceHandle": "1", "target": "cmt_rmaudio",        "targetHandle": null, "id": "e_und_rmaudio" },
-
-    { "source": "cmt_rmaudio",        "sourceHandle": "1", "target": "cmd_rmaudio",        "targetHandle": null, "id": "e_cmt_rmaudio_cmd" },
-    { "source": "cmd_rmaudio",        "sourceHandle": "1", "target": "cmt_reorder",        "targetHandle": null, "id": "e_rmaudio_reorder" },
-
-    { "source": "cmt_reorder",        "sourceHandle": "1", "target": "cmd_reorder",        "targetHandle": null, "id": "e_cmt_reorder_cmd" },
-    { "source": "cmd_reorder",        "sourceHandle": "1", "target": "cmt_exec",           "targetHandle": null, "id": "e_reorder_exec" },
-
-    { "source": "cmt_exec",           "sourceHandle": "1", "target": "ffe_001",            "targetHandle": null, "id": "e_cmt_exec_cmd" },
-    { "source": "ffe_001",            "sourceHandle": "1", "target": "cmt_duration",       "targetHandle": null, "id": "e_exec_duration" },
-
-    { "source": "cmt_duration",       "sourceHandle": "1", "target": "fl_duration",        "targetHandle": null, "id": "e_cmt_duration_cmd" },
-    { "source": "fl_duration",        "sourceHandle": "1", "target": "cmt_replace",        "targetHandle": null, "id": "e_duration_ok" },
-    { "source": "fl_duration",        "sourceHandle": "2", "target": "cmt_duration_fail",  "targetHandle": null, "id": "e_duration_fail" },
-    { "source": "cmt_duration_fail",  "sourceHandle": "1", "target": "fl_duration_review", "targetHandle": null, "id": "e_duration_fail_review" },
-
-    { "source": "cmt_replace",        "sourceHandle": "1", "target": "fl_replace",         "targetHandle": null, "id": "e_cmt_replace_cmd" },
-    { "source": "fl_replace",         "sourceHandle": "1", "target": "cmt_notify",         "targetHandle": null, "id": "e_replace_notify" },
-
-    { "source": "cmt_notify",         "sourceHandle": "1", "target": "chk_plex_notify",    "targetHandle": null, "id": "e_notify_plex_chk" },
-    { "source": "chk_plex_notify",    "sourceHandle": "1", "target": "web_plex",           "targetHandle": null, "id": "e_plex_yes" },
-    { "source": "chk_plex_notify",    "sourceHandle": "2", "target": "chk_arr_notify",     "targetHandle": null, "id": "e_plex_no" },
-    { "source": "web_plex",           "sourceHandle": "1", "target": "chk_arr_notify",     "targetHandle": null, "id": "e_plex_done" },
-
-    { "source": "chk_arr_notify",     "sourceHandle": "1", "target": "arr_notify",         "targetHandle": null, "id": "e_arr_yes" },
-
-    { "source": "err_on",             "sourceHandle": "1", "target": "err_reset",          "targetHandle": null, "id": "e_err_reset" },
-    { "source": "err_reset",          "sourceHandle": "1", "target": "err_fail",           "targetHandle": null, "id": "e_err_fail" }
-
+    {
+      "source": "inp_001",
+      "sourceHandle": "1",
+      "target": "cmt_config",
+      "targetHandle": null,
+      "id": "e_inp_config"
+    },
+    {
+      "source": "cmt_config",
+      "sourceHandle": "1",
+      "target": "var_rm_commentary",
+      "targetHandle": null,
+      "id": "e_config_var1"
+    },
+    {
+      "source": "var_rm_commentary",
+      "sourceHandle": "1",
+      "target": "var_enable_plex",
+      "targetHandle": null,
+      "id": "e_var1_var2"
+    },
+    {
+      "source": "var_enable_plex",
+      "sourceHandle": "1",
+      "target": "var_enable_arr",
+      "targetHandle": null,
+      "id": "e_var2_var3"
+    },
+    {
+      "source": "var_enable_arr",
+      "sourceHandle": "1",
+      "target": "cmt_about",
+      "targetHandle": null,
+      "id": "e_var3_about"
+    },
+    {
+      "source": "cmt_about",
+      "sourceHandle": "1",
+      "target": "cmt_guards",
+      "targetHandle": null,
+      "id": "e_about_guards"
+    },
+    {
+      "source": "cmt_guards",
+      "sourceHandle": "1",
+      "target": "pre_ext",
+      "targetHandle": null,
+      "id": "e_guards_ext"
+    },
+    {
+      "source": "pre_ext",
+      "sourceHandle": "1",
+      "target": "pre_vid",
+      "targetHandle": null,
+      "id": "e_ext_yes"
+    },
+    {
+      "source": "pre_ext",
+      "sourceHandle": "2",
+      "target": "cmt_skip_ext",
+      "targetHandle": null,
+      "id": "e_ext_no"
+    },
+    {
+      "source": "pre_vid",
+      "sourceHandle": "1",
+      "target": "grd_aud",
+      "targetHandle": null,
+      "id": "e_vid_yes"
+    },
+    {
+      "source": "pre_vid",
+      "sourceHandle": "2",
+      "target": "cmt_skip_vid",
+      "targetHandle": null,
+      "id": "e_vid_no"
+    },
+    {
+      "source": "grd_aud",
+      "sourceHandle": "1",
+      "target": "grd_ch",
+      "targetHandle": null,
+      "id": "e_aud_yes"
+    },
+    {
+      "source": "grd_aud",
+      "sourceHandle": "2",
+      "target": "cmt_proc",
+      "targetHandle": null,
+      "id": "e_aud_no"
+    },
+    {
+      "source": "grd_ch",
+      "sourceHandle": "1",
+      "target": "cmt_optimal",
+      "targetHandle": null,
+      "id": "e_ch_yes"
+    },
+    {
+      "source": "grd_ch",
+      "sourceHandle": "2",
+      "target": "cmt_proc",
+      "targetHandle": null,
+      "id": "e_ch_no"
+    },
+    {
+      "source": "cmt_optimal",
+      "sourceHandle": "1",
+      "target": "fl_noop",
+      "targetHandle": null,
+      "id": "e_optimal_noop"
+    },
+    {
+      "source": "cmt_proc",
+      "sourceHandle": "1",
+      "target": "cmt_health",
+      "targetHandle": null,
+      "id": "e_proc_health"
+    },
+    {
+      "source": "cmt_health",
+      "sourceHandle": "1",
+      "target": "chk_health",
+      "targetHandle": null,
+      "id": "e_health_chk"
+    },
+    {
+      "source": "chk_health",
+      "sourceHandle": "1",
+      "target": "ffs_001",
+      "targetHandle": null,
+      "id": "e_health_ok"
+    },
+    {
+      "source": "chk_health",
+      "sourceHandle": "2",
+      "target": "cmt_health_fail",
+      "targetHandle": null,
+      "id": "e_health_fail"
+    },
+    {
+      "source": "cmt_health_fail",
+      "sourceHandle": "1",
+      "target": "err_health",
+      "targetHandle": null,
+      "id": "e_health_fail_err"
+    },
+    {
+      "source": "ffs_001",
+      "sourceHandle": "1",
+      "target": "cmt_commentary",
+      "targetHandle": null,
+      "id": "e_start_commentary"
+    },
+    {
+      "source": "cmt_commentary",
+      "sourceHandle": "1",
+      "target": "chk_rm_commentary",
+      "targetHandle": null,
+      "id": "e_cmt_commentary_chk"
+    },
+    {
+      "source": "chk_rm_commentary",
+      "sourceHandle": "1",
+      "target": "cmd_rmcommentary",
+      "targetHandle": null,
+      "id": "e_commentary_yes"
+    },
+    {
+      "source": "chk_rm_commentary",
+      "sourceHandle": "2",
+      "target": "cmt_eac3",
+      "targetHandle": null,
+      "id": "e_commentary_no"
+    },
+    {
+      "source": "cmd_rmcommentary",
+      "sourceHandle": "1",
+      "target": "cmt_eac3",
+      "targetHandle": null,
+      "id": "e_rmcommentary_eac3"
+    },
+    {
+      "source": "cmd_eac3_eng",
+      "sourceHandle": "1",
+      "target": "cmd_eac3_und",
+      "targetHandle": null,
+      "id": "e_eac3_eng_und"
+    },
+    {
+      "source": "cmd_eac3_und",
+      "sourceHandle": "1",
+      "target": "cmt_ensure",
+      "targetHandle": null,
+      "id": "e_eac3_und_ensure"
+    },
+    {
+      "source": "cmt_ensure",
+      "sourceHandle": "1",
+      "target": "cmd_ens_eng",
+      "targetHandle": null,
+      "id": "e_ensure_eng"
+    },
+    {
+      "source": "cmd_ens_eng",
+      "sourceHandle": "1",
+      "target": "cmd_ens_und",
+      "targetHandle": null,
+      "id": "e_eng_und"
+    },
+    {
+      "source": "cmd_ens_und",
+      "sourceHandle": "1",
+      "target": "cmt_rmaudio",
+      "targetHandle": null,
+      "id": "e_und_rmaudio"
+    },
+    {
+      "source": "cmt_rmaudio",
+      "sourceHandle": "1",
+      "target": "cmd_rmaudio",
+      "targetHandle": null,
+      "id": "e_cmt_rmaudio_cmd"
+    },
+    {
+      "source": "cmd_rmaudio",
+      "sourceHandle": "1",
+      "target": "cmt_reorder",
+      "targetHandle": null,
+      "id": "e_rmaudio_reorder"
+    },
+    {
+      "source": "cmt_reorder",
+      "sourceHandle": "1",
+      "target": "cmd_reorder",
+      "targetHandle": null,
+      "id": "e_cmt_reorder_cmd"
+    },
+    {
+      "source": "cmd_reorder",
+      "sourceHandle": "1",
+      "target": "cmt_exec",
+      "targetHandle": null,
+      "id": "e_reorder_exec"
+    },
+    {
+      "source": "cmt_exec",
+      "sourceHandle": "1",
+      "target": "ffe_001",
+      "targetHandle": null,
+      "id": "e_cmt_exec_cmd"
+    },
+    {
+      "source": "ffe_001",
+      "sourceHandle": "1",
+      "target": "cmt_duration",
+      "targetHandle": null,
+      "id": "e_exec_duration"
+    },
+    {
+      "source": "cmt_duration",
+      "sourceHandle": "1",
+      "target": "fl_duration",
+      "targetHandle": null,
+      "id": "e_cmt_duration_cmd"
+    },
+    {
+      "source": "fl_duration",
+      "sourceHandle": "1",
+      "target": "cmt_replace",
+      "targetHandle": null,
+      "id": "e_duration_ok"
+    },
+    {
+      "source": "fl_duration",
+      "sourceHandle": "2",
+      "target": "cmt_duration_fail",
+      "targetHandle": null,
+      "id": "e_duration_fail"
+    },
+    {
+      "source": "cmt_duration_fail",
+      "sourceHandle": "1",
+      "target": "fl_duration_review",
+      "targetHandle": null,
+      "id": "e_duration_fail_review"
+    },
+    {
+      "source": "cmt_replace",
+      "sourceHandle": "1",
+      "target": "fl_replace",
+      "targetHandle": null,
+      "id": "e_cmt_replace_cmd"
+    },
+    {
+      "source": "fl_replace",
+      "sourceHandle": "1",
+      "target": "cmt_notify",
+      "targetHandle": null,
+      "id": "e_replace_notify"
+    },
+    {
+      "source": "cmt_notify",
+      "sourceHandle": "1",
+      "target": "chk_plex_notify",
+      "targetHandle": null,
+      "id": "e_notify_plex_chk"
+    },
+    {
+      "source": "chk_plex_notify",
+      "sourceHandle": "1",
+      "target": "web_plex",
+      "targetHandle": null,
+      "id": "e_plex_yes"
+    },
+    {
+      "source": "chk_plex_notify",
+      "sourceHandle": "2",
+      "target": "chk_arr_notify",
+      "targetHandle": null,
+      "id": "e_plex_no"
+    },
+    {
+      "source": "web_plex",
+      "sourceHandle": "1",
+      "target": "chk_arr_notify",
+      "targetHandle": null,
+      "id": "e_plex_done"
+    },
+    {
+      "source": "chk_arr_notify",
+      "sourceHandle": "1",
+      "target": "arr_notify",
+      "targetHandle": null,
+      "id": "e_arr_yes"
+    },
+    {
+      "source": "err_on",
+      "sourceHandle": "1",
+      "target": "err_reset",
+      "targetHandle": null,
+      "id": "e_err_reset"
+    },
+    {
+      "source": "err_reset",
+      "sourceHandle": "1",
+      "target": "err_fail",
+      "targetHandle": null,
+      "id": "e_err_fail"
+    },
+    {
+      "source": "cmt_eac3",
+      "sourceHandle": "1",
+      "target": "grd_eac3_ch",
+      "targetHandle": null,
+      "id": "e_eac3_cmt_guard"
+    },
+    {
+      "source": "grd_eac3_ch",
+      "sourceHandle": "1",
+      "target": "cmd_eac3_eng",
+      "targetHandle": null,
+      "id": "e_eac3_guard_yes"
+    },
+    {
+      "source": "grd_eac3_ch",
+      "sourceHandle": "2",
+      "target": "cmt_ensure",
+      "targetHandle": null,
+      "id": "e_eac3_guard_no"
+    }
   ]
 }
