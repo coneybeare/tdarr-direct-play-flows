@@ -122,6 +122,23 @@ def apply_and_save(flow_path: Path, col_map: dict[str, int]) -> None:
 
 M, L, R, E = 0, -750, 750, 1500
 
+VR_01 = -1500   # VR branch column for flow 01 (left of L)
+VR_03 = -2200   # VR branch column for flow 03 (left of HDR_B)
+
+# VR node IDs shared between flows 01 and 03
+VR_NODES_01 = {
+    "chk_vr": M,        # detection node stays on main chain
+    "cmt_vr": VR_01, "ffs_vr": VR_01,
+    "cmd_vr_mp4": VR_01, "cmd_vr_rmsub": VR_01,
+    "cmd_vr_hevc": VR_01, "cmd_vr_tags": VR_01,
+    "cmd_vr_aac_eng": VR_01, "cmd_vr_aac_und": VR_01,
+    "cmd_vr_rmaudio": VR_01, "cmd_vr_reorder": VR_01,
+    "ffe_vr": VR_01,
+    "fl_vr_size": VR_01, "fl_vr_dur": VR_01, "fl_vr_replace": VR_01,
+}
+
+VR_NODES_03 = {k: (M if v == M else VR_03) for k, v in VR_NODES_01.items()}
+
 
 def col_map_01() -> dict[str, int]:
     SD, HI, SW = -500, 500, 1050
@@ -178,6 +195,8 @@ def col_map_01() -> dict[str, int]:
         "chk_arr_notify": M, "arr_notify": M,
         # ── Error handler ─────────────────────────────────────────────────────
         "err_on": E, "err_reset": E, "err_fail": E,
+        # ── VR branch ─────────────────────────────────────────────────────────
+        **VR_NODES_01,
     }
 
 
@@ -312,6 +331,8 @@ def col_map_03() -> dict[str, int]:
         "chk_arr_notify":   M, "arr_notify": M,
         # ── Error handler ─────────────────────────────────────────────────────
         "err_on": ERR, "err_reset": ERR, "err_fail": ERR,
+        # ── VR branch ─────────────────────────────────────────────────────────
+        **VR_NODES_03,
     }
 
 
