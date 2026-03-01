@@ -136,6 +136,7 @@ VR_NODES_01 = {
     "ffe_vr": VR_01,
     "ssim_vr": VR_01,   # SSIM quality gate (after encode, before size check)
     "fl_vr_size": VR_01, "fl_vr_dur": VR_01, "fl_vr_replace": VR_01,
+    "chk_auto_accept_vr": VR_01,  # auto-accept gate on VR replace path
 }
 
 VR_NODES_03 = {k: (M if v == M else VR_03) for k, v in VR_NODES_01.items()}
@@ -147,6 +148,7 @@ def col_map_01() -> dict[str, int]:
         # ── Config ───────────────────────────────────────────────────────────
         "inp_001": M, "cmt_config": M,
         "var_rm_commentary": M, "var_enable_plex": M, "var_enable_arr": M,
+        "var_auto_accept": M,
         # ── Guards ───────────────────────────────────────────────────────────
         "cmt_guards": M,
         "grd_ext": M, "grd_vid": M, "grd_aud": M, "grd_ch": M,
@@ -191,8 +193,10 @@ def col_map_01() -> dict[str, int]:
         "cmt_toobig": R, "fl_review": R,           # shared review node
         "cmt_duration": M, "fl_duration": M,
         "cmt_duration_fail": R,                     # → fl_review (shared)
+        "chk_auto_accept": M,                       # auto-accept gate on main replace path
         # ── Replace ───────────────────────────────────────────────────────────
         "cmt_replace": M, "fl_replace": M,
+        "fl_manual_review": R,                      # shared manual-review node
         # ── Notifications ─────────────────────────────────────────────────────
         "cmt_notify": M, "chk_plex_notify": M,
         "web_plex": R,
@@ -210,6 +214,7 @@ def col_map_02() -> dict[str, int]:
         # ── Config ───────────────────────────────────────────────────────────
         "inp_001": M, "cmt_config": M,
         "var_rm_commentary": M, "var_enable_plex": M, "var_enable_arr": M,
+        "var_auto_accept": M,
         # ── About + prerequisite guards ──────────────────────────────────────
         "cmt_about": M, "cmt_guards": M,
         "pre_ext": M, "pre_vid": M, "grd_aud": M, "grd_ch": M,
@@ -239,8 +244,10 @@ def col_map_02() -> dict[str, int]:
         # ── Duration validation ───────────────────────────────────────────────
         "cmt_duration": M, "fl_duration": M,
         "cmt_duration_fail": R, "fl_duration_review": R,
+        "chk_auto_accept": M,                       # auto-accept gate on main replace path
         # ── Replace ───────────────────────────────────────────────────────────
         "cmt_replace": M, "fl_replace": M,
+        "fl_manual_review": R,                      # shared manual-review node
         # ── Notifications ─────────────────────────────────────────────────────
         "cmt_notify": M, "chk_plex_notify": M,
         "web_plex": R,
@@ -262,6 +269,7 @@ def col_map_03() -> dict[str, int]:
         # ── Config ───────────────────────────────────────────────────────────
         "inp_001": M, "cmt_config": M,
         "var_rm_commentary": M, "var_enable_plex": M, "var_enable_arr": M,
+        "var_auto_accept": M,
         # ── About + guards ────────────────────────────────────────────────────
         "cmt_about": M, "cmt_guards": M,
         "grd_ext": M, "grd_vid": M, "grd_aud": M, "grd_ch": M,
@@ -292,6 +300,7 @@ def col_map_03() -> dict[str, int]:
         "fl_hdr_duration":        HDR,
         "cmt_hdr_dur_fail":       HDR_B,   # duration fail review
         "fl_hdr_dur_review":      HDR_B,
+        "chk_auto_accept_hdr":    HDR,     # auto-accept gate on HDR replace path
         "fl_hdr_replace":         HDR,
         # ── SDR full-transcode path (RIGHT column) ────────────────────────────
         "cmt_sdr_path":           SDR,
@@ -330,7 +339,9 @@ def col_map_03() -> dict[str, int]:
         "fl_sdr_duration":        SDR,
         "cmt_sdr_dur_fail":       SDR_4K,  # duration fail review
         "fl_sdr_dur_review":      SDR_4K,
+        "chk_auto_accept_sdr":    SDR,     # auto-accept gate on SDR replace path
         "fl_sdr_replace":         SDR,
+        "fl_manual_review":       SDR_4K,  # shared manual-review node
         # ── Merged notifications (both paths converge here) ───────────────────
         "cmt_notify":       M, "chk_plex_notify": M,
         "web_plex":         R,
