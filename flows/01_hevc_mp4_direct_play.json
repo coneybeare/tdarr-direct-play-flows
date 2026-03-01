@@ -425,8 +425,8 @@
       "version": "1.0.0",
       "id": "chk_resolution",
       "position": {
-        "x": 0,
-        "y": 3560
+        "x": 3500,
+        "y": 0
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -438,8 +438,8 @@
       "version": "1.0.0",
       "id": "cmd_hevc_sd",
       "position": {
-        "x": -500,
-        "y": 3680
+        "x": 3000,
+        "y": 120
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -462,7 +462,7 @@
       "id": "cmd_hevc_1080",
       "position": {
         "x": 3500,
-        "y": 0
+        "y": 120
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -484,8 +484,8 @@
       "version": "1.0.0",
       "id": "cmd_hevc_4k",
       "position": {
-        "x": 500,
-        "y": 3680
+        "x": 4000,
+        "y": 120
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -544,7 +544,7 @@
       "id": "cmt_tags",
       "position": {
         "x": 3500,
-        "y": 120
+        "y": 240
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -557,7 +557,7 @@
       "id": "cmd_tags",
       "position": {
         "x": 3500,
-        "y": 260
+        "y": 380
       },
       "inputsDB": {
         "inputArguments": "",
@@ -573,7 +573,7 @@
       "id": "cmt_audio",
       "position": {
         "x": 3500,
-        "y": 380
+        "y": 500
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -586,7 +586,7 @@
       "id": "cmd_ens_eng",
       "position": {
         "x": 3500,
-        "y": 520
+        "y": 640
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -607,7 +607,7 @@
       "id": "cmd_ens_und",
       "position": {
         "x": 3500,
-        "y": 640
+        "y": 760
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -628,7 +628,7 @@
       "id": "cmt_eac3",
       "position": {
         "x": 3500,
-        "y": 760
+        "y": 880
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -640,7 +640,7 @@
       "version": "1.0.0",
       "position": {
         "x": 3500,
-        "y": 900
+        "y": 1020
       },
       "inputsDB": {
         "channelCount": "6"
@@ -656,7 +656,7 @@
       "id": "cmd_eac3_eng",
       "position": {
         "x": 3500,
-        "y": 1020
+        "y": 1140
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -677,7 +677,7 @@
       "id": "cmd_eac3_und",
       "position": {
         "x": 3500,
-        "y": 1140
+        "y": 1260
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -698,7 +698,7 @@
       "id": "cmt_rmaudio",
       "position": {
         "x": 3500,
-        "y": 1260
+        "y": 1380
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -711,7 +711,7 @@
       "id": "cmd_rmaudio",
       "position": {
         "x": 3500,
-        "y": 1400
+        "y": 1520
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -728,7 +728,7 @@
       "id": "cmt_reorder",
       "position": {
         "x": 3500,
-        "y": 1520
+        "y": 1640
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -741,7 +741,7 @@
       "id": "cmd_reorder",
       "position": {
         "x": 3500,
-        "y": 1660
+        "y": 1780
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -760,7 +760,7 @@
       "id": "cmt_exec",
       "position": {
         "x": 3500,
-        "y": 1780
+        "y": 1900
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -773,7 +773,7 @@
       "id": "ffe_001",
       "position": {
         "x": 3500,
-        "y": 1920
+        "y": 2040
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -860,51 +860,6 @@
         "y": 2680
       },
       "inputsDB": {},
-      "fpEnabled": true
-    },
-    {
-      "name": "Flag for review",
-      "sourceRepo": "Community",
-      "pluginName": "requireReview",
-      "version": "1.0.0",
-      "id": "fl_ssim_review",
-      "position": {
-        "x": 4250,
-        "y": 2160
-      },
-      "inputsDB": {},
-      "fpEnabled": true
-    },
-    {
-      "name": "Check SSIM quality",
-      "sourceRepo": "local",
-      "pluginName": "checkSSIMScore",
-      "version": "1.0.0",
-      "id": "ssim_001",
-      "position": {
-        "x": 3500,
-        "y": 2040
-      },
-      "inputsDB": {
-        "ssim_threshold": "0.97",
-        "sample_duration": "60"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "Check SSIM quality",
-      "sourceRepo": "local",
-      "pluginName": "checkSSIMScore",
-      "version": "1.0.0",
-      "id": "ssim_vr",
-      "position": {
-        "x": -1500,
-        "y": 3220
-      },
-      "inputsDB": {
-        "ssim_threshold": "0.97",
-        "sample_duration": "60"
-      },
       "fpEnabled": true
     },
     {
@@ -1273,7 +1228,7 @@
       "id": "fl_vr_size",
       "position": {
         "x": -1500,
-        "y": 3340
+        "y": 3220
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -1289,7 +1244,7 @@
       "id": "fl_vr_dur",
       "position": {
         "x": -1500,
-        "y": 3460
+        "y": 3340
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1305,7 +1260,7 @@
       "id": "fl_vr_replace",
       "position": {
         "x": -1500,
-        "y": 3700
+        "y": 3580
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1335,7 +1290,7 @@
       "id": "chk_auto_accept_vr",
       "position": {
         "x": -1500,
-        "y": 3580
+        "y": 3460
       },
       "inputsDB": {
         "variable": "auto_accept",
@@ -1780,27 +1735,6 @@
       "id": "e_cmt_exec_cmd"
     },
     {
-      "source": "ffe_001",
-      "sourceHandle": "1",
-      "target": "ssim_001",
-      "targetHandle": null,
-      "id": "e_exec_ssim"
-    },
-    {
-      "source": "ssim_001",
-      "sourceHandle": "1",
-      "target": "cmt_size",
-      "targetHandle": null,
-      "id": "e_ssim_001_pass"
-    },
-    {
-      "source": "ssim_001",
-      "sourceHandle": "2",
-      "target": "fl_ssim_review",
-      "targetHandle": null,
-      "id": "e_ssim_001_fail"
-    },
-    {
       "source": "cmt_size",
       "sourceHandle": "1",
       "target": "fl_size",
@@ -2039,27 +1973,6 @@
       "id": "e_vr_reorder_exec"
     },
     {
-      "source": "ffe_vr",
-      "sourceHandle": "1",
-      "target": "ssim_vr",
-      "targetHandle": null,
-      "id": "e_vr_exec_ssim"
-    },
-    {
-      "source": "ssim_vr",
-      "sourceHandle": "1",
-      "target": "fl_vr_size",
-      "targetHandle": null,
-      "id": "e_ssim_vr_pass"
-    },
-    {
-      "source": "ssim_vr",
-      "sourceHandle": "2",
-      "target": "fl_ssim_review",
-      "targetHandle": null,
-      "id": "e_ssim_vr_fail"
-    },
-    {
       "source": "fl_vr_size",
       "sourceHandle": "1",
       "target": "fl_vr_dur",
@@ -2100,6 +2013,20 @@
       "target": "fl_manual_review",
       "targetHandle": null,
       "id": "e_vr_accept_review"
+    },
+    {
+      "source": "ffe_001",
+      "sourceHandle": "1",
+      "target": "cmt_size",
+      "targetHandle": null,
+      "id": "e_exec_size"
+    },
+    {
+      "source": "ffe_vr",
+      "sourceHandle": "1",
+      "target": "fl_vr_size",
+      "targetHandle": null,
+      "id": "e_vr_exec_size"
     }
   ]
 }
