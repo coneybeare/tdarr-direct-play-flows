@@ -78,6 +78,22 @@
       "fpEnabled": true
     },
     {
+      "name": "Config: auto-accept?",
+      "sourceRepo": "Community",
+      "pluginName": "setFlowVariable",
+      "version": "1.0.0",
+      "id": "var_auto_accept",
+      "position": {
+        "x": 0,
+        "y": 620
+      },
+      "inputsDB": {
+        "variable": "auto_accept",
+        "value": "true"
+      },
+      "fpEnabled": true
+    },
+    {
       "name": "About this flow",
       "sourceRepo": "Community",
       "pluginName": "comment",
@@ -85,7 +101,7 @@
       "id": "cmt_about",
       "position": {
         "x": 0,
-        "y": 620
+        "y": 740
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -98,7 +114,7 @@
       "id": "cmt_guards",
       "position": {
         "x": 0,
-        "y": 760
+        "y": 880
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -111,7 +127,7 @@
       "id": "pre_ext",
       "position": {
         "x": 0,
-        "y": 900
+        "y": 1020
       },
       "inputsDB": {
         "extensions": "mp4,m4v"
@@ -126,7 +142,7 @@
       "id": "cmt_skip_ext",
       "position": {
         "x": -750,
-        "y": 1020
+        "y": 1140
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -139,7 +155,7 @@
       "id": "pre_vid",
       "position": {
         "x": 0,
-        "y": 1020
+        "y": 1140
       },
       "inputsDB": {
         "codec": "hevc"
@@ -154,7 +170,7 @@
       "id": "cmt_skip_vid",
       "position": {
         "x": -750,
-        "y": 1160
+        "y": 1280
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -167,7 +183,7 @@
       "id": "grd_aud",
       "position": {
         "x": 0,
-        "y": 1140
+        "y": 1260
       },
       "inputsDB": {
         "streamType": "audio",
@@ -185,7 +201,7 @@
       "id": "grd_ch",
       "position": {
         "x": 0,
-        "y": 1260
+        "y": 1380
       },
       "inputsDB": {
         "channelCount": "2"
@@ -200,7 +216,7 @@
       "id": "cmt_optimal",
       "position": {
         "x": -750,
-        "y": 1380
+        "y": 1500
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -213,7 +229,7 @@
       "id": "fl_noop",
       "position": {
         "x": -750,
-        "y": 1520
+        "y": 1640
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -226,7 +242,7 @@
       "id": "cmt_proc",
       "position": {
         "x": 0,
-        "y": 1380
+        "y": 1500
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -239,7 +255,7 @@
       "id": "cmt_health",
       "position": {
         "x": 0,
-        "y": 1520
+        "y": 1640
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -252,7 +268,7 @@
       "id": "chk_health",
       "position": {
         "x": 0,
-        "y": 1660
+        "y": 1780
       },
       "inputsDB": {
         "type": "quick"
@@ -267,7 +283,7 @@
       "id": "cmt_health_fail",
       "position": {
         "x": 750,
-        "y": 1780
+        "y": 1900
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -280,7 +296,7 @@
       "id": "err_health",
       "position": {
         "x": 750,
-        "y": 1920
+        "y": 2040
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -293,7 +309,7 @@
       "id": "ffs_001",
       "position": {
         "x": 0,
-        "y": 1780
+        "y": 1900
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -306,7 +322,7 @@
       "id": "cmt_commentary",
       "position": {
         "x": 0,
-        "y": 1900
+        "y": 2020
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -319,7 +335,7 @@
       "id": "chk_rm_commentary",
       "position": {
         "x": 0,
-        "y": 2040
+        "y": 2160
       },
       "inputsDB": {
         "variable": "remove_commentary",
@@ -336,7 +352,7 @@
       "id": "cmd_rmcommentary",
       "position": {
         "x": -750,
-        "y": 2160
+        "y": 2280
       },
       "inputsDB": {
         "propertyToCheck": "tags.title",
@@ -353,7 +369,7 @@
       "id": "cmt_eac3",
       "position": {
         "x": 0,
-        "y": 2280
+        "y": 2400
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -365,7 +381,7 @@
       "version": "1.0.0",
       "position": {
         "x": 0,
-        "y": 2420
+        "y": 2540
       },
       "inputsDB": {
         "channelCount": "6"
@@ -381,7 +397,7 @@
       "id": "cmd_eac3_eng",
       "position": {
         "x": 0,
-        "y": 2540
+        "y": 2660
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -402,7 +418,7 @@
       "id": "cmd_eac3_und",
       "position": {
         "x": 0,
-        "y": 2660
+        "y": 2780
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -423,7 +439,7 @@
       "id": "cmt_ensure",
       "position": {
         "x": 0,
-        "y": 2780
+        "y": 2900
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -436,7 +452,7 @@
       "id": "cmd_ens_eng",
       "position": {
         "x": 0,
-        "y": 2920
+        "y": 3040
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -457,7 +473,7 @@
       "id": "cmd_ens_und",
       "position": {
         "x": 0,
-        "y": 3040
+        "y": 3160
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -478,7 +494,7 @@
       "id": "cmt_rmaudio",
       "position": {
         "x": 0,
-        "y": 3160
+        "y": 3280
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -491,7 +507,7 @@
       "id": "cmd_rmaudio",
       "position": {
         "x": 0,
-        "y": 3300
+        "y": 3420
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -508,7 +524,7 @@
       "id": "cmt_reorder",
       "position": {
         "x": 0,
-        "y": 3420
+        "y": 3540
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -521,7 +537,7 @@
       "id": "cmd_reorder",
       "position": {
         "x": 0,
-        "y": 3560
+        "y": 3680
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -540,7 +556,7 @@
       "id": "cmt_exec",
       "position": {
         "x": 0,
-        "y": 3680
+        "y": 3800
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -553,7 +569,7 @@
       "id": "ffe_001",
       "position": {
         "x": 0,
-        "y": 3820
+        "y": 3940
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -566,7 +582,7 @@
       "id": "cmt_duration",
       "position": {
         "x": 0,
-        "y": 3940
+        "y": 4060
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -579,7 +595,7 @@
       "id": "fl_duration",
       "position": {
         "x": 0,
-        "y": 4080
+        "y": 4200
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -595,7 +611,7 @@
       "id": "cmt_duration_fail",
       "position": {
         "x": 750,
-        "y": 4200
+        "y": 4320
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -608,7 +624,7 @@
       "id": "fl_duration_review",
       "position": {
         "x": 750,
-        "y": 4340
+        "y": 4580
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -621,7 +637,7 @@
       "id": "cmt_replace",
       "position": {
         "x": 0,
-        "y": 4200
+        "y": 4440
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -634,7 +650,7 @@
       "id": "fl_replace",
       "position": {
         "x": 0,
-        "y": 4340
+        "y": 4580
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -647,7 +663,7 @@
       "id": "cmt_notify",
       "position": {
         "x": 0,
-        "y": 4460
+        "y": 4700
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -660,7 +676,7 @@
       "id": "chk_plex_notify",
       "position": {
         "x": 0,
-        "y": 4600
+        "y": 4840
       },
       "inputsDB": {
         "variable": "enable_plex_notify",
@@ -677,7 +693,7 @@
       "id": "web_plex",
       "position": {
         "x": 750,
-        "y": 4720
+        "y": 4960
       },
       "inputsDB": {
         "url": "http://YOUR_PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=YOUR_PLEX_TOKEN",
@@ -693,7 +709,7 @@
       "id": "chk_arr_notify",
       "position": {
         "x": 0,
-        "y": 4840
+        "y": 5080
       },
       "inputsDB": {
         "variable": "enable_arr_notify",
@@ -710,7 +726,7 @@
       "id": "arr_notify",
       "position": {
         "x": 0,
-        "y": 4960
+        "y": 5200
       },
       "inputsDB": {
         "arr": "radarr",
@@ -757,6 +773,36 @@
       },
       "inputsDB": {},
       "fpEnabled": true
+    },
+    {
+      "name": "Auto-accept?",
+      "sourceRepo": "Community",
+      "pluginName": "checkFlowVariable",
+      "version": "1.0.0",
+      "id": "chk_auto_accept",
+      "position": {
+        "x": 0,
+        "y": 4320
+      },
+      "inputsDB": {
+        "variable": "auto_accept",
+        "value": "true",
+        "condition": "=="
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Await acceptance",
+      "sourceRepo": "Community",
+      "pluginName": "requireReview",
+      "version": "1.0.0",
+      "id": "fl_manual_review",
+      "position": {
+        "x": 750,
+        "y": 4460
+      },
+      "inputsDB": {},
+      "fpEnabled": true
     }
   ],
   "flowEdges": [
@@ -791,9 +837,16 @@
     {
       "source": "var_enable_arr",
       "sourceHandle": "1",
-      "target": "cmt_about",
+      "target": "var_auto_accept",
       "targetHandle": null,
       "id": "e_var3_about"
+    },
+    {
+      "source": "var_auto_accept",
+      "sourceHandle": "1",
+      "target": "cmt_about",
+      "targetHandle": null,
+      "id": "e_var4_about"
     },
     {
       "source": "cmt_about",
@@ -1029,9 +1082,23 @@
     {
       "source": "fl_duration",
       "sourceHandle": "1",
-      "target": "cmt_replace",
+      "target": "chk_auto_accept",
       "targetHandle": null,
       "id": "e_duration_ok"
+    },
+    {
+      "source": "chk_auto_accept",
+      "sourceHandle": "1",
+      "target": "cmt_replace",
+      "targetHandle": null,
+      "id": "e_accept_replace"
+    },
+    {
+      "source": "chk_auto_accept",
+      "sourceHandle": "2",
+      "target": "fl_manual_review",
+      "targetHandle": null,
+      "id": "e_accept_review"
     },
     {
       "source": "fl_duration",
