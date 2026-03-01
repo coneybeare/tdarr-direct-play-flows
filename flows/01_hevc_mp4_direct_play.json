@@ -770,7 +770,7 @@
       "id": "cmt_size",
       "position": {
         "x": 0,
-        "y": 5600
+        "y": 5720
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -783,7 +783,7 @@
       "id": "fl_size",
       "position": {
         "x": 0,
-        "y": 5740
+        "y": 5860
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -799,7 +799,7 @@
       "id": "cmt_toobig",
       "position": {
         "x": 750,
-        "y": 5860
+        "y": 5980
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -812,7 +812,7 @@
       "id": "cmt_duration",
       "position": {
         "x": 0,
-        "y": 5860
+        "y": 5980
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -825,7 +825,7 @@
       "id": "fl_duration",
       "position": {
         "x": 0,
-        "y": 6000
+        "y": 6120
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -841,9 +841,54 @@
       "id": "cmt_duration_fail",
       "position": {
         "x": 750,
-        "y": 6120
+        "y": 6240
       },
       "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Flag for review",
+      "sourceRepo": "Community",
+      "pluginName": "requireReview",
+      "version": "1.0.0",
+      "id": "fl_ssim_review",
+      "position": {
+        "x": 750,
+        "y": 5720
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Check SSIM quality",
+      "sourceRepo": "local",
+      "pluginName": "checkSSIMScore",
+      "version": "1.0.0",
+      "id": "ssim_001",
+      "position": {
+        "x": 0,
+        "y": 5600
+      },
+      "inputsDB": {
+        "ssim_threshold": "0.97",
+        "sample_duration": "60"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Check SSIM quality",
+      "sourceRepo": "local",
+      "pluginName": "checkSSIMScore",
+      "version": "1.0.0",
+      "id": "ssim_vr",
+      "position": {
+        "x": -1500,
+        "y": 3100
+      },
+      "inputsDB": {
+        "ssim_threshold": "0.97",
+        "sample_duration": "60"
+      },
       "fpEnabled": true
     },
     {
@@ -854,7 +899,7 @@
       "id": "fl_review",
       "position": {
         "x": 750,
-        "y": 6260
+        "y": 6380
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -867,7 +912,7 @@
       "id": "cmt_replace",
       "position": {
         "x": 0,
-        "y": 6120
+        "y": 6240
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -880,7 +925,7 @@
       "id": "fl_replace",
       "position": {
         "x": 0,
-        "y": 6260
+        "y": 6380
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -893,7 +938,7 @@
       "id": "cmt_notify",
       "position": {
         "x": 0,
-        "y": 6380
+        "y": 6500
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -906,7 +951,7 @@
       "id": "chk_plex_notify",
       "position": {
         "x": 0,
-        "y": 6520
+        "y": 6640
       },
       "inputsDB": {
         "variable": "enable_plex_notify",
@@ -923,7 +968,7 @@
       "id": "web_plex",
       "position": {
         "x": 750,
-        "y": 6640
+        "y": 6760
       },
       "inputsDB": {
         "url": "http://YOUR_PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=YOUR_PLEX_TOKEN",
@@ -939,7 +984,7 @@
       "id": "chk_arr_notify",
       "position": {
         "x": 0,
-        "y": 6760
+        "y": 6880
       },
       "inputsDB": {
         "variable": "enable_arr_notify",
@@ -956,7 +1001,7 @@
       "id": "arr_notify",
       "position": {
         "x": 0,
-        "y": 6880
+        "y": 7000
       },
       "inputsDB": {
         "arr": "radarr",
@@ -1212,7 +1257,7 @@
       "id": "fl_vr_size",
       "position": {
         "x": -1500,
-        "y": 3100
+        "y": 3220
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -1228,7 +1273,7 @@
       "id": "fl_vr_dur",
       "position": {
         "x": -1500,
-        "y": 3220
+        "y": 3340
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1244,7 +1289,7 @@
       "id": "fl_vr_replace",
       "position": {
         "x": -1500,
-        "y": 3340
+        "y": 3460
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1667,9 +1712,23 @@
     {
       "source": "ffe_001",
       "sourceHandle": "1",
+      "target": "ssim_001",
+      "targetHandle": null,
+      "id": "e_exec_ssim"
+    },
+    {
+      "source": "ssim_001",
+      "sourceHandle": "1",
       "target": "cmt_size",
       "targetHandle": null,
-      "id": "e_exec_size"
+      "id": "e_ssim_001_pass"
+    },
+    {
+      "source": "ssim_001",
+      "sourceHandle": "2",
+      "target": "fl_ssim_review",
+      "targetHandle": null,
+      "id": "e_ssim_001_fail"
     },
     {
       "source": "cmt_size",
@@ -1898,9 +1957,23 @@
     {
       "source": "ffe_vr",
       "sourceHandle": "1",
+      "target": "ssim_vr",
+      "targetHandle": null,
+      "id": "e_vr_exec_ssim"
+    },
+    {
+      "source": "ssim_vr",
+      "sourceHandle": "1",
       "target": "fl_vr_size",
       "targetHandle": null,
-      "id": "e_vr_exec_size"
+      "id": "e_ssim_vr_pass"
+    },
+    {
+      "source": "ssim_vr",
+      "sourceHandle": "2",
+      "target": "fl_ssim_review",
+      "targetHandle": null,
+      "id": "e_ssim_vr_fail"
     },
     {
       "source": "fl_vr_size",

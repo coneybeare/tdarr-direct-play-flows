@@ -134,6 +134,7 @@ VR_NODES_01 = {
     "cmd_vr_aac_eng": VR_01, "cmd_vr_aac_und": VR_01,
     "cmd_vr_rmaudio": VR_01, "cmd_vr_reorder": VR_01,
     "ffe_vr": VR_01,
+    "ssim_vr": VR_01,   # SSIM quality gate (after encode, before size check)
     "fl_vr_size": VR_01, "fl_vr_dur": VR_01, "fl_vr_replace": VR_01,
 }
 
@@ -182,6 +183,9 @@ def col_map_01() -> dict[str, int]:
         "cmt_rmaudio": M, "cmd_rmaudio": M,
         "cmt_reorder": M, "cmd_reorder": M,
         "cmt_exec": M, "ffe_001": M,
+        # ── SSIM quality gate ─────────────────────────────────────────────────
+        "ssim_001": M,          # after main encode execute
+        "fl_ssim_review": R,    # shared SSIM fail review node
         # ── Validation ────────────────────────────────────────────────────────
         "cmt_size": M, "fl_size": M,
         "cmt_toobig": R, "fl_review": R,           # shared review node
@@ -318,6 +322,8 @@ def col_map_03() -> dict[str, int]:
         "cmd_sdr_rmaudio":        SDR,
         "cmd_sdr_reorder":        SDR,
         "ffe_sdr":                SDR,
+        "ssim_sdr":               SDR,      # SSIM quality gate (after SDR encode)
+        "fl_ssim_review":         SDR_4K,  # shared SSIM fail review node
         "fl_sdr_size":            SDR,
         "cmt_sdr_toobig":         SDR_4K,  # size fail review
         "fl_sdr_review":          SDR_4K,

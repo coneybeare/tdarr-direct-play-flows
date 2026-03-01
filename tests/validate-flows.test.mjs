@@ -54,12 +54,12 @@ for (const file of flowFiles) {
       }
     });
 
-    test('all plugins have sourceRepo: Community', () => {
+    test('all plugins have a valid sourceRepo', () => {
+      const VALID_REPOS = new Set(['Community', 'local']);
       for (const plugin of flow.flowPlugins) {
-        assert.strictEqual(
-          plugin.sourceRepo,
-          'Community',
-          `Plugin "${plugin.id}" has sourceRepo "${plugin.sourceRepo}", expected "Community"`
+        assert.ok(
+          VALID_REPOS.has(plugin.sourceRepo),
+          `Plugin "${plugin.id}" has sourceRepo "${plugin.sourceRepo}", expected one of: ${[...VALID_REPOS].join(', ')}`
         );
       }
     });
