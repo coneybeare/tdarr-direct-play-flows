@@ -1079,15 +1079,18 @@
     {
       "name": "Check: VR file?",
       "sourceRepo": "Community",
-      "pluginName": "checkFilePath",
-      "version": "1.0.0",
+      "pluginName": "checkFileNameIncludes",
+      "version": "2.0.0",
       "id": "chk_vr",
       "position": {
         "x": 0,
         "y": 2330
       },
       "inputsDB": {
-        "path": "Virtual Reality"
+        "fileToCheck": "originalFile",
+        "terms": "Virtual Reality",
+        "pattern": "",
+        "includeFileDirectory": "true"
       },
       "fpEnabled": true
     },
