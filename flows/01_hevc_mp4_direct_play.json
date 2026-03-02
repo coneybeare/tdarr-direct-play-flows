@@ -453,8 +453,8 @@
       "version": "1.0.0",
       "id": "chk_nvenc",
       "position": {
-        "x": 3500,
-        "y": 0
+        "x": 0,
+        "y": 3870
       },
       "inputsDB": {
         "hardwareEncoder": "hevc_nvenc"
@@ -469,7 +469,7 @@
       "id": "cmt_resolution",
       "position": {
         "x": 3500,
-        "y": 120
+        "y": 0
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -482,7 +482,7 @@
       "id": "chk_resolution",
       "position": {
         "x": 3500,
-        "y": 260
+        "y": 140
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -495,7 +495,7 @@
       "id": "cmd_hevc_sd",
       "position": {
         "x": 3000,
-        "y": 380
+        "y": 260
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -518,7 +518,7 @@
       "id": "cmd_hevc_1080",
       "position": {
         "x": 3500,
-        "y": 380
+        "y": 260
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -541,7 +541,7 @@
       "id": "cmd_hevc_4k",
       "position": {
         "x": 4000,
-        "y": 380
+        "y": 260
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -563,8 +563,8 @@
       "version": "1.0.0",
       "id": "cmt_sw",
       "position": {
-        "x": 4550,
-        "y": 120
+        "x": 1050,
+        "y": 3990
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -576,8 +576,8 @@
       "version": "1.0.0",
       "id": "cmd_hevc_sw",
       "position": {
-        "x": 4550,
-        "y": 260
+        "x": 1050,
+        "y": 4130
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -600,7 +600,7 @@
       "id": "cmt_tags",
       "position": {
         "x": 3500,
-        "y": 500
+        "y": 380
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -613,7 +613,7 @@
       "id": "cmd_tags",
       "position": {
         "x": 3500,
-        "y": 640
+        "y": 520
       },
       "inputsDB": {
         "inputArguments": "",
@@ -629,7 +629,7 @@
       "id": "cmt_audio",
       "position": {
         "x": 3500,
-        "y": 760
+        "y": 640
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -642,7 +642,7 @@
       "id": "cmd_ens_eng",
       "position": {
         "x": 3500,
-        "y": 900
+        "y": 780
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -663,7 +663,7 @@
       "id": "cmd_ens_und",
       "position": {
         "x": 3500,
-        "y": 1020
+        "y": 900
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -684,7 +684,7 @@
       "id": "cmt_eac3",
       "position": {
         "x": 3500,
-        "y": 1140
+        "y": 1020
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -696,7 +696,7 @@
       "version": "1.0.0",
       "position": {
         "x": 3500,
-        "y": 1280
+        "y": 1160
       },
       "inputsDB": {
         "channelCount": "6"
@@ -712,7 +712,7 @@
       "id": "cmd_eac3_eng",
       "position": {
         "x": 3500,
-        "y": 1400
+        "y": 1280
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -733,7 +733,7 @@
       "id": "cmd_eac3_und",
       "position": {
         "x": 3500,
-        "y": 1520
+        "y": 1400
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -754,7 +754,7 @@
       "id": "cmt_rmaudio",
       "position": {
         "x": 3500,
-        "y": 1640
+        "y": 1520
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -767,7 +767,7 @@
       "id": "cmd_rmaudio",
       "position": {
         "x": 3500,
-        "y": 1780
+        "y": 1660
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -784,7 +784,7 @@
       "id": "cmt_reorder",
       "position": {
         "x": 3500,
-        "y": 1900
+        "y": 1780
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -797,7 +797,7 @@
       "id": "cmd_reorder",
       "position": {
         "x": 3500,
-        "y": 2040
+        "y": 1920
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -816,7 +816,7 @@
       "id": "cmt_exec",
       "position": {
         "x": 3500,
-        "y": 2160
+        "y": 2040
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -829,7 +829,7 @@
       "id": "ffe_001",
       "position": {
         "x": 3500,
-        "y": 2300
+        "y": 2180
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -842,7 +842,7 @@
       "id": "cmt_size",
       "position": {
         "x": 3500,
-        "y": 2420
+        "y": 2300
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -855,7 +855,7 @@
       "id": "fl_size",
       "position": {
         "x": 3500,
-        "y": 2560
+        "y": 2440
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -871,7 +871,7 @@
       "id": "cmt_toobig",
       "position": {
         "x": 4250,
-        "y": 2680
+        "y": 2560
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -884,7 +884,7 @@
       "id": "cmt_duration",
       "position": {
         "x": 3500,
-        "y": 2680
+        "y": 2560
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -897,7 +897,7 @@
       "id": "fl_duration",
       "position": {
         "x": 3500,
-        "y": 2820
+        "y": 2700
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -913,7 +913,7 @@
       "id": "cmt_duration_fail",
       "position": {
         "x": 4250,
-        "y": 2940
+        "y": 2820
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -926,7 +926,7 @@
       "id": "fl_review",
       "position": {
         "x": 4250,
-        "y": 3200
+        "y": 3080
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -939,7 +939,7 @@
       "id": "cmt_replace",
       "position": {
         "x": 3500,
-        "y": 3060
+        "y": 2940
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1332,7 +1332,7 @@
       "id": "chk_auto_accept",
       "position": {
         "x": 3500,
-        "y": 2940
+        "y": 2820
       },
       "inputsDB": {
         "variable": "auto_accept",
@@ -1366,7 +1366,7 @@
       "id": "fl_manual_review",
       "position": {
         "x": 4250,
-        "y": 3080
+        "y": 2960
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2121,6 +2121,20 @@
       "target": "cmt_notify",
       "targetHandle": null,
       "id": "e_vr_replace_notify"
+    },
+    {
+      "source": "fl_review",
+      "sourceHandle": "1",
+      "target": "fl_replace",
+      "targetHandle": null,
+      "id": "e_review_replace"
+    },
+    {
+      "source": "fl_manual_review",
+      "sourceHandle": "1",
+      "target": "fl_replace",
+      "targetHandle": null,
+      "id": "e_manual_review_replace"
     }
   ]
 }
