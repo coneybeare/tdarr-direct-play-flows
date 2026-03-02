@@ -137,6 +137,24 @@
       "fpEnabled": true
     },
     {
+      "name": "Check: hvc1 tag?",
+      "sourceRepo": "Community",
+      "pluginName": "checkStreamProperty",
+      "version": "1.0.0",
+      "id": "grd_tag",
+      "position": {
+        "x": 0,
+        "y": 1120
+      },
+      "inputsDB": {
+        "streamType": "video",
+        "propertyToCheck": "codec_tag_string",
+        "valuesToMatch": "hvc1",
+        "condition": "includes"
+      },
+      "fpEnabled": true
+    },
+    {
       "name": "Check: AAC audio?",
       "sourceRepo": "Community",
       "pluginName": "checkStreamProperty",
@@ -144,7 +162,7 @@
       "id": "grd_aud",
       "position": {
         "x": 0,
-        "y": 1120
+        "y": 1240
       },
       "inputsDB": {
         "streamType": "audio",
@@ -162,7 +180,7 @@
       "id": "grd_ch",
       "position": {
         "x": 0,
-        "y": 1240
+        "y": 1360
       },
       "inputsDB": {
         "channelCount": "2"
@@ -177,7 +195,7 @@
       "id": "cmt_optimal",
       "position": {
         "x": -750,
-        "y": 1360
+        "y": 1480
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -190,7 +208,7 @@
       "id": "fl_noop",
       "position": {
         "x": -750,
-        "y": 1500
+        "y": 1620
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -203,7 +221,7 @@
       "id": "cmt_proc",
       "position": {
         "x": 0,
-        "y": 1360
+        "y": 1480
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -214,11 +232,11 @@
       "version": "1.0.0",
       "sourceRepo": "Community",
       "fpEnabled": true,
-      "name": "── PRE-CHECK 1: LOW BITRATE SKIP ─────────────\nSkips files with overall bitrate ≤ 1 Mbps.\n\nWhy: Very low-bitrate files are typically trailers,\nextras, featurettes, or already heavily compressed\ncontent. Re-encoding HEVC at very low bitrates:\n  • Produces worse quality than the source\n  • Wastes GPU encode sessions on tiny files\n  • NVENC performs poorly near its quality floor\n\nOutput 1 (>1 Mbps): proceed to processing\nOutput 2 (≤1 Mbps): mark done without re-encoding\n\n★ CONFIGURE: greaterThan=1 (Mbps)\n  Increase to 2 or 3 to also skip low-res trailers.\n  Delete this node and its comment to disable\n  the skip and process ALL files regardless.",
+      "name": "── PRE-CHECK 1: LOW BITRATE SKIP ─────────────\nSkips files with overall bitrate ≤ 1 Mbps.\n\nWhy: Very low-bitrate files are typically trailers,\nextras, featurettes, or already heavily compressed\ncontent. Re-encoding HEVC at very low bitrates:\n  • Produces worse quality than the source\n  • Wastes GPU encode sessions on tiny files\n  • NVENC performs poorly near its quality floor\n\nOutput 1 (>1 Mbps): proceed to processing\nOutput 2 (≤1 Mbps): mark done without re-encoding\n\n★ CONFIGURE: greaterThan=0 (disabled — all files process)\n  Increase to 1+ (Mbps) to skip low-bitrate files like\n  trailers, extras, or already-compressed content.\n  Delete this node and its comment to remove the check.",
       "inputsDB": {},
       "position": {
         "x": 0,
-        "y": 1500
+        "y": 1620
       }
     },
     {
@@ -227,15 +245,15 @@
       "version": "1.0.0",
       "sourceRepo": "Community",
       "fpEnabled": true,
-      "name": "Check Overall Bitrate > 1 Mbps\n★ Config: greaterThan=1 (Mbps) | lessThan=500",
+      "name": "Check Overall Bitrate > 0 Mbps\n★ Config: greaterThan=0 (disabled) | lessThan=500",
       "inputsDB": {
         "unit": "mbps",
-        "greaterThan": "1",
+        "greaterThan": "0",
         "lessThan": "500"
       },
       "position": {
         "x": 0,
-        "y": 1940
+        "y": 2060
       }
     },
     {
@@ -248,7 +266,7 @@
       "inputsDB": {},
       "position": {
         "x": -750,
-        "y": 2070
+        "y": 2190
       }
     },
     {
@@ -261,7 +279,7 @@
       "inputsDB": {},
       "position": {
         "x": -750,
-        "y": 2230
+        "y": 2350
       }
     },
     {
@@ -272,7 +290,7 @@
       "id": "cmt_health",
       "position": {
         "x": 0,
-        "y": 2070
+        "y": 2190
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -285,7 +303,7 @@
       "id": "chk_health",
       "position": {
         "x": 0,
-        "y": 2210
+        "y": 2330
       },
       "inputsDB": {
         "type": "quick"
@@ -300,7 +318,7 @@
       "id": "ffs_001",
       "position": {
         "x": 0,
-        "y": 2450
+        "y": 2570
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -313,7 +331,7 @@
       "id": "cmt_mp4",
       "position": {
         "x": 0,
-        "y": 2570
+        "y": 2690
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -326,7 +344,7 @@
       "id": "cmd_mp4",
       "position": {
         "x": 0,
-        "y": 2710
+        "y": 2830
       },
       "inputsDB": {
         "container": "mp4",
@@ -342,7 +360,7 @@
       "id": "cmt_subs",
       "position": {
         "x": 0,
-        "y": 2830
+        "y": 2950
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -355,7 +373,7 @@
       "id": "cmd_rmsub",
       "position": {
         "x": 0,
-        "y": 2970
+        "y": 3090
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -368,7 +386,7 @@
       "id": "cmt_commentary",
       "position": {
         "x": 0,
-        "y": 3090
+        "y": 3210
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -381,7 +399,7 @@
       "id": "chk_rm_commentary",
       "position": {
         "x": 0,
-        "y": 3230
+        "y": 3350
       },
       "inputsDB": {
         "variable": "args.variables.user.remove_commentary",
@@ -398,7 +416,7 @@
       "id": "cmd_rmcommentary",
       "position": {
         "x": 750,
-        "y": 3350
+        "y": 3470
       },
       "inputsDB": {
         "propertyToCheck": "tags.title",
@@ -415,7 +433,7 @@
       "id": "cmt_data",
       "position": {
         "x": 0,
-        "y": 3470
+        "y": 3590
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -428,7 +446,7 @@
       "id": "cmd_rmdata",
       "position": {
         "x": 0,
-        "y": 3610
+        "y": 3730
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -441,7 +459,7 @@
       "id": "cmt_nvenc",
       "position": {
         "x": 0,
-        "y": 3730
+        "y": 3850
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -453,8 +471,8 @@
       "version": "1.0.0",
       "id": "chk_nvenc",
       "position": {
-        "x": 0,
-        "y": 3870
+        "x": 3500,
+        "y": 0
       },
       "inputsDB": {
         "hardwareEncoder": "hevc_nvenc"
@@ -469,7 +487,7 @@
       "id": "cmt_resolution",
       "position": {
         "x": 3500,
-        "y": 0
+        "y": 120
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -482,7 +500,7 @@
       "id": "chk_resolution",
       "position": {
         "x": 3500,
-        "y": 140
+        "y": 260
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -495,7 +513,7 @@
       "id": "cmd_hevc_sd",
       "position": {
         "x": 3000,
-        "y": 260
+        "y": 380
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -518,7 +536,7 @@
       "id": "cmd_hevc_1080",
       "position": {
         "x": 3500,
-        "y": 260
+        "y": 380
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -541,7 +559,7 @@
       "id": "cmd_hevc_4k",
       "position": {
         "x": 4000,
-        "y": 260
+        "y": 380
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -563,8 +581,8 @@
       "version": "1.0.0",
       "id": "cmt_sw",
       "position": {
-        "x": 1050,
-        "y": 3990
+        "x": 4550,
+        "y": 120
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -576,8 +594,8 @@
       "version": "1.0.0",
       "id": "cmd_hevc_sw",
       "position": {
-        "x": 1050,
-        "y": 4130
+        "x": 4550,
+        "y": 260
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -600,7 +618,7 @@
       "id": "cmt_tags",
       "position": {
         "x": 3500,
-        "y": 380
+        "y": 500
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -613,7 +631,7 @@
       "id": "cmd_tags",
       "position": {
         "x": 3500,
-        "y": 520
+        "y": 640
       },
       "inputsDB": {
         "inputArguments": "",
@@ -629,7 +647,7 @@
       "id": "cmt_audio",
       "position": {
         "x": 3500,
-        "y": 640
+        "y": 760
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -642,7 +660,7 @@
       "id": "cmd_ens_eng",
       "position": {
         "x": 3500,
-        "y": 780
+        "y": 900
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -663,7 +681,7 @@
       "id": "cmd_ens_und",
       "position": {
         "x": 3500,
-        "y": 900
+        "y": 1020
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -684,7 +702,7 @@
       "id": "cmt_eac3",
       "position": {
         "x": 3500,
-        "y": 1020
+        "y": 1140
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -696,7 +714,7 @@
       "version": "1.0.0",
       "position": {
         "x": 3500,
-        "y": 1160
+        "y": 1280
       },
       "inputsDB": {
         "channelCount": "6"
@@ -712,7 +730,7 @@
       "id": "cmd_eac3_eng",
       "position": {
         "x": 3500,
-        "y": 1280
+        "y": 1400
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -733,7 +751,7 @@
       "id": "cmd_eac3_und",
       "position": {
         "x": 3500,
-        "y": 1400
+        "y": 1520
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -754,7 +772,7 @@
       "id": "cmt_rmaudio",
       "position": {
         "x": 3500,
-        "y": 1520
+        "y": 1640
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -767,7 +785,7 @@
       "id": "cmd_rmaudio",
       "position": {
         "x": 3500,
-        "y": 1660
+        "y": 1780
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -784,7 +802,7 @@
       "id": "cmt_reorder",
       "position": {
         "x": 3500,
-        "y": 1780
+        "y": 1900
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -797,7 +815,7 @@
       "id": "cmd_reorder",
       "position": {
         "x": 3500,
-        "y": 1920
+        "y": 2040
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -816,7 +834,7 @@
       "id": "cmt_exec",
       "position": {
         "x": 3500,
-        "y": 2040
+        "y": 2160
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -829,7 +847,7 @@
       "id": "ffe_001",
       "position": {
         "x": 3500,
-        "y": 2180
+        "y": 2300
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -842,7 +860,7 @@
       "id": "cmt_size",
       "position": {
         "x": 3500,
-        "y": 2300
+        "y": 2420
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -855,7 +873,7 @@
       "id": "fl_size",
       "position": {
         "x": 3500,
-        "y": 2440
+        "y": 2560
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -871,7 +889,7 @@
       "id": "cmt_toobig",
       "position": {
         "x": 4250,
-        "y": 2560
+        "y": 2680
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -884,7 +902,7 @@
       "id": "cmt_duration",
       "position": {
         "x": 3500,
-        "y": 2560
+        "y": 2680
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -897,7 +915,7 @@
       "id": "fl_duration",
       "position": {
         "x": 3500,
-        "y": 2700
+        "y": 2820
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -913,7 +931,7 @@
       "id": "cmt_duration_fail",
       "position": {
         "x": 4250,
-        "y": 2820
+        "y": 2940
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -926,7 +944,7 @@
       "id": "fl_review",
       "position": {
         "x": 4250,
-        "y": 3080
+        "y": 3200
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -939,7 +957,7 @@
       "id": "cmt_replace",
       "position": {
         "x": 3500,
-        "y": 2940
+        "y": 3060
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -952,7 +970,7 @@
       "id": "fl_replace",
       "position": {
         "x": 3500,
-        "y": 3200
+        "y": 3320
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -965,7 +983,7 @@
       "id": "cmt_notify",
       "position": {
         "x": 3500,
-        "y": 3320
+        "y": 3440
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -978,7 +996,7 @@
       "id": "chk_plex_notify",
       "position": {
         "x": 3500,
-        "y": 3460
+        "y": 3580
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_plex_notify",
@@ -995,7 +1013,7 @@
       "id": "web_plex",
       "position": {
         "x": 4250,
-        "y": 3580
+        "y": 3700
       },
       "inputsDB": {
         "url": "http://YOUR_PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=YOUR_PLEX_TOKEN",
@@ -1011,7 +1029,7 @@
       "id": "chk_arr_notify",
       "position": {
         "x": 3500,
-        "y": 3700
+        "y": 3820
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_arr_notify",
@@ -1028,7 +1046,7 @@
       "id": "arr_notify",
       "position": {
         "x": 3500,
-        "y": 3820
+        "y": 3940
       },
       "inputsDB": {
         "arr": "radarr",
@@ -1084,7 +1102,7 @@
       "id": "chk_vr",
       "position": {
         "x": 0,
-        "y": 2330
+        "y": 2450
       },
       "inputsDB": {
         "fileToCheck": "originalFile",
@@ -1102,7 +1120,7 @@
       "id": "cmt_vr",
       "position": {
         "x": -1500,
-        "y": 2450
+        "y": 2570
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1115,7 +1133,7 @@
       "id": "ffs_vr",
       "position": {
         "x": -1500,
-        "y": 2590
+        "y": 2710
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1128,7 +1146,7 @@
       "id": "cmd_vr_mp4",
       "position": {
         "x": -1500,
-        "y": 2710
+        "y": 2830
       },
       "inputsDB": {
         "container": "mp4",
@@ -1144,7 +1162,7 @@
       "id": "cmd_vr_rmsub",
       "position": {
         "x": -1500,
-        "y": 2830
+        "y": 2950
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1157,7 +1175,7 @@
       "id": "cmd_vr_hevc",
       "position": {
         "x": -1500,
-        "y": 2950
+        "y": 3070
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -1180,7 +1198,7 @@
       "id": "cmd_vr_tags",
       "position": {
         "x": -1500,
-        "y": 3070
+        "y": 3190
       },
       "inputsDB": {
         "inputArguments": "",
@@ -1196,7 +1214,7 @@
       "id": "cmd_vr_aac_eng",
       "position": {
         "x": -1500,
-        "y": 3190
+        "y": 3310
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -1217,7 +1235,7 @@
       "id": "cmd_vr_aac_und",
       "position": {
         "x": -1500,
-        "y": 3310
+        "y": 3430
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -1238,7 +1256,7 @@
       "id": "cmd_vr_rmaudio",
       "position": {
         "x": -1500,
-        "y": 3430
+        "y": 3550
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -1255,7 +1273,7 @@
       "id": "cmd_vr_reorder",
       "position": {
         "x": -1500,
-        "y": 3550
+        "y": 3670
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -1274,7 +1292,7 @@
       "id": "ffe_vr",
       "position": {
         "x": -1500,
-        "y": 3670
+        "y": 3790
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1287,7 +1305,7 @@
       "id": "fl_vr_size",
       "position": {
         "x": -1500,
-        "y": 3790
+        "y": 3910
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -1303,7 +1321,7 @@
       "id": "fl_vr_dur",
       "position": {
         "x": -1500,
-        "y": 3910
+        "y": 4030
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1319,7 +1337,7 @@
       "id": "fl_vr_replace",
       "position": {
         "x": -1500,
-        "y": 4150
+        "y": 4270
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1332,7 +1350,7 @@
       "id": "chk_auto_accept",
       "position": {
         "x": 3500,
-        "y": 2820
+        "y": 2940
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1349,7 +1367,7 @@
       "id": "chk_auto_accept_vr",
       "position": {
         "x": -1500,
-        "y": 4030
+        "y": 4150
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1366,7 +1384,7 @@
       "id": "fl_manual_review",
       "position": {
         "x": 4250,
-        "y": 2960
+        "y": 3080
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1435,13 +1453,6 @@
       "target": "cmt_proc",
       "targetHandle": null,
       "id": "e_ext_no"
-    },
-    {
-      "source": "grd_vid",
-      "sourceHandle": "1",
-      "target": "grd_aud",
-      "targetHandle": null,
-      "id": "e_vid_yes"
     },
     {
       "source": "grd_vid",
@@ -2135,6 +2146,27 @@
       "target": "fl_replace",
       "targetHandle": null,
       "id": "e_manual_review_replace"
+    },
+    {
+      "source": "grd_vid",
+      "sourceHandle": "1",
+      "target": "grd_tag",
+      "targetHandle": null,
+      "id": "e_vid_tag"
+    },
+    {
+      "source": "grd_tag",
+      "sourceHandle": "1",
+      "target": "grd_aud",
+      "targetHandle": null,
+      "id": "e_tag_yes"
+    },
+    {
+      "source": "grd_tag",
+      "sourceHandle": "2",
+      "target": "cmt_proc",
+      "targetHandle": null,
+      "id": "e_tag_no"
     }
   ]
 }
