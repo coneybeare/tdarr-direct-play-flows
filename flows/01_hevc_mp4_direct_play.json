@@ -384,7 +384,7 @@
         "y": 3230
       },
       "inputsDB": {
-        "variable": "remove_commentary",
+        "variable": "args.variables.user.remove_commentary",
         "value": "true",
         "condition": "=="
       },
@@ -981,7 +981,7 @@
         "y": 3460
       },
       "inputsDB": {
-        "variable": "enable_plex_notify",
+        "variable": "args.variables.user.enable_plex_notify",
         "value": "true",
         "condition": "=="
       },
@@ -1014,7 +1014,7 @@
         "y": 3700
       },
       "inputsDB": {
-        "variable": "enable_arr_notify",
+        "variable": "args.variables.user.enable_arr_notify",
         "value": "true",
         "condition": "=="
       },
@@ -1335,7 +1335,7 @@
         "y": 2820
       },
       "inputsDB": {
-        "variable": "auto_accept",
+        "variable": "args.variables.user.auto_accept",
         "value": "true",
         "condition": "=="
       },
@@ -1352,7 +1352,7 @@
         "y": 4030
       },
       "inputsDB": {
-        "variable": "auto_accept",
+        "variable": "args.variables.user.auto_accept",
         "value": "true",
         "condition": "=="
       },
