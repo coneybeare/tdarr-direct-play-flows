@@ -17,7 +17,6 @@ Algorithm:
 
 import html
 import json
-import math
 from collections import defaultdict, deque
 from pathlib import Path
 
@@ -55,6 +54,9 @@ def compute_positions(
     in_degree: dict[str, int]       = {n["id"]: 0 for n in flow["flowPlugins"]}
 
     for e in edges:
+        if e["source"] not in nodes or e["target"] not in nodes:
+            print(f"    WARNING: edge '{e.get('id')}' references unknown node(s), skipping")
+            continue
         out_adj[e["source"]].append(e["target"])
         in_degree[e["target"]] += 1
 
@@ -69,6 +71,10 @@ def compute_positions(
             in_degree[target] -= 1
             if in_degree[target] == 0:
                 queue.append(target)
+
+    if len(topo) < len(nodes):
+        missing = set(nodes) - set(topo)
+        print(f"    WARNING: cycle detected — {len(missing)} node(s) excluded from layout: {missing}")
 
     col_cursor: dict[int, int] = defaultdict(int)
     min_y:      dict[str, int] = defaultdict(int)
@@ -117,7 +123,6 @@ def compute_num_sections(
 
 def apply_wrapping(
     positions:       dict[str, dict],
-    nodes:           dict[str, dict],
     edges:           list[dict],
     col_map:         dict[str, int],
     topo:            list[str],
@@ -292,8 +297,15 @@ def generate_svg(
         x2     = tx(tp["x"]) + nw / 2
         y2     = ty(tp["y"])
         handle = edge.get("sourceHandle", "1")
-        mid    = handle.replace("err1", "err").replace("1", "ok").replace("2", "no")
-        color  = EDGE_COLORS.get(handle, "#90A4AE")
+        # Map to a defined marker: "2"=no, "err1"=err, anything else=ok
+        if handle == "2":
+            marker_key = "2"
+        elif handle == "err1":
+            marker_key = "err1"
+        else:
+            marker_key = "1"
+        mid    = {"1": "ok", "2": "no", "err1": "err"}[marker_key]
+        color  = EDGE_COLORS[marker_key]
         cy_c   = (y1 + y2) / 2
         out.append(
             f'<path d="M{x1},{y1} C{x1},{cy_c} {x2},{cy_c} {x2},{y2}"'
@@ -376,7 +388,6 @@ def apply_and_save(flow_path: Path, col_map: dict[str, int]) -> None:
     with open(flow_path, encoding="utf-8") as f:
         flow = json.load(f)
 
-    nodes_by_id          = {n["id"]: n for n in flow["flowPlugins"]}
     positions, topo      = compute_positions(flow, col_map)
 
     # Wrapping
@@ -387,7 +398,7 @@ def apply_and_save(flow_path: Path, col_map: dict[str, int]) -> None:
 
     if num_sections > 1:
         positions = apply_wrapping(
-            positions, nodes_by_id, flow["flowEdges"],
+            positions, flow["flowEdges"],
             col_map, topo, section_x_shift, num_sections,
         )
 
