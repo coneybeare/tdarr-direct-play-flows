@@ -137,6 +137,24 @@
       "fpEnabled": true
     },
     {
+      "name": "Check: Dolby Vision?",
+      "sourceRepo": "Community",
+      "pluginName": "checkStreamProperty",
+      "version": "1.0.0",
+      "id": "grd_dovi",
+      "position": {
+        "x": 0,
+        "y": 1120
+      },
+      "inputsDB": {
+        "streamType": "video",
+        "propertyToCheck": "codec_tag_string",
+        "valuesToMatch": "dv",
+        "condition": "includes"
+      },
+      "fpEnabled": true
+    },
+    {
       "name": "Check: hvc1 tag?",
       "sourceRepo": "Community",
       "pluginName": "checkStreamProperty",
@@ -144,7 +162,7 @@
       "id": "grd_tag",
       "position": {
         "x": 0,
-        "y": 1120
+        "y": 1240
       },
       "inputsDB": {
         "streamType": "video",
@@ -162,7 +180,7 @@
       "id": "grd_aud",
       "position": {
         "x": 0,
-        "y": 1240
+        "y": 1360
       },
       "inputsDB": {
         "streamType": "audio",
@@ -180,7 +198,7 @@
       "id": "grd_ch",
       "position": {
         "x": 0,
-        "y": 1360
+        "y": 1480
       },
       "inputsDB": {
         "channelCount": "2"
@@ -195,7 +213,7 @@
       "id": "cmt_optimal",
       "position": {
         "x": -750,
-        "y": 1480
+        "y": 1600
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -208,7 +226,7 @@
       "id": "fl_noop",
       "position": {
         "x": -750,
-        "y": 1620
+        "y": 1740
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -221,7 +239,7 @@
       "id": "cmt_proc",
       "position": {
         "x": 0,
-        "y": 1480
+        "y": 1600
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -236,7 +254,7 @@
       "inputsDB": {},
       "position": {
         "x": 0,
-        "y": 1620
+        "y": 1740
       }
     },
     {
@@ -253,7 +271,7 @@
       },
       "position": {
         "x": 0,
-        "y": 2100
+        "y": 2220
       }
     },
     {
@@ -266,7 +284,7 @@
       "inputsDB": {},
       "position": {
         "x": -750,
-        "y": 2230
+        "y": 2350
       }
     },
     {
@@ -279,7 +297,7 @@
       "inputsDB": {},
       "position": {
         "x": -750,
-        "y": 2390
+        "y": 2510
       }
     },
     {
@@ -290,7 +308,7 @@
       "id": "cmt_health",
       "position": {
         "x": 0,
-        "y": 2230
+        "y": 2350
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -303,7 +321,7 @@
       "id": "chk_health",
       "position": {
         "x": 0,
-        "y": 2370
+        "y": 2490
       },
       "inputsDB": {
         "type": "quick"
@@ -318,7 +336,7 @@
       "id": "ffs_001",
       "position": {
         "x": 0,
-        "y": 2610
+        "y": 2730
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -331,7 +349,7 @@
       "id": "cmt_mp4",
       "position": {
         "x": 0,
-        "y": 2730
+        "y": 2850
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -344,7 +362,7 @@
       "id": "cmd_mp4",
       "position": {
         "x": 0,
-        "y": 2870
+        "y": 2990
       },
       "inputsDB": {
         "container": "mp4",
@@ -360,7 +378,7 @@
       "id": "cmt_subs",
       "position": {
         "x": 0,
-        "y": 2990
+        "y": 3110
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -373,7 +391,7 @@
       "id": "cmd_rmsub",
       "position": {
         "x": 0,
-        "y": 3130
+        "y": 3250
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -386,7 +404,7 @@
       "id": "cmt_commentary",
       "position": {
         "x": 0,
-        "y": 3250
+        "y": 3370
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -399,7 +417,7 @@
       "id": "chk_rm_commentary",
       "position": {
         "x": 0,
-        "y": 3390
+        "y": 3510
       },
       "inputsDB": {
         "variable": "args.variables.user.remove_commentary",
@@ -416,7 +434,7 @@
       "id": "cmd_rmcommentary",
       "position": {
         "x": 750,
-        "y": 3510
+        "y": 3630
       },
       "inputsDB": {
         "propertyToCheck": "tags.title",
@@ -433,7 +451,7 @@
       "id": "cmt_data",
       "position": {
         "x": 0,
-        "y": 3630
+        "y": 3750
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -446,7 +464,7 @@
       "id": "cmd_rmdata",
       "position": {
         "x": 0,
-        "y": 3770
+        "y": 3890
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -459,7 +477,7 @@
       "id": "cmt_nvenc",
       "position": {
         "x": 0,
-        "y": 3890
+        "y": 4010
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1076,7 +1094,7 @@
       "id": "chk_vr",
       "position": {
         "x": 0,
-        "y": 2490
+        "y": 2610
       },
       "inputsDB": {
         "fileToCheck": "originalFile",
@@ -1094,7 +1112,7 @@
       "id": "cmt_vr",
       "position": {
         "x": -1500,
-        "y": 2610
+        "y": 2730
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1107,7 +1125,7 @@
       "id": "ffs_vr",
       "position": {
         "x": -1500,
-        "y": 2750
+        "y": 2870
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1120,7 +1138,7 @@
       "id": "cmd_vr_mp4",
       "position": {
         "x": -1500,
-        "y": 2870
+        "y": 2990
       },
       "inputsDB": {
         "container": "mp4",
@@ -1136,7 +1154,7 @@
       "id": "cmd_vr_rmsub",
       "position": {
         "x": -1500,
-        "y": 2990
+        "y": 3110
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1149,7 +1167,7 @@
       "id": "cmd_vr_hevc",
       "position": {
         "x": -1500,
-        "y": 3110
+        "y": 3230
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -1172,7 +1190,7 @@
       "id": "cmd_vr_tags",
       "position": {
         "x": -1500,
-        "y": 3230
+        "y": 3350
       },
       "inputsDB": {
         "inputArguments": "",
@@ -1188,7 +1206,7 @@
       "id": "cmd_vr_aac_eng",
       "position": {
         "x": -1500,
-        "y": 3350
+        "y": 3470
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -1209,7 +1227,7 @@
       "id": "cmd_vr_aac_und",
       "position": {
         "x": -1500,
-        "y": 3470
+        "y": 3590
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -1230,7 +1248,7 @@
       "id": "cmd_vr_rmaudio",
       "position": {
         "x": -1500,
-        "y": 3590
+        "y": 3710
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -1247,7 +1265,7 @@
       "id": "cmd_vr_reorder",
       "position": {
         "x": -1500,
-        "y": 3710
+        "y": 3830
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -1266,7 +1284,7 @@
       "id": "ffe_vr",
       "position": {
         "x": -1500,
-        "y": 3830
+        "y": 3950
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1279,7 +1297,7 @@
       "id": "fl_vr_size",
       "position": {
         "x": -1500,
-        "y": 3950
+        "y": 4070
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -1295,7 +1313,7 @@
       "id": "fl_vr_dur",
       "position": {
         "x": -1500,
-        "y": 4070
+        "y": 4190
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1311,7 +1329,7 @@
       "id": "fl_vr_replace",
       "position": {
         "x": -1500,
-        "y": 4310
+        "y": 4430
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1341,7 +1359,7 @@
       "id": "chk_auto_accept_vr",
       "position": {
         "x": -1500,
-        "y": 4190
+        "y": 4310
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -2108,13 +2126,6 @@
       "id": "e_manual_review_replace"
     },
     {
-      "source": "grd_vid",
-      "sourceHandle": "1",
-      "target": "grd_tag",
-      "targetHandle": null,
-      "id": "e_vid_tag"
-    },
-    {
       "source": "grd_tag",
       "sourceHandle": "1",
       "target": "grd_aud",
@@ -2134,6 +2145,27 @@
       "target": "fl_noop",
       "targetHandle": null,
       "id": "e_err_done"
+    },
+    {
+      "source": "grd_vid",
+      "sourceHandle": "1",
+      "target": "grd_dovi",
+      "targetHandle": null,
+      "id": "e_vid_dovi"
+    },
+    {
+      "source": "grd_dovi",
+      "sourceHandle": "1",
+      "target": "fl_noop",
+      "targetHandle": null,
+      "id": "e_dovi_skip"
+    },
+    {
+      "source": "grd_dovi",
+      "sourceHandle": "2",
+      "target": "grd_tag",
+      "targetHandle": null,
+      "id": "e_dovi_no"
     }
   ]
 }
