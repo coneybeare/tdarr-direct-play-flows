@@ -1069,32 +1069,6 @@
       "fpEnabled": true
     },
     {
-      "name": "Reset error",
-      "sourceRepo": "Community",
-      "pluginName": "resetFlowError",
-      "version": "1.0.0",
-      "id": "err_reset",
-      "position": {
-        "x": 1500,
-        "y": 120
-      },
-      "inputsDB": {},
-      "fpEnabled": true
-    },
-    {
-      "name": "Fail flow",
-      "sourceRepo": "Community",
-      "pluginName": "failFlow",
-      "version": "1.0.0",
-      "id": "err_fail",
-      "position": {
-        "x": 1500,
-        "y": 240
-      },
-      "inputsDB": {},
-      "fpEnabled": true
-    },
-    {
       "name": "Check: VR file?",
       "sourceRepo": "Community",
       "pluginName": "checkFileNameIncludes",
@@ -1917,20 +1891,6 @@
       "id": "e_arr_yes"
     },
     {
-      "source": "err_on",
-      "sourceHandle": "1",
-      "target": "err_reset",
-      "targetHandle": null,
-      "id": "e_err_reset"
-    },
-    {
-      "source": "err_reset",
-      "sourceHandle": "1",
-      "target": "err_fail",
-      "targetHandle": null,
-      "id": "e_err_fail"
-    },
-    {
       "source": "cmt_eac3",
       "sourceHandle": "1",
       "target": "grd_eac3_ch",
@@ -2167,6 +2127,13 @@
       "target": "cmt_proc",
       "targetHandle": null,
       "id": "e_tag_no"
+    },
+    {
+      "source": "err_on",
+      "sourceHandle": "1",
+      "target": "fl_noop",
+      "targetHandle": null,
+      "id": "e_err_done"
     }
   ]
 }
