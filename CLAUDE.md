@@ -1,10 +1,17 @@
 # Claude Code Instructions
 
+## Project Purpose
+
+This project provides a set of Tdarr flows optimized for direct play of HEVC/MP4 files with stereo AAC 2.0 and EAC3 5.1 surround sound. It includes GPU-accelerated encoding with NVENC, software fallback, health checks, duration validation, and optional Plex/arr notifications.
+
+- Primary objective: Ensure optimal direct play compatibility on ios/plex/video.js clients and maintain high quality for HEVC/MP4 media files.
+
 ## Git Workflow — CRITICAL
 
 **Never push directly to `main`.** All changes must go through a pull request.
 
 When making changes:
+
 1. Check the current branch: `git branch`
 2. If on `main`, create a feature branch first: `git checkout -b claude/<description>`
 3. Commit to the feature branch
