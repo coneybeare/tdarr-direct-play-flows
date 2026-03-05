@@ -4,7 +4,7 @@
 
 This project provides a set of Tdarr flows optimized for direct play of HEVC/MP4 files with stereo AAC 2.0 and EAC3 5.1 surround sound. It includes GPU-accelerated encoding with NVENC, software fallback, health checks, duration validation, and optional Plex/arr notifications.
 
-- Primary objective: Ensure optimal direct play compatibility on ios/plex/video.js clients and maintain high quality for HEVC/MP4 media files.
+- Primary objective: Ensure optimal direct play compatibility on iOS/plex/video.js clients and maintain high quality for HEVC/MP4 media files.
 
 ## Git Workflow — CRITICAL
 
@@ -39,7 +39,7 @@ Then commit both the updated flow JSON and `images/01_hevc_mp4_direct_play.svg`.
 ## PR Review Workflow
 
 - After creating a PR, always check for and address Copilot/reviewer comments before considering work done.
-- Use `gh api repos/{owner}/{repo}/pulls/{num}/comments` to fetch inline review comments.
+- Use `gh api --paginate repos/{owner}/{repo}/pulls/{num}/comments` to fetch inline review comments.
 - Address valid feedback with a follow-up commit on the same branch.
 - When asked to review a PR, provide thorough analysis: trace logic through the flow, verify edge cases, check for regressions, and include scenario analysis.
 
