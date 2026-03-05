@@ -3,12 +3,10 @@ name: Claude Code Review
 on:
   pull_request:
     types: [opened, synchronize, ready_for_review, reopened]
-    # Optional: Only run on specific file changes
-    # paths:
-    #   - "src/**/*.ts"
-    #   - "src/**/*.tsx"
-    #   - "src/**/*.js"
-    #   - "src/**/*.jsx"
+    # Skip PRs that modify the workflow file itself — OIDC validation requires the
+    # workflow on the branch to match the default branch, so self-modifying PRs always fail.
+    paths-ignore:
+      - '.github/workflows/**'
 
 jobs:
   claude-review:
