@@ -895,12 +895,12 @@
       },
       "inputsDB": {
         "greaterThan": "0",
-        "lessThan": "120"
+        "lessThan": "150"
       },
       "fpEnabled": true
     },
     {
-      "name": "Too big — review",
+      "name": "Too big — fail",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
@@ -908,6 +908,19 @@
       "position": {
         "x": 4250,
         "y": 2560
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Fail: too big",
+      "sourceRepo": "Community",
+      "pluginName": "failFlow",
+      "version": "1.0.0",
+      "id": "fail_toobig",
+      "position": {
+        "x": 4250,
+        "y": 2700
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1301,7 +1314,7 @@
       },
       "inputsDB": {
         "greaterThan": "0",
-        "lessThan": "120"
+        "lessThan": "150"
       },
       "fpEnabled": true
     },
@@ -1813,9 +1826,9 @@
     {
       "source": "cmt_toobig",
       "sourceHandle": "1",
-      "target": "fl_review",
+      "target": "fail_toobig",
       "targetHandle": null,
-      "id": "e_toobig_review"
+      "id": "e_toobig_fail"
     },
     {
       "source": "cmt_duration",

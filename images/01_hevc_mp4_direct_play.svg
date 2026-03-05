@@ -67,7 +67,7 @@
 <path d="M1362.0,647.9 C1362.0,653.2 1362.0,653.2 1362.0,658.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
 <path d="M1362.0,679.7 C1362.0,684.95 1362.0,684.95 1362.0,690.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
 <path d="M1362.0,679.7 C1362.0,684.95 1560.4,684.95 1560.4,690.2" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-no)"/>
-<path d="M1560.4,716.6 C1560.4,772.2 1560.4,772.2 1560.4,827.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
+<path d="M1560.4,716.6 C1560.4,721.95 1560.4,721.95 1560.4,727.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
 <path d="M1362.0,716.6 C1362.0,721.95 1362.0,721.95 1362.0,727.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
 <path d="M1362.0,748.5 C1362.0,753.75 1362.0,753.75 1362.0,759.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
 <path d="M1362.0,780.2 C1362.0,785.45 1362.0,785.45 1362.0,790.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
@@ -235,7 +235,9 @@
 <rect x="1335.5" y="658.5" width="53" height="21.2" rx="4" fill="#FFF176" stroke="#9E9E9E" stroke-width="0.5"/>
 <text x="1362.0" y="673.6" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1362.0" dy="0">Check: file size ratio</tspan></text>
 <rect x="1533.9" y="690.2" width="53" height="26.4" rx="4" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="1560.4" y="707.9000000000001" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1560.4" dy="0">Too big — review</tspan></text>
+<text x="1560.4" y="707.9000000000001" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1560.4" dy="0">Too big — fail</tspan></text>
+<rect x="1533.9" y="727.3" width="53" height="21.2" rx="4" fill="#B0BEC5" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="1560.4" y="742.4" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1560.4" dy="0">Fail: too big</tspan></text>
 <rect x="1335.5" y="690.2" width="53" height="26.4" rx="4" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.5"/>
 <text x="1362.0" y="707.9000000000001" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1362.0" dy="0">Duration check</tspan></text>
 <rect x="1335.5" y="727.3" width="53" height="21.2" rx="4" fill="#FFF176" stroke="#9E9E9E" stroke-width="0.5"/>
