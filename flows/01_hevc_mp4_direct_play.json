@@ -807,7 +807,7 @@
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
-        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca,aac",
+        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca",
         "condition": "includes"
       },
       "fpEnabled": true
@@ -1252,7 +1252,7 @@
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
-        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca,aac",
+        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca",
         "condition": "includes"
       },
       "fpEnabled": true
