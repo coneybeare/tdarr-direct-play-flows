@@ -499,7 +499,8 @@ def col_map_01() -> dict[str, int]:
         "cmt_exec": M, "ffe_001": M,
         # ── Validation ────────────────────────────────────────────────────────
         "cmt_size": M, "fl_size": M,
-        "cmt_toobig": R, "fl_review": R,           # shared review node
+        "cmt_toobig": R, "fail_toobig": R,             # fail oversized transcodes
+        "fl_review": R,                               # shared review node (duration mismatch)
         "cmt_duration": M, "fl_duration": M,
         "cmt_duration_fail": R,                     # → fl_review (shared)
         "chk_auto_accept": M,                       # auto-accept gate on main replace path

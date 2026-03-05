@@ -48,7 +48,7 @@ Designed for a **Synology NAS** with an **NVIDIA T400 GPU** running Tdarr in Doc
 14. Remove incompatible audio codecs (TrueHD, FLAC, Vorbis, WMA, Opus, **DTS**)
 15. Reorder streams (stereo AAC first)
 16. Execute FFmpeg
-17. Validate output size (≤120% of original; sends to Review if larger)
+17. Validate output size (≤150% of original; fails the flow if larger, preserving original)
 18. Validate output duration (98–102% of original; catches truncated/corrupt outputs)
 19. Replace original file
 20. Notify Plex (opt-in via `enable_plex_notify` variable)
@@ -105,7 +105,7 @@ All configurable values are set directly on individual nodes in Tdarr's visual f
 | `bitrate` | Ensure Stereo AAC | `192k` | Stereo AAC bitrate. 128k is fine; 192k is noticeably better on headphones. |
 | `language` | Ensure Audio nodes | `eng` / `und` | Change to your library's primary language code (e.g., `jpn`, `spa`, `fre`). Add more EnsureAudioStream nodes for multilingual libraries. |
 | `extensions` | Guard: Container check | `mp4,m4v` | Add any other MP4-family extensions your library uses. |
-| `lessThan` | Validate File Size | `120` | Allows up to 20% growth. Increase to 150 if you see false positives on short clips. |
+| `lessThan` | Validate File Size | `150` | Allows up to 50% growth. Files exceeding this threshold fail the flow (original preserved). Increase if re-encoding low-bitrate sources. |
 | `url` | Notify Plex | placeholder | Set to `http://YOUR_PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=YOUR_TOKEN` |
 | `arr_host` | Notify Arr | placeholder | Set to your Radarr or Sonarr URL (e.g., `http://192.168.1.10:7878`) |
 | `arr_api_key` | Notify Arr | placeholder | Found in Radarr/Sonarr under Settings → General → API Key |
@@ -195,11 +195,12 @@ Want Plex/arr notifications?
 
 ## Troubleshooting
 
-**Files going to "Needs Review" frequently:**
+**Files failing with "Transcode error" due to size:**
+- Files exceeding 150% of original size are failed (original preserved)
 - Increase `ffmpegQuality` (e.g., 26–28) to reduce output size
 - Check if source files are already highly compressed (HEVC at low bitrate)
 - Short clips (<5 minutes) may have proportionally large container overhead
-- Increase `lessThan` threshold from 120 to 150 for those libraries
+- Increase `lessThan` threshold beyond 150 for those libraries
 
 **Duration validation failures:**
 - Usually indicates a corrupt source file (the health check should have caught it)

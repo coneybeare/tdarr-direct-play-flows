@@ -919,8 +919,8 @@
       "version": "1.0.0",
       "id": "fail_toobig",
       "position": {
-        "x": 3500,
-        "y": 2820
+        "x": 4250,
+        "y": 2700
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -975,7 +975,7 @@
       "id": "fl_review",
       "position": {
         "x": 4250,
-        "y": 3180
+        "y": 3080
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -988,7 +988,7 @@
       "id": "cmt_replace",
       "position": {
         "x": 3500,
-        "y": 3060
+        "y": 2940
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1001,7 +1001,7 @@
       "id": "fl_replace",
       "position": {
         "x": 3500,
-        "y": 3300
+        "y": 3200
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1014,7 +1014,7 @@
       "id": "cmt_notify",
       "position": {
         "x": 3500,
-        "y": 3420
+        "y": 3320
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1027,7 +1027,7 @@
       "id": "chk_plex_notify",
       "position": {
         "x": 3500,
-        "y": 3560
+        "y": 3460
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_plex_notify",
@@ -1044,7 +1044,7 @@
       "id": "web_plex",
       "position": {
         "x": 4250,
-        "y": 3680
+        "y": 3580
       },
       "inputsDB": {
         "url": "http://YOUR_PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=YOUR_PLEX_TOKEN",
@@ -1060,7 +1060,7 @@
       "id": "chk_arr_notify",
       "position": {
         "x": 3500,
-        "y": 3800
+        "y": 3700
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_arr_notify",
@@ -1077,7 +1077,7 @@
       "id": "arr_notify",
       "position": {
         "x": 3500,
-        "y": 3920
+        "y": 3820
       },
       "inputsDB": {
         "arr": "radarr",
@@ -1355,7 +1355,7 @@
       "id": "chk_auto_accept",
       "position": {
         "x": 3500,
-        "y": 2940
+        "y": 2820
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1389,7 +1389,7 @@
       "id": "fl_manual_review",
       "position": {
         "x": 4250,
-        "y": 3060
+        "y": 2960
       },
       "inputsDB": {},
       "fpEnabled": true
