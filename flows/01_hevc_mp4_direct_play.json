@@ -665,7 +665,7 @@
       "id": "cmt_audio",
       "position": {
         "x": 3500,
-        "y": 760
+        "y": 1520
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -678,7 +678,7 @@
       "id": "cmd_ens_eng",
       "position": {
         "x": 3500,
-        "y": 900
+        "y": 1660
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -699,7 +699,7 @@
       "id": "cmd_ens_und",
       "position": {
         "x": 3500,
-        "y": 1020
+        "y": 1780
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -720,7 +720,7 @@
       "id": "cmt_eac3",
       "position": {
         "x": 3500,
-        "y": 1140
+        "y": 760
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -732,7 +732,7 @@
       "version": "1.0.0",
       "position": {
         "x": 3500,
-        "y": 1280
+        "y": 900
       },
       "inputsDB": {
         "channelCount": "6"
@@ -748,7 +748,7 @@
       "id": "cmd_eac3_eng",
       "position": {
         "x": 3500,
-        "y": 1400
+        "y": 1020
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -769,7 +769,7 @@
       "id": "cmd_eac3_und",
       "position": {
         "x": 3500,
-        "y": 1520
+        "y": 1140
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -790,7 +790,7 @@
       "id": "cmt_rmaudio",
       "position": {
         "x": 3500,
-        "y": 1640
+        "y": 1260
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -803,11 +803,11 @@
       "id": "cmd_rmaudio",
       "position": {
         "x": 3500,
-        "y": 1780
+        "y": 1400
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
-        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca",
+        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca,aac,eac3",
         "condition": "includes"
       },
       "fpEnabled": true
@@ -1206,7 +1206,7 @@
       "id": "cmd_vr_aac_eng",
       "position": {
         "x": -1500,
-        "y": 3470
+        "y": 3590
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -1227,7 +1227,7 @@
       "id": "cmd_vr_aac_und",
       "position": {
         "x": -1500,
-        "y": 3590
+        "y": 3710
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -1248,11 +1248,11 @@
       "id": "cmd_vr_rmaudio",
       "position": {
         "x": -1500,
-        "y": 3710
+        "y": 3470
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
-        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca",
+        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca,aac,eac3",
         "condition": "includes"
       },
       "fpEnabled": true
@@ -1715,7 +1715,7 @@
     {
       "source": "cmd_tags",
       "sourceHandle": "1",
-      "target": "cmt_audio",
+      "target": "cmt_eac3",
       "targetHandle": null,
       "id": "e_tags_audio"
     },
@@ -1736,7 +1736,7 @@
     {
       "source": "cmd_ens_und",
       "sourceHandle": "1",
-      "target": "cmt_eac3",
+      "target": "cmt_reorder",
       "targetHandle": null,
       "id": "e_ens_und_eac3"
     },
@@ -1764,7 +1764,7 @@
     {
       "source": "cmd_rmaudio",
       "sourceHandle": "1",
-      "target": "cmt_reorder",
+      "target": "cmt_audio",
       "targetHandle": null,
       "id": "e_rmaudio_reorder"
     },
@@ -1981,7 +1981,7 @@
     {
       "source": "cmd_vr_tags",
       "sourceHandle": "1",
-      "target": "cmd_vr_aac_eng",
+      "target": "cmd_vr_rmaudio",
       "targetHandle": null,
       "id": "e_vr_tags_eng"
     },
@@ -1995,14 +1995,14 @@
     {
       "source": "cmd_vr_aac_und",
       "sourceHandle": "1",
-      "target": "cmd_vr_rmaudio",
+      "target": "cmd_vr_reorder",
       "targetHandle": null,
       "id": "e_vr_und_rmaudio"
     },
     {
       "source": "cmd_vr_rmaudio",
       "sourceHandle": "1",
-      "target": "cmd_vr_reorder",
+      "target": "cmd_vr_aac_eng",
       "targetHandle": null,
       "id": "e_vr_rmaudio_reorder"
     },
