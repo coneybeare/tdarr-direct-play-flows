@@ -67,20 +67,20 @@
 <path d="M1362.0,647.9 C1362.0,653.2 1362.0,653.2 1362.0,658.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
 <path d="M1362.0,679.7 C1362.0,684.95 1362.0,684.95 1362.0,690.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
 <path d="M1362.0,679.7 C1362.0,684.95 1560.4,684.95 1560.4,690.2" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-no)"/>
-<path d="M1560.4,716.6 C1560.4,772.2 1560.4,772.2 1560.4,827.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
+<path d="M1560.4,716.6 C1560.4,737.8 1362.0,737.8 1362.0,759.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
 <path d="M1362.0,716.6 C1362.0,721.95 1362.0,721.95 1362.0,727.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
-<path d="M1362.0,748.5 C1362.0,753.75 1362.0,753.75 1362.0,759.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
-<path d="M1362.0,780.2 C1362.0,785.45 1362.0,785.45 1362.0,790.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
-<path d="M1362.0,780.2 C1362.0,788.1 1560.4,788.1 1560.4,796.0" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-no)"/>
+<path d="M1362.0,748.5 C1362.0,769.6 1362.0,769.6 1362.0,790.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
+<path d="M1362.0,811.9000000000001 C1362.0,817.2 1362.0,817.2 1362.0,822.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
+<path d="M1362.0,811.9000000000001 C1362.0,817.2 1560.4,817.2 1560.4,822.5" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-no)"/>
 <path d="M1362.0,748.5 C1362.0,753.75 1560.4,753.75 1560.4,759.0" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-no)"/>
-<path d="M1560.4,785.4 C1560.4,806.5999999999999 1560.4,806.5999999999999 1560.4,827.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
-<path d="M1362.0,817.1 C1362.0,838.3 1362.0,838.3 1362.0,859.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
-<path d="M1362.0,880.7 C1362.0,885.95 1362.0,885.95 1362.0,891.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
-<path d="M1362.0,917.6 C1362.0,922.95 1362.0,922.95 1362.0,928.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
-<path d="M1362.0,949.5 C1362.0,954.75 1560.4,954.75 1560.4,960.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
-<path d="M1362.0,949.5 C1362.0,970.6 1362.0,970.6 1362.0,991.7" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-no)"/>
-<path d="M1560.4,981.2 C1560.4,986.45 1362.0,986.45 1362.0,991.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
-<path d="M1362.0,1012.9000000000001 C1362.0,1018.2 1362.0,1018.2 1362.0,1023.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
+<path d="M1560.4,785.4 C1560.4,819.8 1560.4,819.8 1560.4,854.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
+<path d="M1362.0,848.9 C1362.0,867.45 1362.0,867.45 1362.0,886.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
+<path d="M1362.0,907.2 C1362.0,912.45 1362.0,912.45 1362.0,917.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
+<path d="M1362.0,944.1 C1362.0,949.4000000000001 1362.0,949.4000000000001 1362.0,954.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
+<path d="M1362.0,975.9000000000001 C1362.0,981.1500000000001 1560.4,981.1500000000001 1560.4,986.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
+<path d="M1362.0,975.9000000000001 C1362.0,997.0500000000001 1362.0,997.0500000000001 1362.0,1018.2" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-no)"/>
+<path d="M1560.4,1007.6 C1560.4,1012.9000000000001 1362.0,1012.9000000000001 1362.0,1018.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
+<path d="M1362.0,1039.4 C1362.0,1044.65 1362.0,1044.65 1362.0,1049.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
 <path d="M1362.0,208.9 C1362.0,214.2 1362.0,214.2 1362.0,219.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
 <path d="M1362.0,240.7 C1362.0,245.95 1362.0,245.95 1362.0,251.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
 <path d="M1362.0,240.7 C1362.0,277.7 1362.0,277.7 1362.0,314.7" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-no)"/>
@@ -101,7 +101,7 @@
 <path d="M39.7,1050.0 C39.7,1055.25 39.7,1055.25 39.7,1060.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
 <path d="M39.7,1050.0 C39.7,904.5 1560.4,904.5 1560.4,759.0" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-no)"/>
 <path d="M39.7,1081.7 C39.7,1086.95 39.7,1086.95 39.7,1092.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
-<path d="M39.7,1081.7 C39.7,938.85 1560.4,938.85 1560.4,796.0" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-no)"/>
+<path d="M39.7,1081.7 C39.7,952.1 1560.4,952.1 1560.4,822.5" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-no)"/>
 <path d="M1362.0,611.0 C1362.0,616.25 1362.0,616.25 1362.0,621.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
 <path d="M39.7,986.5 C39.7,991.75 39.7,991.75 39.7,997.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
 <path d="M436.4,462.79999999999995 C436.4,468.09999999999997 436.4,468.09999999999997 436.4,473.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
@@ -109,9 +109,9 @@
 <path d="M436.4,531.6 C436.4,536.85 436.4,536.85 436.4,542.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
 <path d="M436.4,531.6 C436.4,536.85 238.1,536.85 238.1,542.1" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-no)"/>
 <path d="M238.1,568.5 C238.1,573.85 238.1,573.85 238.1,579.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
-<path d="M39.7,1113.4 C39.7,1002.3000000000001 1362.0,1002.3000000000001 1362.0,891.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
-<path d="M1560.4,849.0 C1560.4,854.25 1362.0,854.25 1362.0,859.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
-<path d="M1560.4,817.2 C1560.4,838.35 1362.0,838.35 1362.0,859.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
+<path d="M39.7,1113.4 C39.7,1015.5500000000001 1362.0,1015.5500000000001 1362.0,917.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
+<path d="M1560.4,875.4000000000001 C1560.4,880.7 1362.0,880.7 1362.0,886.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
+<path d="M1560.4,843.7 C1560.4,864.85 1362.0,864.85 1362.0,886.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
 <path d="M436.4,362.4 C436.4,367.65 436.4,367.65 436.4,372.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
 <path d="M436.4,362.4 C436.4,399.4 436.4,399.4 436.4,436.4" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-no)"/>
 <path d="M833.1,34.4 C833.1,253.89999999999998 238.1,253.89999999999998 238.1,473.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.8" marker-end="url(#arr-ok)"/>
@@ -235,29 +235,31 @@
 <rect x="1335.5" y="658.5" width="53" height="21.2" rx="4" fill="#FFF176" stroke="#9E9E9E" stroke-width="0.5"/>
 <text x="1362.0" y="673.6" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1362.0" dy="0">Check: file size ratio</tspan></text>
 <rect x="1533.9" y="690.2" width="53" height="26.4" rx="4" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="1560.4" y="707.9000000000001" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1560.4" dy="0">Too big — review</tspan></text>
+<text x="1560.4" y="707.9000000000001" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1560.4" dy="0">Too big — fail</tspan></text>
+<rect x="1335.5" y="759.0" width="53" height="21.2" rx="4" fill="#B0BEC5" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="1362.0" y="774.1" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1362.0" dy="0">Fail: too big</tspan></text>
 <rect x="1335.5" y="690.2" width="53" height="26.4" rx="4" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.5"/>
 <text x="1362.0" y="707.9000000000001" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1362.0" dy="0">Duration check</tspan></text>
 <rect x="1335.5" y="727.3" width="53" height="21.2" rx="4" fill="#FFF176" stroke="#9E9E9E" stroke-width="0.5"/>
 <text x="1362.0" y="742.4" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1362.0" dy="0">Check: duration ratio</tspan></text>
 <rect x="1533.9" y="759.0" width="53" height="26.4" rx="4" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.5"/>
 <text x="1560.4" y="776.7" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1560.4" dy="0">Duration mismatch</tspan></text>
-<rect x="1533.9" y="827.8" width="53" height="21.2" rx="4" fill="#FF8A65" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="1560.4" y="842.9" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1560.4" dy="0">Flag for review</tspan></text>
-<rect x="1335.5" y="790.7" width="53" height="26.4" rx="4" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="1362.0" y="808.4000000000001" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1362.0" dy="0">Replace original</tspan></text>
-<rect x="1335.5" y="859.5" width="53" height="21.2" rx="4" fill="#EF5350" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="1362.0" y="874.6" text-anchor="middle" font-family="monospace" font-size="11" fill="#FFFFFF"><tspan x="1362.0" dy="0">Replace original file</tspan></text>
-<rect x="1335.5" y="891.2" width="53" height="26.4" rx="4" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="1362.0" y="908.9000000000001" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1362.0" dy="0">Notifications</tspan></text>
-<rect x="1335.5" y="928.3" width="53" height="21.2" rx="4" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="1362.0" y="943.4" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1362.0" dy="0">Check: plex notify?</tspan></text>
-<rect x="1533.9" y="960.0" width="53" height="21.2" rx="4" fill="#4FC3F7" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="1560.4" y="975.1" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1560.4" dy="0">Notify Plex</tspan></text>
-<rect x="1335.5" y="991.7" width="53" height="21.2" rx="4" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="1362.0" y="1006.8000000000001" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1362.0" dy="0">Check: arr notify?</tspan></text>
-<rect x="1335.5" y="1023.5" width="53" height="21.2" rx="4" fill="#4FC3F7" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="1362.0" y="1038.6" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1362.0" dy="0">Notify Radarr/Sonarr</tspan></text>
+<rect x="1533.9" y="854.2" width="53" height="21.2" rx="4" fill="#FF8A65" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="1560.4" y="869.3000000000001" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1560.4" dy="0">Flag for review</tspan></text>
+<rect x="1335.5" y="822.5" width="53" height="26.4" rx="4" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="1362.0" y="840.2" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1362.0" dy="0">Replace original</tspan></text>
+<rect x="1335.5" y="886.0" width="53" height="21.2" rx="4" fill="#EF5350" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="1362.0" y="901.1" text-anchor="middle" font-family="monospace" font-size="11" fill="#FFFFFF"><tspan x="1362.0" dy="0">Replace original file</tspan></text>
+<rect x="1335.5" y="917.7" width="53" height="26.4" rx="4" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="1362.0" y="935.4000000000001" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1362.0" dy="0">Notifications</tspan></text>
+<rect x="1335.5" y="954.7" width="53" height="21.2" rx="4" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="1362.0" y="969.8000000000001" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1362.0" dy="0">Check: plex notify?</tspan></text>
+<rect x="1533.9" y="986.4" width="53" height="21.2" rx="4" fill="#4FC3F7" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="1560.4" y="1001.5" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1560.4" dy="0">Notify Plex</tspan></text>
+<rect x="1335.5" y="1018.2" width="53" height="21.2" rx="4" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="1362.0" y="1033.3000000000002" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1362.0" dy="0">Check: arr notify?</tspan></text>
+<rect x="1335.5" y="1049.9" width="53" height="21.2" rx="4" fill="#4FC3F7" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="1362.0" y="1065.0" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1362.0" dy="0">Notify Radarr/Sonarr</tspan></text>
 <rect x="806.6" y="13.2" width="53" height="21.2" rx="4" fill="#B0BEC5" stroke="#9E9E9E" stroke-width="0.5"/>
 <text x="833.1" y="28.299999999999997" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="833.1" dy="0">On flow error</tspan></text>
 <rect x="409.9" y="610.9" width="53" height="21.2" rx="4" fill="#ECEFF1" stroke="#9E9E9E" stroke-width="0.5"/>
@@ -290,12 +292,12 @@
 <text x="39.7" y="1043.8999999999999" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="39.7" dy="0">Check: duration ratio (VR)</tspan></text>
 <rect x="13.2" y="1092.2" width="53" height="21.2" rx="4" fill="#EF5350" stroke="#9E9E9E" stroke-width="0.5"/>
 <text x="39.7" y="1107.3" text-anchor="middle" font-family="monospace" font-size="11" fill="#FFFFFF"><tspan x="39.7" dy="0">Replace original file (VR)</tspan></text>
-<rect x="1335.5" y="759.0" width="53" height="21.2" rx="4" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="1362.0" y="774.1" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1362.0" dy="0">Auto-accept?</tspan></text>
+<rect x="1335.5" y="790.7" width="53" height="21.2" rx="4" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="1362.0" y="805.8000000000001" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1362.0" dy="0">Auto-accept?</tspan></text>
 <rect x="13.2" y="1060.5" width="53" height="21.2" rx="4" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.5"/>
 <text x="39.7" y="1075.6" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="39.7" dy="0">Auto-accept? (VR)</tspan></text>
-<rect x="1533.9" y="796.0" width="53" height="21.2" rx="4" fill="#FF8A65" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="1560.4" y="811.1" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1560.4" dy="0">Await acceptance</tspan></text>
+<rect x="1533.9" y="822.5" width="53" height="21.2" rx="4" fill="#FF8A65" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="1560.4" y="837.6" text-anchor="middle" font-family="monospace" font-size="11" fill="#212121"><tspan x="1560.4" dy="0">Await acceptance</tspan></text>
 <rect x="8" y="958" width="10" height="10" rx="2" fill="#90CAF9" stroke="#9E9E9E" stroke-width="0.5"/>
 <text x="22" y="967" font-family="monospace" font-size="9" fill="#444">Input</text>
 <rect x="8" y="972" width="10" height="10" rx="2" fill="#CE93D8" stroke="#9E9E9E" stroke-width="0.5"/>
