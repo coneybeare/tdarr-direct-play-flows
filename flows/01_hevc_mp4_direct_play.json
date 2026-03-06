@@ -1,5 +1,5 @@
 {
-  "name": "Direct Play Optimizer (Full Pipeline)",
+  "name": "Direct Play Optimizer",
   "description": "Full pipeline: HEVC/MP4 with stereo AAC 2.0 + EAC3 5.1 surround, hvc1 tag, faststart, resolution-tiered quality, NVENC GPU with software fallback, health check, duration validation, optional Plex/arr notifications. Configure via the top config variable nodes.",
   "tags": "hevc,mp4,direct-play,nvenc,aac,eac3,hvc1,faststart,synology",
   "flowPlugins": [
@@ -1218,7 +1218,7 @@
       "name": "Notify Radarr/Sonarr",
       "sourceRepo": "Community",
       "pluginName": "notifyRadarrOrSonarr",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "id": "arr_notify",
       "position": {
         "x": 3500,
