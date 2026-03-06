@@ -496,6 +496,7 @@ def col_map_01() -> dict[str, int]:
         # ── Audio ─────────────────────────────────────────────────────────────
         "cmt_audio": M, "cmd_ens_eng": M, "cmd_ens_und": M,
         "cmt_eac3": M,  "grd_eac3_ch": M, "cmd_eac3_eng": M, "cmd_eac3_und": M,
+        "cmd_rm_aac": M,
         "cmt_rmaudio": M, "cmd_rmaudio": M,
         "cmt_reorder": M, "cmd_reorder": M,
         "cmt_exec": M, "ffe_001": M,

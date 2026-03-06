@@ -665,7 +665,7 @@
       "id": "cmt_audio",
       "position": {
         "x": 3500,
-        "y": 1140
+        "y": 1260
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -678,7 +678,7 @@
       "id": "cmd_ens_eng",
       "position": {
         "x": 3500,
-        "y": 1280
+        "y": 1400
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -699,7 +699,7 @@
       "id": "cmd_ens_und",
       "position": {
         "x": 3500,
-        "y": 1400
+        "y": 1520
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -783,6 +783,23 @@
       "fpEnabled": true
     },
     {
+      "name": "Remove AAC (surround path)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRemoveStreamByProperty",
+      "version": "1.0.0",
+      "id": "cmd_rm_aac",
+      "position": {
+        "x": 3500,
+        "y": 880
+      },
+      "inputsDB": {
+        "propertyToCheck": "codec_name",
+        "valuesToRemove": "aac",
+        "condition": "includes"
+      },
+      "fpEnabled": true
+    },
+    {
       "name": "Remove incompatible audio",
       "sourceRepo": "Community",
       "pluginName": "comment",
@@ -790,7 +807,7 @@
       "id": "cmt_rmaudio",
       "position": {
         "x": 3500,
-        "y": 880
+        "y": 1000
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -803,7 +820,7 @@
       "id": "cmd_rmaudio",
       "position": {
         "x": 3500,
-        "y": 1020
+        "y": 1140
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -820,7 +837,7 @@
       "id": "cmt_reorder",
       "position": {
         "x": 3500,
-        "y": 1520
+        "y": 1640
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -833,7 +850,7 @@
       "id": "cmd_reorder",
       "position": {
         "x": 3500,
-        "y": 1660
+        "y": 1780
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -852,7 +869,7 @@
       "id": "cmt_exec",
       "position": {
         "x": 3500,
-        "y": 1780
+        "y": 1900
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -865,7 +882,7 @@
       "id": "ffe_001",
       "position": {
         "x": 3500,
-        "y": 1920
+        "y": 2040
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -878,7 +895,7 @@
       "id": "cmt_reorder2",
       "position": {
         "x": 3500,
-        "y": 2040
+        "y": 2160
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -891,7 +908,7 @@
       "id": "ffs_reorder",
       "position": {
         "x": 3500,
-        "y": 2180
+        "y": 2300
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -904,7 +921,7 @@
       "id": "cmd_reorder2",
       "position": {
         "x": 3500,
-        "y": 2300
+        "y": 2420
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -923,7 +940,7 @@
       "id": "ffe_reorder",
       "position": {
         "x": 3500,
-        "y": 2420
+        "y": 2540
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -936,7 +953,7 @@
       "id": "cmt_size",
       "position": {
         "x": 3500,
-        "y": 2540
+        "y": 2660
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -949,7 +966,7 @@
       "id": "fl_size",
       "position": {
         "x": 3500,
-        "y": 2680
+        "y": 2800
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -965,7 +982,7 @@
       "id": "cmt_toobig",
       "position": {
         "x": 4250,
-        "y": 2800
+        "y": 2920
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -978,7 +995,7 @@
       "id": "fail_toobig",
       "position": {
         "x": 4250,
-        "y": 2940
+        "y": 3060
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -991,7 +1008,7 @@
       "id": "cmt_duration",
       "position": {
         "x": 3500,
-        "y": 2800
+        "y": 2920
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1004,7 +1021,7 @@
       "id": "fl_duration",
       "position": {
         "x": 3500,
-        "y": 2940
+        "y": 3060
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1020,7 +1037,7 @@
       "id": "cmt_duration_fail",
       "position": {
         "x": 4250,
-        "y": 3060
+        "y": 3180
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1033,7 +1050,7 @@
       "id": "fl_review",
       "position": {
         "x": 4250,
-        "y": 3320
+        "y": 3440
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1046,7 +1063,7 @@
       "id": "cmt_replace",
       "position": {
         "x": 3500,
-        "y": 3180
+        "y": 3300
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1059,7 +1076,7 @@
       "id": "fl_replace",
       "position": {
         "x": 3500,
-        "y": 3440
+        "y": 3560
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1072,7 +1089,7 @@
       "id": "cmt_notify",
       "position": {
         "x": 3500,
-        "y": 3560
+        "y": 3680
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1085,7 +1102,7 @@
       "id": "chk_plex_notify",
       "position": {
         "x": 3500,
-        "y": 3700
+        "y": 3820
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_plex_notify",
@@ -1102,7 +1119,7 @@
       "id": "web_plex",
       "position": {
         "x": 4250,
-        "y": 3820
+        "y": 3940
       },
       "inputsDB": {
         "url": "http://YOUR_PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=YOUR_PLEX_TOKEN",
@@ -1118,7 +1135,7 @@
       "id": "chk_arr_notify",
       "position": {
         "x": 3500,
-        "y": 3940
+        "y": 4060
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_arr_notify",
@@ -1135,7 +1152,7 @@
       "id": "arr_notify",
       "position": {
         "x": 3500,
-        "y": 4060
+        "y": 4180
       },
       "inputsDB": {
         "arr": "radarr",
@@ -1471,7 +1488,7 @@
       "id": "chk_auto_accept",
       "position": {
         "x": 3500,
-        "y": 3060
+        "y": 3180
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1505,7 +1522,7 @@
       "id": "fl_manual_review",
       "position": {
         "x": 4250,
-        "y": 3200
+        "y": 3320
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1879,9 +1896,16 @@
     {
       "source": "cmd_eac3_und",
       "sourceHandle": "1",
+      "target": "cmd_rm_aac",
+      "targetHandle": null,
+      "id": "e_eac3_und_rmaac"
+    },
+    {
+      "source": "cmd_rm_aac",
+      "sourceHandle": "1",
       "target": "cmt_rmaudio",
       "targetHandle": null,
-      "id": "e_eac3_und_rmaudio"
+      "id": "e_rm_aac_rmaudio"
     },
     {
       "source": "cmt_rmaudio",
