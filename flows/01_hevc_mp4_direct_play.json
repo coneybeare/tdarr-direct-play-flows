@@ -504,8 +504,8 @@
       "version": "1.0.0",
       "id": "cmt_resolution",
       "position": {
-        "x": 3500,
-        "y": 0
+        "x": 0,
+        "y": 3920
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -517,8 +517,8 @@
       "version": "1.0.0",
       "id": "chk_resolution",
       "position": {
-        "x": 3500,
-        "y": 140
+        "x": 0,
+        "y": 4060
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -530,8 +530,8 @@
       "version": "1.0.0",
       "id": "cmd_hevc_sd",
       "position": {
-        "x": 3000,
-        "y": 260
+        "x": -500,
+        "y": 4180
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -554,7 +554,7 @@
       "id": "cmd_hevc_1080",
       "position": {
         "x": 3500,
-        "y": 260
+        "y": 0
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -576,8 +576,8 @@
       "version": "1.0.0",
       "id": "cmd_hevc_4k",
       "position": {
-        "x": 4000,
-        "y": 260
+        "x": 500,
+        "y": 4180
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -636,7 +636,7 @@
       "id": "cmt_tags",
       "position": {
         "x": 3500,
-        "y": 380
+        "y": 120
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -649,7 +649,7 @@
       "id": "cmd_tags",
       "position": {
         "x": 3500,
-        "y": 520
+        "y": 260
       },
       "inputsDB": {
         "inputArguments": "",
@@ -665,7 +665,7 @@
       "id": "cmt_audio",
       "position": {
         "x": 3500,
-        "y": 1400
+        "y": 1140
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -678,7 +678,7 @@
       "id": "cmd_ens_eng",
       "position": {
         "x": 3500,
-        "y": 1540
+        "y": 1280
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -699,7 +699,7 @@
       "id": "cmd_ens_und",
       "position": {
         "x": 3500,
-        "y": 1660
+        "y": 1400
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -720,7 +720,7 @@
       "id": "cmt_eac3",
       "position": {
         "x": 3500,
-        "y": 640
+        "y": 380
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -732,7 +732,7 @@
       "version": "1.0.0",
       "position": {
         "x": 3500,
-        "y": 780
+        "y": 520
       },
       "inputsDB": {
         "channelCount": "6"
@@ -748,7 +748,7 @@
       "id": "cmd_eac3_eng",
       "position": {
         "x": 3500,
-        "y": 900
+        "y": 640
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -769,7 +769,7 @@
       "id": "cmd_eac3_und",
       "position": {
         "x": 3500,
-        "y": 1020
+        "y": 760
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -790,7 +790,7 @@
       "id": "cmt_rmaudio",
       "position": {
         "x": 3500,
-        "y": 1140
+        "y": 880
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -803,7 +803,7 @@
       "id": "cmd_rmaudio",
       "position": {
         "x": 3500,
-        "y": 1280
+        "y": 1020
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -820,7 +820,7 @@
       "id": "cmt_reorder",
       "position": {
         "x": 3500,
-        "y": 1780
+        "y": 1520
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -833,7 +833,7 @@
       "id": "cmd_reorder",
       "position": {
         "x": 3500,
-        "y": 1920
+        "y": 1660
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -852,7 +852,7 @@
       "id": "cmt_exec",
       "position": {
         "x": 3500,
-        "y": 2040
+        "y": 1780
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -865,7 +865,65 @@
       "id": "ffe_001",
       "position": {
         "x": 3500,
+        "y": 1920
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Reorder remux",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_reorder2",
+      "position": {
+        "x": 3500,
+        "y": 2040
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Begin reorder remux",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandStart",
+      "version": "1.0.0",
+      "id": "ffs_reorder",
+      "position": {
+        "x": 3500,
         "y": 2180
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Reorder (stereo first, pass 2)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRorderStreams",
+      "version": "1.0.0",
+      "id": "cmd_reorder2",
+      "position": {
+        "x": 3500,
+        "y": 2300
+      },
+      "inputsDB": {
+        "processOrder": "codecs,channels,streamTypes",
+        "languages": "eng,und",
+        "channels": "2,6,8",
+        "codecs": "aac,eac3,ac3,mp3",
+        "streamTypes": "video,audio,subtitle"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Execute reorder remux",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandExecute",
+      "version": "1.0.0",
+      "id": "ffe_reorder",
+      "position": {
+        "x": 3500,
+        "y": 2420
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -878,7 +936,7 @@
       "id": "cmt_size",
       "position": {
         "x": 3500,
-        "y": 2300
+        "y": 2540
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -891,7 +949,7 @@
       "id": "fl_size",
       "position": {
         "x": 3500,
-        "y": 2440
+        "y": 2680
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -907,7 +965,7 @@
       "id": "cmt_toobig",
       "position": {
         "x": 4250,
-        "y": 2560
+        "y": 2800
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -920,7 +978,7 @@
       "id": "fail_toobig",
       "position": {
         "x": 4250,
-        "y": 2700
+        "y": 2940
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -933,7 +991,7 @@
       "id": "cmt_duration",
       "position": {
         "x": 3500,
-        "y": 2560
+        "y": 2800
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -946,7 +1004,7 @@
       "id": "fl_duration",
       "position": {
         "x": 3500,
-        "y": 2700
+        "y": 2940
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -962,7 +1020,7 @@
       "id": "cmt_duration_fail",
       "position": {
         "x": 4250,
-        "y": 2820
+        "y": 3060
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -975,7 +1033,7 @@
       "id": "fl_review",
       "position": {
         "x": 4250,
-        "y": 3080
+        "y": 3320
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -988,7 +1046,7 @@
       "id": "cmt_replace",
       "position": {
         "x": 3500,
-        "y": 2940
+        "y": 3180
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1001,7 +1059,7 @@
       "id": "fl_replace",
       "position": {
         "x": 3500,
-        "y": 3200
+        "y": 3440
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1014,7 +1072,7 @@
       "id": "cmt_notify",
       "position": {
         "x": 3500,
-        "y": 3320
+        "y": 3560
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1027,7 +1085,7 @@
       "id": "chk_plex_notify",
       "position": {
         "x": 3500,
-        "y": 3460
+        "y": 3700
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_plex_notify",
@@ -1044,7 +1102,7 @@
       "id": "web_plex",
       "position": {
         "x": 4250,
-        "y": 3580
+        "y": 3820
       },
       "inputsDB": {
         "url": "http://YOUR_PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=YOUR_PLEX_TOKEN",
@@ -1060,7 +1118,7 @@
       "id": "chk_arr_notify",
       "position": {
         "x": 3500,
-        "y": 3700
+        "y": 3940
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_arr_notify",
@@ -1077,7 +1135,7 @@
       "id": "arr_notify",
       "position": {
         "x": 3500,
-        "y": 3820
+        "y": 4060
       },
       "inputsDB": {
         "arr": "radarr",
@@ -1303,6 +1361,64 @@
       "fpEnabled": true
     },
     {
+      "name": "Reorder remux (VR)",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_vr_reorder2",
+      "position": {
+        "x": -1500,
+        "y": 3720
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Begin reorder remux (VR)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandStart",
+      "version": "1.0.0",
+      "id": "ffs_vr_reorder",
+      "position": {
+        "x": -1500,
+        "y": 3860
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Reorder stereo first (VR, pass 2)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRorderStreams",
+      "version": "1.0.0",
+      "id": "cmd_vr_reorder2",
+      "position": {
+        "x": -1500,
+        "y": 3980
+      },
+      "inputsDB": {
+        "processOrder": "codecs,channels,streamTypes",
+        "languages": "eng,und",
+        "channels": "2,6,8",
+        "codecs": "aac,eac3,ac3,mp3",
+        "streamTypes": "video,audio,subtitle"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Execute reorder remux (VR)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandExecute",
+      "version": "1.0.0",
+      "id": "ffe_vr_reorder",
+      "position": {
+        "x": -1500,
+        "y": 4100
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
       "name": "Check: file size ratio (VR)",
       "sourceRepo": "Community",
       "pluginName": "compareFileSizeRatio",
@@ -1310,7 +1426,7 @@
       "id": "fl_vr_size",
       "position": {
         "x": -1500,
-        "y": 3720
+        "y": 4220
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -1326,7 +1442,7 @@
       "id": "fl_vr_dur",
       "position": {
         "x": -1500,
-        "y": 3840
+        "y": 4340
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1342,7 +1458,7 @@
       "id": "fl_vr_replace",
       "position": {
         "x": -1500,
-        "y": 4080
+        "y": 4580
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1355,7 +1471,7 @@
       "id": "chk_auto_accept",
       "position": {
         "x": 3500,
-        "y": 2820
+        "y": 3060
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1372,7 +1488,7 @@
       "id": "chk_auto_accept_vr",
       "position": {
         "x": -1500,
-        "y": 3960
+        "y": 4460
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1389,7 +1505,7 @@
       "id": "fl_manual_review",
       "position": {
         "x": 4250,
-        "y": 2960
+        "y": 3200
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2071,16 +2187,72 @@
     {
       "source": "ffe_001",
       "sourceHandle": "1",
+      "target": "cmt_reorder2",
+      "targetHandle": null,
+      "id": "e_exec_reorder2"
+    },
+    {
+      "source": "cmt_reorder2",
+      "sourceHandle": "1",
+      "target": "ffs_reorder",
+      "targetHandle": null,
+      "id": "e_cmt_reorder2_start"
+    },
+    {
+      "source": "ffs_reorder",
+      "sourceHandle": "1",
+      "target": "cmd_reorder2",
+      "targetHandle": null,
+      "id": "e_reorder2_cmd"
+    },
+    {
+      "source": "cmd_reorder2",
+      "sourceHandle": "1",
+      "target": "ffe_reorder",
+      "targetHandle": null,
+      "id": "e_reorder2_exec"
+    },
+    {
+      "source": "ffe_reorder",
+      "sourceHandle": "1",
       "target": "cmt_size",
       "targetHandle": null,
-      "id": "e_exec_size"
+      "id": "e_reorder2_size"
     },
     {
       "source": "ffe_vr",
       "sourceHandle": "1",
+      "target": "cmt_vr_reorder2",
+      "targetHandle": null,
+      "id": "e_vr_exec_reorder2"
+    },
+    {
+      "source": "cmt_vr_reorder2",
+      "sourceHandle": "1",
+      "target": "ffs_vr_reorder",
+      "targetHandle": null,
+      "id": "e_vr_cmt_reorder2_start"
+    },
+    {
+      "source": "ffs_vr_reorder",
+      "sourceHandle": "1",
+      "target": "cmd_vr_reorder2",
+      "targetHandle": null,
+      "id": "e_vr_reorder2_cmd"
+    },
+    {
+      "source": "cmd_vr_reorder2",
+      "sourceHandle": "1",
+      "target": "ffe_vr_reorder",
+      "targetHandle": null,
+      "id": "e_vr_reorder2_exec"
+    },
+    {
+      "source": "ffe_vr_reorder",
+      "sourceHandle": "1",
       "target": "fl_vr_size",
       "targetHandle": null,
-      "id": "e_vr_exec_size"
+      "id": "e_vr_reorder2_size"
     },
     {
       "source": "cmt_proc",

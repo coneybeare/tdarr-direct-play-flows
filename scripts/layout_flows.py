@@ -449,6 +449,8 @@ VR_NODES_01 = {
     "cmd_vr_aac_eng": VR_01, "cmd_vr_aac_und": VR_01,
     "cmd_vr_rmaudio": VR_01, "cmd_vr_reorder": VR_01,
     "ffe_vr": VR_01,
+    "cmt_vr_reorder2": VR_01, "ffs_vr_reorder": VR_01,
+    "cmd_vr_reorder2": VR_01, "ffe_vr_reorder": VR_01,
     "fl_vr_size": VR_01, "fl_vr_dur": VR_01, "fl_vr_replace": VR_01,
     "chk_auto_accept_vr": VR_01,  # auto-accept gate on VR replace path
 }
@@ -497,6 +499,7 @@ def col_map_01() -> dict[str, int]:
         "cmt_rmaudio": M, "cmd_rmaudio": M,
         "cmt_reorder": M, "cmd_reorder": M,
         "cmt_exec": M, "ffe_001": M,
+        "cmt_reorder2": M, "ffs_reorder": M, "cmd_reorder2": M, "ffe_reorder": M,
         # ── Validation ────────────────────────────────────────────────────────
         "cmt_size": M, "fl_size": M,
         "cmt_toobig": R, "fail_toobig": R,             # fail oversized transcodes
