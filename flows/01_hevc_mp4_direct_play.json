@@ -553,8 +553,8 @@
       "version": "1.0.0",
       "id": "cmd_hevc_1080",
       "position": {
-        "x": 3500,
-        "y": 0
+        "x": 0,
+        "y": 4180
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -636,7 +636,7 @@
       "id": "cmt_tags",
       "position": {
         "x": 3500,
-        "y": 120
+        "y": 0
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -649,7 +649,7 @@
       "id": "cmd_tags",
       "position": {
         "x": 3500,
-        "y": 260
+        "y": 140
       },
       "inputsDB": {
         "inputArguments": "",
@@ -720,7 +720,7 @@
       "id": "cmt_eac3",
       "position": {
         "x": 3500,
-        "y": 380
+        "y": 260
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -732,13 +732,28 @@
       "version": "1.0.0",
       "position": {
         "x": 3500,
-        "y": 520
+        "y": 400
       },
       "inputsDB": {
         "channelCount": "6"
       },
       "fpEnabled": true,
       "id": "grd_eac3_ch"
+    },
+    {
+      "name": "Guard: 8 ch surround?",
+      "sourceRepo": "Community",
+      "pluginName": "checkChannelCount",
+      "version": "1.0.0",
+      "position": {
+        "x": 3500,
+        "y": 520
+      },
+      "inputsDB": {
+        "channelCount": "8"
+      },
+      "fpEnabled": true,
+      "id": "grd_eac3_ch8"
     },
     {
       "name": "Ensure EAC3 5.1 (eng)",
@@ -824,7 +839,7 @@
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
-        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca",
+        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dts,dca,ac3,mp3",
         "condition": "includes"
       },
       "fpEnabled": true
@@ -914,6 +929,19 @@
       "fpEnabled": true
     },
     {
+      "name": "Remove data streams (pass 2)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRemoveDataStreams",
+      "version": "1.0.0",
+      "id": "cmd_rmdata2",
+      "position": {
+        "x": 3500,
+        "y": 2420
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
       "name": "Reorder (stereo first, pass 2)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRorderStreams",
@@ -921,7 +949,7 @@
       "id": "cmd_reorder2",
       "position": {
         "x": 3500,
-        "y": 2420
+        "y": 2540
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -940,7 +968,7 @@
       "id": "ffe_reorder",
       "position": {
         "x": 3500,
-        "y": 2540
+        "y": 2660
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -953,7 +981,7 @@
       "id": "cmt_size",
       "position": {
         "x": 3500,
-        "y": 2660
+        "y": 2780
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -966,7 +994,7 @@
       "id": "fl_size",
       "position": {
         "x": 3500,
-        "y": 2800
+        "y": 2920
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -982,7 +1010,7 @@
       "id": "cmt_toobig",
       "position": {
         "x": 4250,
-        "y": 2920
+        "y": 3040
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -995,7 +1023,7 @@
       "id": "fail_toobig",
       "position": {
         "x": 4250,
-        "y": 3060
+        "y": 3180
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1008,7 +1036,7 @@
       "id": "cmt_duration",
       "position": {
         "x": 3500,
-        "y": 2920
+        "y": 3040
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1021,7 +1049,7 @@
       "id": "fl_duration",
       "position": {
         "x": 3500,
-        "y": 3060
+        "y": 3180
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1037,7 +1065,7 @@
       "id": "cmt_duration_fail",
       "position": {
         "x": 4250,
-        "y": 3180
+        "y": 3300
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1050,7 +1078,7 @@
       "id": "fl_review",
       "position": {
         "x": 4250,
-        "y": 3440
+        "y": 3560
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1063,7 +1091,7 @@
       "id": "cmt_replace",
       "position": {
         "x": 3500,
-        "y": 3300
+        "y": 3420
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1076,7 +1104,7 @@
       "id": "fl_replace",
       "position": {
         "x": 3500,
-        "y": 3560
+        "y": 3680
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1089,7 +1117,7 @@
       "id": "cmt_notify",
       "position": {
         "x": 3500,
-        "y": 3680
+        "y": 3800
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1102,7 +1130,7 @@
       "id": "chk_plex_notify",
       "position": {
         "x": 3500,
-        "y": 3820
+        "y": 3940
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_plex_notify",
@@ -1119,7 +1147,7 @@
       "id": "web_plex",
       "position": {
         "x": 4250,
-        "y": 3940
+        "y": 4060
       },
       "inputsDB": {
         "url": "http://YOUR_PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=YOUR_PLEX_TOKEN",
@@ -1135,7 +1163,7 @@
       "id": "chk_arr_notify",
       "position": {
         "x": 3500,
-        "y": 4060
+        "y": 4180
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_arr_notify",
@@ -1152,7 +1180,7 @@
       "id": "arr_notify",
       "position": {
         "x": 3500,
-        "y": 4180
+        "y": 4300
       },
       "inputsDB": {
         "arr": "radarr",
@@ -1340,7 +1368,7 @@
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
-        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca",
+        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dts,dca,ac3,mp3",
         "condition": "includes"
       },
       "fpEnabled": true
@@ -1404,6 +1432,19 @@
       "fpEnabled": true
     },
     {
+      "name": "Remove data streams (VR, pass 2)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRemoveDataStreams",
+      "version": "1.0.0",
+      "id": "cmd_vr_rmdata2",
+      "position": {
+        "x": -1500,
+        "y": 3980
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
       "name": "Reorder stereo first (VR, pass 2)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRorderStreams",
@@ -1411,7 +1452,7 @@
       "id": "cmd_vr_reorder2",
       "position": {
         "x": -1500,
-        "y": 3980
+        "y": 4100
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -1430,7 +1471,7 @@
       "id": "ffe_vr_reorder",
       "position": {
         "x": -1500,
-        "y": 4100
+        "y": 4220
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1443,7 +1484,7 @@
       "id": "fl_vr_size",
       "position": {
         "x": -1500,
-        "y": 4220
+        "y": 4340
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -1459,7 +1500,7 @@
       "id": "fl_vr_dur",
       "position": {
         "x": -1500,
-        "y": 4340
+        "y": 4460
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1475,7 +1516,7 @@
       "id": "fl_vr_replace",
       "position": {
         "x": -1500,
-        "y": 4580
+        "y": 4700
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1488,7 +1529,7 @@
       "id": "chk_auto_accept",
       "position": {
         "x": 3500,
-        "y": 3180
+        "y": 3300
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1505,7 +1546,7 @@
       "id": "chk_auto_accept_vr",
       "position": {
         "x": -1500,
-        "y": 4460
+        "y": 4580
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1522,7 +1563,7 @@
       "id": "fl_manual_review",
       "position": {
         "x": 4250,
-        "y": 3320
+        "y": 3440
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2078,9 +2119,23 @@
     {
       "source": "grd_eac3_ch",
       "sourceHandle": "2",
-      "target": "cmt_rmaudio",
+      "target": "grd_eac3_ch8",
       "targetHandle": null,
       "id": "e_eac3_guard_no"
+    },
+    {
+      "source": "grd_eac3_ch8",
+      "sourceHandle": "1",
+      "target": "cmd_eac3_eng",
+      "targetHandle": null,
+      "id": "e_eac3_guard8_yes"
+    },
+    {
+      "source": "grd_eac3_ch8",
+      "sourceHandle": "2",
+      "target": "cmt_rmaudio",
+      "targetHandle": null,
+      "id": "e_eac3_guard8_no"
     },
     {
       "source": "chk_vr",
@@ -2225,6 +2280,13 @@
     {
       "source": "ffs_reorder",
       "sourceHandle": "1",
+      "target": "cmd_rmdata2",
+      "targetHandle": null,
+      "id": "e_reorder2_rmdata"
+    },
+    {
+      "source": "cmd_rmdata2",
+      "sourceHandle": "1",
       "target": "cmd_reorder2",
       "targetHandle": null,
       "id": "e_reorder2_cmd"
@@ -2259,6 +2321,13 @@
     },
     {
       "source": "ffs_vr_reorder",
+      "sourceHandle": "1",
+      "target": "cmd_vr_rmdata2",
+      "targetHandle": null,
+      "id": "e_vr_reorder2_rmdata"
+    },
+    {
+      "source": "cmd_vr_rmdata2",
       "sourceHandle": "1",
       "target": "cmd_vr_reorder2",
       "targetHandle": null,
