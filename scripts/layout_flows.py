@@ -447,6 +447,7 @@ VR_NODES_01 = {
     "cmd_vr_mp4": VR_01, "cmd_vr_rmsub": VR_01,
     "cmd_vr_hevc": VR_01, "cmd_vr_tags": VR_01,
     "cmd_vr_aac_eng": VR_01, "cmd_vr_aac_und": VR_01,
+    "cmd_vr_ens_any": VR_01,
     "cmd_vr_rmaudio": VR_01, "cmd_vr_reorder": VR_01,
     "ffe_vr": VR_01,
     "cmt_vr_reorder2": VR_01, "ffs_vr_reorder": VR_01,
@@ -494,9 +495,9 @@ def col_map_01() -> dict[str, int]:
         # Merge after encoders → MAIN
         "cmt_tags": M, "cmd_tags": M,
         # ── Audio ─────────────────────────────────────────────────────────────
-        "cmt_audio": M, "cmd_ens_eng": M, "cmd_ens_und": M,
+        "cmt_audio": M, "cmd_ens_eng": M, "cmd_ens_und": M, "cmd_ens_any": M,
         "cmt_eac3": M,  "grd_eac3_ch": M, "grd_eac3_ch8": M,
-        "cmd_eac3_eng": M, "cmd_eac3_und": M,
+        "cmd_eac3_eng": M, "cmd_eac3_und": M, "cmd_eac3_any": M,
         "cmd_rm_aac": M,
         "cmt_rmaudio": M, "cmd_rmaudio": M,
         "cmt_reorder": M, "cmd_reorder": M,
