@@ -447,9 +447,8 @@ VR_NODES_01 = {
     "cmd_vr_mp4": VR_01, "cmd_vr_rmsub": VR_01,
     "cmd_vr_hevc": VR_01, "cmd_vr_tags": VR_01,
     "cmd_vr_aac_eng": VR_01, "cmd_vr_aac_und": VR_01,
-    "cmd_vr_ens_any": VR_01,
     "cmd_vr_rmaudio": VR_01, "cmd_vr_reorder": VR_01,
-    "ffe_vr": VR_01,
+    "cmd_vr_nochapters": VR_01, "ffe_vr": VR_01,
     "cmt_vr_reorder2": VR_01, "ffs_vr_reorder": VR_01,
     "cmd_vr_rmdata2": VR_01, "cmd_vr_reorder2": VR_01, "ffe_vr_reorder": VR_01,
     "fl_vr_size": VR_01, "fl_vr_dur": VR_01, "fl_vr_replace": VR_01,
@@ -494,15 +493,17 @@ def col_map_01() -> dict[str, int]:
         "cmt_sw": SW, "cmd_hevc_sw": SW,
         # Merge after encoders → MAIN
         "cmt_tags": M, "cmd_tags": M,
-        # ── Audio ─────────────────────────────────────────────────────────────
-        "cmt_audio": M, "cmd_ens_eng": M, "cmd_ens_und": M, "cmd_ens_any": M,
-        "cmt_eac3": M,  "grd_eac3_ch": M, "grd_eac3_ch8": M,
-        "cmd_eac3_eng": M, "cmd_eac3_und": M, "cmd_eac3_any": M,
-        "cmd_rm_aac": M,
+        # ── Audio (pass 1: AAC only) ────────────────────────────────────────
         "cmt_rmaudio": M, "cmd_rmaudio": M,
+        "cmt_audio": M, "cmd_ens_eng": M, "cmd_ens_und": M,
         "cmt_reorder": M, "cmd_reorder": M,
-        "cmt_exec": M, "ffe_001": M,
-        "cmt_reorder2": M, "ffs_reorder": M, "cmd_rmdata2": M, "cmd_reorder2": M, "ffe_reorder": M,
+        "cmt_exec": M, "cmd_nochapters": M, "ffe_001": M,
+        # ── Reorder pass (EAC3 surround + cleanup) ──────────────────────────
+        "cmt_reorder2": M, "ffs_reorder": M,
+        "cmt_eac3": M, "grd_eac3_ch": M, "grd_eac3_ch8": M,
+        "cmd_eac3_eng": M, "cmd_eac3_und": M,
+        "cmd_rm_aac": M,
+        "cmd_rmdata2": M, "cmd_reorder2": M, "ffe_reorder": M,
         # ── Validation ────────────────────────────────────────────────────────
         "cmt_size": M, "fl_size": M,
         "cmt_toobig": R, "fail_toobig": R,             # fail oversized transcodes
