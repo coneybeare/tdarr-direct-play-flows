@@ -748,6 +748,7 @@ VR_NODES_01 = {
     "cmd_vr_rmdata2": VR_01, "cmd_vr_reorder2": VR_01,
     "ffe_vr_reorder": VR_01,
     "fl_vr_size": VR_01, "fl_vr_dur": VR_01,
+    "grd_vr_has_video": VR_01, "grd_vr_has_audio": VR_01,
     "fl_vr_replace": VR_01, "chk_auto_accept_vr": VR_01,
 }
 
@@ -791,7 +792,7 @@ def col_map_01() -> dict[str, int]:
         "cmt_exec": M, "cmd_nochapters": M, "ffe_001": M,
         # ── Reorder pass ──────────────────────────────────────────────
         "cmt_reorder2": M, "ffs_reorder": M,
-        "cmt_eac3": M, "grd_eac3_ch": M, "grd_eac3_ch8": M,
+        "cmt_eac3": M, "grd_eac3_codec": M, "grd_eac3_ch": M, "grd_eac3_ch8": M,
         "cmd_eac3_eng": M, "cmd_eac3_und": M,
         "cmd_rm_aac": M,
         "cmd_rmdata2": M, "cmd_reorder2": M, "ffe_reorder": M,
@@ -801,6 +802,8 @@ def col_map_01() -> dict[str, int]:
         "fl_review": L,
         "cmt_duration": M, "fl_duration": M,
         "cmt_duration_fail": L,
+        "grd_has_video": M, "grd_has_audio": M,
+        "fail_no_streams": L,
         "chk_auto_accept": M,
         # ── Replace ───────────────────────────────────────────────────
         "cmt_replace": M, "fl_replace": M,
