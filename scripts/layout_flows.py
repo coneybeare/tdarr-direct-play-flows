@@ -151,7 +151,7 @@ def _find_break_points(
             candidates,
             key=lambda c: (c[1], abs(c[0] - target_y)),
         )
-        # Only use if reasonably close (within 30% of section height)
+        # Only use if reasonably close (within 40% of section height)
         section_h = total / num_sections
         if abs(best[0] - target_y) < section_h * 0.4:
             breaks.append(best[0])
@@ -567,8 +567,12 @@ def generate_svg(
         )
         for i, (_, sid, tid, color, label) in enumerate(connectors):
             cy_k = key_y + 28 + i * conn_line_h
-            src_n = nodes_by_id[sid]["name"].split("\n")[0][:22]
-            tgt_n = nodes_by_id[tid]["name"].split("\n")[0][:22]
+            src_n = nodes_by_id[sid]["name"].split("\n")[0]
+            tgt_n = nodes_by_id[tid]["name"].split("\n")[0]
+            if len(src_n) > 22:
+                src_n = src_n[:21] + "…"
+            if len(tgt_n) > 22:
+                tgt_n = tgt_n[:21] + "…"
             connector_lines.append(
                 f'<circle cx="{key_x + 6}" cy="{cy_k - 3}"'
                 f' r="5" fill="{color}"/>'
@@ -672,7 +676,6 @@ def apply_and_save(
     with open(flow_path, encoding="utf-8") as f:
         flow = json.load(f)
 
-    nodes_by_id = {n["id"]: n for n in flow["flowPlugins"]}
     positions, topo, _out_adj = compute_positions(flow, col_map)
 
     # Find break points and split into sections
@@ -720,17 +723,17 @@ def apply_and_save(
 
 # ── Column maps ────────────────────────────────────────────────────────────────
 #
-# Column x values (300px spacing):
-#   VR = -600   VR branch (far left)
-#   L  = -300   left branches (skip / shared fail-review)
-#   M  =    0   main chain
-#   R  =  300   right branches (commentary / plex notify)
-#   SW =  600   software libx265 fallback
+# Column x values (500px spacing):
+#   VR = -1000  VR branch (far left)
+#   L  =  -500  left branches (skip / shared fail-review)
+#   M  =     0  main chain
+#   R  =   500  right branches (commentary / plex notify)
+#   SW =  1000  software libx265 fallback
 #
 # Shared columns at different y regions:
-#   SD = -300   SD/720p encoder (same x as L)
-#   HI =  300   4K/1440p encoder (same x as R)
-#   E  = -600   error handler (same x as VR, top of flow)
+#   SD = -500   SD/720p encoder (same x as L)
+#   HI =  500   4K/1440p encoder (same x as R)
+#   E  = -1000  error handler (same x as VR, top of flow)
 
 M, L, R = 0, -500, 500
 

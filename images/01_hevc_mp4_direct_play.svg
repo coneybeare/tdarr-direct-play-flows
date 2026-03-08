@@ -432,22 +432,22 @@
 <text x="1816" y="1697" font-family="monospace" font-size="9" fill="#555">Health check (quick) → Check: VR file?</text>
 <circle cx="1806" cy="1707" r="5" fill="#66BB6A"/>
 <text x="1806" y="1710" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#fff">2</text>
-<text x="1816" y="1710" font-family="monospace" font-size="9" fill="#555">Set: hvc1 + faststart → Remove incompatible au</text>
+<text x="1816" y="1710" font-family="monospace" font-size="9" fill="#555">Set: hvc1 + faststart → Remove incompatible a…</text>
 <circle cx="1806" cy="1720" r="5" fill="#66BB6A"/>
 <text x="1806" y="1723" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#fff">3</text>
 <text x="1816" y="1723" font-family="monospace" font-size="9" fill="#555">Ensure EAC3 5.1 (und) → Remove: ac3, mp3</text>
 <circle cx="1806" cy="1733" r="5" fill="#EF5350"/>
 <text x="1806" y="1736" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#fff">4</text>
-<text x="1816" y="1736" font-family="monospace" font-size="9" fill="#555">Guard: has AC3 surroun → Remove data streams (p</text>
+<text x="1816" y="1736" font-family="monospace" font-size="9" fill="#555">Guard: has AC3 surrou… → Remove data streams (…</text>
 <circle cx="1806" cy="1746" r="5" fill="#EF5350"/>
 <text x="1806" y="1749" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#fff">5</text>
-<text x="1816" y="1749" font-family="monospace" font-size="9" fill="#555">Guard: 8 ch surround? → Remove data streams (p</text>
+<text x="1816" y="1749" font-family="monospace" font-size="9" fill="#555">Guard: 8 ch surround? → Remove data streams (…</text>
 <circle cx="1806" cy="1759" r="5" fill="#EF5350"/>
 <text x="1806" y="1762" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#fff">6</text>
-<text x="1816" y="1762" font-family="monospace" font-size="9" fill="#555">Check: file size ratio → Too big — fail</text>
+<text x="1816" y="1762" font-family="monospace" font-size="9" fill="#555">Check: file size rati… → Too big — fail</text>
 <circle cx="1806" cy="1772" r="5" fill="#EF5350"/>
 <text x="1806" y="1775" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#fff">7</text>
-<text x="1816" y="1775" font-family="monospace" font-size="9" fill="#555">Check: duration ratio  → Duration mismatch</text>
+<text x="1816" y="1775" font-family="monospace" font-size="9" fill="#555">Check: duration ratio… → Duration mismatch</text>
 <circle cx="1806" cy="1785" r="5" fill="#EF5350"/>
 <text x="1806" y="1788" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#fff">8</text>
 <text x="1816" y="1788" font-family="monospace" font-size="9" fill="#555">Guard: has video? (VR) → FAIL: missing streams</text>
@@ -459,5 +459,5 @@
 <text x="1816" y="1814" font-family="monospace" font-size="9" fill="#555">Auto-accept? (VR) → Await acceptance</text>
 <circle cx="1806" cy="1824" r="5" fill="#66BB6A"/>
 <text x="1806" y="1827" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#fff">11</text>
-<text x="1816" y="1827" font-family="monospace" font-size="9" fill="#555">Replace original file  → Notifications</text>
+<text x="1816" y="1827" font-family="monospace" font-size="9" fill="#555">Replace original file… → Notifications</text>
 </svg>
