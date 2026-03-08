@@ -9,8 +9,8 @@ Algorithm:
   3. Column (X) is determined by a per-flow lookup table.
   4. Heights are estimated from node name line-count + plugin type.
   5. The layout is split into horizontal sections for a rectangular shape.
-  6. Cross-section edges are replaced with labeled connection indicators.
-  7. Within-section edges use orthogonal routing with collision avoidance.
+  6. All edges are drawn as SVG paths with orthogonal routing.
+  7. Cross-section edges route through the gaps between sections.
   8. An SVG overview is written to images/ for README documentation.
 """
 
@@ -28,9 +28,8 @@ IMAGES_DIR = Path(__file__).parent.parent / "images"
 GAP               = 90     # vertical gap between nodes (px)
 NODE_WIDTH        = 420    # Tdarr node width
 BEND_RADIUS       = 10     # rounded corner radius for orthogonal edges
-SECTION_GAP       = 250    # horizontal gap between wrapped sections
+SECTION_GAP       = 350    # horizontal gap between wrapped sections
 SVG_DISPLAY_WIDTH = 4000   # SVG rendered width (px)
-CONNECTOR_RADIUS  = 8      # radius for connection indicator circles
 
 
 # ── Height estimation ──────────────────────────────────────────────────────────
@@ -282,13 +281,52 @@ EDGE_COLORS = {"1": "#66BB6A", "2": "#EF5350", "err1": "#90A4AE"}
 DEFAULT_COLOR = "#ECEFF1"
 
 
+def _polyline_path(points: list[tuple[float, float]], r: float) -> str:
+    """Generate SVG path for an orthogonal polyline with rounded corners."""
+    if len(points) < 2:
+        return ""
+    if len(points) == 2:
+        return (f"M{points[0][0]:.1f},{points[0][1]:.1f} "
+                f"L{points[1][0]:.1f},{points[1][1]:.1f}")
+
+    parts = [f"M{points[0][0]:.1f},{points[0][1]:.1f}"]
+    for i in range(1, len(points) - 1):
+        px, py = points[i - 1]
+        cx, cy = points[i]
+        nx, ny = points[i + 1]
+
+        in_len = abs(cx - px) + abs(cy - py)
+        out_len = abs(nx - cx) + abs(ny - cy)
+        ar = min(r, in_len / 2, out_len / 2)
+        if ar < 1:
+            parts.append(f"L{cx:.1f},{cy:.1f}")
+            continue
+
+        idx = (1 if cx > px else -1) if abs(cx - px) > 0.1 else 0
+        idy = (1 if cy > py else -1) if abs(cy - py) > 0.1 else 0
+        odx = (1 if nx > cx else -1) if abs(nx - cx) > 0.1 else 0
+        ody = (1 if ny > cy else -1) if abs(ny - cy) > 0.1 else 0
+
+        bx = cx - idx * ar if idx else cx
+        by = cy - idy * ar if idy else cy
+        ax = cx + odx * ar if odx else cx
+        ay = cy + ody * ar if ody else cy
+
+        parts.append(f"L{bx:.1f},{by:.1f}")
+        parts.append(f"Q{cx:.1f},{cy:.1f} {ax:.1f},{ay:.1f}")
+
+    last = points[-1]
+    parts.append(f"L{last[0]:.1f},{last[1]:.1f}")
+    return " ".join(parts)
+
+
 def _svg_marker(handle_key: str, color: str) -> str:
     mid = (handle_key.replace("err1", "err")
            .replace("1", "ok").replace("2", "no"))
     return (
-        f'<marker id="arr-{mid}" markerWidth="8" markerHeight="8"'
-        f' refX="7" refY="4" orient="auto">'
-        f'<path d="M0,0 L0,8 L8,4 z" fill="{color}"/></marker>'
+        f'<marker id="arr-{mid}" markerWidth="5" markerHeight="5"'
+        f' refX="4" refY="2.5" orient="auto">'
+        f'<path d="M0,0 L0,5 L5,2.5 z" fill="{color}"/></marker>'
     )
 
 
@@ -332,13 +370,23 @@ def _edge_path(
     ty: "Callable[[float], float]",
     ts: "Callable[[float], float]",
     nw: float,
+    src_x_offset: float = 0,
+    tgt_x_offset: float = 0,
 ) -> str:
-    """Generate SVG path: straight for same-column, orthogonal for cross."""
-    sx1 = tx(x1) + nw / 2
+    """Generate SVG path: straight for same-column, orthogonal for cross.
+
+    After routing, appends a thin virtual rect for the horizontal segment
+    to node_rects so subsequent edges avoid the same channel.
+    """
+    sx1 = tx(x1) + nw / 2 + src_x_offset
     sy1 = ty(y1)
-    sx2 = tx(x2) + nw / 2
+    sx2 = tx(x2) + nw / 2 + tgt_x_offset
     sy2 = ty(y2)
     r = ts(BEND_RADIUS) if ts(BEND_RADIUS) > 2 else 3
+    # Minimum final segment so the arrow doesn't hide the rounded corner
+    min_final = r + 14
+    # Thickness of virtual rect claimed by each horizontal routing channel
+    chan_h = 6
 
     if abs(sx1 - sx2) < 1:
         return f"M{sx1},{sy1} L{sx2},{sy2}"
@@ -346,9 +394,55 @@ def _edge_path(
     dx = sx2 - sx1
     sign_x = 1 if dx > 0 else -1
 
+    def _claim_channel(mid_y: float) -> None:
+        """Add a thin virtual rect so future edges avoid this y-level."""
+        lo_x = min(sx1, sx2)
+        node_rects.append((lo_x, mid_y - chan_h / 2,
+                           abs(dx), chan_h))
+
+    def _first_block_top(vx: float, vy_lo: float, vy_hi: float) -> float:
+        """Return top y of the first node blocking a vertical at vx, or -1."""
+        best = -1.0
+        for rx, ry, rw, rh in node_rects:
+            if (rx < vx + 2 and rx + rw > vx - 2
+                    and ry + rh > vy_lo + 2 and ry < vy_hi - 2):
+                if best < 0 or ry < best:
+                    best = ry
+        return best
+
+    # Minimum clearance from source/target for visible rounded turns
+    min_turn = r + 16
+
+    def _blocked_route(block_top: float) -> str:
+        """Route around a vertical blocker: horizontal just above it."""
+        exit_y = block_top - ts(8)
+        if exit_y < sy1 + ts(8):
+            exit_y = sy1 + ts(8)
+        exit_y = _find_clear_y(exit_y, sx1, sx2, node_rects)
+        _claim_channel(exit_y)
+        points = [
+            (sx1, sy1),
+            (sx1, exit_y),
+            (sx2, exit_y),
+            (sx2, sy2),
+        ]
+        return _polyline_path(points, r)
+
     if sy2 >= sy1:
         raw_mid = (sy1 + sy2) / 2
-        mid_y = _find_clear_y(raw_mid, sx1, sx2, node_rects)
+        # Enforce minimum distance from both source and target
+        min_mid = sy1 + min_turn + r
+        max_mid = sy2 - min_final - r
+        clamped = max(min(raw_mid, max_mid), min_mid)
+        mid_y = _find_clear_y(clamped, sx1, sx2, node_rects)
+        mid_y = max(min(mid_y, max_mid), min_mid)
+        _claim_channel(mid_y)
+
+        # Check if the initial vertical from source would pass through a node
+        block_top = _first_block_top(sx1, sy1, mid_y)
+        if block_top > 0:
+            return _blocked_route(block_top)
+
         half_top = abs(mid_y - sy1)
         half_bot = abs(sy2 - mid_y)
         half_dx = abs(dx) / 2
@@ -364,8 +458,15 @@ def _edge_path(
             f"L{sx2},{sy2}"
         )
     else:
-        below_y = sy1 + ts(30)
+        below_y = sy1 + min_turn
         mid_y = _find_clear_y(below_y, sx1, sx2, node_rects)
+        _claim_channel(mid_y)
+
+        # Check if the initial vertical from source would pass through a node
+        block_top = _first_block_top(sx1, sy1, mid_y)
+        if block_top > 0:
+            return _blocked_route(block_top)
+
         ar = min(r, abs(dx) / 2 - 1, max(1, abs(mid_y - sy1) - 1))
         sign_y = 1 if sy2 > mid_y else -1
         if ar < 1:
@@ -442,10 +543,92 @@ def generate_svg(
             nw, ts(estimate_height(node)),
         ))
 
-    # ── Classify edges: within-section vs cross-section ────────────────
-    connector_id = 0
-    connectors: list[tuple[int, str, str, str, str]] = []
+    # ── Compute section gap centers for cross-section routing ────────
+    section_max_x: dict[int, float] = {}
+    section_min_x: dict[int, float] = {}
+    for nid in positions:
+        sec = node_section.get(nid, 0)
+        nx_val = tx(positions[nid]["x"])
+        right = nx_val + nw
+        if sec not in section_max_x or right > section_max_x[sec]:
+            section_max_x[sec] = right
+        if sec not in section_min_x or nx_val < section_min_x[sec]:
+            section_min_x[sec] = nx_val
+    sections_sorted = sorted(section_max_x.keys())
+    gap_centers: dict[tuple[int, int], float] = {}
+    for i in range(len(sections_sorted) - 1):
+        s1, s2 = sections_sorted[i], sections_sorted[i + 1]
+        cx_gap = (section_max_x[s1] + section_min_x[s2]) / 2
+        gap_centers[(s1, s2)] = cx_gap
+        gap_centers[(s2, s1)] = cx_gap
 
+    r = ts(BEND_RADIUS) if ts(BEND_RADIUS) > 2 else 3
+
+    # ── Pre-compute fan-out / fan-in offsets ──────────────────────────
+    # Spread edge endpoints evenly across the node width
+    node_pad = nw * 0.15  # keep edges away from node corners
+    usable_w = nw - 2 * node_pad  # usable width for edge endpoints
+
+    edges_by_source: dict[str, list[dict]] = defaultdict(list)
+    edges_by_target: dict[str, list[dict]] = defaultdict(list)
+    for edge in edges:
+        sid, tid = edge.get("source"), edge.get("target")
+        if sid in positions and tid in positions:
+            edges_by_source[sid].append(edge)
+            edges_by_target[tid].append(edge)
+
+    # Sort outgoing edges by target x position (left-to-right)
+    for sid in edges_by_source:
+        edges_by_source[sid].sort(
+            key=lambda e: positions.get(e["target"], {}).get("x", 0))
+    # Sort incoming edges by source x position
+    for tid in edges_by_target:
+        edges_by_target[tid].sort(
+            key=lambda e: positions.get(e["source"], {}).get("x", 0))
+
+    def _source_offset(edge: dict) -> float:
+        """Offset from node center, evenly distributed across node width."""
+        sid = edge["source"]
+        group = edges_by_source[sid]
+        n = len(group)
+        if n <= 1:
+            return 0
+        i = group.index(edge)
+        # Distribute from -usable_w/2 to +usable_w/2
+        return -usable_w / 2 + usable_w * i / (n - 1)
+
+    def _target_offset(edge: dict) -> float:
+        """Offset from node center, evenly distributed across node width."""
+        tid = edge["target"]
+        group = edges_by_target[tid]
+        n = len(group)
+        if n <= 1:
+            return 0
+        i = group.index(edge)
+        return -usable_w / 2 + usable_w * i / (n - 1)
+
+    # Pre-compute gap offsets for cross-section edges through same gap
+    cross_by_gap: dict[tuple[int, int], list[dict]] = defaultdict(list)
+    for edge in edges:
+        sid, tid = edge.get("source"), edge.get("target")
+        if sid not in positions or tid not in positions:
+            continue
+        s_sec = node_section.get(sid, 0)
+        t_sec = node_section.get(tid, 0)
+        if s_sec != t_sec:
+            gap_key = (min(s_sec, t_sec), min(s_sec, t_sec) + 1)
+            cross_by_gap[gap_key].append(edge)
+
+    gap_edge_offset: dict[str, float] = {}
+    for gap_key, gap_edges in cross_by_gap.items():
+        n = len(gap_edges)
+        gap_spread = min(ts(SECTION_GAP) * 0.5, n * ts(12))
+        for i, e in enumerate(gap_edges):
+            gap_edge_offset[e["id"]] = (
+                (i - (n - 1) / 2) * gap_spread / max(n - 1, 1)
+            )
+
+    # ── Draw all edges ────────────────────────────────────────────────
     for edge in edges:
         sid = edge.get("source")
         tid = edge.get("target")
@@ -469,59 +652,94 @@ def generate_svg(
         mid = {"1": "ok", "2": "no", "err1": "err"}[marker_key]
         color = EDGE_COLORS[marker_key]
 
+        s_off = _source_offset(edge)
+        t_off = _target_offset(edge)
+        sx1 = tx(sp["x"]) + nw / 2 + s_off
+        sy1 = ty(sp["y"]) + ts(src_h)
+        sx2 = tx(tp["x"]) + nw / 2 + t_off
+        sy2 = ty(tp["y"])
+
         if s_sec != t_sec:
-            # Cross-section: draw connection indicators
-            connector_id += 1
-            label = str(connector_id)
-            connectors.append(
-                (connector_id, sid, tid, color, label))
+            # Cross-section: route through the gap between sections
+            # Offset exit/entry margins so parallel cross-section edges
+            # from the same source or to the same target don't overlap
+            base_margin = ts(25)
+            cross_src = [e for e in edges_by_source[sid]
+                         if node_section.get(e["target"], 0) != s_sec]
+            cross_tgt = [e for e in edges_by_target[tid]
+                         if node_section.get(e["source"], 0) != t_sec]
+            src_idx = cross_src.index(edge) if edge in cross_src else 0
+            tgt_idx = cross_tgt.index(edge) if edge in cross_tgt else 0
+            exit_margin = base_margin + src_idx * ts(12)
+            entry_margin = base_margin + tgt_idx * ts(12)
 
-            # Source exit indicator (bottom of source node)
-            cx_s = tx(sp["x"]) + nw / 2
-            cy_s = ty(sp["y"]) + ts(src_h) + ts(15)
-            out.append(
-                f'<circle cx="{cx_s}" cy="{cy_s}"'
-                f' r="{CONNECTOR_RADIUS}" fill="{color}"'
-                f' stroke="#fff" stroke-width="1.5"/>'
-            )
-            out.append(
-                f'<text x="{cx_s}" y="{cy_s + 3.5}"'
-                f' text-anchor="middle"'
-                f' font-family="monospace" font-size="8"'
-                f' font-weight="bold" fill="#fff">'
-                f'{html.escape(label)}</text>'
-            )
+            if s_sec < t_sec:
+                base_gap = gap_centers.get(
+                    (s_sec, s_sec + 1), (sx1 + sx2) / 2)
+            else:
+                base_gap = gap_centers.get(
+                    (s_sec, s_sec - 1), (sx1 + sx2) / 2)
+            gap_x = base_gap + gap_edge_offset.get(edge["id"], 0)
+            points = [
+                (sx1, sy1),
+                (sx1, sy1 + exit_margin),
+                (gap_x, sy1 + exit_margin),
+                (gap_x, sy2 - entry_margin),
+                (sx2, sy2 - entry_margin),
+                (sx2, sy2),
+            ]
+            # Remove zero-length segments
+            simplified = [points[0]]
+            for p in points[1:]:
+                if (abs(p[0] - simplified[-1][0]) > 0.5
+                        or abs(p[1] - simplified[-1][1]) > 0.5):
+                    simplified.append(p)
+            path_d = _polyline_path(simplified, r)
+            dash = ' stroke-dasharray="6,3"'
+        else:
+            # Within-section: orthogonal routed edge
+            # Check if this same-column edge will need a horizontal detour
+            # (i.e., there are blocking nodes between source and target)
+            same_col = abs(sp["x"] - tp["x"]) < 1
+            needs_detour = False
+            if same_col:
+                # Check if any node rect blocks the straight path
+                cx_check = tx(sp["x"]) + nw / 2
+                y_lo = min(sy1, sy2)
+                y_hi = max(sy1, sy2)
+                for rx, ry, rw, rh in node_rects_svg:
+                    if (rx < cx_check + nw / 2 and rx + rw > cx_check - nw / 2
+                            and ry + rh > y_lo + 2 and ry < y_hi - 2):
+                        needs_detour = True
+                        break
+            if same_col and not needs_detour:
+                # Straight vertical — use offsets only when multi-edge
+                path_d = _edge_path(
+                    sp["x"], sp["y"] + src_h, tp["x"], tp["y"],
+                    node_rects_svg, tx, ty, ts, nw,
+                    src_x_offset=s_off, tgt_x_offset=t_off,
+                )
+            else:
+                # Cross-column or same-column detour: full offset routing
+                path_d = _edge_path(
+                    sp["x"], sp["y"] + src_h, tp["x"], tp["y"],
+                    node_rects_svg, tx, ty, ts, nw,
+                    src_x_offset=s_off, tgt_x_offset=t_off,
+                )
+            dash = ""
 
-            # Target entry indicator (top of target node)
-            cx_t = tx(tp["x"]) + nw / 2
-            cy_t = ty(tp["y"]) - ts(15)
-            out.append(
-                f'<circle cx="{cx_t}" cy="{cy_t}"'
-                f' r="{CONNECTOR_RADIUS}" fill="{color}"'
-                f' stroke="#fff" stroke-width="1.5"/>'
-            )
-            out.append(
-                f'<text x="{cx_t}" y="{cy_t + 3.5}"'
-                f' text-anchor="middle"'
-                f' font-family="monospace" font-size="8"'
-                f' font-weight="bold" fill="#fff">'
-                f'{html.escape(label)}</text>'
-            )
-            continue
-
-        # Within-section: draw orthogonal routed edge
-        path_d = _edge_path(
-            sp["x"], sp["y"] + src_h, tp["x"], tp["y"],
-            node_rects_svg, tx, ty, ts, nw,
-        )
         out.append(
             f'<path d="{path_d}" fill="none"'
             f' stroke="{color}" stroke-width="1.5"'
-            f' opacity="0.75"'
+            f' opacity="0.7"{dash}'
             f' marker-end="url(#arr-{mid})"/>'
         )
 
     # ── Nodes ──────────────────────────────────────────────────────────
+    # Approximate max chars that fit in a node at current scale
+    char_w = font * 0.6
+    max_chars = max(5, int((nw - 10) / char_w))
+
     for node in flow["flowPlugins"]:
         nid = node["id"]
         if nid not in positions:
@@ -545,7 +763,7 @@ def generate_svg(
         cx = nx + nw / 2
         tspans = "".join(
             f'<tspan x="{cx}" dy="{0 if i == 0 else line_h}">'
-            f'{html.escape(line)}</tspan>'
+            f'{html.escape(line[:max_chars - 1] + "…" if len(line) > max_chars else line)}</tspan>'
             for i, line in enumerate(name_lines)
         )
         out.append(
@@ -553,50 +771,6 @@ def generate_svg(
             f' font-family="monospace" font-size="{font}"'
             f' fill="{tfill}">{tspans}</text>'
         )
-
-    # ── Connection key (cross-section edge legend) ─────────────────────
-    # Rendered AFTER svg_h is finalized; placed in the bottom margin
-    # below all nodes, centered horizontally.
-    connector_lines: list[str] = []
-    connector_height = 0
-    if connectors:
-        conn_font = 9
-        conn_line_h = 13
-        connector_height = 20 + len(connectors) * conn_line_h + 10
-        key_y = svg_h  # start at current bottom
-        key_x = svg_w // 2 - 200
-        connector_lines.append(
-            f'<text x="{key_x}" y="{key_y + 14}"'
-            f' font-family="monospace" font-size="{conn_font}"'
-            f' font-weight="bold" fill="#555">'
-            f'Cross-section connections:</text>'
-        )
-        for i, (_, sid, tid, color, label) in enumerate(connectors):
-            cy_k = key_y + 28 + i * conn_line_h
-            src_n = nodes_by_id[sid]["name"].split("\n")[0]
-            tgt_n = nodes_by_id[tid]["name"].split("\n")[0]
-            if len(src_n) > 22:
-                src_n = src_n[:21] + "…"
-            if len(tgt_n) > 22:
-                tgt_n = tgt_n[:21] + "…"
-            connector_lines.append(
-                f'<circle cx="{key_x + 6}" cy="{cy_k - 3}"'
-                f' r="5" fill="{color}"/>'
-            )
-            connector_lines.append(
-                f'<text x="{key_x + 6}" y="{cy_k}"'
-                f' text-anchor="middle"'
-                f' font-family="monospace" font-size="7"'
-                f' font-weight="bold" fill="#fff">'
-                f'{label}</text>'
-            )
-            connector_lines.append(
-                f'<text x="{key_x + 16}" y="{cy_k}"'
-                f' font-family="monospace"'
-                f' font-size="{conn_font}" fill="#555">'
-                f'{html.escape(src_n)} → '
-                f'{html.escape(tgt_n)}</text>'
-            )
 
     # ── Plugin color legend ────────────────────────────────────────────
     legend_items = [
@@ -628,15 +802,19 @@ def generate_svg(
         ("#66BB6A", "Yes / Pass"),
         ("#EF5350", "No / Fail"),
         ("#90A4AE", "Error"),
+        ("#66BB6A", "── Cross-section"),
     ]
     ex = 10
     ey_top = ly_top - len(edge_legend) * 15 - 10
     for i, (color, label) in enumerate(edge_legend):
         ey = ey_top + i * 15
+        is_dashed = "Cross-section" in label
+        dash_attr = ' stroke-dasharray="6,3"' if is_dashed else ""
         out.append(
             f'<line x1="{ex}" y1="{ey + 5}"'
             f' x2="{ex + 20}" y2="{ey + 5}"'
-            f' stroke="{color}" stroke-width="2"/>'
+            f' stroke="{color}" stroke-width="2"'
+            f'{dash_attr}/>'
         )
         out.append(
             f'<text x="{ex + 24}" y="{ey + box_s - 1}"'
@@ -644,32 +822,11 @@ def generate_svg(
             f' fill="#444">{html.escape(label)}</text>'
         )
 
-    # Add connector legend and expand SVG if needed
-    if connector_lines:
-        out.extend(connector_lines)
-        svg_h_final = svg_h + connector_height
-    else:
-        svg_h_final = svg_h
-
     out.append("</svg>")
 
-    # Patch the SVG header with the final height
-    svg_text = "\n".join(out)
-    svg_text = svg_text.replace(
-        f'height="{svg_h}" viewBox="0 0 {svg_w} {svg_h}"',
-        f'height="{svg_h_final}" viewBox="0 0 {svg_w} {svg_h_final}"',
-        1,
-    )
-    # Also patch the background rect
-    svg_text = svg_text.replace(
-        f'<rect width="{svg_w}" height="{svg_h}" fill="#FAFAFA"/>',
-        f'<rect width="{svg_w}" height="{svg_h_final}" fill="#FAFAFA"/>',
-        1,
-    )
-
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(svg_text)
-    print(f"    SVG → {output_path.name}  ({svg_w}×{svg_h_final} px)")
+    output_path.write_text("\n".join(out))
+    print(f"    SVG → {output_path.name}  ({svg_w}×{svg_h} px)")
 
 
 # ── Save + layout + generate ───────────────────────────────────────────────────
@@ -750,8 +907,8 @@ VR_NODES_01 = {
     "cmt_vr": VR_01, "ffs_vr": VR_01,
     "cmd_vr_mp4": VR_01, "cmd_vr_rmsub": VR_01, "cmd_vr_rmimages": VR_01,
     "cmd_vr_hevc": VR_01, "cmd_vr_tags": VR_01,
-    "cmd_vr_aac_eng": VR_01, "grd_vr_dup_und": VR_01, "grd_vr_dup_eng": VR_01,
-    "cmd_vr_aac_und": VR_01,
+    "cmd_vr_aac_eng": VR_01, "grd_vr_dup_und": VR_01 - 500, "grd_vr_dup_eng": VR_01 + 500,
+    "cmd_vr_aac_und": VR_01 + 500,
     "cmd_vr_rmaudio": VR_01, "cmd_vr_reorder": VR_01,
     "cmd_vr_nochapters": VR_01, "ffe_vr": VR_01,
     "cmt_vr_reorder2": VR_01, "ffs_vr_reorder": VR_01,
@@ -776,7 +933,7 @@ def col_map_01() -> dict[str, int]:
         "grd_ext": M, "grd_vid": M, "grd_aud": M, "grd_ch": M,
         "grd_dovi": M, "grd_tag": M,
         "cmt_optimal": L, "fl_noop": L,
-        "cmt_proc": M,
+        "cmt_proc": R,
         # ── Low-bitrate skip ──────────────────────────────────────────
         "cmt_lowbit": M, "chk_lowbit": M,
         "cmt_skip_lowbit": L, "fl_skip_lowbit": L,
@@ -800,12 +957,12 @@ def col_map_01() -> dict[str, int]:
         # ── Audio ─────────────────────────────────────────────────────
         "cmt_rmaudio": M, "cmd_rmaudio": M,
         "cmt_audio": M, "cmd_ens_eng": M,
-        "grd_dup_und": M, "grd_dup_eng": M, "cmd_ens_und": R,
+        "grd_dup_und": L, "grd_dup_eng": R, "cmd_ens_und": R,
         "cmt_reorder": M, "cmd_reorder": M,
         "cmt_exec": M, "cmd_nochapters": M, "ffe_001": M,
         # ── Reorder pass ──────────────────────────────────────────────
         "cmt_reorder2": M, "ffs_reorder": M,
-        "cmt_eac3": M, "grd_eac3_codec": M, "grd_eac3_ch": M, "grd_eac3_ch8": M,
+        "cmt_eac3": M, "grd_eac3_codec": M, "grd_eac3_ch": M, "grd_eac3_ch8": L,
         "cmd_eac3_eng": M,
         "cmd_rm_aac": M,
         "cmd_rmdata2": M, "cmd_reorder2": M, "ffe_reorder": M,
