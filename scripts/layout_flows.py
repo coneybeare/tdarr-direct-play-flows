@@ -14,10 +14,13 @@ Algorithm:
   8. An SVG overview is written to images/ for README documentation.
 """
 
+from __future__ import annotations
+
 import html
 import json
 from collections import defaultdict, deque
 from pathlib import Path
+from typing import Callable
 
 FLOWS_DIR  = Path(__file__).parent.parent / "flows"
 IMAGES_DIR = Path(__file__).parent.parent / "images"
@@ -325,7 +328,10 @@ def _find_clear_y(
 def _edge_path(
     x1: float, y1: float, x2: float, y2: float,
     node_rects: list[tuple[float, float, float, float]],
-    tx, ty, ts, nw: float,
+    tx: "Callable[[float], float]",
+    ty: "Callable[[float], float]",
+    ts: "Callable[[float], float]",
+    nw: float,
 ) -> str:
     """Generate SVG path: straight for same-column, orthogonal for cross."""
     sx1 = tx(x1) + nw / 2
