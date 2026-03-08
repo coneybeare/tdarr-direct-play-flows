@@ -665,7 +665,7 @@
       "id": "cmt_audio",
       "position": {
         "x": 3500,
-        "y": 1240
+        "y": 380
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -678,7 +678,7 @@
       "id": "cmd_ens_eng",
       "position": {
         "x": 3500,
-        "y": 1380
+        "y": 520
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -699,32 +699,11 @@
       "id": "cmd_ens_und",
       "position": {
         "x": 3500,
-        "y": 1500
+        "y": 640
       },
       "inputsDB": {
         "audioEncoder": "aac",
         "language": "und",
-        "channels": "2",
-        "enableBitrate": "true",
-        "bitrate": "192k",
-        "enableSamplerate": "false",
-        "samplerate": "48000"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "Ensure AAC 2.0 (any lang)",
-      "sourceRepo": "Community",
-      "pluginName": "ffmpegCommandEnsureAudioStream",
-      "version": "1.0.0",
-      "id": "cmd_ens_any",
-      "position": {
-        "x": 3500,
-        "y": 1620
-      },
-      "inputsDB": {
-        "audioEncoder": "aac",
-        "language": "",
         "channels": "2",
         "enableBitrate": "true",
         "bitrate": "192k",
@@ -741,7 +720,7 @@
       "id": "cmt_eac3",
       "position": {
         "x": 3500,
-        "y": 120
+        "y": 1660
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -753,7 +732,7 @@
       "version": "1.0.0",
       "position": {
         "x": 3500,
-        "y": 260
+        "y": 1800
       },
       "inputsDB": {
         "channelCount": "6"
@@ -768,7 +747,7 @@
       "version": "1.0.0",
       "position": {
         "x": 3500,
-        "y": 380
+        "y": 1920
       },
       "inputsDB": {
         "channelCount": "8"
@@ -784,7 +763,7 @@
       "id": "cmd_eac3_eng",
       "position": {
         "x": 3500,
-        "y": 500
+        "y": 2040
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -805,7 +784,7 @@
       "id": "cmd_eac3_und",
       "position": {
         "x": 3500,
-        "y": 620
+        "y": 2160
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -819,40 +798,19 @@
       "fpEnabled": true
     },
     {
-      "name": "Ensure EAC3 5.1 (any lang)",
-      "sourceRepo": "Community",
-      "pluginName": "ffmpegCommandEnsureAudioStream",
-      "version": "1.0.0",
-      "id": "cmd_eac3_any",
-      "position": {
-        "x": 3500,
-        "y": 740
-      },
-      "inputsDB": {
-        "audioEncoder": "eac3",
-        "language": "",
-        "channels": "6",
-        "enableBitrate": "true",
-        "bitrate": "384k",
-        "enableSamplerate": "false",
-        "samplerate": "48000"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "Remove: aac, ac3, dts...",
+      "name": "Remove: aac, mp3",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveStreamByProperty",
       "version": "1.0.0",
       "id": "cmd_rm_aac",
       "position": {
         "x": 3500,
-        "y": 860
+        "y": 2280
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
-        "valuesToRemove": "aac,ac3,mp3,dts",
-        "condition": "=="
+        "valuesToRemove": "aac,mp3",
+        "condition": "includes"
       },
       "fpEnabled": true
     },
@@ -864,20 +822,20 @@
       "id": "cmt_rmaudio",
       "position": {
         "x": 3500,
-        "y": 980
+        "y": 120
       },
       "inputsDB": {},
       "fpEnabled": true
     },
     {
-      "name": "Remove: truehd, flac, dca...",
+      "name": "Remove incompatible audio",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveStreamByProperty",
       "version": "1.0.0",
       "id": "cmd_rmaudio",
       "position": {
         "x": 3500,
-        "y": 1120
+        "y": 260
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -894,7 +852,7 @@
       "id": "cmt_reorder",
       "position": {
         "x": 3500,
-        "y": 1740
+        "y": 760
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -907,7 +865,7 @@
       "id": "cmd_reorder",
       "position": {
         "x": 3500,
-        "y": 1880
+        "y": 900
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -926,9 +884,25 @@
       "id": "cmt_exec",
       "position": {
         "x": 3500,
-        "y": 2000
+        "y": 1020
       },
       "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Drop chapter data",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandCustomArguments",
+      "version": "1.0.0",
+      "id": "cmd_nochapters",
+      "position": {
+        "x": 3500,
+        "y": 1160
+      },
+      "inputsDB": {
+        "inputArguments": "",
+        "outputArguments": "-map_chapters -1"
+      },
       "fpEnabled": true
     },
     {
@@ -939,7 +913,7 @@
       "id": "ffe_001",
       "position": {
         "x": 3500,
-        "y": 2140
+        "y": 1280
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -952,7 +926,7 @@
       "id": "cmt_reorder2",
       "position": {
         "x": 3500,
-        "y": 2260
+        "y": 1400
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -965,7 +939,7 @@
       "id": "ffs_reorder",
       "position": {
         "x": 3500,
-        "y": 2400
+        "y": 1540
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -978,7 +952,7 @@
       "id": "cmd_rmdata2",
       "position": {
         "x": 3500,
-        "y": 2520
+        "y": 2400
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -991,7 +965,7 @@
       "id": "cmd_reorder2",
       "position": {
         "x": 3500,
-        "y": 2640
+        "y": 2520
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -1010,7 +984,7 @@
       "id": "ffe_reorder",
       "position": {
         "x": 3500,
-        "y": 2760
+        "y": 2640
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1023,7 +997,7 @@
       "id": "cmt_size",
       "position": {
         "x": 3500,
-        "y": 2880
+        "y": 2760
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1036,7 +1010,7 @@
       "id": "fl_size",
       "position": {
         "x": 3500,
-        "y": 3020
+        "y": 2900
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -1052,7 +1026,7 @@
       "id": "cmt_toobig",
       "position": {
         "x": 4250,
-        "y": 3140
+        "y": 3020
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1065,7 +1039,7 @@
       "id": "fail_toobig",
       "position": {
         "x": 4250,
-        "y": 3280
+        "y": 3160
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1078,7 +1052,7 @@
       "id": "cmt_duration",
       "position": {
         "x": 3500,
-        "y": 3140
+        "y": 3020
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1091,7 +1065,7 @@
       "id": "fl_duration",
       "position": {
         "x": 3500,
-        "y": 3280
+        "y": 3160
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1107,7 +1081,7 @@
       "id": "cmt_duration_fail",
       "position": {
         "x": 4250,
-        "y": 3400
+        "y": 3280
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1120,7 +1094,7 @@
       "id": "fl_review",
       "position": {
         "x": 4250,
-        "y": 3660
+        "y": 3540
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1133,7 +1107,7 @@
       "id": "cmt_replace",
       "position": {
         "x": 3500,
-        "y": 3520
+        "y": 3400
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1146,7 +1120,7 @@
       "id": "fl_replace",
       "position": {
         "x": 3500,
-        "y": 3780
+        "y": 3660
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1159,7 +1133,7 @@
       "id": "cmt_notify",
       "position": {
         "x": 3500,
-        "y": 3900
+        "y": 3780
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1172,7 +1146,7 @@
       "id": "chk_plex_notify",
       "position": {
         "x": 3500,
-        "y": 4040
+        "y": 3920
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_plex_notify",
@@ -1189,7 +1163,7 @@
       "id": "web_plex",
       "position": {
         "x": 4250,
-        "y": 4160
+        "y": 4040
       },
       "inputsDB": {
         "url": "http://YOUR_PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=YOUR_PLEX_TOKEN",
@@ -1205,7 +1179,7 @@
       "id": "chk_arr_notify",
       "position": {
         "x": 3500,
-        "y": 4280
+        "y": 4160
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_arr_notify",
@@ -1222,7 +1196,7 @@
       "id": "arr_notify",
       "position": {
         "x": 3500,
-        "y": 4400
+        "y": 4280
       },
       "inputsDB": {
         "arr": "radarr",
@@ -1399,28 +1373,7 @@
       "fpEnabled": true
     },
     {
-      "name": "Ensure AAC 2.0 (any, VR)",
-      "sourceRepo": "Community",
-      "pluginName": "ffmpegCommandEnsureAudioStream",
-      "version": "1.0.0",
-      "id": "cmd_vr_ens_any",
-      "position": {
-        "x": -1500,
-        "y": 3480
-      },
-      "inputsDB": {
-        "audioEncoder": "aac",
-        "language": "",
-        "channels": "2",
-        "enableBitrate": "true",
-        "bitrate": "192k",
-        "enableSamplerate": "false",
-        "samplerate": "48000"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "Remove: truehd, flac, dca... (VR)",
+      "name": "Remove incompatible audio (VR)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveStreamByProperty",
       "version": "1.0.0",
@@ -1444,7 +1397,7 @@
       "id": "cmd_vr_reorder",
       "position": {
         "x": -1500,
-        "y": 3600
+        "y": 3480
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -1452,6 +1405,22 @@
         "channels": "2,6,8",
         "codecs": "aac,eac3,ac3,mp3",
         "streamTypes": "video,audio,subtitle"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Drop chapter data (VR)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandCustomArguments",
+      "version": "1.0.0",
+      "id": "cmd_vr_nochapters",
+      "position": {
+        "x": -1500,
+        "y": 3600
+      },
+      "inputsDB": {
+        "inputArguments": "",
+        "outputArguments": "-map_chapters -1"
       },
       "fpEnabled": true
     },
@@ -1592,7 +1561,7 @@
       "id": "chk_auto_accept",
       "position": {
         "x": 3500,
-        "y": 3400
+        "y": 3280
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1626,7 +1595,7 @@
       "id": "fl_manual_review",
       "position": {
         "x": 4250,
-        "y": 3540
+        "y": 3420
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1965,9 +1934,9 @@
     {
       "source": "cmd_tags",
       "sourceHandle": "1",
-      "target": "cmt_eac3",
+      "target": "cmt_rmaudio",
       "targetHandle": null,
-      "id": "e_tags_audio"
+      "id": "e_tags_rmaudio"
     },
     {
       "source": "cmt_audio",
@@ -1986,16 +1955,9 @@
     {
       "source": "cmd_ens_und",
       "sourceHandle": "1",
-      "target": "cmd_ens_any",
-      "targetHandle": null,
-      "id": "e_ens_und_any"
-    },
-    {
-      "source": "cmd_ens_any",
-      "sourceHandle": "1",
       "target": "cmt_reorder",
       "targetHandle": null,
-      "id": "e_ens_any_reorder"
+      "id": "e_ens_und_reorder"
     },
     {
       "source": "cmd_eac3_eng",
@@ -2007,23 +1969,16 @@
     {
       "source": "cmd_eac3_und",
       "sourceHandle": "1",
-      "target": "cmd_eac3_any",
-      "targetHandle": null,
-      "id": "e_eac3_und_any"
-    },
-    {
-      "source": "cmd_eac3_any",
-      "sourceHandle": "1",
       "target": "cmd_rm_aac",
       "targetHandle": null,
-      "id": "e_eac3_any_rmaac"
+      "id": "e_eac3_und_rmaac"
     },
     {
       "source": "cmd_rm_aac",
       "sourceHandle": "1",
-      "target": "cmt_rmaudio",
+      "target": "cmd_rmdata2",
       "targetHandle": null,
-      "id": "e_rm_aac_rmaudio"
+      "id": "e_rm_aac_rmdata"
     },
     {
       "source": "cmt_rmaudio",
@@ -2056,9 +2011,16 @@
     {
       "source": "cmt_exec",
       "sourceHandle": "1",
+      "target": "cmd_nochapters",
+      "targetHandle": null,
+      "id": "e_cmt_exec_nochapters"
+    },
+    {
+      "source": "cmd_nochapters",
+      "sourceHandle": "1",
       "target": "ffe_001",
       "targetHandle": null,
-      "id": "e_cmt_exec_cmd"
+      "id": "e_nochapters_exec"
     },
     {
       "source": "cmt_size",
@@ -2210,9 +2172,9 @@
     {
       "source": "grd_eac3_ch8",
       "sourceHandle": "2",
-      "target": "cmt_rmaudio",
+      "target": "cmd_rmdata2",
       "targetHandle": null,
-      "id": "e_eac3_guard8_no"
+      "id": "e_eac3_guard8_rmdata"
     },
     {
       "source": "chk_vr",
@@ -2280,16 +2242,9 @@
     {
       "source": "cmd_vr_aac_und",
       "sourceHandle": "1",
-      "target": "cmd_vr_ens_any",
-      "targetHandle": null,
-      "id": "e_vr_und_any"
-    },
-    {
-      "source": "cmd_vr_ens_any",
-      "sourceHandle": "1",
       "target": "cmd_vr_reorder",
       "targetHandle": null,
-      "id": "e_vr_ens_any_reorder"
+      "id": "e_vr_und_reorder"
     },
     {
       "source": "cmd_vr_rmaudio",
@@ -2301,9 +2256,16 @@
     {
       "source": "cmd_vr_reorder",
       "sourceHandle": "1",
+      "target": "cmd_vr_nochapters",
+      "targetHandle": null,
+      "id": "e_vr_reorder_nochapters"
+    },
+    {
+      "source": "cmd_vr_nochapters",
+      "sourceHandle": "1",
       "target": "ffe_vr",
       "targetHandle": null,
-      "id": "e_vr_reorder_exec"
+      "id": "e_vr_nochapters_exec"
     },
     {
       "source": "fl_vr_size",
@@ -2364,9 +2326,9 @@
     {
       "source": "ffs_reorder",
       "sourceHandle": "1",
-      "target": "cmd_rmdata2",
+      "target": "cmt_eac3",
       "targetHandle": null,
-      "id": "e_reorder2_rmdata"
+      "id": "e_reorder2_eac3"
     },
     {
       "source": "cmd_rmdata2",
