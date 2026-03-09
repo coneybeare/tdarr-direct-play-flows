@@ -132,5 +132,69 @@ for (const file of flowFiles) {
       const hasErrorHandler = flow.flowPlugins.some((p) => p.pluginName === 'onFlowError');
       assert.ok(hasErrorHandler, 'Flow is missing an onFlowError node');
     });
+
+    test('bitrate cap chain is wired correctly', () => {
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+
+      // NVENC encoders → chk_br_vlow
+      for (const enc of ['cmd_hevc_sd', 'cmd_hevc_1080', 'cmd_hevc_4k']) {
+        assert.strictEqual(edgeMap.get(`${enc}:1`), 'chk_br_vlow', `${enc} should route to chk_br_vlow`);
+      }
+
+      // chk_br_vlow → cmd_cap_vlow (yes) / chk_br_low (no)
+      assert.strictEqual(edgeMap.get('chk_br_vlow:1'), 'cmd_cap_vlow');
+      assert.strictEqual(edgeMap.get('chk_br_vlow:2'), 'chk_br_low');
+
+      // chk_br_low → cmd_cap_low (yes) / chk_br_mid (no)
+      assert.strictEqual(edgeMap.get('chk_br_low:1'), 'cmd_cap_low');
+      assert.strictEqual(edgeMap.get('chk_br_low:2'), 'chk_br_mid');
+
+      // chk_br_mid → cmd_cap_mid (yes) / cmt_tags (no)
+      assert.strictEqual(edgeMap.get('chk_br_mid:1'), 'cmd_cap_mid');
+      assert.strictEqual(edgeMap.get('chk_br_mid:2'), 'cmt_tags');
+
+      // All caps → cmt_tags
+      for (const cap of ['cmd_cap_vlow', 'cmd_cap_low', 'cmd_cap_mid']) {
+        assert.strictEqual(edgeMap.get(`${cap}:1`), 'cmt_tags', `${cap} should route to cmt_tags`);
+      }
+
+      // SW encoder bypasses caps → cmt_tags
+      assert.strictEqual(edgeMap.get('cmd_hevc_sw:1'), 'cmt_tags');
+    });
+
+    test('bitrate cap CQ values are not below encoder QP', () => {
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      const caps = [
+        { id: 'cmd_cap_vlow', minCQ: 28 },
+        { id: 'cmd_cap_low', minCQ: 26 },
+        { id: 'cmd_cap_mid', minCQ: 24 },
+      ];
+
+      for (const { id, minCQ } of caps) {
+        const node = pluginMap.get(id);
+        assert.ok(node, `Missing node ${id}`);
+        const match = node.inputsDB.outputArguments.match(/-cq\s+(\d+)/);
+        assert.ok(match, `${id} outputArguments missing -cq`);
+        const cq = parseInt(match[1], 10);
+        assert.ok(cq >= minCQ, `${id} CQ ${cq} is below minimum ${minCQ} (would inflate file size)`);
+      }
+    });
+
+    test('cmd_rm_ac3mp3 is reachable from all EAC3 guard paths', () => {
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+
+      // EAC3 codec check NO → cmd_rm_ac3mp3
+      assert.strictEqual(edgeMap.get('grd_eac3_codec:2'), 'cmd_rm_ac3mp3',
+        'Non-EAC3 codec path should route through cmd_rm_ac3mp3');
+
+      // EAC3 ch8 check NO → cmd_rm_ac3mp3
+      assert.strictEqual(edgeMap.get('grd_eac3_ch8:2'), 'cmd_rm_ac3mp3',
+        'Non-surround channel path should route through cmd_rm_ac3mp3');
+
+      // EAC3 eng → cmd_rm_ac3mp3
+      assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmd_rm_ac3mp3',
+        'EAC3 eng path should route through cmd_rm_ac3mp3');
+    });
   });
 }
