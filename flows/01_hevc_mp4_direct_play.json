@@ -951,7 +951,7 @@
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveStreamByProperty",
       "version": "1.0.0",
-      "id": "cmd_rm_aac",
+      "id": "cmd_rm_ac3mp3",
       "position": {
         "x": 9810,
         "y": 170
@@ -2349,12 +2349,12 @@
     {
       "source": "cmd_eac3_eng",
       "sourceHandle": "1",
-      "target": "cmd_rm_aac",
+      "target": "cmd_rm_ac3mp3",
       "targetHandle": null,
-      "id": "e_eac3_eng_rmaac"
+      "id": "e_eac3_eng_rmac3mp3"
     },
     {
-      "source": "cmd_rm_aac",
+      "source": "cmd_rm_ac3mp3",
       "sourceHandle": "1",
       "target": "cmd_rmdata2",
       "targetHandle": null,
@@ -2566,7 +2566,7 @@
     {
       "source": "grd_eac3_codec",
       "sourceHandle": "2",
-      "target": "cmd_rm_aac",
+      "target": "cmd_rm_ac3mp3",
       "targetHandle": null,
       "id": "e_eac3_codec_no"
     },
@@ -2594,7 +2594,7 @@
     {
       "source": "grd_eac3_ch8",
       "sourceHandle": "2",
-      "target": "cmd_rm_aac",
+      "target": "cmd_rm_ac3mp3",
       "targetHandle": null,
       "id": "e_eac3_guard8_rmdata"
     },
