@@ -951,8 +951,8 @@ def col_map_01() -> dict[str, int]:
         "cmt_resolution": M, "chk_resolution": M,
         "cmd_hevc_sd": sd, "cmd_hevc_1080": M, "cmd_hevc_4k": hi,
         "cmt_sw": sw, "cmd_hevc_sw": sw,
-        "chk_br_low": M, "chk_br_mid": M,
-        "cmd_cap_low": L, "cmd_cap_mid": L,
+        "chk_br_vlow": M, "chk_br_low": M, "chk_br_mid": M,
+        "cmd_cap_vlow": L, "cmd_cap_low": L, "cmd_cap_mid": L,
         "cmt_tags": M, "cmd_tags": M,
         # ── Audio ─────────────────────────────────────────────────────
         "cmt_rmaudio": M, "cmd_rmaudio": M,
