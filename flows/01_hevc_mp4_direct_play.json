@@ -652,8 +652,8 @@
       "version": "1.0.0",
       "id": "cmt_tags",
       "position": {
-        "x": 6540,
-        "y": 0
+        "x": 3270,
+        "y": 3690
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -765,7 +765,7 @@
       "id": "cmd_tags",
       "position": {
         "x": 6540,
-        "y": 190
+        "y": 0
       },
       "inputsDB": {
         "inputArguments": "",
@@ -781,7 +781,7 @@
       "id": "cmt_audio",
       "position": {
         "x": 6540,
-        "y": 720
+        "y": 530
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -794,7 +794,7 @@
       "id": "cmd_ens_eng",
       "position": {
         "x": 6540,
-        "y": 910
+        "y": 720
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -815,7 +815,7 @@
       "id": "cmd_ens_und",
       "position": {
         "x": 7040,
-        "y": 1420
+        "y": 1230
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -836,7 +836,7 @@
       "id": "grd_dup_und",
       "position": {
         "x": 6040,
-        "y": 1080
+        "y": 890
       },
       "inputsDB": {
         "streamType": "audio",
@@ -854,7 +854,7 @@
       "id": "grd_dup_eng",
       "position": {
         "x": 7040,
-        "y": 1250
+        "y": 1060
       },
       "inputsDB": {
         "streamType": "audio",
@@ -872,24 +872,24 @@
       "id": "cmt_eac3",
       "position": {
         "x": 6540,
-        "y": 2840
+        "y": 2650
       },
       "inputsDB": {},
       "fpEnabled": true
     },
     {
-      "name": "Guard: has AC3 surround?",
+      "name": "Guard: has surround codec?",
       "sourceRepo": "Community",
       "pluginName": "checkStreamProperty",
       "version": "1.0.0",
       "position": {
         "x": 6540,
-        "y": 3030
+        "y": 2840
       },
       "inputsDB": {
         "streamType": "audio",
         "propertyToCheck": "codec_name",
-        "valuesToMatch": "ac3",
+        "valuesToMatch": "ac3,eac3",
         "condition": "equals"
       },
       "fpEnabled": true,
@@ -902,7 +902,7 @@
       "version": "1.0.0",
       "position": {
         "x": 6540,
-        "y": 3200
+        "y": 3010
       },
       "inputsDB": {
         "channelCount": "6"
@@ -917,7 +917,7 @@
       "version": "1.0.0",
       "position": {
         "x": 6040,
-        "y": 3370
+        "y": 3180
       },
       "inputsDB": {
         "channelCount": "8"
@@ -971,7 +971,7 @@
       "id": "cmt_rmaudio",
       "position": {
         "x": 6540,
-        "y": 360
+        "y": 170
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -984,7 +984,7 @@
       "id": "cmd_rmaudio",
       "position": {
         "x": 6540,
-        "y": 550
+        "y": 360
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -1001,7 +1001,7 @@
       "id": "cmt_reorder",
       "position": {
         "x": 6540,
-        "y": 1590
+        "y": 1400
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1014,7 +1014,7 @@
       "id": "cmd_reorder",
       "position": {
         "x": 6540,
-        "y": 1780
+        "y": 1590
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -1033,7 +1033,7 @@
       "id": "cmt_exec",
       "position": {
         "x": 6540,
-        "y": 1950
+        "y": 1760
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1046,7 +1046,7 @@
       "id": "cmd_nochapters",
       "position": {
         "x": 6540,
-        "y": 2140
+        "y": 1950
       },
       "inputsDB": {
         "inputArguments": "",
@@ -1062,7 +1062,7 @@
       "id": "ffe_001",
       "position": {
         "x": 6540,
-        "y": 2310
+        "y": 2120
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1075,7 +1075,7 @@
       "id": "cmt_reorder2",
       "position": {
         "x": 6540,
-        "y": 2480
+        "y": 2290
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1088,7 +1088,7 @@
       "id": "ffs_reorder",
       "position": {
         "x": 6540,
-        "y": 2670
+        "y": 2480
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1126,6 +1126,39 @@
       "fpEnabled": true
     },
     {
+      "name": "Remove: eac3 stereo",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRemoveStreamByProperty",
+      "version": "1.0.0",
+      "id": "cmd_rm_eac3",
+      "position": {
+        "x": 7040,
+        "y": 3350
+      },
+      "inputsDB": {
+        "propertyToCheck": "codec_name",
+        "valuesToRemove": "eac3",
+        "condition": "equals"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Set: faststart (pass 2)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandCustomArguments",
+      "version": "1.0.0",
+      "id": "cmd_faststart2",
+      "position": {
+        "x": 9810,
+        "y": 680
+      },
+      "inputsDB": {
+        "inputArguments": "",
+        "outputArguments": "-movflags +faststart"
+      },
+      "fpEnabled": true
+    },
+    {
       "name": "Execute reorder remux",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandExecute",
@@ -1133,7 +1166,7 @@
       "id": "ffe_reorder",
       "position": {
         "x": 9810,
-        "y": 680
+        "y": 850
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1146,7 +1179,7 @@
       "id": "cmt_size",
       "position": {
         "x": 9810,
-        "y": 850
+        "y": 1020
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1159,7 +1192,7 @@
       "id": "fl_size",
       "position": {
         "x": 9810,
-        "y": 1040
+        "y": 1210
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -1175,7 +1208,7 @@
       "id": "cmt_toobig",
       "position": {
         "x": 9310,
-        "y": 1210
+        "y": 1380
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1188,7 +1221,7 @@
       "id": "fail_toobig",
       "position": {
         "x": 9310,
-        "y": 1400
+        "y": 1570
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1201,7 +1234,7 @@
       "id": "cmt_duration",
       "position": {
         "x": 9810,
-        "y": 1210
+        "y": 1380
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1214,7 +1247,7 @@
       "id": "fl_duration",
       "position": {
         "x": 9810,
-        "y": 1400
+        "y": 1570
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1230,7 +1263,7 @@
       "id": "grd_has_video",
       "position": {
         "x": 9810,
-        "y": 1570
+        "y": 1740
       },
       "inputsDB": {
         "streamType": "video",
@@ -1248,7 +1281,7 @@
       "id": "grd_has_audio",
       "position": {
         "x": 9810,
-        "y": 1740
+        "y": 1910
       },
       "inputsDB": {
         "streamType": "audio",
@@ -1266,7 +1299,7 @@
       "id": "fail_no_streams",
       "position": {
         "x": 9310,
-        "y": 1930
+        "y": 2100
       },
       "inputsDB": {
         "errorMessage": "Output file is missing video or audio streams"
@@ -1281,7 +1314,7 @@
       "id": "cmt_duration_fail",
       "position": {
         "x": 9310,
-        "y": 1570
+        "y": 1740
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1294,7 +1327,7 @@
       "id": "fl_review",
       "position": {
         "x": 9310,
-        "y": 1760
+        "y": 1930
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1307,7 +1340,7 @@
       "id": "cmt_replace",
       "position": {
         "x": 9810,
-        "y": 2080
+        "y": 2250
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1320,7 +1353,7 @@
       "id": "fl_replace",
       "position": {
         "x": 9810,
-        "y": 2270
+        "y": 2440
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1333,7 +1366,7 @@
       "id": "cmt_notify",
       "position": {
         "x": 9810,
-        "y": 2440
+        "y": 2610
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1346,7 +1379,7 @@
       "id": "chk_plex_notify",
       "position": {
         "x": 9810,
-        "y": 2630
+        "y": 2800
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_plex_notify",
@@ -1363,7 +1396,7 @@
       "id": "web_plex",
       "position": {
         "x": 10310,
-        "y": 2800
+        "y": 2970
       },
       "inputsDB": {
         "url": "http://YOUR_PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=YOUR_PLEX_TOKEN",
@@ -1379,7 +1412,7 @@
       "id": "chk_arr_notify",
       "position": {
         "x": 9810,
-        "y": 2970
+        "y": 3140
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_arr_notify",
@@ -1396,7 +1429,7 @@
       "id": "arr_notify",
       "position": {
         "x": 9810,
-        "y": 3140
+        "y": 3310
       },
       "inputsDB": {
         "arr": "radarr",
@@ -1814,7 +1847,7 @@
       "id": "chk_auto_accept",
       "position": {
         "x": 9810,
-        "y": 1910
+        "y": 2080
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1884,7 +1917,7 @@
       "id": "fl_manual_review",
       "position": {
         "x": 9310,
-        "y": 2100
+        "y": 2270
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2594,9 +2627,9 @@
     {
       "source": "grd_eac3_ch8",
       "sourceHandle": "2",
-      "target": "cmd_rm_ac3mp3",
+      "target": "cmd_rm_eac3",
       "targetHandle": null,
-      "id": "e_eac3_guard8_rmdata"
+      "id": "e_eac3_guard8_rmeac3"
     },
     {
       "source": "chk_vr",
@@ -2823,11 +2856,25 @@
       "id": "e_reorder2_cmd"
     },
     {
+      "source": "cmd_rm_eac3",
+      "sourceHandle": "1",
+      "target": "cmd_rm_ac3mp3",
+      "targetHandle": null,
+      "id": "e_rmeac3_rmac3mp3"
+    },
+    {
       "source": "cmd_reorder2",
+      "sourceHandle": "1",
+      "target": "cmd_faststart2",
+      "targetHandle": null,
+      "id": "e_reorder2_faststart"
+    },
+    {
+      "source": "cmd_faststart2",
       "sourceHandle": "1",
       "target": "ffe_reorder",
       "targetHandle": null,
-      "id": "e_reorder2_exec"
+      "id": "e_faststart2_exec"
     },
     {
       "source": "ffe_reorder",
