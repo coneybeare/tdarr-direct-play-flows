@@ -964,7 +964,7 @@
       "fpEnabled": true
     },
     {
-      "name": "Remove: ac3, mp3",
+      "name": "Remove: ac3, mp3, dts",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveStreamByProperty",
       "version": "1.0.0",
@@ -975,7 +975,7 @@
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
-        "valuesToRemove": "ac3,mp3",
+        "valuesToRemove": "ac3,mp3,dts",
         "condition": "equals"
       },
       "fpEnabled": true
@@ -1005,7 +1005,7 @@
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
-        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca",
+        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca,dts",
         "condition": "includes"
       },
       "fpEnabled": true
@@ -1687,7 +1687,7 @@
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
-        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca",
+        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca,dts",
         "condition": "includes"
       },
       "fpEnabled": true

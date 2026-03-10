@@ -216,6 +216,20 @@ for (const file of flowFiles) {
         'cmd_rm_ac3mp3 should route to cmd_faststart2');
     });
 
+    test('DTS is stripped by both audio removal nodes', () => {
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      const rmaudio = pluginMap.get('cmd_rmaudio');
+      assert.ok(rmaudio, 'Missing node cmd_rmaudio');
+      assert.ok(rmaudio.inputsDB.valuesToRemove.includes('dts'),
+        'cmd_rmaudio must remove dts (ffprobe codec_name variant)');
+
+      const rmac3mp3 = pluginMap.get('cmd_rm_ac3mp3');
+      assert.ok(rmac3mp3, 'Missing node cmd_rm_ac3mp3');
+      assert.ok(rmac3mp3.inputsDB.valuesToRemove.includes('dts'),
+        'cmd_rm_ac3mp3 must remove dts (reorder can re-map from first pipeline)');
+    });
+
     test('second pipeline has faststart', () => {
       const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
       const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));

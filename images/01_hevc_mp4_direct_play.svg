@@ -287,7 +287,7 @@
 <rect x="3663.6" y="26.9" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="3734.1" y="42.849999999999994" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Ensure EAC3 5.1 (eng)</tspan></text>
 <rect x="3663.6" y="198.5" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="214.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Remove: ac3, mp3</tspan></text>
+<text x="3734.1" y="214.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Remove: ac3, mp3, dts</tspan></text>
 <rect x="2563.5" y="148.0" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="2634.0" y="167.3" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Remove incompatible audio</tspan></text>
 <rect x="2563.5" y="211.9" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
