@@ -181,36 +181,53 @@ for (const file of flowFiles) {
       }
     });
 
-    test('cmd_rm_ac3mp3 is reachable from all EAC3 guard paths', () => {
+    test('cmd_rm_ac3mp3 runs after reorder to prevent re-mapping', () => {
       const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
 
-      // EAC3 codec check NO → cmd_rm_ac3mp3 (no surround codec at all)
-      assert.strictEqual(edgeMap.get('grd_eac3_codec:2'), 'cmd_rm_ac3mp3',
-        'Non-surround codec path should route through cmd_rm_ac3mp3');
+      // All EAC3 paths merge at cmd_rmdata2 (before reorder)
+      assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmd_rmdata2',
+        'EAC3 eng path should route to cmd_rmdata2');
+      assert.strictEqual(edgeMap.get('grd_eac3_codec:2'), 'cmd_rmdata2',
+        'Non-surround codec path should route to cmd_rmdata2');
+      assert.strictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmd_rmdata2',
+        'cmd_rm_eac3 should route to cmd_rmdata2');
 
-      // EAC3 ch8 check NO → cmd_rm_eac3 → cmd_rm_ac3mp3 (has stereo eac3/ac3)
+      // cmd_rm_eac3 still on non-surround path
       assert.strictEqual(edgeMap.get('grd_eac3_ch8:2'), 'cmd_rm_eac3',
         'Non-surround channel path should strip stereo EAC3 first');
-      assert.strictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmd_rm_ac3mp3',
-        'cmd_rm_eac3 should route to cmd_rm_ac3mp3');
 
-      // EAC3 eng → cmd_rm_ac3mp3 (surround path, keep eac3)
-      assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmd_rm_ac3mp3',
-        'EAC3 eng path should route through cmd_rm_ac3mp3');
+      // Reorder THEN remove ac3/mp3 (prevents reorder from re-adding)
+      assert.strictEqual(edgeMap.get('cmd_reorder2:1'), 'cmd_rm_ac3mp3',
+        'cmd_reorder2 should route to cmd_rm_ac3mp3');
+      assert.strictEqual(edgeMap.get('cmd_rm_ac3mp3:1'), 'cmd_faststart2',
+        'cmd_rm_ac3mp3 should route to cmd_faststart2');
     });
 
     test('second pipeline has faststart', () => {
       const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
       const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
 
-      // cmd_reorder2 → cmd_faststart2 → ffe_reorder
-      assert.strictEqual(edgeMap.get('cmd_reorder2:1'), 'cmd_faststart2');
+      // cmd_faststart2 → ffe_reorder
       assert.strictEqual(edgeMap.get('cmd_faststart2:1'), 'ffe_reorder');
 
       const node = pluginMap.get('cmd_faststart2');
       assert.ok(node, 'Missing node cmd_faststart2');
       assert.ok(node.inputsDB.outputArguments.includes('+faststart'),
         'cmd_faststart2 must include +faststart');
+    });
+
+    test('attachments are stripped in first pipeline', () => {
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      const node = pluginMap.get('cmd_rmattach');
+      assert.ok(node, 'Missing node cmd_rmattach');
+      assert.strictEqual(node.inputsDB.propertyToCheck, 'codec_type');
+      assert.strictEqual(node.inputsDB.valuesToRemove, 'attachment');
+
+      // cmd_rmimages → cmd_rmattach → cmt_nvenc
+      assert.strictEqual(edgeMap.get('cmd_rmimages:1'), 'cmd_rmattach');
+      assert.strictEqual(edgeMap.get('cmd_rmattach:1'), 'cmt_nvenc');
     });
   });
 }

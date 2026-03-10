@@ -945,7 +945,7 @@ def col_map_01() -> dict[str, int]:
         "cmt_subs": M, "cmd_rmsub": M,
         "cmt_commentary": M, "chk_rm_commentary": M,
         "cmd_rmcommentary": R,
-        "cmt_data": M, "cmd_rmdata": M, "cmd_rmimages": M,
+        "cmt_data": M, "cmd_rmdata": M, "cmd_rmimages": M, "cmd_rmattach": M,
         # ── NVENC / resolution / encoders ─────────────────────────────
         "cmt_nvenc": M, "chk_nvenc": M,
         "cmt_resolution": M, "chk_resolution": M,
