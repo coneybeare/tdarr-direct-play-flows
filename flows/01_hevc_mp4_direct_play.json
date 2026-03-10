@@ -1143,7 +1143,7 @@
       "fpEnabled": true
     },
     {
-      "name": "Remove: eac3 stereo",
+      "name": "Remove: all eac3 (no surround)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveStreamByProperty",
       "version": "1.0.0",

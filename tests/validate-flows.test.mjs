@@ -183,6 +183,19 @@ for (const file of flowFiles) {
 
     test('cmd_rm_ac3mp3 runs after reorder to prevent re-mapping', () => {
       const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      // grd_eac3_codec YES → grd_eac3_ch (surround codec found, check channels)
+      assert.strictEqual(edgeMap.get('grd_eac3_codec:1'), 'grd_eac3_ch',
+        'Surround codec path should route to channel check');
+
+      // grd_eac3_codec must match both ac3 and eac3
+      const codecGuard = pluginMap.get('grd_eac3_codec');
+      assert.ok(codecGuard, 'Missing node grd_eac3_codec');
+      assert.ok(codecGuard.inputsDB.valuesToMatch.includes('ac3'),
+        'grd_eac3_codec must match ac3');
+      assert.ok(codecGuard.inputsDB.valuesToMatch.includes('eac3'),
+        'grd_eac3_codec must match eac3');
 
       // All EAC3 paths merge at cmd_rmdata2 (before reorder)
       assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmd_rmdata2',
@@ -192,9 +205,9 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmd_rmdata2',
         'cmd_rm_eac3 should route to cmd_rmdata2');
 
-      // cmd_rm_eac3 still on non-surround path
+      // cmd_rm_eac3 on non-surround path (no 6+ch surround, strip all eac3)
       assert.strictEqual(edgeMap.get('grd_eac3_ch8:2'), 'cmd_rm_eac3',
-        'Non-surround channel path should strip stereo EAC3 first');
+        'Non-surround channel path should strip EAC3 first');
 
       // Reorder THEN remove ac3/mp3 (prevents reorder from re-adding)
       assert.strictEqual(edgeMap.get('cmd_reorder2:1'), 'cmd_rm_ac3mp3',

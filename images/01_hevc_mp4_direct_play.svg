@@ -311,7 +311,7 @@
 <rect x="3663.6" y="141.3" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="3734.1" y="157.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Reorder (stereo first, pass 2)</tspan></text>
 <rect x="2731.7" y="1217.8" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2802.2" y="1233.75" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2802.2" dy="0">Remove: eac3 stereo</tspan></text>
+<text x="2802.2" y="1233.75" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2802.2" dy="0">Remove: all eac3 (no surround)</tspan></text>
 <rect x="3663.6" y="255.7" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="3734.1" y="271.65" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Set: faststart (pass 2)</tspan></text>
 <rect x="3663.6" y="312.9" width="141" height="26.9" rx="5" fill="#2E7D32" stroke="#9E9E9E" stroke-width="0.7"/>
