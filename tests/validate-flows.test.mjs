@@ -181,20 +181,82 @@ for (const file of flowFiles) {
       }
     });
 
-    test('cmd_rm_ac3mp3 is reachable from all EAC3 guard paths', () => {
+    test('cmd_rm_ac3mp3 runs after reorder to prevent re-mapping', () => {
       const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
 
-      // EAC3 codec check NO → cmd_rm_ac3mp3
-      assert.strictEqual(edgeMap.get('grd_eac3_codec:2'), 'cmd_rm_ac3mp3',
-        'Non-EAC3 codec path should route through cmd_rm_ac3mp3');
+      // grd_eac3_codec YES → grd_eac3_ch (surround codec found, check channels)
+      assert.strictEqual(edgeMap.get('grd_eac3_codec:1'), 'grd_eac3_ch',
+        'Surround codec path should route to channel check');
 
-      // EAC3 ch8 check NO → cmd_rm_ac3mp3
-      assert.strictEqual(edgeMap.get('grd_eac3_ch8:2'), 'cmd_rm_ac3mp3',
-        'Non-surround channel path should route through cmd_rm_ac3mp3');
+      // grd_eac3_codec must match both ac3 and eac3
+      const codecGuard = pluginMap.get('grd_eac3_codec');
+      assert.ok(codecGuard, 'Missing node grd_eac3_codec');
+      assert.ok(codecGuard.inputsDB.valuesToMatch.includes('ac3'),
+        'grd_eac3_codec must match ac3');
+      assert.ok(codecGuard.inputsDB.valuesToMatch.includes('eac3'),
+        'grd_eac3_codec must match eac3');
+      assert.strictEqual(codecGuard.inputsDB.condition, 'includes',
+        'grd_eac3_codec must use "includes" (not "equals") for comma-separated valuesToMatch');
 
-      // EAC3 eng → cmd_rm_ac3mp3
-      assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmd_rm_ac3mp3',
-        'EAC3 eng path should route through cmd_rm_ac3mp3');
+      // All EAC3 paths merge at cmd_rmdata2 (before reorder)
+      assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmd_rmdata2',
+        'EAC3 eng path should route to cmd_rmdata2');
+      assert.strictEqual(edgeMap.get('grd_eac3_codec:2'), 'cmd_rmdata2',
+        'Non-surround codec path should route to cmd_rmdata2');
+      assert.strictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmd_rmdata2',
+        'cmd_rm_eac3 should route to cmd_rmdata2');
+
+      // cmd_rm_eac3 on non-surround path (no 6+ch surround, strip all eac3)
+      assert.strictEqual(edgeMap.get('grd_eac3_ch8:2'), 'cmd_rm_eac3',
+        'Non-surround channel path should strip EAC3 first');
+
+      // Reorder THEN remove ac3/mp3 (prevents reorder from re-adding)
+      assert.strictEqual(edgeMap.get('cmd_reorder2:1'), 'cmd_rm_ac3mp3',
+        'cmd_reorder2 should route to cmd_rm_ac3mp3');
+      assert.strictEqual(edgeMap.get('cmd_rm_ac3mp3:1'), 'cmd_faststart2',
+        'cmd_rm_ac3mp3 should route to cmd_faststart2');
+    });
+
+    test('DTS is stripped by both audio removal nodes', () => {
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      const rmaudio = pluginMap.get('cmd_rmaudio');
+      assert.ok(rmaudio, 'Missing node cmd_rmaudio');
+      assert.ok(rmaudio.inputsDB.valuesToRemove.includes('dts'),
+        'cmd_rmaudio must remove dts (ffprobe codec_name variant)');
+
+      const rmac3mp3 = pluginMap.get('cmd_rm_ac3mp3');
+      assert.ok(rmac3mp3, 'Missing node cmd_rm_ac3mp3');
+      assert.ok(rmac3mp3.inputsDB.valuesToRemove.includes('dts'),
+        'cmd_rm_ac3mp3 must remove dts (reorder can re-map from first pipeline)');
+    });
+
+    test('second pipeline has faststart', () => {
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      // cmd_faststart2 → ffe_reorder
+      assert.strictEqual(edgeMap.get('cmd_faststart2:1'), 'ffe_reorder');
+
+      const node = pluginMap.get('cmd_faststart2');
+      assert.ok(node, 'Missing node cmd_faststart2');
+      assert.ok(node.inputsDB.outputArguments.includes('+faststart'),
+        'cmd_faststart2 must include +faststart');
+    });
+
+    test('attachments are stripped in first pipeline', () => {
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      const node = pluginMap.get('cmd_rmattach');
+      assert.ok(node, 'Missing node cmd_rmattach');
+      assert.strictEqual(node.inputsDB.propertyToCheck, 'codec_type');
+      assert.strictEqual(node.inputsDB.valuesToRemove, 'attachment');
+
+      // cmd_rmimages → cmd_rmattach → cmt_nvenc
+      assert.strictEqual(edgeMap.get('cmd_rmimages:1'), 'cmd_rmattach');
+      assert.strictEqual(edgeMap.get('cmd_rmattach:1'), 'cmt_nvenc');
     });
   });
 }
