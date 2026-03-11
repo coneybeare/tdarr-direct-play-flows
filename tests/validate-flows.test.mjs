@@ -196,6 +196,8 @@ for (const file of flowFiles) {
         'grd_eac3_codec must match ac3');
       assert.ok(codecGuard.inputsDB.valuesToMatch.includes('eac3'),
         'grd_eac3_codec must match eac3');
+      assert.strictEqual(codecGuard.inputsDB.condition, 'includes',
+        'grd_eac3_codec must use "includes" (not "equals") for comma-separated valuesToMatch');
 
       // All EAC3 paths merge at cmd_rmdata2 (before reorder)
       assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmd_rmdata2',

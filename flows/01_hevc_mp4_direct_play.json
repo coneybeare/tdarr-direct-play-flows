@@ -907,7 +907,7 @@
         "streamType": "audio",
         "propertyToCheck": "codec_name",
         "valuesToMatch": "ac3,eac3",
-        "condition": "equals"
+        "condition": "includes"
       },
       "fpEnabled": true,
       "id": "grd_eac3_codec"
