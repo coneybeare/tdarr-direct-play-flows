@@ -915,7 +915,7 @@ VR_NODES_01 = {
     "cmd_vr_nochapters": VR_01, "ffe_vr": VR_01,
     "cmt_vr_reorder2": VR_01, "ffs_vr_reorder": VR_01,
     "cmd_vr_rmdata2": VR_01, "cmd_vr_reorder2": VR_01,
-    "ffe_vr_reorder": VR_01,
+    "cmd_vr_faststart2": VR_01, "ffe_vr_reorder": VR_01,
     "fl_vr_size": VR_01, "fl_vr_dur": VR_01,
     "grd_vr_has_video": VR_01, "grd_vr_has_audio": VR_01,
     "fl_vr_replace": VR_01, "chk_auto_accept_vr": VR_01,
