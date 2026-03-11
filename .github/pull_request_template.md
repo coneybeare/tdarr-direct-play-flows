@@ -4,9 +4,7 @@
 
 ## Which flow(s) are affected?
 
-- [ ] 01 - Direct Play Optimizer (Full Pipeline)
-- [ ] 02 - Audio Fix: Stereo AAC 2.0 + EAC3 5.1
-- [ ] 03 - HDR-Aware Transcode
+- [ ] 01 - Direct Play Optimizer
 - [ ] Tests
 - [ ] Documentation / README
 - [ ] GitHub config (.github/)
