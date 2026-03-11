@@ -976,7 +976,7 @@
       "inputsDB": {
         "propertyToCheck": "codec_name",
         "valuesToRemove": "ac3,mp3,dts",
-        "condition": "equals"
+        "condition": "includes"
       },
       "fpEnabled": true
     },
