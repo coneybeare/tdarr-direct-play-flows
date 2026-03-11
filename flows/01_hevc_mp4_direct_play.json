@@ -1589,7 +1589,7 @@
       "id": "cmd_vr_tags",
       "position": {
         "x": 2270,
-        "y": 1210
+        "y": 1550
       },
       "inputsDB": {
         "inputArguments": "",
@@ -1605,7 +1605,7 @@
       "id": "cmd_vr_aac_eng",
       "position": {
         "x": 2270,
-        "y": 1550
+        "y": 1890
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -1626,7 +1626,7 @@
       "id": "cmd_vr_aac_und",
       "position": {
         "x": 2770,
-        "y": 2060
+        "y": 2400
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -1647,7 +1647,7 @@
       "id": "grd_vr_dup_und",
       "position": {
         "x": 1770,
-        "y": 1720
+        "y": 2060
       },
       "inputsDB": {
         "streamType": "audio",
@@ -1665,7 +1665,7 @@
       "id": "grd_vr_dup_eng",
       "position": {
         "x": 2770,
-        "y": 1890
+        "y": 2230
       },
       "inputsDB": {
         "streamType": "audio",
@@ -1683,7 +1683,7 @@
       "id": "cmd_vr_rmaudio",
       "position": {
         "x": 2270,
-        "y": 1380
+        "y": 1720
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -1700,7 +1700,7 @@
       "id": "cmd_vr_reorder",
       "position": {
         "x": 2270,
-        "y": 2230
+        "y": 2570
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -1719,7 +1719,7 @@
       "id": "cmd_vr_nochapters",
       "position": {
         "x": 2270,
-        "y": 2400
+        "y": 2740
       },
       "inputsDB": {
         "inputArguments": "",
@@ -1735,7 +1735,7 @@
       "id": "ffe_vr",
       "position": {
         "x": 2270,
-        "y": 2570
+        "y": 2910
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1748,7 +1748,7 @@
       "id": "cmt_vr_reorder2",
       "position": {
         "x": 2270,
-        "y": 2740
+        "y": 3080
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1761,7 +1761,7 @@
       "id": "ffs_vr_reorder",
       "position": {
         "x": 2270,
-        "y": 2930
+        "y": 3270
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1774,7 +1774,7 @@
       "id": "cmd_vr_rmdata2",
       "position": {
         "x": 2270,
-        "y": 3100
+        "y": 3440
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1787,7 +1787,7 @@
       "id": "cmd_vr_reorder2",
       "position": {
         "x": 2270,
-        "y": 3270
+        "y": 3610
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -1806,7 +1806,7 @@
       "id": "ffe_vr_reorder",
       "position": {
         "x": 2270,
-        "y": 3440
+        "y": 3780
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1819,7 +1819,7 @@
       "id": "fl_vr_size",
       "position": {
         "x": 2270,
-        "y": 3610
+        "y": 3950
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -1835,7 +1835,7 @@
       "id": "fl_vr_dur",
       "position": {
         "x": 2270,
-        "y": 3780
+        "y": 4120
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1851,7 +1851,7 @@
       "id": "fl_vr_replace",
       "position": {
         "x": 2270,
-        "y": 4460
+        "y": 4800
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1881,7 +1881,7 @@
       "id": "chk_auto_accept_vr",
       "position": {
         "x": 2270,
-        "y": 4290
+        "y": 4630
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1898,7 +1898,7 @@
       "id": "grd_vr_has_video",
       "position": {
         "x": 2270,
-        "y": 3950
+        "y": 4290
       },
       "inputsDB": {
         "streamType": "video",
@@ -1916,7 +1916,7 @@
       "id": "grd_vr_has_audio",
       "position": {
         "x": 2270,
-        "y": 4120
+        "y": 4460
       },
       "inputsDB": {
         "streamType": "audio",
@@ -1937,6 +1937,55 @@
         "y": 2270
       },
       "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Check: VR bitrate?",
+      "sourceRepo": "Community",
+      "pluginName": "checkOverallBitrate",
+      "version": "1.0.0",
+      "id": "chk_vr_br",
+      "position": {
+        "x": 2270,
+        "y": 1210
+      },
+      "inputsDB": {
+        "unit": "kbps",
+        "greaterThan": "0",
+        "lessThan": "15000"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Cap: VR 12 Mbps",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandCustomArguments",
+      "version": "1.0.0",
+      "id": "cmd_vr_cap_low",
+      "position": {
+        "x": 1770,
+        "y": 1380
+      },
+      "inputsDB": {
+        "inputArguments": "",
+        "outputArguments": "-rc vbr -cq 22 -maxrate 12M -bufsize 24M"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Cap: VR 25 Mbps",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandCustomArguments",
+      "version": "1.0.0",
+      "id": "cmd_vr_cap_high",
+      "position": {
+        "x": 2770,
+        "y": 1380
+      },
+      "inputsDB": {
+        "inputArguments": "",
+        "outputArguments": "-rc vbr -cq 20 -maxrate 25M -bufsize 50M"
+      },
       "fpEnabled": true
     }
   ],
@@ -2707,7 +2756,7 @@
     {
       "source": "cmd_vr_hevc",
       "sourceHandle": "1",
-      "target": "cmd_vr_tags",
+      "target": "chk_vr_br",
       "targetHandle": null,
       "id": "e_vr_hevc_tags"
     },
@@ -3046,6 +3095,34 @@
       "target": "grd_tag",
       "targetHandle": null,
       "id": "e_dovi_no"
+    },
+    {
+      "source": "chk_vr_br",
+      "sourceHandle": "1",
+      "target": "cmd_vr_cap_low",
+      "targetHandle": null,
+      "id": "e_vr_br_low_yes"
+    },
+    {
+      "source": "chk_vr_br",
+      "sourceHandle": "2",
+      "target": "cmd_vr_cap_high",
+      "targetHandle": null,
+      "id": "e_vr_br_low_no"
+    },
+    {
+      "source": "cmd_vr_cap_low",
+      "sourceHandle": "1",
+      "target": "cmd_vr_tags",
+      "targetHandle": null,
+      "id": "e_vr_cap_low_tags"
+    },
+    {
+      "source": "cmd_vr_cap_high",
+      "sourceHandle": "1",
+      "target": "cmd_vr_tags",
+      "targetHandle": null,
+      "id": "e_vr_cap_high_tags"
     }
   ]
 }
