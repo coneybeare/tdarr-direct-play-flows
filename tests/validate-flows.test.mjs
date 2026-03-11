@@ -253,6 +253,8 @@ for (const file of flowFiles) {
       assert.ok(node, 'Missing node cmd_rmattach');
       assert.strictEqual(node.inputsDB.propertyToCheck, 'codec_type');
       assert.strictEqual(node.inputsDB.valuesToRemove, 'attachment');
+      assert.strictEqual(node.inputsDB.condition, 'includes',
+        'cmd_rmattach must use "includes" (not "equals") — equals fails on attachment-type streams');
 
       // cmd_rmimages → cmd_rmattach → cmt_nvenc
       assert.strictEqual(edgeMap.get('cmd_rmimages:1'), 'cmd_rmattach');

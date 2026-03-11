@@ -499,7 +499,7 @@
       "inputsDB": {
         "propertyToCheck": "codec_type",
         "valuesToRemove": "attachment",
-        "condition": "equals"
+        "condition": "includes"
       },
       "fpEnabled": true
     },
