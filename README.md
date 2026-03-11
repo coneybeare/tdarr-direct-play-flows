@@ -141,7 +141,9 @@ NVENC QP (Quantization Parameter) is not equivalent across resolutions. A QP of 
 
 ### Should I Remove Subtitles?
 
-Flow 01 and 03 remove **all** subtitles. This is the most aggressive approach for direct play because:
+There is an assumption that the system is setup to use external subtitle files, managed by a service such as [Bazaar](https://www.bazarr.media/) or similar.
+
+Flow 01 removes **all** subtitles. This is the most aggressive approach for direct play because:
 
 - PGS/VOBSUB (image-based) always force Plex to transcode for iOS/Web clients
 - ASS/SRT text subs cause transcoding on many clients
