@@ -1,6 +1,6 @@
 # tdarr-direct-play-flows
 
-[![Claude](https://img.shields.io/badge/Claude-D97757?logo=claude&logoColor=fff)](#) [![Validate Flows](https://github.com/coneybeare/tdarr-direct-play-flows/actions/workflows/test.yml/badge.svg)](https://github.com/coneybeare/tdarr-direct-play-flows/actions/workflows/test.yml)
+[![Claude](https://img.shields.io/badge/Claude-D97757?logo=claude&logoColor=fff)](https://claude.ai) [![Validate Flows](https://github.com/coneybeare/tdarr-direct-play-flows/actions/workflows/test.yml/badge.svg)](https://github.com/coneybeare/tdarr-direct-play-flows/actions/workflows/test.yml)
 
 Tdarr flows optimized to maximize direct-play compatibility on iOS, macOS, Plex, and web (video.js) clients — while reducing file size using HEVC (H.265).
 
