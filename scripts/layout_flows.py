@@ -913,7 +913,7 @@ VR_NODES_01 = {
     "cmd_vr_aac_eng": VR_01, "grd_vr_dup_und": VR_01 - 500, "grd_vr_dup_eng": VR_01 + 500,
     "cmd_vr_aac_und": VR_01 + 500,
     "cmd_vr_rmaudio": VR_01, "cmd_vr_reorder": VR_01,
-    "cmd_vr_nochapters": VR_01, "ffe_vr": VR_01,
+    "cmd_vr_nochapters": VR_01, "cmd_vr_rmdata": VR_01, "ffe_vr": VR_01,
     "cmt_vr_reorder2": VR_01, "ffs_vr_reorder": VR_01,
     "cmd_vr_rmdata2": VR_01, "cmd_vr_reorder2": VR_01,
     "cmd_vr_faststart2": VR_01, "ffe_vr_reorder": VR_01,

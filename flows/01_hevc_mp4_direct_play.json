@@ -1728,6 +1728,19 @@
       "fpEnabled": true
     },
     {
+      "name": "Remove data streams (VR)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRemoveDataStreams",
+      "version": "1.0.0",
+      "id": "cmd_vr_rmdata",
+      "position": {
+        "x": 2270,
+        "y": 3080
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
       "name": "Execute FFmpeg (VR)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandExecute",
@@ -1735,7 +1748,7 @@
       "id": "ffe_vr",
       "position": {
         "x": 2270,
-        "y": 3080
+        "y": 3250
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1748,7 +1761,7 @@
       "id": "cmt_vr_reorder2",
       "position": {
         "x": 2270,
-        "y": 3250
+        "y": 3420
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1761,7 +1774,7 @@
       "id": "ffs_vr_reorder",
       "position": {
         "x": 2270,
-        "y": 3440
+        "y": 3610
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1774,7 +1787,7 @@
       "id": "cmd_vr_rmdata2",
       "position": {
         "x": 2270,
-        "y": 3610
+        "y": 3780
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1787,7 +1800,7 @@
       "id": "cmd_vr_reorder2",
       "position": {
         "x": 2270,
-        "y": 3780
+        "y": 3950
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -1806,7 +1819,7 @@
       "id": "cmd_vr_faststart2",
       "position": {
         "x": 2270,
-        "y": 3950
+        "y": 4120
       },
       "inputsDB": {
         "inputArguments": "",
@@ -1822,7 +1835,7 @@
       "id": "ffe_vr_reorder",
       "position": {
         "x": 2270,
-        "y": 4120
+        "y": 4290
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1835,7 +1848,7 @@
       "id": "fl_vr_size",
       "position": {
         "x": 2270,
-        "y": 4290
+        "y": 4460
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -1851,7 +1864,7 @@
       "id": "fl_vr_dur",
       "position": {
         "x": 2270,
-        "y": 4460
+        "y": 4630
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1867,7 +1880,7 @@
       "id": "fl_vr_replace",
       "position": {
         "x": 2270,
-        "y": 5140
+        "y": 5310
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1897,7 +1910,7 @@
       "id": "chk_auto_accept_vr",
       "position": {
         "x": 2270,
-        "y": 4970
+        "y": 5140
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1914,7 +1927,7 @@
       "id": "grd_vr_has_video",
       "position": {
         "x": 2270,
-        "y": 4630
+        "y": 4800
       },
       "inputsDB": {
         "streamType": "video",
@@ -1932,7 +1945,7 @@
       "id": "grd_vr_has_audio",
       "position": {
         "x": 2270,
-        "y": 4800
+        "y": 4970
       },
       "inputsDB": {
         "streamType": "audio",
@@ -2874,9 +2887,16 @@
     {
       "source": "cmd_vr_nochapters",
       "sourceHandle": "1",
+      "target": "cmd_vr_rmdata",
+      "targetHandle": null,
+      "id": "e_vr_nochapters_rmdata"
+    },
+    {
+      "source": "cmd_vr_rmdata",
+      "sourceHandle": "1",
       "target": "ffe_vr",
       "targetHandle": null,
-      "id": "e_vr_nochapters_exec"
+      "id": "e_vr_rmdata_exec"
     },
     {
       "source": "fl_vr_size",

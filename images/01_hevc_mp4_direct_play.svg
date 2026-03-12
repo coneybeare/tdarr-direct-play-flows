@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="4000" height="1817" viewBox="0 0 4000 1817">
+<svg xmlns="http://www.w3.org/2000/svg" width="4000" height="1874" viewBox="0 0 4000 1874">
 <defs>
 <marker id="arr-ok" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L0,5 L5,2.5 z" fill="#66BB6A"/></marker>
 <marker id="arr-no" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L0,5 L5,2.5 z" fill="#EF5350"/></marker>
 <marker id="arr-err" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L0,5 L5,2.5 z" fill="#90A4AE"/></marker>
 </defs>
-<rect width="4000" height="1817" fill="#FAFAFA"/>
+<rect width="4000" height="1874" fill="#FAFAFA"/>
 <text x="2000" y="20" text-anchor="middle" font-family="monospace" font-size="14" font-weight="bold" fill="#333">Direct Play Optimizer</text>
 <path d="M433.8,53.8 L433.8,84.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M433.8,117.7 L433.8,148.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
@@ -128,16 +128,17 @@
 <path d="M1197.5,689.7 L1197.5,719.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,975.6 L1197.5,1005.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,1032.8 L1197.5,1063.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1148.2,1497.1 L1148.2,1510.8 Q1148.2,1514.2 1151.6,1514.2 L1194.1,1514.2 Q1197.5,1514.2 1197.5,1517.6 L1197.5,1527.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1246.8,1497.0 L1246.8,1502.0 Q1246.8,1505.4 1250.2,1505.4 L2164.7,1505.4 Q2168.1,1505.4 2168.1,1502.0 L2168.1,486.2 Q2168.1,482.8 2171.5,482.8 L3513.2,482.8 Q3516.6,482.8 3516.6,486.2 L3516.6,491.2" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
+<path d="M1197.5,1090.0 L1197.5,1120.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1148.2,1554.2 L1148.2,1567.9 Q1148.2,1571.3 1151.6,1571.3 L1194.1,1571.3 Q1197.5,1571.3 1197.5,1574.7 L1197.5,1584.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1246.8,1554.2 L1246.8,1559.2 Q1246.8,1562.6 1250.2,1562.6 L2169.1,1562.6 Q2172.5,1562.6 2172.5,1559.2 L2172.5,607.3 Q2172.5,603.9 2175.9,603.9 L3513.2,603.9 Q3516.6,603.9 3516.6,607.3 L3516.6,612.3" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
+<path d="M1246.8,1554.2 L1246.8,1559.2 Q1246.8,1562.6 1250.2,1562.6 L2164.7,1562.6 Q2168.1,1562.6 2168.1,1559.2 L2168.1,486.2 Q2168.1,482.8 2171.5,482.8 L3513.2,482.8 Q3516.6,482.8 3516.6,486.2 L3516.6,491.2" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
 <path d="M1148.2,1611.4 L1148.2,1625.1 Q1148.2,1628.5 1151.6,1628.5 L1194.1,1628.5 Q1197.5,1628.5 1197.5,1631.9 L1197.5,1641.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1246.8,1611.4 L1246.8,1616.4 Q1246.8,1619.8 1250.2,1619.8 L2173.5,1619.8 Q2176.9,1619.8 2176.9,1616.4 L2176.9,728.4 Q2176.9,725.0 2180.3,725.0 L3513.2,725.0 Q3516.6,725.0 3516.6,728.4 L3516.6,733.4" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
+<path d="M1246.8,1611.4 L1246.8,1616.4 Q1246.8,1619.8 1250.2,1619.8 L2169.1,1619.8 Q2172.5,1619.8 2172.5,1616.4 L2172.5,607.3 Q2172.5,603.9 2175.9,603.9 L3513.2,603.9 Q3516.6,603.9 3516.6,607.3 L3516.6,612.3" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
 <path d="M1148.2,1668.6 L1148.2,1682.3 Q1148.2,1685.7 1151.6,1685.7 L1194.1,1685.7 Q1197.5,1685.7 1197.5,1689.1 L1197.5,1698.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1246.8,1668.6 L1246.8,1673.6 Q1246.8,1677.0 1250.2,1677.0 L2177.8,1677.0 Q2181.2,1677.0 2181.2,1673.6 L2181.2,724.4 Q2181.2,721.0 2184.7,721.0 L3546.1,721.0 Q3549.5,721.0 3549.5,724.4 L3549.5,733.4" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
+<path d="M1246.8,1668.6 L1246.8,1673.6 Q1246.8,1677.0 1250.2,1677.0 L2173.5,1677.0 Q2176.9,1677.0 2176.9,1673.6 L2176.9,728.4 Q2176.9,725.0 2180.3,725.0 L3513.2,725.0 Q3516.6,725.0 3516.6,728.4 L3516.6,733.4" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
 <path d="M1148.2,1725.8 L1148.2,1739.5 Q1148.2,1742.9 1151.6,1742.9 L1194.1,1742.9 Q1197.5,1742.9 1197.5,1746.3 L1197.5,1756.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1246.8,1725.8 L1246.8,1730.8 Q1246.8,1734.2 1250.2,1734.2 L2182.2,1734.2 Q2185.7,1734.2 2185.7,1730.8 L2185.7,785.6 Q2185.7,782.2 2189.1,782.2 L3513.2,782.2 Q3516.6,782.2 3516.6,785.6 L3516.6,790.6" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
+<path d="M1246.8,1725.8 L1246.8,1730.8 Q1246.8,1734.2 1250.2,1734.2 L2177.8,1734.2 Q2181.2,1734.2 2181.2,1730.8 L2181.2,724.4 Q2181.2,721.0 2184.7,721.0 L3546.1,721.0 Q3549.5,721.0 3549.5,724.4 L3549.5,733.4" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
+<path d="M1148.2,1783.0 L1148.2,1796.7 Q1148.2,1800.1 1151.6,1800.1 L1194.1,1800.1 Q1197.5,1800.1 1197.5,1803.5 L1197.5,1813.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M1246.8,1783.0 L1246.8,1788.0 Q1246.8,1791.4 1250.2,1791.4 L2182.2,1791.4 Q2185.7,1791.4 2185.7,1788.0 L2185.7,785.6 Q2185.7,782.2 2189.1,782.2 L3513.2,782.2 Q3516.6,782.2 3516.6,785.6 L3516.6,790.6" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
 <path d="M2634.0,831.0 L2634.0,861.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M2634.0,894.9 L2634.0,925.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M2634.0,952.1 L2634.0,982.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
@@ -146,19 +147,19 @@
 <path d="M3734.1,168.2 L3734.1,198.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M3734.1,282.6 L3734.1,312.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M3734.1,339.8 L3734.1,370.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1197.5,1090.0 L1197.5,1120.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1197.5,1153.9 L1197.5,1184.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M1197.5,1147.2 L1197.5,1177.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,1211.1 L1197.5,1241.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,1268.3 L1197.5,1298.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,1325.5 L1197.5,1355.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,1382.7 L1197.5,1413.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,1439.9 L1197.5,1470.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M1197.5,1497.1 L1197.5,1527.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M602.0,817.5 L602.0,831.2 Q602.0,834.6 598.6,834.6 L437.2,834.6 Q433.8,834.6 433.8,838.0 L433.8,847.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M433.8,881.4 L433.8,911.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M483.2,938.6 L483.2,952.3 Q483.2,955.7 479.8,955.7 L437.2,955.7 Q433.8,955.7 433.8,959.1 L433.8,968.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M384.4,938.6 L384.4,952.3 Q384.4,955.7 381.1,955.7 L269.0,955.7 Q265.6,955.7 265.6,959.1 L265.6,968.9" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
 <path d="M265.6,1002.5 L265.6,1032.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1197.5,1783.0 L1197.5,1788.0 Q1197.5,1791.4 1200.9,1791.4 L2186.7,1791.4 Q2190.1,1791.4 2190.1,1788.0 L2190.1,900.0 Q2190.1,896.6 2193.5,896.6 L3681.3,896.6 Q3684.8,896.6 3684.8,900.0 L3684.8,905.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-ok)"/>
+<path d="M1197.5,1840.2 L1197.5,1845.2 Q1197.5,1848.6 1200.9,1848.6 L2186.7,1848.6 Q2190.1,1848.6 2190.1,1845.2 L2190.1,900.0 Q2190.1,896.6 2193.5,896.6 L3681.3,896.6 Q3684.8,896.6 3684.8,900.0 L3684.8,905.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-ok)"/>
 <path d="M3565.9,703.1 L3565.9,727.3 Q3565.9,730.7 3569.3,730.7 L3681.3,730.7 Q3684.8,730.7 3684.8,734.1 L3684.8,847.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M3565.9,817.5 L3565.9,831.2 Q3565.9,834.6 3569.3,834.6 L3730.7,834.6 Q3734.1,834.6 3734.1,838.0 L3734.1,847.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M384.4,639.2 L384.4,652.9 Q384.4,656.3 387.8,656.3 L430.4,656.3 Q433.8,656.3 433.8,659.7 L433.8,669.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
@@ -391,34 +392,36 @@
 <text x="1197.5" y="964.6500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Reorder stereo first (VR)</tspan></text>
 <rect x="1127.0" y="1005.9" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1197.5" y="1021.85" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Drop chapter data (VR)</tspan></text>
-<rect x="1127.0" y="1063.1" width="141" height="26.9" rx="5" fill="#2E7D32" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1197.5" y="1079.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFFFF"><tspan x="1197.5" dy="0">Execute FFmpeg (VR)</tspan></text>
-<rect x="1127.0" y="1120.3" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1197.5" y="1139.6" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Reorder remux (VR)</tspan></text>
-<rect x="1127.0" y="1184.2" width="141" height="26.9" rx="5" fill="#A5D6A7" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1197.5" y="1200.15" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Begin reorder remux (VR)</tspan></text>
-<rect x="1127.0" y="1241.4" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1197.5" y="1257.3500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Remove data streams (VR, pass …</tspan></text>
+<rect x="1127.0" y="1063.1" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1197.5" y="1079.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Remove data streams (VR)</tspan></text>
+<rect x="1127.0" y="1120.3" width="141" height="26.9" rx="5" fill="#2E7D32" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1197.5" y="1136.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFFFF"><tspan x="1197.5" dy="0">Execute FFmpeg (VR)</tspan></text>
+<rect x="1127.0" y="1177.5" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1197.5" y="1196.8" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Reorder remux (VR)</tspan></text>
+<rect x="1127.0" y="1241.4" width="141" height="26.9" rx="5" fill="#A5D6A7" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1197.5" y="1257.3500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Begin reorder remux (VR)</tspan></text>
 <rect x="1127.0" y="1298.6" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1197.5" y="1314.55" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Reorder stereo first (VR, pass…</tspan></text>
+<text x="1197.5" y="1314.55" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Remove data streams (VR, pass …</tspan></text>
 <rect x="1127.0" y="1355.8" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1197.5" y="1371.75" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Set: hvc1 + faststart (VR remu…</tspan></text>
-<rect x="1127.0" y="1413.0" width="141" height="26.9" rx="5" fill="#2E7D32" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1197.5" y="1428.95" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFFFF"><tspan x="1197.5" dy="0">Execute reorder remux (VR)</tspan></text>
-<rect x="1127.0" y="1470.1" width="141" height="26.9" rx="5" fill="#FFF176" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1197.5" y="1486.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Check: file size ratio (VR)</tspan></text>
+<text x="1197.5" y="1371.75" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Reorder stereo first (VR, pass…</tspan></text>
+<rect x="1127.0" y="1413.0" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1197.5" y="1428.95" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Set: hvc1 + faststart (VR remu…</tspan></text>
+<rect x="1127.0" y="1470.1" width="141" height="26.9" rx="5" fill="#2E7D32" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1197.5" y="1486.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFFFF"><tspan x="1197.5" dy="0">Execute reorder remux (VR)</tspan></text>
 <rect x="1127.0" y="1527.3" width="141" height="26.9" rx="5" fill="#FFF176" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1197.5" y="1543.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Check: duration ratio (VR)</tspan></text>
-<rect x="1127.0" y="1756.1" width="141" height="26.9" rx="5" fill="#EF5350" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1197.5" y="1772.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFFFF"><tspan x="1197.5" dy="0">Replace original file (VR)</tspan></text>
+<text x="1197.5" y="1543.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Check: file size ratio (VR)</tspan></text>
+<rect x="1127.0" y="1584.5" width="141" height="26.9" rx="5" fill="#FFF176" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1197.5" y="1600.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Check: duration ratio (VR)</tspan></text>
+<rect x="1127.0" y="1813.3" width="141" height="26.9" rx="5" fill="#EF5350" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1197.5" y="1829.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFFFF"><tspan x="1197.5" dy="0">Replace original file (VR)</tspan></text>
 <rect x="3663.6" y="726.7" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="3734.1" y="742.6500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Auto-accept?</tspan></text>
-<rect x="1127.0" y="1698.9" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1197.5" y="1714.8500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Auto-accept? (VR)</tspan></text>
-<rect x="1127.0" y="1584.5" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1197.5" y="1600.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Guard: has video? (VR)</tspan></text>
+<rect x="1127.0" y="1756.1" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1197.5" y="1772.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Auto-accept? (VR)</tspan></text>
 <rect x="1127.0" y="1641.7" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1197.5" y="1657.65" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Guard: has audio? (VR)</tspan></text>
+<text x="1197.5" y="1657.65" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Guard: has video? (VR)</tspan></text>
+<rect x="1127.0" y="1698.9" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1197.5" y="1714.8500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Guard: has audio? (VR)</tspan></text>
 <rect x="3495.4" y="790.6" width="141" height="26.9" rx="5" fill="#FF8A65" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="3565.9" y="806.5500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3565.9" dy="0">Await acceptance</tspan></text>
 <rect x="1127.0" y="491.2" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
@@ -429,36 +432,36 @@
 <text x="1365.7" y="564.35" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1365.7" dy="0">Cap: VR 25 Mbps</tspan></text>
 <rect x="1127.0" y="434.0" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1197.5" y="449.95" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Check: already HEVC? (VR)</tspan></text>
-<rect x="10" y="1629" width="11" height="11" rx="2" fill="#90CAF9" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="26" y="1639" font-family="monospace" font-size="10" fill="#444">Input</text>
-<rect x="10" y="1644" width="11" height="11" rx="2" fill="#CE93D8" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="26" y="1654" font-family="monospace" font-size="10" fill="#444">Config</text>
-<rect x="10" y="1659" width="11" height="11" rx="2" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="26" y="1669" font-family="monospace" font-size="10" fill="#444">Check</text>
-<rect x="10" y="1674" width="11" height="11" rx="2" fill="#A5D6A7" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="26" y="1684" font-family="monospace" font-size="10" fill="#444">FFmpeg cmd</text>
-<rect x="10" y="1689" width="11" height="11" rx="2" fill="#66BB6A" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="26" y="1699" font-family="monospace" font-size="10" fill="#444">Encode</text>
-<rect x="10" y="1704" width="11" height="11" rx="2" fill="#2E7D32" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="26" y="1714" font-family="monospace" font-size="10" fill="#444">Execute</text>
-<rect x="10" y="1719" width="11" height="11" rx="2" fill="#FFF176" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="26" y="1729" font-family="monospace" font-size="10" fill="#444">Validate</text>
-<rect x="10" y="1734" width="11" height="11" rx="2" fill="#EF5350" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="26" y="1744" font-family="monospace" font-size="10" fill="#444">Replace</text>
-<rect x="10" y="1749" width="11" height="11" rx="2" fill="#FF8A65" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="26" y="1759" font-family="monospace" font-size="10" fill="#444">Review</text>
-<rect x="10" y="1764" width="11" height="11" rx="2" fill="#4FC3F7" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="26" y="1774" font-family="monospace" font-size="10" fill="#444">Notify</text>
-<rect x="10" y="1779" width="11" height="11" rx="2" fill="#B0BEC5" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="26" y="1789" font-family="monospace" font-size="10" fill="#444">Error</text>
-<rect x="10" y="1794" width="11" height="11" rx="2" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.5"/>
-<text x="26" y="1804" font-family="monospace" font-size="10" fill="#444">Comment</text>
-<line x1="10" y1="1564" x2="30" y2="1564" stroke="#66BB6A" stroke-width="2"/>
-<text x="34" y="1569" font-family="monospace" font-size="10" fill="#444">Yes / Pass</text>
-<line x1="10" y1="1579" x2="30" y2="1579" stroke="#EF5350" stroke-width="2"/>
-<text x="34" y="1584" font-family="monospace" font-size="10" fill="#444">No / Fail</text>
-<line x1="10" y1="1594" x2="30" y2="1594" stroke="#90A4AE" stroke-width="2"/>
-<text x="34" y="1599" font-family="monospace" font-size="10" fill="#444">Error</text>
-<line x1="10" y1="1609" x2="30" y2="1609" stroke="#66BB6A" stroke-width="2" stroke-dasharray="6,3"/>
-<text x="34" y="1614" font-family="monospace" font-size="10" fill="#444">── Cross-section</text>
+<rect x="10" y="1686" width="11" height="11" rx="2" fill="#90CAF9" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="26" y="1696" font-family="monospace" font-size="10" fill="#444">Input</text>
+<rect x="10" y="1701" width="11" height="11" rx="2" fill="#CE93D8" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="26" y="1711" font-family="monospace" font-size="10" fill="#444">Config</text>
+<rect x="10" y="1716" width="11" height="11" rx="2" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="26" y="1726" font-family="monospace" font-size="10" fill="#444">Check</text>
+<rect x="10" y="1731" width="11" height="11" rx="2" fill="#A5D6A7" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="26" y="1741" font-family="monospace" font-size="10" fill="#444">FFmpeg cmd</text>
+<rect x="10" y="1746" width="11" height="11" rx="2" fill="#66BB6A" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="26" y="1756" font-family="monospace" font-size="10" fill="#444">Encode</text>
+<rect x="10" y="1761" width="11" height="11" rx="2" fill="#2E7D32" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="26" y="1771" font-family="monospace" font-size="10" fill="#444">Execute</text>
+<rect x="10" y="1776" width="11" height="11" rx="2" fill="#FFF176" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="26" y="1786" font-family="monospace" font-size="10" fill="#444">Validate</text>
+<rect x="10" y="1791" width="11" height="11" rx="2" fill="#EF5350" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="26" y="1801" font-family="monospace" font-size="10" fill="#444">Replace</text>
+<rect x="10" y="1806" width="11" height="11" rx="2" fill="#FF8A65" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="26" y="1816" font-family="monospace" font-size="10" fill="#444">Review</text>
+<rect x="10" y="1821" width="11" height="11" rx="2" fill="#4FC3F7" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="26" y="1831" font-family="monospace" font-size="10" fill="#444">Notify</text>
+<rect x="10" y="1836" width="11" height="11" rx="2" fill="#B0BEC5" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="26" y="1846" font-family="monospace" font-size="10" fill="#444">Error</text>
+<rect x="10" y="1851" width="11" height="11" rx="2" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.5"/>
+<text x="26" y="1861" font-family="monospace" font-size="10" fill="#444">Comment</text>
+<line x1="10" y1="1621" x2="30" y2="1621" stroke="#66BB6A" stroke-width="2"/>
+<text x="34" y="1626" font-family="monospace" font-size="10" fill="#444">Yes / Pass</text>
+<line x1="10" y1="1636" x2="30" y2="1636" stroke="#EF5350" stroke-width="2"/>
+<text x="34" y="1641" font-family="monospace" font-size="10" fill="#444">No / Fail</text>
+<line x1="10" y1="1651" x2="30" y2="1651" stroke="#90A4AE" stroke-width="2"/>
+<text x="34" y="1656" font-family="monospace" font-size="10" fill="#444">Error</text>
+<line x1="10" y1="1666" x2="30" y2="1666" stroke="#66BB6A" stroke-width="2" stroke-dasharray="6,3"/>
+<text x="34" y="1671" font-family="monospace" font-size="10" fill="#444">── Cross-section</text>
 </svg>
