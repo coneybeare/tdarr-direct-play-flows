@@ -63,3 +63,55 @@ Key constraints that prevent common mistakes:
 - Check that new nodes are added to `col_map_01()` in `scripts/layout_flows.py`.
 - Validate edge wiring: every node should have incoming edges (except `inputFile` and `onFlowError`).
 - Consider the interaction between FFmpeg command-build plugins (they share state within a single pipeline).
+
+## Tdarr V2 API Reference
+
+All DB operations go through `POST /api/v2/cruddb`. The payload is always `{"data": {...}}`.
+
+### Query all files
+
+```json
+{
+  "data": {
+    "collection": "FileJSONDB",
+    "mode": "getAll",
+    "docFilter": {}
+  }
+}
+```
+
+- Returns a **dict** keyed by file path (`{"/path/to/file.mp4": {...}, ...}`), not a list.
+- `docFilter` is broken server-side — always returns all files regardless of filter. Filter client-side.
+- File `_id` field equals the file path (same as the dict key).
+
+### Update a file record
+
+```json
+{
+  "data": {
+    "collection": "FileJSONDB",
+    "mode": "update",
+    "docID": "<file _id>",
+    "obj": { "TranscodeDecisionMaker": "Queued" }
+  }
+}
+```
+
+**CRITICAL:** The field payload key must be `obj`, NOT `update`. Using `update` returns HTTP 200 but silently ignores the change. Reference: https://github.com/HaveAGitGat/Tdarr/issues/752
+
+### Other endpoints
+
+- `GET /api/v2/status` — returns `{version, uptime, os, isProduction, buildDate}`.
+
+### Analyzing and requeuing files
+
+```bash
+# Analyze processed files on one or more servers
+python3 scripts/analyze_tdarr.py http://HOST:PORT
+
+# Analyze and requeue files that have errors
+python3 scripts/analyze_tdarr.py --requeue http://HOST:PORT
+
+# Dump raw JSON for processed files
+python3 scripts/analyze_tdarr.py --json http://HOST:PORT
+```
