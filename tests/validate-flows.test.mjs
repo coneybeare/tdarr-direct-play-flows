@@ -276,5 +276,16 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('cmd_rmimages:1'), 'cmd_rmattach');
       assert.strictEqual(edgeMap.get('cmd_rmattach:1'), 'cmt_nvenc');
     });
+
+    test('ffmpegCommandRemoveStreamByProperty nodes use includes condition', () => {
+      // All RemoveStreamByProperty nodes must use "includes" — "equals" silently fails
+      const removeNodes = flow.flowPlugins.filter(
+        (p) => p.pluginName === 'ffmpegCommandRemoveStreamByProperty'
+      );
+      for (const node of removeNodes) {
+        assert.strictEqual(node.inputsDB.condition, 'includes',
+          `${node.id} must use "includes" — "equals" silently fails on ffmpegCommandRemoveStreamByProperty`);
+      }
+    });
   });
 }
