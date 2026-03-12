@@ -1155,7 +1155,7 @@
       "inputsDB": {
         "propertyToCheck": "codec_name",
         "valuesToRemove": "eac3",
-        "condition": "equals"
+        "condition": "includes"
       },
       "fpEnabled": true
     },
