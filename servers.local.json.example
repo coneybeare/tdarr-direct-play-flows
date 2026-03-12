@@ -5,8 +5,14 @@
       "host": "http://<HOST_A>:8266",
       "flow_id": "<FLOW_ID_A>",
       "overrides": {
-        "var_enable_arr": { "value": "true" },
+        "var_rm_commentary": { "value": "true" },
         "var_enable_plex": { "value": "false" },
+        "var_enable_arr": { "value": "true" },
+        "var_auto_accept": { "value": "true" },
+        "web_plex": {
+          "url": "http://<PLEX_HOST>:32400/library/sections/all/refresh?X-Plex-Token=<PLEX_TOKEN>",
+          "method": "GET"
+        },
         "arr_notify": {
           "arr": "radarr",
           "arr_host": "http://<RADARR_HOST>:7878",
@@ -19,8 +25,14 @@
       "host": "http://<HOST_B>:8266",
       "flow_id": "<FLOW_ID_B>",
       "overrides": {
-        "var_enable_arr": { "value": "true" },
+        "var_rm_commentary": { "value": "true" },
         "var_enable_plex": { "value": "false" },
+        "var_enable_arr": { "value": "true" },
+        "var_auto_accept": { "value": "true" },
+        "web_plex": {
+          "url": "http://<PLEX_HOST>:32400/library/sections/all/refresh?X-Plex-Token=<PLEX_TOKEN>",
+          "method": "GET"
+        },
         "arr_notify": {
           "arr": "sonarr",
           "arr_host": "http://<SONARR_HOST>:8989",
