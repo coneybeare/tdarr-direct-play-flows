@@ -4,12 +4,25 @@
 Usage:
     python3 scripts/analyze_tdarr.py HOST [HOST ...]
     python3 scripts/analyze_tdarr.py --api-key SECRET HOST [HOST ...]
+    python3 scripts/analyze_tdarr.py --requeue HOST [HOST ...]
 
 Examples:
     python3 scripts/analyze_tdarr.py http://localhost:8265
     python3 scripts/analyze_tdarr.py http://localhost:8265 http://localhost:8265
     python3 scripts/analyze_tdarr.py --queued http://localhost:8265
     python3 scripts/analyze_tdarr.py --status all http://localhost:8265
+    python3 scripts/analyze_tdarr.py --requeue http://localhost:8265
+
+Tdarr API notes:
+    - POST /api/v2/cruddb is the main endpoint for all DB operations.
+    - FileJSONDB getAll returns a dict keyed by file path, NOT a list.
+      docFilter is broken server-side; always returns all files regardless
+      of filter — filter client-side instead.
+    - To update a file record, use mode "update" with the "obj" field
+      (NOT "update"). Using "update" instead of "obj" silently ignores
+      the change. Reference: https://github.com/HaveAGitGat/Tdarr/issues/752
+    - File _id equals the file path (the dict key from getAll).
+    - GET /api/v2/status returns server version, uptime, and OS info.
 """
 
 from __future__ import annotations
@@ -50,24 +63,64 @@ def get_status(host: str, api_key: str | None = None) -> dict:
 
 
 def get_all_files(host: str, api_key: str | None = None) -> list[dict]:
-    """Fetch all files from the FileJSONDB collection."""
+    """Fetch all files from the FileJSONDB collection.
+
+    Tdarr returns a dict keyed by file path (not a list).  The docFilter
+    parameter is broken server-side and always returns everything, so we
+    fetch all and let callers filter client-side.
+    """
     payload = {
         "data": {
             "collection": "FileJSONDB",
             "mode": "getAll",
-            "docID": "",
+            "docFilter": {},
         }
     }
     resp = _post(f"{host}/api/v2/cruddb", payload, api_key)
     if isinstance(resp, list):
         return resp
     if isinstance(resp, dict):
+        # Tdarr returns {file_path: file_record, ...} — extract values
+        first = next(iter(resp.values()), None) if resp else None
+        if first and isinstance(first, dict) and ("file" in first or "_id" in first):
+            return list(resp.values())
+        # Fallback: check for nested list keys
         for key in ("docs", "data", "files", "results"):
             if key in resp and isinstance(resp[key], list):
                 return resp[key]
         if "_id" in resp:
             return [resp]
     return []
+
+
+def requeue_file(
+    host: str, file_id: str, api_key: str | None = None
+) -> bool:
+    """Set a file's TranscodeDecisionMaker to 'Queued'.
+
+    Uses the cruddb update mode with the ``obj`` field (not ``update``).
+    The ``update`` field silently ignores changes — ``obj`` is required.
+    Reference: https://github.com/HaveAGitGat/Tdarr/issues/752
+    """
+    payload = {
+        "data": {
+            "collection": "FileJSONDB",
+            "mode": "update",
+            "docID": file_id,
+            "obj": {"TranscodeDecisionMaker": "Queued"},
+        }
+    }
+    url = f"{host}/api/v2/cruddb"
+    data = json.dumps(payload).encode()
+    headers = {"Content-Type": "application/json"}
+    if api_key:
+        headers["x-api-key"] = api_key
+    req = urllib.request.Request(url, data=data, headers=headers, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            return resp.status == 200
+    except urllib.error.URLError:
+        return False
 
 
 # ── Analysis ──────────────────────────────────────────────────────────────────
@@ -387,6 +440,11 @@ def main() -> None:
     parser.add_argument(
         "--json", action="store_true", help="Output raw file JSON and exit"
     )
+    parser.add_argument(
+        "--requeue",
+        action="store_true",
+        help="Requeue files that have errors (set TranscodeDecisionMaker to 'Queued')",
+    )
     args = parser.parse_args()
 
     grand = {
@@ -461,6 +519,21 @@ def main() -> None:
         counts = print_host_report(reports, host, show_clean=args.clean)
         for k in grand:
             grand[k] += counts[k]
+
+        # Requeue files with errors
+        if args.requeue:
+            error_reports = [
+                r for r in reports if any(i.severity == "error" for i in r.issues)
+            ]
+            if error_reports:
+                print(f"\n  Requeuing {len(error_reports)} file(s) with errors...")
+                for r in error_reports:
+                    file_id = r.path
+                    ok = requeue_file(host, file_id, args.api_key)
+                    status_str = "OK" if ok else "FAILED"
+                    print(f"    [{status_str}] {r.name}")
+            else:
+                print("\n  No files with errors to requeue.")
 
     if len(args.hosts) > 1 and not args.json:
         print(f"\n{'=' * 80}")
