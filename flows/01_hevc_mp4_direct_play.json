@@ -775,7 +775,7 @@
       "fpEnabled": true
     },
     {
-      "name": "Set: hvc1 + faststart",
+      "name": "Set: hvc1 + 10bit + faststart",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandCustomArguments",
       "version": "1.0.0",
@@ -786,7 +786,7 @@
       },
       "inputsDB": {
         "inputArguments": "",
-        "outputArguments": "-tag:v hvc1 -movflags +faststart"
+        "outputArguments": "-tag:v hvc1 -movflags +faststart -profile:v main10"
       },
       "fpEnabled": true
     },
@@ -1559,7 +1559,7 @@
       "fpEnabled": true
     },
     {
-      "name": "Encode: HEVC (VR, NVENC, QP20)",
+      "name": "Encode: HEVC (VR, NVENC)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandSetVideoEncoder",
       "version": "1.0.0",
@@ -1577,23 +1577,23 @@
         "hardwareEncoding": "true",
         "hardwareType": "nvenc",
         "hardwareDecoding": "true",
-        "forceEncoding": "true"
+        "forceEncoding": "false"
       },
       "fpEnabled": true
     },
     {
-      "name": "Set: hvc1 + faststart (VR)",
+      "name": "Set: hvc1 + 10bit + faststart (VR)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandCustomArguments",
       "version": "1.0.0",
       "id": "cmd_vr_tags",
       "position": {
         "x": 2270,
-        "y": 1550
+        "y": 1720
       },
       "inputsDB": {
         "inputArguments": "",
-        "outputArguments": "-tag:v hvc1 -movflags +faststart"
+        "outputArguments": "-tag:v hvc1 -movflags +faststart -profile:v main10"
       },
       "fpEnabled": true
     },
@@ -1605,7 +1605,7 @@
       "id": "cmd_vr_aac_eng",
       "position": {
         "x": 2270,
-        "y": 1890
+        "y": 2060
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -1626,7 +1626,7 @@
       "id": "cmd_vr_aac_und",
       "position": {
         "x": 2770,
-        "y": 2400
+        "y": 2570
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -1647,7 +1647,7 @@
       "id": "grd_vr_dup_und",
       "position": {
         "x": 1770,
-        "y": 2060
+        "y": 2230
       },
       "inputsDB": {
         "streamType": "audio",
@@ -1665,7 +1665,7 @@
       "id": "grd_vr_dup_eng",
       "position": {
         "x": 2770,
-        "y": 2230
+        "y": 2400
       },
       "inputsDB": {
         "streamType": "audio",
@@ -1683,7 +1683,7 @@
       "id": "cmd_vr_rmaudio",
       "position": {
         "x": 2270,
-        "y": 1720
+        "y": 1890
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -1700,7 +1700,7 @@
       "id": "cmd_vr_reorder",
       "position": {
         "x": 2270,
-        "y": 2570
+        "y": 2740
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -1719,12 +1719,25 @@
       "id": "cmd_vr_nochapters",
       "position": {
         "x": 2270,
-        "y": 2740
+        "y": 2910
       },
       "inputsDB": {
         "inputArguments": "",
         "outputArguments": "-map_chapters -1"
       },
+      "fpEnabled": true
+    },
+    {
+      "name": "Remove data streams (VR)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRemoveDataStreams",
+      "version": "1.0.0",
+      "id": "cmd_vr_rmdata",
+      "position": {
+        "x": 2270,
+        "y": 3080
+      },
+      "inputsDB": {},
       "fpEnabled": true
     },
     {
@@ -1735,7 +1748,7 @@
       "id": "ffe_vr",
       "position": {
         "x": 2270,
-        "y": 2910
+        "y": 3250
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1748,7 +1761,7 @@
       "id": "cmt_vr_reorder2",
       "position": {
         "x": 2270,
-        "y": 3080
+        "y": 3420
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1761,7 +1774,7 @@
       "id": "ffs_vr_reorder",
       "position": {
         "x": 2270,
-        "y": 3270
+        "y": 3610
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1774,7 +1787,7 @@
       "id": "cmd_vr_rmdata2",
       "position": {
         "x": 2270,
-        "y": 3440
+        "y": 3780
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1787,7 +1800,7 @@
       "id": "cmd_vr_reorder2",
       "position": {
         "x": 2270,
-        "y": 3610
+        "y": 3950
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -1806,7 +1819,7 @@
       "id": "cmd_vr_faststart2",
       "position": {
         "x": 2270,
-        "y": 3780
+        "y": 4120
       },
       "inputsDB": {
         "inputArguments": "",
@@ -1822,7 +1835,7 @@
       "id": "ffe_vr_reorder",
       "position": {
         "x": 2270,
-        "y": 3950
+        "y": 4290
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1835,7 +1848,7 @@
       "id": "fl_vr_size",
       "position": {
         "x": 2270,
-        "y": 4120
+        "y": 4460
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -1851,7 +1864,7 @@
       "id": "fl_vr_dur",
       "position": {
         "x": 2270,
-        "y": 4290
+        "y": 4630
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1867,7 +1880,7 @@
       "id": "fl_vr_replace",
       "position": {
         "x": 2270,
-        "y": 4970
+        "y": 5310
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1897,7 +1910,7 @@
       "id": "chk_auto_accept_vr",
       "position": {
         "x": 2270,
-        "y": 4800
+        "y": 5140
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1914,7 +1927,7 @@
       "id": "grd_vr_has_video",
       "position": {
         "x": 2270,
-        "y": 4460
+        "y": 4800
       },
       "inputsDB": {
         "streamType": "video",
@@ -1932,7 +1945,7 @@
       "id": "grd_vr_has_audio",
       "position": {
         "x": 2270,
-        "y": 4630
+        "y": 4970
       },
       "inputsDB": {
         "streamType": "audio",
@@ -1963,7 +1976,7 @@
       "id": "chk_vr_br",
       "position": {
         "x": 2270,
-        "y": 1210
+        "y": 1380
       },
       "inputsDB": {
         "unit": "kbps",
@@ -1980,7 +1993,7 @@
       "id": "cmd_vr_cap_low",
       "position": {
         "x": 1770,
-        "y": 1380
+        "y": 1550
       },
       "inputsDB": {
         "inputArguments": "",
@@ -1996,11 +2009,29 @@
       "id": "cmd_vr_cap_high",
       "position": {
         "x": 2770,
-        "y": 1380
+        "y": 1550
       },
       "inputsDB": {
         "inputArguments": "",
         "outputArguments": "-rc vbr -cq 20 -maxrate 25M -bufsize 50M"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Check: already HEVC? (VR)",
+      "sourceRepo": "Community",
+      "pluginName": "checkStreamProperty",
+      "version": "1.0.0",
+      "id": "grd_vr_codec",
+      "position": {
+        "x": 2270,
+        "y": 1210
+      },
+      "inputsDB": {
+        "propertyToCheck": "codec_name",
+        "valuesToMatch": "hevc",
+        "condition": "includes",
+        "streamType": "video"
       },
       "fpEnabled": true
     }
@@ -2772,9 +2803,23 @@
     {
       "source": "cmd_vr_hevc",
       "sourceHandle": "1",
+      "target": "grd_vr_codec",
+      "targetHandle": null,
+      "id": "e_vr_hevc_grd"
+    },
+    {
+      "source": "grd_vr_codec",
+      "sourceHandle": "1",
+      "target": "cmd_vr_tags",
+      "targetHandle": null,
+      "id": "e_vr_grd_tags"
+    },
+    {
+      "source": "grd_vr_codec",
+      "sourceHandle": "2",
       "target": "chk_vr_br",
       "targetHandle": null,
-      "id": "e_vr_hevc_tags"
+      "id": "e_vr_grd_br"
     },
     {
       "source": "cmd_vr_tags",
@@ -2842,9 +2887,16 @@
     {
       "source": "cmd_vr_nochapters",
       "sourceHandle": "1",
+      "target": "cmd_vr_rmdata",
+      "targetHandle": null,
+      "id": "e_vr_nochapters_rmdata"
+    },
+    {
+      "source": "cmd_vr_rmdata",
+      "sourceHandle": "1",
       "target": "ffe_vr",
       "targetHandle": null,
-      "id": "e_vr_nochapters_exec"
+      "id": "e_vr_rmdata_exec"
     },
     {
       "source": "fl_vr_size",

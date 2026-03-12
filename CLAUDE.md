@@ -4,7 +4,7 @@
 
 This project provides a set of Tdarr flows optimized for direct play of HEVC/MP4 files with stereo AAC 2.0 and EAC3 5.1 surround sound. It includes GPU-accelerated encoding with NVENC, software fallback, health checks, duration validation, and optional Plex/arr notifications.
 
-- Primary objective: Ensure optimal direct play compatibility on iOS/plex/video.js clients and maintain high quality for HEVC/MP4 media files.
+- Primary objective: Ensure optimal direct play compatibility on iOS/Mac/Plex/Oculus Rift/video.js clients and maintain high quality for HEVC/MP4 media files.
 
 ## Git Workflow — CRITICAL
 
@@ -35,6 +35,20 @@ python3 scripts/layout_flows.py
 ```
 
 Then commit both the updated flow JSON and `images/01_hevc_mp4_direct_play.svg`.
+
+## Deploying Flows to Tdarr Servers
+
+After merging a PR, deploy the updated flow to all Tdarr servers:
+
+```
+python3 scripts/deploy_flow.py
+```
+
+Options:
+- `--dry-run` — show overrides without deploying
+- `--server "Server A"` — deploy to a single server
+
+The script reads `servers.local.json` (gitignored) for server hosts, flow IDs, and per-server overrides (e.g. Radarr vs Sonarr notification config). Copy `servers.local.json.example` to get started.
 
 ## PR Review Workflow
 
@@ -97,7 +111,7 @@ All DB operations go through `POST /api/v2/cruddb`. The payload is always `{"dat
 }
 ```
 
-**CRITICAL:** The field payload key must be `obj`, NOT `update`. Using `update` returns HTTP 200 but silently ignores the change. Reference: https://github.com/HaveAGitGat/Tdarr/issues/752
+**CRITICAL:** The field payload key must be `obj`, NOT `update`. Using `update` returns HTTP 200 but silently ignores the change. Reference: <https://github.com/HaveAGitGat/Tdarr/issues/752>
 
 ### Other endpoints
 

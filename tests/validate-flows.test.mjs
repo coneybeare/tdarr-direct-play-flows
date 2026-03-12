@@ -277,6 +277,30 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('cmd_rmattach:1'), 'cmt_nvenc');
     });
 
+    test('encode tag nodes include -profile:v main10 for 10-bit output', () => {
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      // Normal path (shared by NVENC and SW encoders)
+      const cmdTags = pluginMap.get('cmd_tags');
+      assert.ok(cmdTags, 'Missing node cmd_tags');
+      assert.ok(cmdTags.inputsDB.outputArguments.includes('-profile:v main10'),
+        'cmd_tags must include -profile:v main10 for 10-bit HEVC output');
+
+      // VR path
+      const vrTags = pluginMap.get('cmd_vr_tags');
+      assert.ok(vrTags, 'Missing node cmd_vr_tags');
+      assert.ok(vrTags.inputsDB.outputArguments.includes('-profile:v main10'),
+        'cmd_vr_tags must include -profile:v main10 for 10-bit HEVC output');
+    });
+
+    test('VR encoder does not force re-encoding of existing HEVC', () => {
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+      const vrHevc = pluginMap.get('cmd_vr_hevc');
+      assert.ok(vrHevc, 'Missing node cmd_vr_hevc');
+      assert.strictEqual(vrHevc.inputsDB.forceEncoding, 'false',
+        'cmd_vr_hevc forceEncoding must be "false" — 8K HEVC files exceed T400 VRAM and only need retagging');
+    });
+
     test('ffmpegCommandRemoveStreamByProperty nodes use includes condition', () => {
       // All RemoveStreamByProperty nodes must use "includes" — "equals" silently fails
       const removeNodes = flow.flowPlugins.filter(
