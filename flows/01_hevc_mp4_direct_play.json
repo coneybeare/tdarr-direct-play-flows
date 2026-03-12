@@ -775,7 +775,7 @@
       "fpEnabled": true
     },
     {
-      "name": "Set: hvc1 + faststart",
+      "name": "Set: hvc1 + 10bit + faststart",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandCustomArguments",
       "version": "1.0.0",
@@ -1582,7 +1582,7 @@
       "fpEnabled": true
     },
     {
-      "name": "Set: hvc1 + faststart (VR)",
+      "name": "Set: hvc1 + 10bit + faststart (VR)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandCustomArguments",
       "version": "1.0.0",
