@@ -110,16 +110,10 @@ def requeue_file(
             "obj": {"TranscodeDecisionMaker": "Queued"},
         }
     }
-    url = f"{host}/api/v2/cruddb"
-    data = json.dumps(payload).encode()
-    headers = {"Content-Type": "application/json"}
-    if api_key:
-        headers["x-api-key"] = api_key
-    req = urllib.request.Request(url, data=data, headers=headers, method="POST")
     try:
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            return resp.status == 200
-    except urllib.error.URLError:
+        _post(f"{host}/api/v2/cruddb", payload, api_key)
+        return True
+    except (urllib.error.URLError, Exception):
         return False
 
 
