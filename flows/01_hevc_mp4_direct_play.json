@@ -1160,7 +1160,7 @@
       "fpEnabled": true
     },
     {
-      "name": "Set: faststart (pass 2)",
+      "name": "Set: hvc1 + faststart (remux)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandCustomArguments",
       "version": "1.0.0",
@@ -1171,7 +1171,7 @@
       },
       "inputsDB": {
         "inputArguments": "",
-        "outputArguments": "-movflags +faststart"
+        "outputArguments": "-tag:v hvc1 -movflags +faststart"
       },
       "fpEnabled": true
     },
@@ -1799,6 +1799,22 @@
       "fpEnabled": true
     },
     {
+      "name": "Set: hvc1 + faststart (VR remux)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandCustomArguments",
+      "version": "1.0.0",
+      "id": "cmd_vr_faststart2",
+      "position": {
+        "x": 2270,
+        "y": 3780
+      },
+      "inputsDB": {
+        "inputArguments": "",
+        "outputArguments": "-tag:v hvc1 -movflags +faststart"
+      },
+      "fpEnabled": true
+    },
+    {
       "name": "Execute reorder remux (VR)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandExecute",
@@ -1806,7 +1822,7 @@
       "id": "ffe_vr_reorder",
       "position": {
         "x": 2270,
-        "y": 3780
+        "y": 3950
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1819,7 +1835,7 @@
       "id": "fl_vr_size",
       "position": {
         "x": 2270,
-        "y": 3950
+        "y": 4120
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -1835,7 +1851,7 @@
       "id": "fl_vr_dur",
       "position": {
         "x": 2270,
-        "y": 4120
+        "y": 4290
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1851,7 +1867,7 @@
       "id": "fl_vr_replace",
       "position": {
         "x": 2270,
-        "y": 4800
+        "y": 4970
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1881,7 +1897,7 @@
       "id": "chk_auto_accept_vr",
       "position": {
         "x": 2270,
-        "y": 4630
+        "y": 4800
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1898,7 +1914,7 @@
       "id": "grd_vr_has_video",
       "position": {
         "x": 2270,
-        "y": 4290
+        "y": 4460
       },
       "inputsDB": {
         "streamType": "video",
@@ -1916,7 +1932,7 @@
       "id": "grd_vr_has_audio",
       "position": {
         "x": 2270,
-        "y": 4460
+        "y": 4630
       },
       "inputsDB": {
         "streamType": "audio",
@@ -2987,9 +3003,16 @@
     {
       "source": "cmd_vr_reorder2",
       "sourceHandle": "1",
+      "target": "cmd_vr_faststart2",
+      "targetHandle": null,
+      "id": "e_vr_reorder2_faststart2"
+    },
+    {
+      "source": "cmd_vr_faststart2",
+      "sourceHandle": "1",
       "target": "ffe_vr_reorder",
       "targetHandle": null,
-      "id": "e_vr_reorder2_exec"
+      "id": "e_vr_faststart2_exec"
     },
     {
       "source": "ffe_vr_reorder",

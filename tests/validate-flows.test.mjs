@@ -245,6 +245,22 @@ for (const file of flowFiles) {
         'cmd_faststart2 must include +faststart');
     });
 
+    test('remux passes include hvc1 tag', () => {
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      // Normal path remux
+      const faststart2 = pluginMap.get('cmd_faststart2');
+      assert.ok(faststart2, 'Missing node cmd_faststart2');
+      assert.ok(faststart2.inputsDB.outputArguments.includes('-tag:v hvc1'),
+        'cmd_faststart2 must include -tag:v hvc1 to prevent FFmpeg defaulting to hev1');
+
+      // VR path remux
+      const vrFaststart2 = pluginMap.get('cmd_vr_faststart2');
+      assert.ok(vrFaststart2, 'Missing node cmd_vr_faststart2');
+      assert.ok(vrFaststart2.inputsDB.outputArguments.includes('-tag:v hvc1'),
+        'cmd_vr_faststart2 must include -tag:v hvc1 to prevent FFmpeg defaulting to hev1');
+    });
+
     test('attachments are stripped in first pipeline', () => {
       const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
       const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
