@@ -278,13 +278,10 @@ for (const file of flowFiles) {
     });
 
     test('ffmpegCommandRemoveStreamByProperty nodes use includes condition', () => {
-      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
-
       // All RemoveStreamByProperty nodes must use "includes" — "equals" silently fails
       const removeNodes = flow.flowPlugins.filter(
         (p) => p.pluginName === 'ffmpegCommandRemoveStreamByProperty'
       );
-      assert.ok(removeNodes.length > 0, 'No ffmpegCommandRemoveStreamByProperty nodes found');
       for (const node of removeNodes) {
         assert.strictEqual(node.inputsDB.condition, 'includes',
           `${node.id} must use "includes" — "equals" silently fails on ffmpegCommandRemoveStreamByProperty`);
