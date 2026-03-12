@@ -907,6 +907,7 @@ VR_NODES_01 = {
     "cmt_vr": VR_01, "ffs_vr": VR_01,
     "cmd_vr_mp4": VR_01, "cmd_vr_rmsub": VR_01, "cmd_vr_rmimages": VR_01,
     "cmd_vr_hevc": VR_01,
+    "grd_vr_codec": VR_01,
     "chk_vr_br": VR_01, "cmd_vr_cap_low": VR_01 - 500, "cmd_vr_cap_high": VR_01 + 500,
     "cmd_vr_tags": VR_01,
     "cmd_vr_aac_eng": VR_01, "grd_vr_dup_und": VR_01 - 500, "grd_vr_dup_eng": VR_01 + 500,
