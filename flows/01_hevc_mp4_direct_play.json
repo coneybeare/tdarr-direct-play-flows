@@ -786,7 +786,7 @@
       },
       "inputsDB": {
         "inputArguments": "",
-        "outputArguments": "-tag:v hvc1 -movflags +faststart"
+        "outputArguments": "-tag:v hvc1 -movflags +faststart -profile:v main10"
       },
       "fpEnabled": true
     },
@@ -1559,7 +1559,7 @@
       "fpEnabled": true
     },
     {
-      "name": "Encode: HEVC (VR, NVENC, QP20)",
+      "name": "Encode: HEVC (VR, NVENC)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandSetVideoEncoder",
       "version": "1.0.0",
@@ -1577,7 +1577,7 @@
         "hardwareEncoding": "true",
         "hardwareType": "nvenc",
         "hardwareDecoding": "true",
-        "forceEncoding": "true"
+        "forceEncoding": "false"
       },
       "fpEnabled": true
     },
@@ -1593,7 +1593,7 @@
       },
       "inputsDB": {
         "inputArguments": "",
-        "outputArguments": "-tag:v hvc1 -movflags +faststart"
+        "outputArguments": "-tag:v hvc1 -movflags +faststart -profile:v main10"
       },
       "fpEnabled": true
     },
