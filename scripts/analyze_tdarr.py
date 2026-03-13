@@ -126,7 +126,7 @@ def delete_file(
 
     Returns (success, message) so callers can report what went wrong.
     """
-    payload = {"data": {"file": file_id}}
+    payload = {"data": {"file": {"_id": file_id}}}
     try:
         _post(f"{host}/api/v2/delete-file", payload, api_key)
         return True, "OK"
