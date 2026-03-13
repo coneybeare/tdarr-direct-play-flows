@@ -121,14 +121,21 @@ def requeue_file(
 
 def delete_file(
     host: str, file_id: str, api_key: str | None = None
-) -> bool:
-    """Delete a file from disk and remove it from the Tdarr database."""
+) -> tuple[bool, str]:
+    """Delete a file from disk and remove it from the Tdarr database.
+
+    Returns (success, message) so callers can report what went wrong.
+    """
     payload = {"data": {"file": file_id}}
     try:
         _post(f"{host}/api/v2/delete-file", payload, api_key)
-        return True
-    except (urllib.error.URLError, Exception):
-        return False
+        return True, "OK"
+    except urllib.error.HTTPError as e:
+        return False, f"HTTP {e.code}: {e.reason}"
+    except urllib.error.URLError as e:
+        return False, f"Connection error: {e.reason}"
+    except Exception as e:
+        return False, str(e)
 
 
 # ── Analysis ──────────────────────────────────────────────────────────────────
@@ -563,9 +570,23 @@ def main() -> None:
                 skipped = 0
                 for ef in error_files:
                     file_id = ef.get("_id") or ef.get("file", "")
+                    if not file_id:
+                        print("\n    (unknown file — no _id or file path, skipping)")
+                        skipped += 1
+                        continue
                     short = PurePosixPath(file_id).name
-                    codec = ef.get("video_codec_name", "?")
-                    res = ef.get("video_resolution", "?")
+                    # Derive display fields from ffProbeData with raw-field fallbacks
+                    probe = ef.get("ffProbeData") or {}
+                    probe_streams = probe.get("streams") or []
+                    vs = next(
+                        (s for s in probe_streams if s.get("codec_type") == "video"),
+                        {},
+                    )
+                    codec = vs.get("codec_name") or ef.get("video_codec_name", "?")
+                    res = (
+                        ef.get("video_resolution")
+                        or f"{vs.get('width', '?')}x{vs.get('height', '?')}"
+                    )
                     size_mb = ef.get("file_size", 0)
                     print(f"\n    {short}")
                     print(f"      {codec} {res} | {size_mb:.1f} MB")
@@ -573,13 +594,14 @@ def main() -> None:
                         answer = input("      Delete from disk and DB? [y/N] ").strip().lower()
                     except (EOFError, KeyboardInterrupt):
                         print("\n  Aborted.")
-                        break
+                        sys.exit(1)
                     if answer == "y":
-                        ok = delete_file(host, file_id, args.api_key)
-                        status_str = "DELETED" if ok else "FAILED"
-                        print(f"      [{status_str}]")
+                        ok, msg = delete_file(host, file_id, args.api_key)
                         if ok:
+                            print("      [DELETED]")
                             deleted += 1
+                        else:
+                            print(f"      [FAILED] {msg}")
                     else:
                         print("      [SKIPPED]")
                         skipped += 1
