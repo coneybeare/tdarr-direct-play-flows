@@ -5,6 +5,7 @@ Usage:
     python3 scripts/analyze_tdarr.py HOST [HOST ...]
     python3 scripts/analyze_tdarr.py --api-key SECRET HOST [HOST ...]
     python3 scripts/analyze_tdarr.py --requeue HOST [HOST ...]
+    python3 scripts/analyze_tdarr.py --delete-errors HOST [HOST ...]
 
 Examples:
     python3 scripts/analyze_tdarr.py http://localhost:8265
@@ -12,6 +13,7 @@ Examples:
     python3 scripts/analyze_tdarr.py --queued http://localhost:8265
     python3 scripts/analyze_tdarr.py --status all http://localhost:8265
     python3 scripts/analyze_tdarr.py --requeue http://localhost:8265
+    python3 scripts/analyze_tdarr.py --delete-errors http://localhost:8265
 
 Tdarr API notes:
     - POST /api/v2/cruddb is the main endpoint for all DB operations.
@@ -112,6 +114,18 @@ def requeue_file(
     }
     try:
         _post(f"{host}/api/v2/cruddb", payload, api_key)
+        return True
+    except (urllib.error.URLError, Exception):
+        return False
+
+
+def delete_file(
+    host: str, file_id: str, api_key: str | None = None
+) -> bool:
+    """Delete a file from disk and remove it from the Tdarr database."""
+    payload = {"data": {"file": file_id}}
+    try:
+        _post(f"{host}/api/v2/delete-file", payload, api_key)
         return True
     except (urllib.error.URLError, Exception):
         return False
@@ -439,6 +453,12 @@ def main() -> None:
         action="store_true",
         help="Requeue files that have errors (set TranscodeDecisionMaker to 'Queued')",
     )
+    parser.add_argument(
+        "--delete-errors",
+        action="store_true",
+        help="Delete files that have transcode errors (from disk and DB). "
+        "Prompts for confirmation on each file.",
+    )
     args = parser.parse_args()
 
     grand = {
@@ -528,6 +548,44 @@ def main() -> None:
                     print(f"    [{status_str}] {r.name}")
             else:
                 print("\n  No files with errors to requeue.")
+
+        # Delete files with transcode errors (requires per-file confirmation)
+        if args.delete_errors:
+            error_files = [
+                f
+                for f in files
+                if isinstance(f, dict)
+                and f.get("TranscodeDecisionMaker") == "Transcode error"
+            ]
+            if error_files:
+                print(f"\n  Found {len(error_files)} file(s) with transcode errors:")
+                deleted = 0
+                skipped = 0
+                for ef in error_files:
+                    file_id = ef.get("_id") or ef.get("file", "")
+                    short = PurePosixPath(file_id).name
+                    codec = ef.get("video_codec_name", "?")
+                    res = ef.get("video_resolution", "?")
+                    size_mb = ef.get("file_size", 0)
+                    print(f"\n    {short}")
+                    print(f"      {codec} {res} | {size_mb:.1f} MB")
+                    try:
+                        answer = input("      Delete from disk and DB? [y/N] ").strip().lower()
+                    except (EOFError, KeyboardInterrupt):
+                        print("\n  Aborted.")
+                        break
+                    if answer == "y":
+                        ok = delete_file(host, file_id, args.api_key)
+                        status_str = "DELETED" if ok else "FAILED"
+                        print(f"      [{status_str}]")
+                        if ok:
+                            deleted += 1
+                    else:
+                        print("      [SKIPPED]")
+                        skipped += 1
+                print(f"\n  Done: {deleted} deleted, {skipped} skipped")
+            else:
+                print("\n  No files with transcode errors to delete.")
 
     if len(args.hosts) > 1 and not args.json:
         print(f"\n{'=' * 80}")
