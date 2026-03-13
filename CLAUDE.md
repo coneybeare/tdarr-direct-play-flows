@@ -128,4 +128,7 @@ python3 scripts/analyze_tdarr.py --requeue http://HOST:PORT
 
 # Dump raw JSON for processed files
 python3 scripts/analyze_tdarr.py --json http://HOST:PORT
+
+# Delete files with transcode errors (prompts per file)
+python3 scripts/analyze_tdarr.py --delete-errors http://HOST:PORT
 ```
