@@ -4,6 +4,7 @@
       "name": "Server A",
       "host": "http://<HOST_A>:8266",
       "flow_id": "<FLOW_ID_A>",
+      "api_key": "<TDARR_API_KEY_A>",
       "overrides": {
         "var_rm_commentary": { "value": "true" },
         "var_enable_plex": { "value": "false" },
@@ -24,6 +25,7 @@
       "name": "Server B",
       "host": "http://<HOST_B>:8266",
       "flow_id": "<FLOW_ID_B>",
+      "api_key": "<TDARR_API_KEY_B>",
       "overrides": {
         "var_rm_commentary": { "value": "true" },
         "var_enable_plex": { "value": "false" },

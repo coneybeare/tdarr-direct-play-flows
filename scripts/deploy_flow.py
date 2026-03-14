@@ -29,11 +29,14 @@ FLOW_PATH = ROOT / "flows" / "01_hevc_mp4_direct_play.json"
 CONFIG_PATH = ROOT / "servers.local.json"
 
 
-def _post(url, payload, timeout=30):
+def _post(url, payload, api_key=None, timeout=30):
+    headers = {"Content-Type": "application/json"}
+    if api_key:
+        headers["x-api-key"] = api_key
     req = urllib.request.Request(
         url,
         data=json.dumps(payload).encode(),
-        headers={"Content-Type": "application/json"},
+        headers=headers,
         method="POST",
     )
     resp = urllib.request.urlopen(req, timeout=timeout)
@@ -64,6 +67,7 @@ def deploy_server(server, flow_data, dry_run=False):
     name = server["name"]
     host = server["host"].rstrip("/")
     flow_id = server["flow_id"]
+    api_key = server.get("api_key")
     overrides = server.get("overrides", {})
 
     print(f"\n{'=' * 40}")
@@ -101,7 +105,7 @@ def deploy_server(server, flow_data, dry_run=False):
     }
 
     try:
-        status, _ = _post(f"{host}/api/v2/cruddb", payload)
+        status, _ = _post(f"{host}/api/v2/cruddb", payload, api_key)
         print(f"  Deploy: HTTP {status}")
     except (urllib.error.URLError, Exception) as e:
         print(f"  Deploy FAILED: {e}")
@@ -116,7 +120,7 @@ def deploy_server(server, flow_data, dry_run=False):
                 "docID": flow_id,
             }
         }
-        status, body = _post(f"{host}/api/v2/cruddb", verify_payload)
+        status, body = _post(f"{host}/api/v2/cruddb", verify_payload, api_key)
         remote = json.loads(body)
         remote_plugins = len(remote.get("flowPlugins", []))
         remote_edges = len(remote.get("flowEdges", []))
