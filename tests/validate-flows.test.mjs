@@ -199,13 +199,13 @@ for (const file of flowFiles) {
       assert.strictEqual(codecGuard.inputsDB.condition, 'includes',
         'grd_eac3_codec must use "includes" (not "equals") for comma-separated valuesToMatch');
 
-      // All EAC3 paths merge at cmd_rmdata2 (before reorder)
-      assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmd_rmdata2',
-        'EAC3 eng path should route to cmd_rmdata2');
-      assert.strictEqual(edgeMap.get('grd_eac3_codec:2'), 'cmd_rmdata2',
-        'Non-surround codec path should route to cmd_rmdata2');
-      assert.strictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmd_rmdata2',
-        'cmd_rm_eac3 should route to cmd_rmdata2');
+      // All EAC3 paths merge at cmt_audio (EAC3 now in pass 1, before AAC stereo)
+      assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmt_audio',
+        'EAC3 eng path should route to cmt_audio');
+      assert.strictEqual(edgeMap.get('grd_eac3_codec:2'), 'cmt_audio',
+        'Non-surround codec path should route to cmt_audio');
+      assert.strictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmt_audio',
+        'cmd_rm_eac3 should route to cmt_audio');
 
       // cmd_rm_eac3 on non-surround path (no 6+ch surround, strip all eac3)
       assert.strictEqual(edgeMap.get('grd_eac3_ch8:2'), 'cmd_rm_eac3',
