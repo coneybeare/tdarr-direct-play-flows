@@ -912,6 +912,7 @@ VR_NODES_01 = {
     "cmd_vr_tags": VR_01,
     "cmd_vr_aac_eng": VR_01, "grd_vr_dup_und": VR_01 - 500, "grd_vr_dup_eng": VR_01 + 500,
     "cmd_vr_aac_und": VR_01 + 500,
+    "grd_vr_fb_eng": VR_01 - 500, "cmd_vr_ens_fb": VR_01 - 500,
     "cmd_vr_rmaudio": VR_01, "cmd_vr_reorder": VR_01,
     "cmd_vr_nochapters": VR_01, "cmd_vr_rmdata": VR_01, "ffe_vr": VR_01,
     "cmt_vr_reorder2": VR_01, "ffs_vr_reorder": VR_01,
@@ -964,6 +965,7 @@ def col_map_01() -> dict[str, int]:
         "cmd_eac3_eng": M, "cmd_rm_eac3": R,
         "cmt_audio": M, "cmd_ens_eng": M,
         "grd_dup_und": L, "grd_dup_eng": R, "cmd_ens_und": R,
+        "grd_fb_eng": L, "cmd_ens_fb": L,
         "cmt_reorder": M, "cmd_reorder": M,
         "cmt_exec": M, "cmd_nochapters": M, "ffe_001": M,
         # ── Reorder pass ──────────────────────────────────────────────
