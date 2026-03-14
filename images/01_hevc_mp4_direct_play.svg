@@ -68,9 +68,9 @@
 <path d="M2634.0,595.5 L2634.0,625.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M2634.0,652.6 L2634.0,666.3 Q2634.0,669.7 2630.6,669.7 L2469.2,669.7 Q2465.8,669.7 2465.8,673.1 L2465.8,682.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M2515.2,709.8 L2515.2,723.5 Q2515.2,726.9 2518.6,726.9 L2798.8,726.9 Q2802.2,726.9 2802.2,730.3 L2802.2,740.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2416.5,709.8 L2416.5,773.0 Q2416.5,776.4 2419.9,776.4 L2581.2,776.4 Q2584.7,776.4 2584.7,779.8 L2584.7,854.5" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M2851.5,767.0 L2851.5,780.7 Q2851.5,784.1 2848.1,784.1 L2805.6,784.1 Q2802.2,784.1 2802.2,787.5 L2802.2,797.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2752.8,767.0 L2752.8,791.2 Q2752.8,794.6 2749.4,794.6 L2637.4,794.6 Q2634.0,794.6 2634.0,798.0 L2634.0,854.5" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M2416.5,709.8 L2416.5,723.5 Q2416.5,726.9 2419.9,726.9 L2462.4,726.9 Q2465.8,726.9 2465.8,730.3 L2465.8,740.1" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M2752.85,767.0 L2752.85,797.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2851.5499999999997,767.0 L2851.5499999999997,797.3" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
 <path d="M2802.2,824.2 L2802.2,837.9 Q2802.2,841.3 2798.8,841.3 L2686.8,841.3 Q2683.3,841.3 2683.3,844.7 L2683.3,854.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M2634.0,531.5 L2634.0,545.2 Q2634.0,548.6 2630.6,548.6 L2588.1,548.6 Q2584.7,548.6 2584.7,552.0 L2584.7,561.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M3734.1,289.3 L3734.1,319.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
@@ -121,9 +121,9 @@
 <path d="M1197.5,632.5 L1197.5,662.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,746.8 L1197.5,760.5 Q1197.5,763.9 1194.1,763.9 L1032.7,763.9 Q1029.3,763.9 1029.3,767.3 L1029.3,777.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1078.6,804.0 L1078.6,817.7 Q1078.6,821.1 1082.0,821.1 L1362.3,821.1 Q1365.7,821.1 1365.7,824.5 L1365.7,834.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M979.9,804.0 L979.9,867.2 Q979.9,870.6 983.3,870.6 L1144.8,870.6 Q1148.2,870.6 1148.2,874.0 L1148.2,948.7" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M1415.0,861.2 L1415.0,874.9 Q1415.0,878.3 1411.6,878.3 L1369.1,878.3 Q1365.7,878.3 1365.7,881.7 L1365.7,891.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1316.4,861.2 L1316.4,885.4 Q1316.4,888.8 1313.0,888.8 L1200.9,888.8 Q1197.5,888.8 1197.5,892.2 L1197.5,948.7" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M979.9,804.0 L979.9,817.7 Q979.9,821.1 983.3,821.1 L1025.9,821.1 Q1029.3,821.1 1029.3,824.5 L1029.3,834.3" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M1316.3500000000001,861.2 L1316.3500000000001,891.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M1415.05,861.2 L1415.05,891.5" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
 <path d="M1365.7,918.4 L1365.7,932.1 Q1365.7,935.5 1362.3,935.5 L1250.2,935.5 Q1246.8,935.5 1246.8,938.9 L1246.8,948.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,689.7 L1197.5,719.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,975.6 L1197.5,1005.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
@@ -178,6 +178,12 @@
 <path d="M552.6,868.0 L552.6,881.7 Q552.6,885.1 549.2,885.1 L486.6,885.1 Q483.2,885.1 483.2,888.5 L483.2,898.2" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
 <path d="M483.2,925.1 L483.2,938.8 Q483.2,942.2 486.6,942.2 L631.5,942.2 Q634.9,942.2 634.9,945.6 L634.9,955.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M384.4,925.1 L384.4,938.8 Q384.4,942.2 381.1,942.2 L269.0,942.2 Q265.6,942.2 265.6,945.6 L265.6,955.4" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M2515.2,767.0 L2515.2,791.2 Q2515.2,794.6 2518.6,794.6 L2581.2,794.6 Q2584.7,794.6 2584.7,798.0 L2584.7,854.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2416.5,767.0 L2416.5,780.7 Q2416.5,784.1 2419.9,784.1 L2462.4,784.1 Q2465.8,784.1 2465.8,787.5 L2465.8,797.3" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M2465.8,824.2 L2465.8,837.9 Q2465.8,841.3 2469.2,841.3 L2630.6,841.3 Q2634.0,841.3 2634.0,844.7 L2634.0,854.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M1078.6,861.2 L1078.6,885.4 Q1078.6,888.8 1082.0,888.8 L1144.8,888.8 Q1148.2,888.8 1148.2,892.2 L1148.2,948.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M979.9,861.2 L979.9,874.9 Q979.9,878.3 983.3,878.3 L1025.9,878.3 Q1029.3,878.3 1029.3,881.7 L1029.3,891.5" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M1029.3,918.4 L1029.3,932.1 Q1029.3,935.5 1032.7,935.5 L1194.1,935.5 Q1197.5,935.5 1197.5,938.9 L1197.5,948.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <rect x="363.3" y="26.9" width="141" height="26.9" rx="5" fill="#90CAF9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="433.8" y="42.849999999999994" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="433.8" dy="0">Input File</tspan></text>
 <rect x="363.3" y="84.1" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
@@ -444,6 +450,14 @@
 <text x="602.0" y="856.95" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="602.0" dy="0">Guard: has EAC3?</tspan></text>
 <rect x="363.3" y="898.2" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="433.8" y="914.1500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="433.8" dy="0">Guard: unwanted audio?</tspan></text>
+<rect x="2395.3" y="740.1" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2465.8" y="756.0500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2465.8" dy="0">Guard: eng audio?</tspan></text>
+<rect x="2395.3" y="797.3" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2465.8" y="813.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2465.8" dy="0">Ensure AAC 2.0 (fallback)</tspan></text>
+<rect x="958.8" y="834.3" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1029.3" y="850.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1029.3" dy="0">Guard: eng audio? (VR)</tspan></text>
+<rect x="958.8" y="891.5" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1029.3" y="907.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1029.3" dy="0">Ensure AAC 2.0 (VR fallback)</tspan></text>
 <rect x="10" y="1686" width="11" height="11" rx="2" fill="#90CAF9" stroke="#9E9E9E" stroke-width="0.5"/>
 <text x="26" y="1696" font-family="monospace" font-size="10" fill="#444">Input</text>
 <rect x="10" y="1701" width="11" height="11" rx="2" fill="#CE93D8" stroke="#9E9E9E" stroke-width="0.5"/>

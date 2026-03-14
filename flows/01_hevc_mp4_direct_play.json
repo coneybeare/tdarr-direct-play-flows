@@ -2085,6 +2085,84 @@
         "condition": "includes"
       },
       "fpEnabled": true
+    },
+    {
+      "name": "Guard: eng audio?",
+      "sourceRepo": "Community",
+      "pluginName": "checkStreamProperty",
+      "version": "1.0.0",
+      "id": "grd_fb_eng",
+      "position": {
+        "x": 6040,
+        "y": 2120
+      },
+      "inputsDB": {
+        "streamType": "audio",
+        "propertyToCheck": "tags.language",
+        "valuesToMatch": "eng",
+        "condition": "includes"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Ensure AAC 2.0 (fallback)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandEnsureAudioStream",
+      "version": "1.0.0",
+      "id": "cmd_ens_fb",
+      "position": {
+        "x": 6040,
+        "y": 2290
+      },
+      "inputsDB": {
+        "audioEncoder": "aac",
+        "language": "",
+        "channels": "2",
+        "enableBitrate": "true",
+        "bitrate": "192k",
+        "enableSamplerate": "false",
+        "samplerate": "48000"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Guard: eng audio? (VR)",
+      "sourceRepo": "Community",
+      "pluginName": "checkStreamProperty",
+      "version": "1.0.0",
+      "id": "grd_vr_fb_eng",
+      "position": {
+        "x": 1770,
+        "y": 2400
+      },
+      "inputsDB": {
+        "streamType": "audio",
+        "propertyToCheck": "tags.language",
+        "valuesToMatch": "eng",
+        "condition": "includes"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Ensure AAC 2.0 (VR fallback)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandEnsureAudioStream",
+      "version": "1.0.0",
+      "id": "cmd_vr_ens_fb",
+      "position": {
+        "x": 1770,
+        "y": 2570
+      },
+      "inputsDB": {
+        "audioEncoder": "aac",
+        "language": "",
+        "channels": "2",
+        "enableBitrate": "true",
+        "bitrate": "192k",
+        "enableSamplerate": "false",
+        "samplerate": "48000"
+      },
+      "fpEnabled": true
     }
   ],
   "flowEdges": [
@@ -2525,7 +2603,7 @@
     {
       "source": "grd_dup_und",
       "sourceHandle": "2",
-      "target": "cmt_reorder",
+      "target": "grd_fb_eng",
       "targetHandle": null,
       "id": "e_grd_und_no"
     },
@@ -2539,7 +2617,7 @@
     {
       "source": "grd_dup_eng",
       "sourceHandle": "2",
-      "target": "cmt_reorder",
+      "target": "cmd_ens_und",
       "targetHandle": null,
       "id": "e_grd_eng_no"
     },
@@ -2896,7 +2974,7 @@
     {
       "source": "grd_vr_dup_und",
       "sourceHandle": "2",
-      "target": "cmd_vr_reorder",
+      "target": "grd_vr_fb_eng",
       "targetHandle": null,
       "id": "e_vr_grd_und_no"
     },
@@ -2910,7 +2988,7 @@
     {
       "source": "grd_vr_dup_eng",
       "sourceHandle": "2",
-      "target": "cmd_vr_reorder",
+      "target": "cmd_vr_aac_und",
       "targetHandle": null,
       "id": "e_vr_grd_eng_no"
     },
@@ -3291,6 +3369,48 @@
       "target": "cmt_optimal",
       "targetHandle": null,
       "id": "e_unwanted_no"
+    },
+    {
+      "source": "grd_fb_eng",
+      "sourceHandle": "1",
+      "target": "cmt_reorder",
+      "targetHandle": null,
+      "id": "e_fb_eng_yes"
+    },
+    {
+      "source": "grd_fb_eng",
+      "sourceHandle": "2",
+      "target": "cmd_ens_fb",
+      "targetHandle": null,
+      "id": "e_fb_eng_no"
+    },
+    {
+      "source": "cmd_ens_fb",
+      "sourceHandle": "1",
+      "target": "cmt_reorder",
+      "targetHandle": null,
+      "id": "e_ens_fb"
+    },
+    {
+      "source": "grd_vr_fb_eng",
+      "sourceHandle": "1",
+      "target": "cmd_vr_reorder",
+      "targetHandle": null,
+      "id": "e_vr_fb_eng_yes"
+    },
+    {
+      "source": "grd_vr_fb_eng",
+      "sourceHandle": "2",
+      "target": "cmd_vr_ens_fb",
+      "targetHandle": null,
+      "id": "e_vr_fb_eng_no"
+    },
+    {
+      "source": "cmd_vr_ens_fb",
+      "sourceHandle": "1",
+      "target": "cmd_vr_reorder",
+      "targetHandle": null,
+      "id": "e_vr_ens_fb"
     }
   ]
 }
