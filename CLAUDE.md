@@ -48,7 +48,7 @@ Options:
 - `--dry-run` — show overrides without deploying
 - `--server "Server A"` — deploy to a single server
 
-The script reads `servers.local.json` (gitignored) for server hosts, flow IDs, and per-server overrides (e.g. Radarr vs Sonarr notification config). Copy `servers.local.json.example` to get started.
+The script reads `servers.local.json` (gitignored) for server hosts, flow IDs, API keys, and per-server overrides (e.g. Radarr vs Sonarr notification config). When Tdarr auth is enabled (`auth=true`), the `api_key` field in each server entry is sent as an `x-api-key` header. Copy `servers.local.json.example` to get started.
 
 ## PR Review Workflow
 
@@ -121,7 +121,7 @@ All DB operations go through `POST /api/v2/cruddb`. The payload is always `{"dat
 
 ```bash
 # Analyze processed files on one or more servers
-python3 scripts/analyze_tdarr.py http://HOST:PORT
+python3 scripts/analyze_tdarr.py --api-key SECRET http://HOST:PORT
 
 # Analyze and requeue files that have errors
 python3 scripts/analyze_tdarr.py --requeue http://HOST:PORT
