@@ -213,7 +213,7 @@
       "id": "cmt_optimal",
       "position": {
         "x": -500,
-        "y": 2590
+        "y": 2760
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -226,7 +226,7 @@
       "id": "fl_noop",
       "position": {
         "x": -500,
-        "y": 2780
+        "y": 2950
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -239,7 +239,7 @@
       "id": "cmt_proc",
       "position": {
         "x": 500,
-        "y": 2590
+        "y": 2760
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -254,7 +254,7 @@
       "inputsDB": {},
       "position": {
         "x": 0,
-        "y": 2780
+        "y": 2950
       }
     },
     {
@@ -271,7 +271,7 @@
       },
       "position": {
         "x": 0,
-        "y": 2970
+        "y": 3140
       }
     },
     {
@@ -284,7 +284,7 @@
       "inputsDB": {},
       "position": {
         "x": -500,
-        "y": 3140
+        "y": 3310
       }
     },
     {
@@ -297,7 +297,7 @@
       "inputsDB": {},
       "position": {
         "x": -500,
-        "y": 3330
+        "y": 3500
       }
     },
     {
@@ -308,7 +308,7 @@
       "id": "cmt_health",
       "position": {
         "x": 0,
-        "y": 3140
+        "y": 3310
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -321,7 +321,7 @@
       "id": "chk_health",
       "position": {
         "x": 0,
-        "y": 3330
+        "y": 3500
       },
       "inputsDB": {
         "type": "quick"
@@ -2067,6 +2067,24 @@
         "condition": "includes"
       },
       "fpEnabled": true
+    },
+    {
+      "name": "Guard: unwanted audio?",
+      "sourceRepo": "Community",
+      "pluginName": "checkStreamProperty",
+      "version": "1.0.0",
+      "id": "grd_unwanted",
+      "position": {
+        "x": 0,
+        "y": 2590
+      },
+      "inputsDB": {
+        "streamType": "audio",
+        "propertyToCheck": "codec_name",
+        "valuesToMatch": "ac3,dts,dca,mp3,truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,pcm_s16le,pcm_s24le",
+        "condition": "includes"
+      },
+      "fpEnabled": true
     }
   ],
   "flowEdges": [
@@ -3235,7 +3253,7 @@
     {
       "source": "grd_surr_ch",
       "sourceHandle": "1",
-      "target": "cmt_optimal",
+      "target": "grd_unwanted",
       "targetHandle": null,
       "id": "e_surr_ch_yes"
     },
@@ -3256,9 +3274,23 @@
     {
       "source": "grd_has_eac3",
       "sourceHandle": "2",
-      "target": "cmt_optimal",
+      "target": "grd_unwanted",
       "targetHandle": null,
       "id": "e_has_eac3_no"
+    },
+    {
+      "source": "grd_unwanted",
+      "sourceHandle": "1",
+      "target": "cmt_proc",
+      "targetHandle": null,
+      "id": "e_unwanted_yes"
+    },
+    {
+      "source": "grd_unwanted",
+      "sourceHandle": "2",
+      "target": "cmt_optimal",
+      "targetHandle": null,
+      "id": "e_unwanted_no"
     }
   ]
 }
