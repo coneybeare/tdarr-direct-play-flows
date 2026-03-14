@@ -69,9 +69,7 @@
 <path d="M2634.0,652.6 L2634.0,666.3 Q2634.0,669.7 2630.6,669.7 L2469.2,669.7 Q2465.8,669.7 2465.8,673.1 L2465.8,682.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M2515.2,709.8 L2515.2,723.5 Q2515.2,726.9 2518.6,726.9 L2798.8,726.9 Q2802.2,726.9 2802.2,730.3 L2802.2,740.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M2416.5,709.8 L2416.5,723.5 Q2416.5,726.9 2419.9,726.9 L2462.4,726.9 Q2465.8,726.9 2465.8,730.3 L2465.8,740.1" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M2752.85,767.0 L2752.85,797.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2851.5499999999997,767.0 L2851.5499999999997,797.3" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M2802.2,824.2 L2802.2,837.9 Q2802.2,841.3 2798.8,841.3 L2686.8,841.3 Q2683.3,841.3 2683.3,844.7 L2683.3,854.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2802.2,767.0 L2802.2,801.6 Q2802.2,805.0 2798.8,805.0 L2686.8,805.0 Q2683.3,805.0 2683.3,808.4 L2683.3,854.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M2634.0,531.5 L2634.0,545.2 Q2634.0,548.6 2630.6,548.6 L2588.1,548.6 Q2584.7,548.6 2584.7,552.0 L2584.7,561.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M3734.1,289.3 L3734.1,319.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M2634.0,181.7 L2634.0,211.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
@@ -122,9 +120,7 @@
 <path d="M1197.5,746.8 L1197.5,760.5 Q1197.5,763.9 1194.1,763.9 L1032.7,763.9 Q1029.3,763.9 1029.3,767.3 L1029.3,777.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1078.6,804.0 L1078.6,817.7 Q1078.6,821.1 1082.0,821.1 L1362.3,821.1 Q1365.7,821.1 1365.7,824.5 L1365.7,834.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M979.9,804.0 L979.9,817.7 Q979.9,821.1 983.3,821.1 L1025.9,821.1 Q1029.3,821.1 1029.3,824.5 L1029.3,834.3" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M1316.3500000000001,861.2 L1316.3500000000001,891.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1415.05,861.2 L1415.05,891.5" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M1365.7,918.4 L1365.7,932.1 Q1365.7,935.5 1362.3,935.5 L1250.2,935.5 Q1246.8,935.5 1246.8,938.9 L1246.8,948.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M1365.7,861.2 L1365.7,895.9 Q1365.7,899.2 1362.3,899.2 L1250.2,899.2 Q1246.8,899.2 1246.8,902.6 L1246.8,948.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,689.7 L1197.5,719.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,975.6 L1197.5,1005.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,1032.8 L1197.5,1063.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
@@ -290,12 +286,10 @@
 <text x="2634.0" y="581.0999999999999" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Audio pipeline</tspan></text>
 <rect x="2563.5" y="625.7" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="2634.0" y="641.6500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Ensure AAC 2.0 (eng)</tspan></text>
-<rect x="2731.7" y="797.3" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2802.2" y="813.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2802.2" dy="0">Ensure AAC 2.0 (und)</tspan></text>
+<rect x="2731.7" y="740.1" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2802.2" y="756.0500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2802.2" dy="0">Ensure AAC 2.0 (und)</tspan></text>
 <rect x="2395.3" y="682.9" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="2465.8" y="698.85" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2465.8" dy="0">Guard: und audio?</tspan></text>
-<rect x="2731.7" y="740.1" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2802.2" y="756.0500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2802.2" dy="0">Guard: eng audio?</tspan></text>
 <rect x="2563.5" y="269.1" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="2634.0" y="288.40000000000003" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">EAC3 5.1 surround</tspan></text>
 <rect x="2563.5" y="333.1" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
@@ -392,12 +386,10 @@
 <text x="1197.5" y="621.5500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Set: hvc1 + 10bit + faststart …</tspan></text>
 <rect x="1127.0" y="719.9" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1197.5" y="735.85" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Ensure AAC 2.0 eng (VR)</tspan></text>
-<rect x="1295.2" y="891.5" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1365.7" y="907.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1365.7" dy="0">Ensure AAC 2.0 und (VR)</tspan></text>
+<rect x="1295.2" y="834.3" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1365.7" y="850.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1365.7" dy="0">Ensure AAC 2.0 und (VR)</tspan></text>
 <rect x="958.8" y="777.1" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1029.3" y="793.0500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1029.3" dy="0">Guard: und audio? (VR)</tspan></text>
-<rect x="1295.2" y="834.3" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1365.7" y="850.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1365.7" dy="0">Guard: eng audio? (VR)</tspan></text>
 <rect x="1127.0" y="662.7" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1197.5" y="678.6500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Remove incompatible audio (VR)</tspan></text>
 <rect x="1127.0" y="948.7" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
@@ -451,11 +443,11 @@
 <rect x="363.3" y="898.2" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="433.8" y="914.1500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="433.8" dy="0">Guard: unwanted audio?</tspan></text>
 <rect x="2395.3" y="740.1" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2465.8" y="756.0500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2465.8" dy="0">Guard: eng audio?</tspan></text>
+<text x="2465.8" y="756.0500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2465.8" dy="0">Guard: eng audio? (fb)</tspan></text>
 <rect x="2395.3" y="797.3" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="2465.8" y="813.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2465.8" dy="0">Ensure AAC 2.0 (fallback)</tspan></text>
 <rect x="958.8" y="834.3" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1029.3" y="850.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1029.3" dy="0">Guard: eng audio? (VR)</tspan></text>
+<text x="1029.3" y="850.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1029.3" dy="0">Guard: eng audio? (VR fb)</tspan></text>
 <rect x="958.8" y="891.5" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1029.3" y="907.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1029.3" dy="0">Ensure AAC 2.0 (VR fallback)</tspan></text>
 <rect x="10" y="1686" width="11" height="11" rx="2" fill="#90CAF9" stroke="#9E9E9E" stroke-width="0.5"/>
