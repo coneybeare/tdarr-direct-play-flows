@@ -226,9 +226,9 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_ch:1'), 'grd_surr_ch',
         '2ch check should route to surround channel check');
 
-      // grd_surr_ch YES → cmt_optimal (has stereo + surround = optimal)
-      assert.strictEqual(edgeMap.get('grd_surr_ch:1'), 'cmt_optimal',
-        'Files with surround should be optimal');
+      // grd_surr_ch YES → grd_unwanted (has surround, check for unwanted audio)
+      assert.strictEqual(edgeMap.get('grd_surr_ch:1'), 'grd_unwanted',
+        'Files with surround should check for unwanted audio');
 
       // grd_surr_ch NO → grd_has_eac3 (no surround, check for orphaned EAC3)
       assert.strictEqual(edgeMap.get('grd_surr_ch:2'), 'grd_has_eac3',
@@ -238,9 +238,9 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_has_eac3:1'), 'cmt_proc',
         'Orphaned EAC3 should route to processing');
 
-      // grd_has_eac3 NO → cmt_optimal (just stereo AAC = fine)
-      assert.strictEqual(edgeMap.get('grd_has_eac3:2'), 'cmt_optimal',
-        'No EAC3 and no surround should be optimal');
+      // grd_has_eac3 NO → grd_unwanted (no EAC3, check for unwanted audio)
+      assert.strictEqual(edgeMap.get('grd_has_eac3:2'), 'grd_unwanted',
+        'No EAC3 should check for unwanted audio');
 
       // Verify grd_has_eac3 config matches eac3
       const hasEac3 = pluginMap.get('grd_has_eac3');
@@ -248,6 +248,31 @@ for (const file of flowFiles) {
       assert.strictEqual(hasEac3.inputsDB.propertyToCheck, 'codec_name');
       assert.strictEqual(hasEac3.inputsDB.valuesToMatch, 'eac3');
       assert.strictEqual(hasEac3.inputsDB.condition, 'includes');
+    });
+
+    test('guard chain catches unwanted audio codecs', () => {
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      // grd_unwanted YES → cmt_proc (has unwanted audio, needs cleanup)
+      assert.strictEqual(edgeMap.get('grd_unwanted:1'), 'cmt_proc',
+        'Unwanted audio should route to processing');
+
+      // grd_unwanted NO → cmt_optimal (clean audio, already optimal)
+      assert.strictEqual(edgeMap.get('grd_unwanted:2'), 'cmt_optimal',
+        'No unwanted audio should be optimal');
+
+      // Verify grd_unwanted config
+      const grdUnwanted = pluginMap.get('grd_unwanted');
+      assert.ok(grdUnwanted, 'Missing node grd_unwanted');
+      assert.strictEqual(grdUnwanted.inputsDB.streamType, 'audio');
+      assert.strictEqual(grdUnwanted.inputsDB.propertyToCheck, 'codec_name');
+      assert.strictEqual(grdUnwanted.inputsDB.condition, 'includes');
+      // Should catch common unwanted codecs
+      for (const codec of ['ac3', 'dts', 'dca', 'mp3', 'truehd', 'flac']) {
+        assert.ok(grdUnwanted.inputsDB.valuesToMatch.includes(codec),
+          `grd_unwanted should catch ${codec}`);
+      }
     });
 
     test('DTS is stripped by both audio removal nodes', () => {
