@@ -274,13 +274,16 @@ for (const file of flowFiles) {
           `grd_unwanted should catch ${codec}`);
       }
 
-      // Every codec in the guard must be removable by the pipeline
+      // Every codec in the guard must be removable by the pipeline (exact match)
       const rmaudio = pluginMap.get('cmd_rmaudio');
       const rmac3mp3 = pluginMap.get('cmd_rm_ac3mp3');
       assert.ok(rmaudio && rmac3mp3, 'Missing removal nodes');
-      const removable = rmaudio.inputsDB.valuesToRemove + ',' + rmac3mp3.inputsDB.valuesToRemove;
-      for (const codec of grdUnwanted.inputsDB.valuesToMatch.split(',')) {
-        assert.ok(removable.includes(codec),
+      const removableSet = new Set([
+        ...rmaudio.inputsDB.valuesToRemove.split(',').map(s => s.trim()),
+        ...rmac3mp3.inputsDB.valuesToRemove.split(',').map(s => s.trim()),
+      ]);
+      for (const codec of grdUnwanted.inputsDB.valuesToMatch.split(',').map(s => s.trim())) {
+        assert.ok(removableSet.has(codec),
           `grd_unwanted catches "${codec}" but no removal node strips it`);
       }
     });
@@ -317,6 +320,38 @@ for (const file of flowFiles) {
       assert.strictEqual(fb.pluginName, 'ffmpegCommandEnsureAudioStream');
       assert.strictEqual(fb.inputsDB.audioEncoder, 'aac');
       assert.strictEqual(fb.inputsDB.channels, '2');
+
+      // ── VR path: same structure ──
+      assert.strictEqual(edgeMap.get('grd_vr_dup_und:1'), 'cmd_vr_aac_und',
+        'VR: und audio present should route directly to und AAC creation');
+      assert.ok(!pluginMap.has('grd_vr_dup_eng'),
+        'grd_vr_dup_eng should be removed (was redundant)');
+
+      assert.strictEqual(edgeMap.get('grd_vr_dup_und:2'), 'grd_vr_fb_eng',
+        'VR: no und audio should check for eng fallback');
+      assert.strictEqual(edgeMap.get('grd_vr_fb_eng:1'), 'cmd_vr_reorder',
+        'VR: eng audio present should skip fallback');
+      assert.strictEqual(edgeMap.get('grd_vr_fb_eng:2'), 'cmd_vr_ens_fb',
+        'VR: no eng/und audio should route to fallback AAC');
+      assert.strictEqual(edgeMap.get('cmd_vr_ens_fb:1'), 'cmd_vr_reorder',
+        'VR: fallback AAC should route to reorder');
+
+      const vrFb = pluginMap.get('cmd_vr_ens_fb');
+      assert.ok(vrFb, 'Missing node cmd_vr_ens_fb');
+      assert.strictEqual(vrFb.pluginName, 'ffmpegCommandEnsureAudioStream');
+      assert.strictEqual(vrFb.inputsDB.audioEncoder, 'aac');
+      assert.strictEqual(vrFb.inputsDB.channels, '2');
+
+      // VR removal node should also strip PCM
+      const vrRmaudio = pluginMap.get('cmd_vr_rmaudio');
+      assert.ok(vrRmaudio, 'Missing node cmd_vr_rmaudio');
+      const vrRemovableSet = new Set(
+        vrRmaudio.inputsDB.valuesToRemove.split(',').map(s => s.trim())
+      );
+      for (const codec of ['pcm_s16le', 'pcm_s24le']) {
+        assert.ok(vrRemovableSet.has(codec),
+          `cmd_vr_rmaudio should strip ${codec}`);
+      }
     });
 
     test('DTS is stripped by both audio removal nodes', () => {
