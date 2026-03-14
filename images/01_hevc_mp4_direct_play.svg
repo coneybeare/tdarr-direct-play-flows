@@ -437,7 +437,7 @@
 <rect x="1127.0" y="434.0" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1197.5" y="449.95" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Check: already HEVC? (VR)</tspan></text>
 <rect x="363.3" y="783.9" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="433.8" y="799.85" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="433.8" dy="0">Guard: 6ch surround?</tspan></text>
+<text x="433.8" y="799.85" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="433.8" dy="0">Guard: 6+ ch surround?</tspan></text>
 <rect x="531.5" y="841.0" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="602.0" y="856.95" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="602.0" dy="0">Guard: has EAC3?</tspan></text>
 <rect x="10" y="1686" width="11" height="11" rx="2" fill="#90CAF9" stroke="#9E9E9E" stroke-width="0.5"/>

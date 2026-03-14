@@ -2036,7 +2036,7 @@
       "fpEnabled": true
     },
     {
-      "name": "Guard: 6ch surround?",
+      "name": "Guard: 6+ ch surround?",
       "sourceRepo": "Community",
       "pluginName": "checkChannelCount",
       "version": "1.0.0",
