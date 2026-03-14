@@ -199,13 +199,13 @@ for (const file of flowFiles) {
       assert.strictEqual(codecGuard.inputsDB.condition, 'includes',
         'grd_eac3_codec must use "includes" (not "equals") for comma-separated valuesToMatch');
 
-      // All EAC3 paths merge at cmd_rmdata2 (before reorder)
-      assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmd_rmdata2',
-        'EAC3 eng path should route to cmd_rmdata2');
-      assert.strictEqual(edgeMap.get('grd_eac3_codec:2'), 'cmd_rmdata2',
-        'Non-surround codec path should route to cmd_rmdata2');
-      assert.strictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmd_rmdata2',
-        'cmd_rm_eac3 should route to cmd_rmdata2');
+      // All EAC3 paths merge at cmt_audio (EAC3 now in pass 1, before AAC stereo)
+      assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmt_audio',
+        'EAC3 eng path should route to cmt_audio');
+      assert.strictEqual(edgeMap.get('grd_eac3_codec:2'), 'cmt_audio',
+        'Non-surround codec path should route to cmt_audio');
+      assert.strictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmt_audio',
+        'cmd_rm_eac3 should route to cmt_audio');
 
       // cmd_rm_eac3 on non-surround path (no 6+ch surround, strip all eac3)
       assert.strictEqual(edgeMap.get('grd_eac3_ch8:2'), 'cmd_rm_eac3',
@@ -216,6 +216,38 @@ for (const file of flowFiles) {
         'cmd_reorder2 should route to cmd_rm_ac3mp3');
       assert.strictEqual(edgeMap.get('cmd_rm_ac3mp3:1'), 'cmd_faststart2',
         'cmd_rm_ac3mp3 should route to cmd_faststart2');
+    });
+
+    test('guard chain catches orphaned stereo EAC3', () => {
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      // grd_ch YES → grd_surr_ch (check for 6+ ch surround)
+      assert.strictEqual(edgeMap.get('grd_ch:1'), 'grd_surr_ch',
+        '2ch check should route to surround channel check');
+
+      // grd_surr_ch YES → cmt_optimal (has stereo + surround = optimal)
+      assert.strictEqual(edgeMap.get('grd_surr_ch:1'), 'cmt_optimal',
+        'Files with surround should be optimal');
+
+      // grd_surr_ch NO → grd_has_eac3 (no surround, check for orphaned EAC3)
+      assert.strictEqual(edgeMap.get('grd_surr_ch:2'), 'grd_has_eac3',
+        'No surround should check for orphaned EAC3');
+
+      // grd_has_eac3 YES → cmt_proc (stereo EAC3 without surround = needs cleanup)
+      assert.strictEqual(edgeMap.get('grd_has_eac3:1'), 'cmt_proc',
+        'Orphaned EAC3 should route to processing');
+
+      // grd_has_eac3 NO → cmt_optimal (just stereo AAC = fine)
+      assert.strictEqual(edgeMap.get('grd_has_eac3:2'), 'cmt_optimal',
+        'No EAC3 and no surround should be optimal');
+
+      // Verify grd_has_eac3 config matches eac3
+      const hasEac3 = pluginMap.get('grd_has_eac3');
+      assert.ok(hasEac3, 'Missing node grd_has_eac3');
+      assert.strictEqual(hasEac3.inputsDB.propertyToCheck, 'codec_name');
+      assert.strictEqual(hasEac3.inputsDB.valuesToMatch, 'eac3');
+      assert.strictEqual(hasEac3.inputsDB.condition, 'includes');
     });
 
     test('DTS is stripped by both audio removal nodes', () => {

@@ -934,6 +934,7 @@ def col_map_01() -> dict[str, int]:
         # ── Guards ────────────────────────────────────────────────────
         "cmt_guards": M,
         "grd_ext": M, "grd_vid": M, "grd_aud": M, "grd_ch": M,
+        "grd_surr_ch": M, "grd_has_eac3": R,
         "grd_dovi": M, "grd_tag": M,
         "cmt_optimal": L, "fl_noop": L,
         "cmt_proc": R,
@@ -959,15 +960,15 @@ def col_map_01() -> dict[str, int]:
         "cmt_tags": M, "cmd_tags": M,
         # ── Audio ─────────────────────────────────────────────────────
         "cmt_rmaudio": M, "cmd_rmaudio": M,
+        "cmt_eac3": M, "grd_eac3_codec": M, "grd_eac3_ch": M, "grd_eac3_ch8": L,
+        "cmd_eac3_eng": M, "cmd_rm_eac3": R,
         "cmt_audio": M, "cmd_ens_eng": M,
         "grd_dup_und": L, "grd_dup_eng": R, "cmd_ens_und": R,
         "cmt_reorder": M, "cmd_reorder": M,
         "cmt_exec": M, "cmd_nochapters": M, "ffe_001": M,
         # ── Reorder pass ──────────────────────────────────────────────
         "cmt_reorder2": M, "ffs_reorder": M,
-        "cmt_eac3": M, "grd_eac3_codec": M, "grd_eac3_ch": M, "grd_eac3_ch8": L,
-        "cmd_eac3_eng": M,
-        "cmd_rm_eac3": R, "cmd_rm_ac3mp3": M,
+        "cmd_rm_ac3mp3": M,
         "cmd_rmdata2": M, "cmd_reorder2": M,
         "cmd_faststart2": M, "ffe_reorder": M,
         # ── Validation ────────────────────────────────────────────────
