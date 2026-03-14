@@ -832,7 +832,7 @@
       "id": "cmd_ens_und",
       "position": {
         "x": 7040,
-        "y": 2290
+        "y": 2120
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -859,24 +859,6 @@
         "streamType": "audio",
         "propertyToCheck": "tags.language",
         "valuesToMatch": "und",
-        "condition": "includes"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "Guard: eng audio?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_dup_eng",
-      "position": {
-        "x": 7040,
-        "y": 2120
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "tags.language",
-        "valuesToMatch": "eng",
         "condition": "includes"
       },
       "fpEnabled": true
@@ -1005,7 +987,7 @@
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
-        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca,dts",
+        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca,dts,pcm_s16le,pcm_s24le",
         "condition": "includes"
       },
       "fpEnabled": true
@@ -1626,7 +1608,7 @@
       "id": "cmd_vr_aac_und",
       "position": {
         "x": 2770,
-        "y": 2570
+        "y": 2400
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -1658,24 +1640,6 @@
       "fpEnabled": true
     },
     {
-      "name": "Guard: eng audio? (VR)",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_vr_dup_eng",
-      "position": {
-        "x": 2770,
-        "y": 2400
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "tags.language",
-        "valuesToMatch": "eng",
-        "condition": "includes"
-      },
-      "fpEnabled": true
-    },
-    {
       "name": "Remove incompatible audio (VR)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveStreamByProperty",
@@ -1687,7 +1651,7 @@
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
-        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca,dts",
+        "valuesToRemove": "truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,dca,dts,pcm_s16le,pcm_s24le",
         "condition": "includes"
       },
       "fpEnabled": true
@@ -2087,7 +2051,7 @@
       "fpEnabled": true
     },
     {
-      "name": "Guard: eng audio?",
+      "name": "Guard: eng audio? (fb)",
       "sourceRepo": "Community",
       "pluginName": "checkStreamProperty",
       "version": "1.0.0",
@@ -2126,7 +2090,7 @@
       "fpEnabled": true
     },
     {
-      "name": "Guard: eng audio? (VR)",
+      "name": "Guard: eng audio? (VR fb)",
       "sourceRepo": "Community",
       "pluginName": "checkStreamProperty",
       "version": "1.0.0",
@@ -2596,7 +2560,7 @@
     {
       "source": "grd_dup_und",
       "sourceHandle": "1",
-      "target": "grd_dup_eng",
+      "target": "cmd_ens_und",
       "targetHandle": null,
       "id": "e_grd_und_yes"
     },
@@ -2606,20 +2570,6 @@
       "target": "grd_fb_eng",
       "targetHandle": null,
       "id": "e_grd_und_no"
-    },
-    {
-      "source": "grd_dup_eng",
-      "sourceHandle": "1",
-      "target": "cmd_ens_und",
-      "targetHandle": null,
-      "id": "e_grd_eng_yes"
-    },
-    {
-      "source": "grd_dup_eng",
-      "sourceHandle": "2",
-      "target": "cmd_ens_und",
-      "targetHandle": null,
-      "id": "e_grd_eng_no"
     },
     {
       "source": "cmd_ens_und",
@@ -2967,7 +2917,7 @@
     {
       "source": "grd_vr_dup_und",
       "sourceHandle": "1",
-      "target": "grd_vr_dup_eng",
+      "target": "cmd_vr_aac_und",
       "targetHandle": null,
       "id": "e_vr_grd_und_yes"
     },
@@ -2977,20 +2927,6 @@
       "target": "grd_vr_fb_eng",
       "targetHandle": null,
       "id": "e_vr_grd_und_no"
-    },
-    {
-      "source": "grd_vr_dup_eng",
-      "sourceHandle": "1",
-      "target": "cmd_vr_aac_und",
-      "targetHandle": null,
-      "id": "e_vr_grd_eng_yes"
-    },
-    {
-      "source": "grd_vr_dup_eng",
-      "sourceHandle": "2",
-      "target": "cmd_vr_aac_und",
-      "targetHandle": null,
-      "id": "e_vr_grd_eng_no"
     },
     {
       "source": "cmd_vr_aac_und",

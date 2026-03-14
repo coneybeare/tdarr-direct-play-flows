@@ -273,6 +273,50 @@ for (const file of flowFiles) {
         assert.ok(grdUnwanted.inputsDB.valuesToMatch.includes(codec),
           `grd_unwanted should catch ${codec}`);
       }
+
+      // Every codec in the guard must be removable by the pipeline
+      const rmaudio = pluginMap.get('cmd_rmaudio');
+      const rmac3mp3 = pluginMap.get('cmd_rm_ac3mp3');
+      assert.ok(rmaudio && rmac3mp3, 'Missing removal nodes');
+      const removable = rmaudio.inputsDB.valuesToRemove + ',' + rmac3mp3.inputsDB.valuesToRemove;
+      for (const codec of grdUnwanted.inputsDB.valuesToMatch.split(',')) {
+        assert.ok(removable.includes(codec),
+          `grd_unwanted catches "${codec}" but no removal node strips it`);
+      }
+    });
+
+    test('stereo AAC fallback for non-eng/non-und audio', () => {
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      // grd_dup_und YES → cmd_ens_und directly (no redundant eng guard)
+      assert.strictEqual(edgeMap.get('grd_dup_und:1'), 'cmd_ens_und',
+        'und audio present should route directly to und AAC creation');
+      assert.ok(!pluginMap.has('grd_dup_eng'),
+        'grd_dup_eng should be removed (was redundant)');
+
+      // grd_dup_und NO → grd_fb_eng (check if eng pass worked)
+      assert.strictEqual(edgeMap.get('grd_dup_und:2'), 'grd_fb_eng',
+        'No und audio should check for eng fallback');
+
+      // grd_fb_eng YES → cmt_reorder (eng pass created AAC)
+      assert.strictEqual(edgeMap.get('grd_fb_eng:1'), 'cmt_reorder',
+        'Eng audio present should skip fallback');
+
+      // grd_fb_eng NO → cmd_ens_fb (fallback AAC creation)
+      assert.strictEqual(edgeMap.get('grd_fb_eng:2'), 'cmd_ens_fb',
+        'No eng/und audio should route to fallback AAC');
+
+      // cmd_ens_fb → cmt_reorder
+      assert.strictEqual(edgeMap.get('cmd_ens_fb:1'), 'cmt_reorder',
+        'Fallback AAC should route to reorder');
+
+      // Verify fallback node config
+      const fb = pluginMap.get('cmd_ens_fb');
+      assert.ok(fb, 'Missing node cmd_ens_fb');
+      assert.strictEqual(fb.pluginName, 'ffmpegCommandEnsureAudioStream');
+      assert.strictEqual(fb.inputsDB.audioEncoder, 'aac');
+      assert.strictEqual(fb.inputsDB.channels, '2');
     });
 
     test('DTS is stripped by both audio removal nodes', () => {
