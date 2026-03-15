@@ -327,6 +327,8 @@ for (const file of flowFiles) {
       assert.strictEqual(hasEng.inputsDB.streamType, 'audio');
       assert.strictEqual(hasEng.inputsDB.propertyToCheck, 'tags.language');
       assert.strictEqual(hasEng.inputsDB.valuesToMatch, 'eng');
+      assert.strictEqual(hasEng.inputsDB.condition, 'includes',
+        'grd_has_eng must use "includes" condition');
 
       // grd_dup_und YES → cmd_ens_und directly (no redundant eng guard)
       assert.strictEqual(edgeMap.get('grd_dup_und:1'), 'cmd_ens_und',
@@ -373,6 +375,8 @@ for (const file of flowFiles) {
       assert.strictEqual(vrHasEng.inputsDB.streamType, 'audio');
       assert.strictEqual(vrHasEng.inputsDB.propertyToCheck, 'tags.language');
       assert.strictEqual(vrHasEng.inputsDB.valuesToMatch, 'eng');
+      assert.strictEqual(vrHasEng.inputsDB.condition, 'includes',
+        'grd_vr_has_eng must use "includes" condition');
 
       assert.strictEqual(edgeMap.get('grd_vr_dup_und:1'), 'cmd_vr_aac_und',
         'VR: und audio present should route directly to und AAC creation');
