@@ -199,6 +199,22 @@ for (const file of flowFiles) {
       assert.strictEqual(codecGuard.inputsDB.condition, 'includes',
         'grd_eac3_codec must use "includes" (not "equals") for comma-separated valuesToMatch');
 
+      // Surround channels route through cmd_rm_old_eac3 before creating fresh EAC3
+      assert.strictEqual(edgeMap.get('grd_eac3_ch:1'), 'cmd_rm_old_eac3',
+        '6+ ch surround should strip old EAC3 first');
+      assert.strictEqual(edgeMap.get('grd_eac3_ch8:1'), 'cmd_rm_old_eac3',
+        '8 ch surround should strip old EAC3 first');
+      assert.strictEqual(edgeMap.get('cmd_rm_old_eac3:1'), 'cmd_eac3_eng',
+        'After stripping old EAC3, create fresh 5.1');
+
+      // Verify cmd_rm_old_eac3 config
+      const rmOldEac3 = pluginMap.get('cmd_rm_old_eac3');
+      assert.ok(rmOldEac3, 'Missing node cmd_rm_old_eac3');
+      assert.strictEqual(rmOldEac3.pluginName, 'ffmpegCommandRemoveStreamByProperty');
+      assert.strictEqual(rmOldEac3.inputsDB.propertyToCheck, 'codec_name');
+      assert.strictEqual(rmOldEac3.inputsDB.valuesToRemove, 'eac3');
+      assert.strictEqual(rmOldEac3.inputsDB.condition, 'includes');
+
       // All EAC3 paths merge at cmt_audio (EAC3 now in pass 1, before AAC stereo)
       assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmt_audio',
         'EAC3 eng path should route to cmt_audio');
@@ -292,6 +308,28 @@ for (const file of flowFiles) {
       const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
       const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
 
+      // cmt_audio → grd_has_eng (check for eng audio before EnsureAudioStream)
+      assert.strictEqual(edgeMap.get('cmt_audio:1'), 'grd_has_eng',
+        'Audio pipeline should check for eng audio first');
+
+      // grd_has_eng YES → cmd_ens_eng (has eng, safe to create stereo)
+      assert.strictEqual(edgeMap.get('grd_has_eng:1'), 'cmd_ens_eng',
+        'Eng audio present should route to AAC creation');
+
+      // grd_has_eng NO → grd_dup_und (no eng, skip eng EnsureAudioStream to prevent fallback duplicates)
+      assert.strictEqual(edgeMap.get('grd_has_eng:2'), 'grd_dup_und',
+        'No eng audio should skip eng AAC creation');
+
+      // Verify grd_has_eng config
+      const hasEng = pluginMap.get('grd_has_eng');
+      assert.ok(hasEng, 'Missing node grd_has_eng');
+      assert.strictEqual(hasEng.pluginName, 'checkStreamProperty');
+      assert.strictEqual(hasEng.inputsDB.streamType, 'audio');
+      assert.strictEqual(hasEng.inputsDB.propertyToCheck, 'tags.language');
+      assert.strictEqual(hasEng.inputsDB.valuesToMatch, 'eng');
+      assert.strictEqual(hasEng.inputsDB.condition, 'includes',
+        'grd_has_eng must use "includes" condition');
+
       // grd_dup_und YES → cmd_ens_und directly (no redundant eng guard)
       assert.strictEqual(edgeMap.get('grd_dup_und:1'), 'cmd_ens_und',
         'und audio present should route directly to und AAC creation');
@@ -322,6 +360,24 @@ for (const file of flowFiles) {
       assert.strictEqual(fb.inputsDB.channels, '2');
 
       // ── VR path: same structure ──
+      // cmd_vr_rmaudio → grd_vr_has_eng (check eng before AAC creation)
+      assert.strictEqual(edgeMap.get('cmd_vr_rmaudio:1'), 'grd_vr_has_eng',
+        'VR: audio removal should check for eng audio first');
+      assert.strictEqual(edgeMap.get('grd_vr_has_eng:1'), 'cmd_vr_aac_eng',
+        'VR: eng audio present should route to AAC creation');
+      assert.strictEqual(edgeMap.get('grd_vr_has_eng:2'), 'grd_vr_dup_und',
+        'VR: no eng audio should skip eng AAC creation');
+
+      // Verify grd_vr_has_eng config
+      const vrHasEng = pluginMap.get('grd_vr_has_eng');
+      assert.ok(vrHasEng, 'Missing node grd_vr_has_eng');
+      assert.strictEqual(vrHasEng.pluginName, 'checkStreamProperty');
+      assert.strictEqual(vrHasEng.inputsDB.streamType, 'audio');
+      assert.strictEqual(vrHasEng.inputsDB.propertyToCheck, 'tags.language');
+      assert.strictEqual(vrHasEng.inputsDB.valuesToMatch, 'eng');
+      assert.strictEqual(vrHasEng.inputsDB.condition, 'includes',
+        'grd_vr_has_eng must use "includes" condition');
+
       assert.strictEqual(edgeMap.get('grd_vr_dup_und:1'), 'cmd_vr_aac_und',
         'VR: und audio present should route directly to und AAC creation');
       assert.ok(!pluginMap.has('grd_vr_dup_eng'),
@@ -352,6 +408,20 @@ for (const file of flowFiles) {
         assert.ok(vrRemovableSet.has(codec),
           `cmd_vr_rmaudio should strip ${codec}`);
       }
+    });
+
+    test('image removal nodes strip bin_data streams', () => {
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      const rmimages = pluginMap.get('cmd_rmimages');
+      assert.ok(rmimages, 'Missing node cmd_rmimages');
+      assert.ok(rmimages.inputsDB.valuesToRemove.includes('bin_data'),
+        'cmd_rmimages must strip bin_data streams');
+
+      const vrRmimages = pluginMap.get('cmd_vr_rmimages');
+      assert.ok(vrRmimages, 'Missing node cmd_vr_rmimages');
+      assert.ok(vrRmimages.inputsDB.valuesToRemove.includes('bin_data'),
+        'cmd_vr_rmimages must strip bin_data streams');
     });
 
     test('DTS is stripped by both audio removal nodes', () => {
