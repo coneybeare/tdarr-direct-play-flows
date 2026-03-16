@@ -188,12 +188,20 @@ def probe_file(local_path: str) -> dict | None:
         return None
 
 
+def _safe_float(value, default: float = 0.0) -> float:
+    """Safely parse a numeric value, returning default on failure."""
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
 def _print_probe_result(probe_data: dict) -> None:
     """Print a concise summary of ffprobe results."""
     streams = probe_data.get("streams", [])
     fmt = probe_data.get("format", {})
-    dur_s = float(fmt.get("duration", 0))
-    br = float(fmt.get("bit_rate", 0)) / 1000
+    dur_s = _safe_float(fmt.get("duration"))
+    br = _safe_float(fmt.get("bit_rate")) / 1000
     encoder = fmt.get("tags", {}).get("encoder", "")
 
     video = [s for s in streams if s.get("codec_type") == "video"
@@ -272,7 +280,7 @@ def arr_search_movie(
     Returns a status message.
     """
     headers = {"Content-Type": "application/json", "X-Api-Key": arr_key}
-    search_term = urllib.parse.quote(title)
+    search_term = urllib.parse.quote(title, safe="")
     req = urllib.request.Request(
         f"{arr_host}/api/v3/movie/lookup?term={search_term}", headers=headers
     )
@@ -334,7 +342,7 @@ def arr_search_episode(
     Returns a status message.
     """
     headers = {"Content-Type": "application/json", "X-Api-Key": arr_key}
-    search_term = urllib.parse.quote(series_name)
+    search_term = urllib.parse.quote(series_name, safe="")
     req = urllib.request.Request(
         f"{arr_host}/api/v3/series/lookup?term={search_term}", headers=headers
     )
@@ -715,10 +723,13 @@ def _replace_error_files(
     arr_key = arr_info.get("arr_api_key", "")
 
     print(f"\n  Replace errors ({len(error_files)} files):")
-    if arr_type:
+    if arr_type and arr_host and arr_key:
         print(f"  arr: {arr_type} at {arr_host}")
+    elif arr_type:
+        print(f"  WARNING: {arr_type} config incomplete (missing host or API key), skipping arr search")
+        arr_type = ""
     else:
-        print("  WARNING: No arr config found for this server")
+        print("  WARNING: No arr config found for this server, skipping arr search")
 
     deleted = 0
     skipped = 0
@@ -868,6 +879,14 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    # --requeue and --delete-errors don't work with --status errors
+    # (use --replace-errors instead for the error-specific workflow)
+    if args.status == "errors" and (args.requeue or args.delete_errors):
+        parser.error(
+            "--requeue and --delete-errors are not compatible with --status errors. "
+            "Use --replace-errors for the error deletion/re-search workflow."
+        )
+
     # Build list of (host, api_key) pairs
     server_entries: list[tuple[str, str | None]] = []
     if args.servers:
@@ -969,9 +988,9 @@ def main() -> None:
                     or f"{vs.get('width', '?')}x{vs.get('height', '?')}"
                 )
                 size_mb = ef.get("file_size", 0)
-                dur_s = float(fmt.get("duration", 0))
+                dur_s = _safe_float(fmt.get("duration"))
                 dur_min = dur_s / 60 if dur_s else 0
-                br = float(fmt.get("bit_rate", 0)) / 1000
+                br = _safe_float(fmt.get("bit_rate")) / 1000
                 encoder = fmt.get("tags", {}).get("encoder", "")
 
                 audio_streams = [
@@ -1018,7 +1037,19 @@ def main() -> None:
                     else:
                         print(f"      Disk probe: file not found at {local_path}")
 
+            # Populate grand totals for --status errors mode
+            processed_count = sum(
+                1 for f in files if isinstance(f, dict)
+                and f.get("TranscodeDecisionMaker", "") in PROCESSED_STATUSES
+            )
+            queued_count = sum(
+                1 for f in files if isinstance(f, dict)
+                and f.get("TranscodeDecisionMaker", "") not in PROCESSED_STATUSES
+                and f.get("TranscodeDecisionMaker", "") != "Transcode error"
+            )
             grand["errors"] += len(error_files)
+            grand["processed"] += processed_count
+            grand["queued"] += queued_count
             grand["total"] += len(files)
 
             # --replace-errors within --status errors
