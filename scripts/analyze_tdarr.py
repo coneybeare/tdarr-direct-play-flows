@@ -3,13 +3,15 @@
 
 Usage:
     python3 scripts/analyze_tdarr.py HOST [HOST ...]
+    python3 scripts/analyze_tdarr.py --servers              # reads servers.local.json
     python3 scripts/analyze_tdarr.py --api-key SECRET HOST [HOST ...]
     python3 scripts/analyze_tdarr.py --requeue HOST [HOST ...]
     python3 scripts/analyze_tdarr.py --delete-errors HOST [HOST ...]
 
 Examples:
     python3 scripts/analyze_tdarr.py http://localhost:8265
-    python3 scripts/analyze_tdarr.py http://localhost:8265 http://localhost:8265
+    python3 scripts/analyze_tdarr.py --servers
+    python3 scripts/analyze_tdarr.py --servers --status errors
     python3 scripts/analyze_tdarr.py --queued http://localhost:8265
     python3 scripts/analyze_tdarr.py --status all http://localhost:8265
     python3 scripts/analyze_tdarr.py --requeue http://localhost:8265
@@ -31,11 +33,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 from dataclasses import dataclass, field
-from pathlib import PurePosixPath
+from pathlib import Path, PurePosixPath
 
 
 # ── Tdarr API helpers ─────────────────────────────────────────────────────────
@@ -47,7 +51,7 @@ def _post(url: str, payload: dict, api_key: str | None = None) -> dict:
     if api_key:
         headers["x-api-key"] = api_key
     req = urllib.request.Request(url, data=data, headers=headers, method="POST")
-    with urllib.request.urlopen(req, timeout=30) as resp:
+    with urllib.request.urlopen(req, timeout=120) as resp:
         return json.loads(resp.read())
 
 
@@ -125,17 +129,283 @@ def delete_file(
     """Delete a file from disk and remove it from the Tdarr database.
 
     Returns (success, message) so callers can report what went wrong.
+    The /api/v2/delete-file endpoint may return an empty body on success.
     """
     payload = {"data": {"file": {"_id": file_id}}}
+    data = json.dumps(payload).encode()
+    headers = {"Content-Type": "application/json"}
+    if api_key:
+        headers["x-api-key"] = api_key
+    req = urllib.request.Request(
+        f"{host}/api/v2/delete-file", data=data, headers=headers, method="POST"
+    )
     try:
-        _post(f"{host}/api/v2/delete-file", payload, api_key)
-        return True, "OK"
+        with urllib.request.urlopen(req, timeout=30):
+            return True, "OK"
     except urllib.error.HTTPError as e:
         return False, f"HTTP {e.code}: {e.reason}"
     except urllib.error.URLError as e:
         return False, f"Connection error: {e.reason}"
     except Exception as e:
         return False, str(e)
+
+
+def _tdarr_path_to_local(tdarr_path: str, mount_prefix: str = "/Volumes") -> str:
+    """Convert a Tdarr file path to a local SMB mount path.
+
+    Tdarr paths like /movies/Foo/bar.mp4 map to /Volumes/Movies/Foo/bar.mp4.
+    The first path component is title-cased to match macOS mount names.
+    """
+    parts = PurePosixPath(tdarr_path).parts
+    if len(parts) < 2:
+        return tdarr_path
+    # /movies → Movies, /television → Television, /other → Other
+    share_name = parts[1].title()
+    rest = str(PurePosixPath(*parts[2:])) if len(parts) > 2 else ""
+    return str(Path(mount_prefix) / share_name / rest)
+
+
+def probe_file(local_path: str) -> dict | None:
+    """Run ffprobe on a local file and return parsed JSON, or None on error."""
+    try:
+        result = subprocess.run(
+            [
+                "ffprobe",
+                "-v", "error",
+                "-show_streams",
+                "-show_format",
+                "-print_format", "json",
+                local_path,
+            ],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        if result.returncode != 0:
+            return None
+        return json.loads(result.stdout)
+    except (subprocess.TimeoutExpired, FileNotFoundError, json.JSONDecodeError):
+        return None
+
+
+def _print_probe_result(probe_data: dict) -> None:
+    """Print a concise summary of ffprobe results."""
+    streams = probe_data.get("streams", [])
+    fmt = probe_data.get("format", {})
+    dur_s = float(fmt.get("duration", 0))
+    br = float(fmt.get("bit_rate", 0)) / 1000
+    encoder = fmt.get("tags", {}).get("encoder", "")
+
+    video = [s for s in streams if s.get("codec_type") == "video"
+             and s.get("codec_name") not in ("mjpeg", "png", "gif")]
+    audio = [s for s in streams if s.get("codec_type") == "audio"]
+
+    print(f"      Disk probe ({len(streams)} streams, {dur_s / 60:.0f} min, {br:.0f} kbps):")
+    for v in video:
+        tag = v.get("codec_tag_string", "?")
+        enc = (v.get("tags") or {}).get("encoder", "")
+        w = v.get("width", "?")
+        h = v.get("height", "?")
+        print(f"        video/{v.get('codec_name','?')} ({tag}) {w}x{h}"
+              + (f" enc={enc}" if enc else ""))
+    for a in audio:
+        lang = (a.get("tags") or {}).get("language", "?")
+        print(f"        audio/{a.get('codec_name','?')} {a.get('channels','?')}ch lang={lang}")
+    if not video and not audio:
+        print("        (no video/audio streams)")
+    if encoder:
+        print(f"        muxer: {encoder}")
+    # Diagnosis
+    if not audio:
+        print("        >> CORRUPT: no audio on disk")
+    if not video:
+        print("        >> CORRUPT: no video on disk")
+    if not streams:
+        print("        >> CORRUPT: no streams at all")
+
+
+# ── Arr integration ──────────────────────────────────────────────────────────
+
+
+def _parse_series_episode(tdarr_path: str) -> tuple[str, int, int] | None:
+    """Extract series name, season, and episode from a Tdarr TV path.
+
+    Expects paths like /television/Show Name/Season N/Show Name - SXXEXX - Title.mp4
+    Returns (series_name, season, episode) or None if not parseable.
+    """
+    import re
+
+    name = PurePosixPath(tdarr_path).stem
+    m = re.search(r"S(\d+)E(\d+)", name)
+    if not m:
+        return None
+    season = int(m.group(1))
+    episode = int(m.group(2))
+    # Series name is everything before " - SXXEXX"
+    series_name = name[: m.start()].rstrip(" -")
+    return series_name, season, episode
+
+
+def _parse_movie(tdarr_path: str) -> tuple[str, int | None] | None:
+    """Extract movie title and year from a Tdarr movie path.
+
+    Expects paths like /movies/Title (YEAR)/Title (YEAR) Quality.mp4
+    Returns (title, year) or None if not parseable.
+    """
+    import re
+
+    parts = PurePosixPath(tdarr_path).parts
+    if len(parts) < 3:
+        return None
+    folder = parts[2]  # e.g. "Title (2020)"
+    m = re.search(r"^(.+?)\s*\((\d{4})\)", folder)
+    if m:
+        return m.group(1).strip(), int(m.group(2))
+    return folder, None
+
+
+def arr_search_movie(
+    arr_host: str, arr_key: str, title: str, year: int | None = None
+) -> str:
+    """Find a movie in Radarr and trigger a search for replacement.
+
+    Returns a status message.
+    """
+    headers = {"Content-Type": "application/json", "X-Api-Key": arr_key}
+    search_term = urllib.parse.quote(title)
+    req = urllib.request.Request(
+        f"{arr_host}/api/v3/movie/lookup?term={search_term}", headers=headers
+    )
+    results = json.loads(urllib.request.urlopen(req, timeout=30).read())
+
+    found = None
+    for r in results:
+        if r.get("id"):
+            if year and r.get("year") == year:
+                found = r
+                break
+            elif not found:
+                found = r
+    if not found:
+        return "not found in Radarr"
+
+    mid = found["id"]
+    # Enable monitoring (best-effort — PUT can fail on stale movie data)
+    try:
+        req2 = urllib.request.Request(
+            f"{arr_host}/api/v3/movie/{mid}", headers=headers
+        )
+        movie = json.loads(urllib.request.urlopen(req2, timeout=30).read())
+        movie["monitored"] = True
+        req3 = urllib.request.Request(
+            f"{arr_host}/api/v3/movie/{mid}",
+            data=json.dumps(movie).encode(),
+            headers=headers,
+            method="PUT",
+        )
+        urllib.request.urlopen(req3, timeout=30)
+        monitored = True
+    except Exception:
+        monitored = False
+
+    # Refresh then search
+    for cmd_name in ["RefreshMovie", "MoviesSearch"]:
+        cmd = {"name": cmd_name, "movieIds": [mid]}
+        req4 = urllib.request.Request(
+            f"{arr_host}/api/v3/command",
+            data=json.dumps(cmd).encode(),
+            headers=headers,
+        )
+        urllib.request.urlopen(req4, timeout=30)
+
+    status = "monitored + " if monitored else ""
+    return f"{status}search queued (id={mid})"
+
+
+def arr_search_episode(
+    arr_host: str,
+    arr_key: str,
+    series_name: str,
+    season: int,
+    episode: int,
+) -> str:
+    """Find a series/episode in Sonarr and trigger a search for replacement.
+
+    Returns a status message.
+    """
+    headers = {"Content-Type": "application/json", "X-Api-Key": arr_key}
+    search_term = urllib.parse.quote(series_name)
+    req = urllib.request.Request(
+        f"{arr_host}/api/v3/series/lookup?term={search_term}", headers=headers
+    )
+    results = json.loads(urllib.request.urlopen(req, timeout=30).read())
+
+    found = None
+    for r in results:
+        if r.get("id"):
+            found = r
+            break
+    if not found:
+        return "series not found in Sonarr"
+
+    sid = found["id"]
+    # Get episodes
+    req2 = urllib.request.Request(
+        f"{arr_host}/api/v3/episode?seriesId={sid}", headers=headers
+    )
+    eps = json.loads(urllib.request.urlopen(req2, timeout=30).read())
+
+    ep_id = None
+    monitored = False
+    for ep in eps:
+        if ep.get("seasonNumber") == season and ep.get("episodeNumber") == episode:
+            ep_id = ep["id"]
+            # Enable monitoring (best-effort)
+            try:
+                ep["monitored"] = True
+                req3 = urllib.request.Request(
+                    f"{arr_host}/api/v3/episode/{ep_id}",
+                    data=json.dumps(ep).encode(),
+                    headers=headers,
+                    method="PUT",
+                )
+                urllib.request.urlopen(req3, timeout=30)
+                monitored = True
+            except Exception:
+                pass
+            break
+
+    if not ep_id:
+        return f"S{season:02d}E{episode:02d} not found in Sonarr"
+
+    cmd = {"name": "EpisodeSearch", "episodeIds": [ep_id]}
+    req4 = urllib.request.Request(
+        f"{arr_host}/api/v3/command",
+        data=json.dumps(cmd).encode(),
+        headers=headers,
+    )
+    urllib.request.urlopen(req4, timeout=30)
+    status = "monitored + " if monitored else ""
+    return f"{status}search queued (ep_id={ep_id})"
+
+
+def _get_arr_config() -> dict[str, dict]:
+    """Load arr config from servers.local.json keyed by Tdarr host.
+
+    Returns {host: {"arr": "radarr"|"sonarr", "arr_host": ..., "arr_api_key": ...}}
+    """
+    servers_file = Path(__file__).resolve().parent.parent / "servers.local.json"
+    if not servers_file.exists():
+        return {}
+    with open(servers_file) as fh:
+        data = json.load(fh)
+    result = {}
+    for srv in data.get("servers", []):
+        host = srv["host"].rstrip("/")
+        arr = srv.get("overrides", {}).get("arr_notify", {})
+        if arr:
+            result[host] = arr
+    return result
 
 
 # ── Analysis ──────────────────────────────────────────────────────────────────
@@ -432,21 +702,131 @@ def print_host_report(reports: list[FileReport], host: str, show_clean: bool) ->
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 
+def _replace_error_files(
+    error_files: list[dict],
+    host: str,
+    host_api_key: str | None,
+) -> None:
+    """Delete error files from Tdarr and trigger arr replacement searches."""
+    arr_config = _get_arr_config()
+    arr_info = arr_config.get(host, {})
+    arr_type = arr_info.get("arr", "")
+    arr_host = arr_info.get("arr_host", "")
+    arr_key = arr_info.get("arr_api_key", "")
+
+    print(f"\n  Replace errors ({len(error_files)} files):")
+    if arr_type:
+        print(f"  arr: {arr_type} at {arr_host}")
+    else:
+        print("  WARNING: No arr config found for this server")
+
+    deleted = 0
+    skipped = 0
+    searched = 0
+    for ef in error_files:
+        file_id = ef.get("_id") or ef.get("file", "")
+        if not file_id:
+            skipped += 1
+            continue
+        short = PurePosixPath(file_id).name
+
+        # Show file info
+        probe = ef.get("ffProbeData") or {}
+        probe_streams = probe.get("streams") or []
+        vs = next(
+            (s for s in probe_streams if s.get("codec_type") == "video"),
+            {},
+        )
+        codec = vs.get("codec_name") or ef.get("video_codec_name", "?")
+        res = (
+            ef.get("video_resolution")
+            or f"{vs.get('width', '?')}x{vs.get('height', '?')}"
+        )
+        size_mb = ef.get("file_size", 0)
+        audio = [s for s in probe_streams if s.get("codec_type") == "audio"]
+
+        print(f"\n    {short}")
+        print(f"      {codec} {res} | {size_mb:.1f} MB | audio: {len(audio)} streams")
+
+        try:
+            answer = (
+                input("      Delete and search for replacement? [y/N] ")
+                .strip()
+                .lower()
+            )
+        except (EOFError, KeyboardInterrupt):
+            print("\n  Aborted.")
+            sys.exit(1)
+
+        if answer != "y":
+            print("      [SKIPPED]")
+            skipped += 1
+            continue
+
+        # Delete from Tdarr DB (also removes from disk)
+        ok, msg = delete_file(host, file_id, host_api_key)
+        if ok:
+            print("      [DELETED]")
+            deleted += 1
+        else:
+            print(f"      [DELETE FAILED] {msg}")
+            continue
+
+        # Trigger arr search
+        if not arr_host:
+            print("      [!] No arr config — skipping search")
+            continue
+
+        try:
+            if arr_type == "radarr":
+                parsed = _parse_movie(file_id)
+                if parsed:
+                    title, year = parsed
+                    result = arr_search_movie(arr_host, arr_key, title, year)
+                    print(f"      Radarr: {result}")
+                    searched += 1
+                else:
+                    print("      [!] Could not parse movie from path")
+            elif arr_type == "sonarr":
+                parsed = _parse_series_episode(file_id)
+                if parsed:
+                    series, season, episode = parsed
+                    result = arr_search_episode(
+                        arr_host, arr_key, series, season, episode
+                    )
+                    print(f"      Sonarr: {result}")
+                    searched += 1
+                else:
+                    print("      [!] Could not parse episode from path")
+        except Exception as e:
+            print(f"      [!] Arr search failed: {e}")
+
+    print(
+        f"\n  Done: {deleted} deleted, {searched} searches triggered, "
+        f"{skipped} skipped"
+    )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Analyze Tdarr file state for flow issues",
     )
     parser.add_argument(
         "hosts",
-        nargs="+",
+        nargs="*",
         metavar="HOST",
         help="Tdarr server URL(s), e.g. http://localhost:<PORT>",
     )
     parser.add_argument("--api-key", default=None, help="Tdarr API key (optional)")
     parser.add_argument(
+        "--servers",
+        action="store_true",
+        help="Read server list from servers.local.json (no HOST args needed)",
+    )
+    parser.add_argument(
         "--status",
         default="processed",
-        choices=["processed", "queued", "all"],
+        choices=["processed", "queued", "errors", "all"],
         help="Which files to analyze (default: processed)",
     )
     parser.add_argument(
@@ -466,7 +846,46 @@ def main() -> None:
         help="Delete files that have transcode errors (from disk and DB). "
         "Prompts for confirmation on each file.",
     )
+    parser.add_argument(
+        "--probe",
+        action="store_true",
+        help="Run ffprobe on error files via local SMB mounts to verify actual "
+        "stream state on disk. Requires volumes mounted at /Volumes/Movies, "
+        "/Volumes/Television, etc.",
+    )
+    parser.add_argument(
+        "--replace-errors",
+        action="store_true",
+        help="Delete transcode error files from Tdarr DB and disk, then trigger "
+        "Radarr/Sonarr search for replacements. Reads arr config from "
+        "servers.local.json. Prompts for confirmation on each file.",
+    )
+    parser.add_argument(
+        "--mount-prefix",
+        default="/Volumes",
+        help="Local mount point prefix (default: /Volumes). Tdarr paths like "
+        "/movies/... map to <prefix>/Movies/...",
+    )
     args = parser.parse_args()
+
+    # Build list of (host, api_key) pairs
+    server_entries: list[tuple[str, str | None]] = []
+    if args.servers:
+        servers_file = Path(__file__).resolve().parent.parent / "servers.local.json"
+        if not servers_file.exists():
+            print(f"ERROR: {servers_file} not found. Copy servers.local.json.example to get started.")
+            sys.exit(1)
+        with open(servers_file) as fh:
+            servers_data = json.load(fh)
+        for srv in servers_data.get("servers", []):
+            srv_host = srv["host"].rstrip("/")
+            srv_key = srv.get("api_key") or args.api_key
+            server_entries.append((srv_host, srv_key))
+    elif args.hosts:
+        for h in args.hosts:
+            server_entries.append((h.rstrip("/"), args.api_key))
+    else:
+        parser.error("Provide HOST argument(s) or use --servers to read servers.local.json")
 
     grand = {
         "total": 0,
@@ -477,19 +896,18 @@ def main() -> None:
         "errors": 0,
     }
 
-    for host in args.hosts:
-        host = host.rstrip("/")
+    for host, host_api_key in server_entries:
         print(f"\nConnecting to {host} ...")
 
         try:
-            status = get_status(host, args.api_key)
+            status = get_status(host, host_api_key)
             print(f"  Tdarr v{status.get('version', '?')}")
         except Exception as e:
             print(f"  ERROR: Cannot connect: {e}")
             continue
 
         try:
-            files = get_all_files(host, args.api_key)
+            files = get_all_files(host, host_api_key)
         except Exception as e:
             print(f"  ERROR: Failed to fetch files: {e}")
             continue
@@ -514,8 +932,99 @@ def main() -> None:
                     for f in files
                     if f.get("TranscodeDecisionMaker", "") not in PROCESSED_STATUSES
                 ]
+            elif args.status == "errors":
+                files = [
+                    f
+                    for f in files
+                    if f.get("TranscodeDecisionMaker", "") == "Transcode error"
+                ]
             json.dump(files, sys.stdout, indent=2)
             print()
+            continue
+
+        # For --status errors, show transcode error files with stream details
+        if args.status == "errors":
+            error_files = [
+                f
+                for f in files
+                if isinstance(f, dict)
+                and f.get("TranscodeDecisionMaker") == "Transcode error"
+            ]
+            print(f"\n  TRANSCODE ERRORS ({len(error_files)} files)")
+            print(f"  {'-' * 76}")
+            for ef in error_files:
+                file_id = ef.get("_id") or ef.get("file", "")
+                short = PurePosixPath(file_id).name if file_id else "(unknown)"
+                probe = ef.get("ffProbeData") or {}
+                probe_streams = probe.get("streams") or []
+                fmt = probe.get("format") or {}
+                vs = next(
+                    (s for s in probe_streams if s.get("codec_type") == "video"),
+                    {},
+                )
+                codec = vs.get("codec_name") or ef.get("video_codec_name", "?")
+                tag = vs.get("codec_tag_string", "?")
+                res = (
+                    ef.get("video_resolution")
+                    or f"{vs.get('width', '?')}x{vs.get('height', '?')}"
+                )
+                size_mb = ef.get("file_size", 0)
+                dur_s = float(fmt.get("duration", 0))
+                dur_min = dur_s / 60 if dur_s else 0
+                br = float(fmt.get("bit_rate", 0)) / 1000
+                encoder = fmt.get("tags", {}).get("encoder", "")
+
+                audio_streams = [
+                    s for s in probe_streams if s.get("codec_type") == "audio"
+                ]
+                audio_desc = (
+                    ", ".join(
+                        f"{s.get('codec_name', '?')}/{s.get('channels', '?')}ch"
+                        f"/{(s.get('tags') or {}).get('language', '?')}"
+                        for s in audio_streams
+                    )
+                    or "none"
+                )
+
+                print(f"\n    {short}")
+                print(
+                    f"      {codec} ({tag}) | {res} | {br:.0f} kbps "
+                    f"| {size_mb:.1f} MB | {dur_min:.0f} min"
+                )
+                print(f"      Audio: {audio_desc}")
+                if encoder:
+                    print(f"      Muxer: {encoder}")
+
+                # Flag obvious issues
+                if not probe_streams:
+                    print("      [X] No streams in ffProbeData (sparse probe)")
+                if not audio_streams:
+                    print("      [X] No audio streams")
+                enc_tag = vs.get("tags", {}).get("encoder", "")
+                if enc_tag and ("nvenc" in enc_tag or "libx265" in enc_tag):
+                    print(f"      [!] Encoded by flow ({enc_tag})")
+
+                # Local disk probe
+                if args.probe and file_id:
+                    local_path = _tdarr_path_to_local(
+                        file_id, args.mount_prefix
+                    )
+                    if Path(local_path).exists():
+                        disk_probe = probe_file(local_path)
+                        if disk_probe:
+                            _print_probe_result(disk_probe)
+                        else:
+                            print(f"      Disk probe: FAILED (ffprobe error)")
+                    else:
+                        print(f"      Disk probe: file not found at {local_path}")
+
+            grand["errors"] += len(error_files)
+            grand["total"] += len(files)
+
+            # --replace-errors within --status errors
+            if args.replace_errors and error_files:
+                _replace_error_files(error_files, host, host_api_key)
+
             continue
 
         check_processed = args.status == "processed"
@@ -550,7 +1059,7 @@ def main() -> None:
                 print(f"\n  Requeuing {len(error_reports)} file(s) with errors...")
                 for r in error_reports:
                     file_id = r.path
-                    ok = requeue_file(host, file_id, args.api_key)
+                    ok = requeue_file(host, file_id, host_api_key)
                     status_str = "OK" if ok else "FAILED"
                     print(f"    [{status_str}] {r.name}")
             else:
@@ -596,7 +1105,7 @@ def main() -> None:
                         print("\n  Aborted.")
                         sys.exit(1)
                     if answer == "y":
-                        ok, msg = delete_file(host, file_id, args.api_key)
+                        ok, msg = delete_file(host, file_id, host_api_key)
                         if ok:
                             print("      [DELETED]")
                             deleted += 1
@@ -609,7 +1118,20 @@ def main() -> None:
             else:
                 print("\n  No files with transcode errors to delete.")
 
-    if len(args.hosts) > 1 and not args.json:
+        # Replace errors: delete from Tdarr + disk, trigger arr search
+        if args.replace_errors:
+            error_files = [
+                f
+                for f in files
+                if isinstance(f, dict)
+                and f.get("TranscodeDecisionMaker") == "Transcode error"
+            ]
+            if error_files:
+                _replace_error_files(error_files, host, host_api_key)
+            else:
+                print("\n  No files with transcode errors to replace.")
+
+    if len(server_entries) > 1 and not args.json:
         print(f"\n{'=' * 80}")
         print(
             f"  GRAND TOTAL: {grand['total']} files | "
