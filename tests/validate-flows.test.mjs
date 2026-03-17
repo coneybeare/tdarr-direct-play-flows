@@ -519,20 +519,25 @@ for (const file of flowFiles) {
     });
 
     test('onFlowError does not replace original file', () => {
-      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
       const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
 
-      // err_on must NOT route to any replaceOriginalFile node
-      const errTarget = edgeMap.get('err_on:1');
-      assert.ok(errTarget, 'onFlowError must have an outgoing edge');
-      const targetNode = pluginMap.get(errTarget);
-      assert.ok(targetNode, `Missing target node ${errTarget}`);
-      assert.notStrictEqual(targetNode.pluginName, 'replaceOriginalFile',
-        'onFlowError must NOT replace original file — a failed transcode would overwrite the original with a broken working file');
+      // Collect ALL outgoing edges from err_on (not just one via Map)
+      const errEdges = flow.flowEdges.filter((e) => e.source === 'err_on');
+      assert.ok(errEdges.length > 0, 'onFlowError must have at least one outgoing edge');
 
-      // The target should be a safe terminal (comment node)
-      assert.strictEqual(targetNode.pluginName, 'comment',
-        'onFlowError should terminate at a comment node to preserve the original file');
+      for (const edge of errEdges) {
+        const targetNode = pluginMap.get(edge.target);
+        assert.ok(targetNode, `Missing target node ${edge.target}`);
+        assert.notStrictEqual(targetNode.pluginName, 'replaceOriginalFile',
+          `onFlowError edge ${edge.id} must NOT route to replaceOriginalFile — a failed transcode would overwrite the original with a broken working file`);
+
+        // Each target should be a safe terminal (comment node with no outgoing edges)
+        assert.strictEqual(targetNode.pluginName, 'comment',
+          `onFlowError target ${edge.target} should be a comment node to preserve the original file`);
+        const outgoing = flow.flowEdges.filter((e) => e.source === edge.target);
+        assert.strictEqual(outgoing.length, 0,
+          `onFlowError terminal ${edge.target} must have no outgoing edges`);
+      }
     });
   });
 }
