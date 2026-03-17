@@ -2180,6 +2180,21 @@
         "samplerate": "48000"
       },
       "fpEnabled": true
+    },
+    {
+      "name": "Error Terminal",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_err_end",
+      "position": {
+        "x": -1000,
+        "y": 170
+      },
+      "inputsDB": {
+        "comment": "Flow errored. Do NOT replace original file — preserve it for diagnosis."
+      },
+      "fpEnabled": true
     }
   ],
   "flowEdges": [
@@ -3299,9 +3314,9 @@
     {
       "source": "err_on",
       "sourceHandle": "1",
-      "target": "fl_noop",
+      "target": "cmt_err_end",
       "targetHandle": null,
-      "id": "e_err_done"
+      "id": "e_err_on_end"
     },
     {
       "source": "grd_vid",

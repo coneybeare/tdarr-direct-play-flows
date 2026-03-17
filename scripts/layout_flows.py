@@ -990,7 +990,7 @@ def col_map_01() -> dict[str, int]:
         "web_plex": R,
         "chk_arr_notify": M, "arr_notify": M,
         # ── Error handler ─────────────────────────────────────────────
-        "err_on": e, "err_reset": e, "err_fail": e,
+        "err_on": e, "cmt_err_end": e,
         # ── VR branch ─────────────────────────────────────────────────
         **VR_NODES_01,
     }

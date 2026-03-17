@@ -20,7 +20,7 @@
 <path d="M483.2,696.4 L483.2,702.4 Q483.2,705.8 486.6,705.8 L582.1,705.8 Q585.5,705.8 585.5,709.2 L585.5,955.4" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
 <path d="M384.4,753.6 L384.4,767.3 Q384.4,770.7 387.8,770.7 L430.4,770.7 Q433.8,770.7 433.8,774.1 L433.8,783.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M483.2,753.6 L483.2,777.8 Q483.2,781.2 486.6,781.2 L598.6,781.2 Q602.0,781.2 602.0,784.6 L602.0,955.4" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M265.6,989.1 L265.6,1019.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M265.6,989.1 L265.6,1002.8 Q265.6,1006.2 262.2,1006.2 L219.7,1006.2 Q216.3,1006.2 216.3,1009.6 L216.3,1019.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M433.8,1174.1 L433.8,1204.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M433.8,1231.3 L433.8,1236.3 Q433.8,1239.7 437.2,1239.7 L812.2,1239.7 Q815.6,1239.7 815.6,1236.3 L815.6,21.9 Q815.6,18.5 819.0,18.5 L1530.5,18.5 Q1533.9,18.5 1533.9,21.9 L1533.9,26.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-ok)"/>
 <path d="M1533.9,111.0 L1533.9,141.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
@@ -165,7 +165,7 @@
 <path d="M3565.9,938.6 L3565.9,952.3 Q3565.9,955.7 3569.3,955.7 L3730.7,955.7 Q3734.1,955.7 3734.1,959.1 L3734.1,968.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M384.4,639.2 L384.4,652.9 Q384.4,656.3 387.8,656.3 L430.4,656.3 Q433.8,656.3 433.8,659.7 L433.8,669.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M483.2,639.2 L483.2,663.4 Q483.2,666.8 486.6,666.8 L615.1,666.8 Q618.5,666.8 618.5,670.2 L618.5,955.4" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M97.4,53.8 L97.4,527.4 Q97.4,530.8 100.8,530.8 L212.9,530.8 Q216.3,530.8 216.3,534.2 L216.3,1019.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M97.4,53.8 L97.4,84.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M384.4,524.8 L384.4,538.5 Q384.4,541.9 387.8,541.9 L430.4,541.9 Q433.8,541.9 433.8,545.3 L433.8,555.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M384.4,582.0 L384.4,606.2 Q384.4,609.6 381.1,609.6 L318.4,609.6 Q315.0,609.6 315.0,613.0 L315.0,1019.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M483.2,582.0 L483.2,595.7 Q483.2,599.1 479.8,599.1 L437.2,599.1 Q433.8,599.1 433.8,602.5 L433.8,612.3" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
@@ -461,6 +461,8 @@
 <text x="1029.3" y="907.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1029.3" dy="0">Guard: eng audio? (VR fb)</tspan></text>
 <rect x="958.8" y="948.7" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1029.3" y="964.6500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1029.3" dy="0">Ensure AAC 2.0 (VR fallback)</tspan></text>
+<rect x="26.9" y="84.1" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="97.4" y="103.39999999999999" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="97.4" dy="0">Error Terminal</tspan></text>
 <rect x="10" y="1743" width="11" height="11" rx="2" fill="#90CAF9" stroke="#9E9E9E" stroke-width="0.5"/>
 <text x="26" y="1753" font-family="monospace" font-size="10" fill="#444">Input</text>
 <rect x="10" y="1758" width="11" height="11" rx="2" fill="#CE93D8" stroke="#9E9E9E" stroke-width="0.5"/>
