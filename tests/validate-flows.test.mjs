@@ -517,5 +517,22 @@ for (const file of flowFiles) {
           `${node.id} must use "includes" — "equals" silently fails on ffmpegCommandRemoveStreamByProperty`);
       }
     });
+
+    test('onFlowError does not replace original file', () => {
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      // err_on must NOT route to any replaceOriginalFile node
+      const errTarget = edgeMap.get('err_on:1');
+      assert.ok(errTarget, 'onFlowError must have an outgoing edge');
+      const targetNode = pluginMap.get(errTarget);
+      assert.ok(targetNode, `Missing target node ${errTarget}`);
+      assert.notStrictEqual(targetNode.pluginName, 'replaceOriginalFile',
+        'onFlowError must NOT replace original file — a failed transcode would overwrite the original with a broken working file');
+
+      // The target should be a safe terminal (comment node)
+      assert.strictEqual(targetNode.pluginName, 'comment',
+        'onFlowError should terminate at a comment node to preserve the original file');
+    });
   });
 }
