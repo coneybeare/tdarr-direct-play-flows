@@ -962,7 +962,7 @@ def col_map_01() -> dict[str, int]:
         # ── Audio ─────────────────────────────────────────────────────
         "cmt_rmaudio": M, "cmd_rmaudio": M,
         "cmt_eac3": M, "grd_eac3_codec": M, "grd_eac3_ch": M, "grd_eac3_ch8": L,
-        "cmd_rm_old_eac3": M, "cmd_eac3_eng": M, "cmd_rm_eac3": R,
+        "cmd_eac3_eng": M, "cmd_rm_eac3": R,
         "cmt_audio": M, "grd_has_eng": M, "cmd_ens_eng": M,
         "grd_dup_und": L, "cmd_ens_und": R,
         "grd_fb_eng": L, "cmd_ens_fb": L,
