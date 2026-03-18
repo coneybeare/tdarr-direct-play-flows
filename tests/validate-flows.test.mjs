@@ -199,23 +199,17 @@ for (const file of flowFiles) {
       assert.strictEqual(codecGuard.inputsDB.condition, 'includes',
         'grd_eac3_codec must use "includes" (not "equals") for comma-separated valuesToMatch');
 
-      // Surround channels route through cmd_rm_old_eac3 before creating fresh EAC3
-      assert.strictEqual(edgeMap.get('grd_eac3_ch:1'), 'cmd_rm_old_eac3',
-        '6+ ch surround should strip old EAC3 first');
-      assert.strictEqual(edgeMap.get('grd_eac3_ch8:1'), 'cmd_rm_old_eac3',
-        '8 ch surround should strip old EAC3 first');
-      assert.strictEqual(edgeMap.get('cmd_rm_old_eac3:1'), 'cmd_eac3_eng',
-        'After stripping old EAC3, create fresh 5.1');
+      // Surround channels route directly to EAC3 creation (no pre-strip)
+      assert.strictEqual(edgeMap.get('grd_eac3_ch:1'), 'cmd_eac3_eng',
+        '6+ ch surround should route to EAC3 creation');
+      assert.strictEqual(edgeMap.get('grd_eac3_ch8:1'), 'cmd_eac3_eng',
+        '8 ch surround should route to EAC3 creation');
 
-      // Verify cmd_rm_old_eac3 config
-      const rmOldEac3 = pluginMap.get('cmd_rm_old_eac3');
-      assert.ok(rmOldEac3, 'Missing node cmd_rm_old_eac3');
-      assert.strictEqual(rmOldEac3.pluginName, 'ffmpegCommandRemoveStreamByProperty');
-      assert.strictEqual(rmOldEac3.inputsDB.propertyToCheck, 'codec_name');
-      assert.strictEqual(rmOldEac3.inputsDB.valuesToRemove, 'eac3');
-      assert.strictEqual(rmOldEac3.inputsDB.condition, 'includes');
+      // cmd_rm_old_eac3 must NOT exist (it destroyed source EAC3 before creation)
+      assert.ok(!pluginMap.has('cmd_rm_old_eac3'),
+        'cmd_rm_old_eac3 must be removed — it strips source EAC3 surround tracks before EAC3 creation');
 
-      // All EAC3 paths merge at cmt_audio (EAC3 now in pass 1, before AAC stereo)
+      // All EAC3 paths merge at cmt_audio
       assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmt_audio',
         'EAC3 eng path should route to cmt_audio');
       assert.strictEqual(edgeMap.get('grd_eac3_codec:2'), 'cmt_audio',
