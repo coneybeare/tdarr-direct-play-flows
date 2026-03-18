@@ -2769,7 +2769,7 @@
     {
       "source": "grd_eac3_codec",
       "sourceHandle": "2",
-      "target": "cmt_audio",
+      "target": "cmd_rm_ac3mp3",
       "targetHandle": null,
       "id": "e_eac3_codec_no"
     },

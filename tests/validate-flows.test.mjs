@@ -216,8 +216,8 @@ for (const file of flowFiles) {
         'cmd_rm_eac3 should route to cmd_rm_ac3mp3');
       assert.strictEqual(edgeMap.get('cmd_rm_ac3mp3:1'), 'cmt_audio',
         'cmd_rm_ac3mp3 should route to cmt_audio');
-      assert.strictEqual(edgeMap.get('grd_eac3_codec:2'), 'cmt_audio',
-        'Non-surround codec path should route to cmt_audio');
+      assert.strictEqual(edgeMap.get('grd_eac3_codec:2'), 'cmd_rm_ac3mp3',
+        'Non-surround codec path should route through cmd_rm_ac3mp3 to strip MP3/AC3');
 
       // cmd_rm_eac3 on non-surround path (no 6+ch surround, strip all eac3)
       assert.strictEqual(edgeMap.get('grd_eac3_ch8:2'), 'cmd_rm_eac3',
