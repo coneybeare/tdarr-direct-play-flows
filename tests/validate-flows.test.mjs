@@ -209,23 +209,31 @@ for (const file of flowFiles) {
       assert.ok(!pluginMap.has('cmd_rm_old_eac3'),
         'cmd_rm_old_eac3 must be removed — it strips source EAC3 surround tracks before EAC3 creation');
 
-      // All EAC3 paths merge at cmt_audio
-      assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmt_audio',
-        'EAC3 eng path should route to cmt_audio');
+      // EAC3 creation and no-surround paths route through cmd_rm_ac3mp3 then cmt_audio
+      assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmd_rm_ac3mp3',
+        'EAC3 eng path should route to cmd_rm_ac3mp3');
+      assert.strictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmd_rm_ac3mp3',
+        'cmd_rm_eac3 should route to cmd_rm_ac3mp3');
+      assert.strictEqual(edgeMap.get('cmd_rm_ac3mp3:1'), 'cmt_audio',
+        'cmd_rm_ac3mp3 should route to cmt_audio');
       assert.strictEqual(edgeMap.get('grd_eac3_codec:2'), 'cmt_audio',
         'Non-surround codec path should route to cmt_audio');
-      assert.strictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmt_audio',
-        'cmd_rm_eac3 should route to cmt_audio');
 
       // cmd_rm_eac3 on non-surround path (no 6+ch surround, strip all eac3)
       assert.strictEqual(edgeMap.get('grd_eac3_ch8:2'), 'cmd_rm_eac3',
         'Non-surround channel path should strip EAC3 first');
 
-      // Reorder THEN remove ac3/mp3 (prevents reorder from re-adding)
-      assert.strictEqual(edgeMap.get('cmd_reorder2:1'), 'cmd_rm_ac3mp3',
-        'cmd_reorder2 should route to cmd_rm_ac3mp3');
-      assert.strictEqual(edgeMap.get('cmd_rm_ac3mp3:1'), 'cmd_faststart2',
-        'cmd_rm_ac3mp3 should route to cmd_faststart2');
+      // Second FFmpeg pass must NOT exist (eliminated to prevent ffprobe failures)
+      assert.ok(!pluginMap.has('ffs_reorder'),
+        'ffs_reorder must be removed — second pass ffprobe fails on high-stream-count files');
+      assert.ok(!pluginMap.has('ffe_reorder'),
+        'ffe_reorder must be removed — second pass is eliminated');
+      assert.ok(!pluginMap.has('cmt_reorder2'),
+        'cmt_reorder2 must be removed — second pass is eliminated');
+
+      // ffe_001 routes directly to size validation (no second pass)
+      assert.strictEqual(edgeMap.get('ffe_001:1'), 'cmt_size',
+        'ffe_001 should route directly to size check (no second pass)');
     });
 
     test('guard chain catches orphaned stereo EAC3', () => {
@@ -429,30 +437,19 @@ for (const file of flowFiles) {
       const rmac3mp3 = pluginMap.get('cmd_rm_ac3mp3');
       assert.ok(rmac3mp3, 'Missing node cmd_rm_ac3mp3');
       assert.ok(rmac3mp3.inputsDB.valuesToRemove.includes('dts'),
-        'cmd_rm_ac3mp3 must remove dts (reorder can re-map from first pipeline)');
+        'cmd_rm_ac3mp3 must remove dts');
     });
 
-    test('second pipeline has faststart', () => {
-      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+    test('hvc1 tag set in both normal and VR paths', () => {
       const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
 
-      // cmd_faststart2 → ffe_reorder
-      assert.strictEqual(edgeMap.get('cmd_faststart2:1'), 'ffe_reorder');
-
-      const node = pluginMap.get('cmd_faststart2');
-      assert.ok(node, 'Missing node cmd_faststart2');
-      assert.ok(node.inputsDB.outputArguments.includes('+faststart'),
-        'cmd_faststart2 must include +faststart');
-    });
-
-    test('remux passes include hvc1 tag', () => {
-      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
-
-      // Normal path remux
-      const faststart2 = pluginMap.get('cmd_faststart2');
-      assert.ok(faststart2, 'Missing node cmd_faststart2');
-      assert.ok(faststart2.inputsDB.outputArguments.includes('-tag:v hvc1'),
-        'cmd_faststart2 must include -tag:v hvc1 to prevent FFmpeg defaulting to hev1');
+      // Normal path (cmd_tags in first pipeline)
+      const tags = pluginMap.get('cmd_tags');
+      assert.ok(tags, 'Missing node cmd_tags');
+      assert.ok(tags.inputsDB.outputArguments.includes('-tag:v hvc1'),
+        'cmd_tags must include -tag:v hvc1');
+      assert.ok(tags.inputsDB.outputArguments.includes('+faststart'),
+        'cmd_tags must include +faststart');
 
       // VR path remux
       const vrFaststart2 = pluginMap.get('cmd_vr_faststart2');

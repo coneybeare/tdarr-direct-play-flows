@@ -962,17 +962,12 @@ def col_map_01() -> dict[str, int]:
         # ── Audio ─────────────────────────────────────────────────────
         "cmt_rmaudio": M, "cmd_rmaudio": M,
         "cmt_eac3": M, "grd_eac3_codec": M, "grd_eac3_ch": M, "grd_eac3_ch8": L,
-        "cmd_eac3_eng": M, "cmd_rm_eac3": R,
+        "cmd_eac3_eng": M, "cmd_rm_eac3": R, "cmd_rm_ac3mp3": M,
         "cmt_audio": M, "grd_has_eng": M, "cmd_ens_eng": M,
         "grd_dup_und": L, "cmd_ens_und": R,
         "grd_fb_eng": L, "cmd_ens_fb": L,
         "cmt_reorder": M, "cmd_reorder": M,
         "cmt_exec": M, "cmd_nochapters": M, "ffe_001": M,
-        # ── Reorder pass ──────────────────────────────────────────────
-        "cmt_reorder2": M, "ffs_reorder": M,
-        "cmd_rm_ac3mp3": M,
-        "cmd_rmdata2": M, "cmd_reorder2": M,
-        "cmd_faststart2": M, "ffe_reorder": M,
         # ── Validation ────────────────────────────────────────────────
         "cmt_size": M, "fl_size": M,
         "cmt_toobig": L, "fail_toobig": L,
