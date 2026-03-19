@@ -199,25 +199,33 @@ for (const file of flowFiles) {
       assert.strictEqual(codecGuard.inputsDB.condition, 'includes',
         'grd_eac3_codec must use "includes" (not "equals") for comma-separated valuesToMatch');
 
-      // Surround channels route directly to EAC3 creation (no pre-strip)
-      assert.strictEqual(edgeMap.get('grd_eac3_ch:1'), 'cmd_eac3_eng',
-        '6+ ch surround should route to EAC3 creation');
-      assert.strictEqual(edgeMap.get('grd_eac3_ch8:1'), 'cmd_eac3_eng',
-        '8 ch surround should route to EAC3 creation');
+      // Surround channels route through English audio guard before EAC3 creation
+      assert.strictEqual(edgeMap.get('grd_eac3_ch:1'), 'grd_eac3_has_eng',
+        '6+ ch surround should check for English audio before EAC3 creation');
+      assert.strictEqual(edgeMap.get('grd_eac3_ch8:1'), 'grd_eac3_has_eng',
+        '8 ch surround should check for English audio before EAC3 creation');
+
+      // English audio guard routes to EAC3 creation or skips
+      assert.strictEqual(edgeMap.get('grd_eac3_has_eng:1'), 'cmd_eac3_eng',
+        'Has English audio should route to EAC3 creation');
+      assert.strictEqual(edgeMap.get('grd_eac3_has_eng:2'), 'cmt_audio',
+        'No English audio should skip EAC3 creation (prevents EnsureAudioStream failure)');
 
       // cmd_rm_old_eac3 must NOT exist (it destroyed source EAC3 before creation)
       assert.ok(!pluginMap.has('cmd_rm_old_eac3'),
         'cmd_rm_old_eac3 must be removed — it strips source EAC3 surround tracks before EAC3 creation');
 
-      // EAC3 creation and no-surround paths route through cmd_rm_ac3mp3 then cmt_audio
-      assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmd_rm_ac3mp3',
-        'EAC3 eng path should route to cmd_rm_ac3mp3');
-      assert.strictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmd_rm_ac3mp3',
-        'cmd_rm_eac3 should route to cmd_rm_ac3mp3');
-      assert.strictEqual(edgeMap.get('cmd_rm_ac3mp3:1'), 'cmt_audio',
-        'cmd_rm_ac3mp3 should route to cmt_audio');
-      assert.strictEqual(edgeMap.get('grd_eac3_codec:2'), 'cmd_rm_ac3mp3',
-        'Non-surround codec path should route through cmd_rm_ac3mp3 to strip MP3/AC3');
+      // EAC3 section routes back to cmt_audio (AC3 removal happens later)
+      assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmt_audio',
+        'EAC3 eng path should route to cmt_audio');
+      assert.strictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmt_audio',
+        'cmd_rm_eac3 should route to cmt_audio');
+      assert.strictEqual(edgeMap.get('grd_eac3_codec:2'), 'cmt_audio',
+        'Non-surround codec path should route to cmt_audio');
+
+      // cmd_rm_ac3mp3 runs AFTER audio creation (before reorder)
+      assert.strictEqual(edgeMap.get('cmd_rm_ac3mp3:1'), 'cmt_reorder',
+        'cmd_rm_ac3mp3 should route to reorder (after all audio creation)');
 
       // cmd_rm_eac3 on non-surround path (no 6+ch surround, strip all eac3)
       assert.strictEqual(edgeMap.get('grd_eac3_ch8:2'), 'cmd_rm_eac3',
@@ -342,17 +350,17 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_dup_und:2'), 'grd_fb_eng',
         'No und audio should check for eng fallback');
 
-      // grd_fb_eng YES → cmt_reorder (eng pass created AAC)
-      assert.strictEqual(edgeMap.get('grd_fb_eng:1'), 'cmt_reorder',
+      // grd_fb_eng YES → cmd_rm_ac3mp3 (eng pass created AAC, now remove legacy codecs)
+      assert.strictEqual(edgeMap.get('grd_fb_eng:1'), 'cmd_rm_ac3mp3',
         'Eng audio present should skip fallback');
 
       // grd_fb_eng NO → cmd_ens_fb (fallback AAC creation)
       assert.strictEqual(edgeMap.get('grd_fb_eng:2'), 'cmd_ens_fb',
         'No eng/und audio should route to fallback AAC');
 
-      // cmd_ens_fb → cmt_reorder
-      assert.strictEqual(edgeMap.get('cmd_ens_fb:1'), 'cmt_reorder',
-        'Fallback AAC should route to reorder');
+      // cmd_ens_fb → cmd_rm_ac3mp3
+      assert.strictEqual(edgeMap.get('cmd_ens_fb:1'), 'cmd_rm_ac3mp3',
+        'Fallback AAC should route to legacy codec removal');
 
       // Verify fallback node config
       const fb = pluginMap.get('cmd_ens_fb');
