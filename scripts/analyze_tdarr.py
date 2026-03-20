@@ -130,7 +130,7 @@ def requeue_file(
             f"{host}/api/v2/cruddb", data=data, headers=headers, method="POST"
         )
         with urllib.request.urlopen(req, timeout=120) as resp:
-            return resp.status == 200
+            return 200 <= resp.status < 300
     except (urllib.error.URLError, Exception):
         return False
 
@@ -968,6 +968,10 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    # --search and --requeue-file are not compatible with --json
+    if args.json and (args.search or args.requeue_file):
+        parser.error("--json cannot be combined with --search or --requeue-file")
+
     # --requeue and --delete-errors don't work with --status errors
     # (use --replace-errors instead for the error-specific workflow)
     if args.status == "errors" and (args.requeue or args.delete_errors):
@@ -1059,6 +1063,9 @@ def main() -> None:
                 print(f"\n  Requeuing {len(matches)} file(s) matching '{args.requeue_file}':")
                 for mf in matches:
                     file_id = mf.get("_id") or mf.get("file", "")
+                    if not file_id:
+                        print("    [SKIP] (no file ID)")
+                        continue
                     short = PurePosixPath(file_id).name if file_id else "(unknown)"
                     status = mf.get("TranscodeDecisionMaker", "?")
                     ok = requeue_file(host, file_id, host_api_key)
@@ -1297,7 +1304,7 @@ def main() -> None:
                 print("\n  No files with transcode errors to replace.")
 
     # Dump combined JSON after processing all servers (single valid array)
-    if args.json and all_json_files:
+    if args.json:
         json.dump(all_json_files, sys.stdout, indent=2)
         print()
 
