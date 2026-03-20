@@ -968,6 +968,8 @@ def col_map_01() -> dict[str, int]:
         "grd_fb_eng": L, "cmd_ens_fb": L,
         "cmt_reorder": M, "cmd_reorder": M,
         "cmt_exec": M, "cmd_nochapters": M, "ffe_001": M,
+        # ── Pass 2: strip AC3/MP3 (now real codec_names) ─────────────
+        "ffs_002": M, "cmd_rm_ac3mp3": M, "ffe_002": M,
         # ── Validation ────────────────────────────────────────────────
         "cmt_size": M, "fl_size": M,
         "cmt_toobig": L, "fail_toobig": L,
