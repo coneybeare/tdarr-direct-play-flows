@@ -12,6 +12,8 @@ Examples:
     python3 scripts/analyze_tdarr.py http://localhost:8265
     python3 scripts/analyze_tdarr.py --servers
     python3 scripts/analyze_tdarr.py --servers --status errors
+    python3 scripts/analyze_tdarr.py --servers --search "ozark"
+    python3 scripts/analyze_tdarr.py --servers --requeue-file "liya silver"
     python3 scripts/analyze_tdarr.py --queued http://localhost:8265
     python3 scripts/analyze_tdarr.py --status all http://localhost:8265
     python3 scripts/analyze_tdarr.py --requeue http://localhost:8265
@@ -107,6 +109,9 @@ def requeue_file(
     Uses the cruddb update mode with the ``obj`` field (not ``update``).
     The ``update`` field silently ignores changes — ``obj`` is required.
     Reference: https://github.com/HaveAGitGat/Tdarr/issues/752
+
+    The update endpoint may return an empty body on success, so we check
+    HTTP status rather than parsing JSON.
     """
     payload = {
         "data": {
@@ -117,8 +122,15 @@ def requeue_file(
         }
     }
     try:
-        _post(f"{host}/api/v2/cruddb", payload, api_key)
-        return True
+        data = json.dumps(payload).encode()
+        headers = {"Content-Type": "application/json"}
+        if api_key:
+            headers["x-api-key"] = api_key
+        req = urllib.request.Request(
+            f"{host}/api/v2/cruddb", data=data, headers=headers, method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=120) as resp:
+            return resp.status == 200
     except (urllib.error.URLError, Exception):
         return False
 
@@ -596,13 +608,13 @@ def analyze_file(f: dict, check_processed: bool = True) -> FileReport | None:
         report.issues.append(FileIssue("error", f"{len(attach_streams)} attachment(s)"))
 
     # Size increase
-    if size_ratio > 120:
-        report.issues.append(
-            FileIssue("warning", f"Size increase: {size_ratio:.0f}% of original")
-        )
-    elif size_ratio > 150:
+    if size_ratio > 150:
         report.issues.append(
             FileIssue("error", f"Size increase: {size_ratio:.0f}% of original")
+        )
+    elif size_ratio > 120:
+        report.issues.append(
+            FileIssue("warning", f"Size increase: {size_ratio:.0f}% of original")
         )
 
     return report
@@ -611,6 +623,69 @@ def analyze_file(f: dict, check_processed: bool = True) -> FileReport | None:
 # ── Output formatting ─────────────────────────────────────────────────────────
 
 SEV = {"error": "X", "warning": "!", "info": "-"}
+
+
+def _print_search_result(f: dict) -> None:
+    """Print detailed info for a single file record (used by --search)."""
+    file_path = f.get("_id") or f.get("file") or "?"
+    short = PurePosixPath(file_path).name if file_path else "(unknown)"
+    probe = f.get("ffProbeData") or {}
+    streams = probe.get("streams") or []
+    fmt = probe.get("format") or {}
+
+    vs = next(
+        (s for s in streams if s.get("codec_type") == "video"
+         and s.get("codec_name") not in ("mjpeg", "png", "gif")),
+        {},
+    )
+    audio_streams = [s for s in streams if s.get("codec_type") == "audio"]
+    sub_streams = [s for s in streams if s.get("codec_type") == "subtitle"]
+    data_streams = [s for s in streams if s.get("codec_type") == "data"]
+    attach_streams = [s for s in streams if s.get("codec_type") == "attachment"]
+
+    codec = vs.get("codec_name") or f.get("video_codec_name", "?")
+    tag = vs.get("codec_tag_string", "?")
+    res = (
+        f.get("video_resolution")
+        or f"{vs.get('width', '?')}x{vs.get('height', '?')}"
+    )
+    container = f.get("container", "?")
+    size_mb = f.get("file_size", 0)
+    status = f.get("TranscodeDecisionMaker", "?")
+    size_ratio = f.get("newVsOldRatio", 0) or 0
+    footprint = f.get("footprintId", "")
+    dur_s = _safe_float(fmt.get("duration"))
+    br = _safe_float(fmt.get("bit_rate")) / 1000
+
+    audio_desc = (
+        ", ".join(
+            f"{s.get('codec_name', '?')}/{s.get('channels', '?')}ch"
+            f"/{(s.get('tags') or {}).get('language', '?')}"
+            for s in audio_streams
+        )
+        or "none"
+    )
+
+    ratio_str = f" | {size_ratio:.0f}% of orig" if size_ratio else ""
+    print(f"\n    {short}")
+    print(f"      {container} | {codec} ({tag}) | {res} | {br:.0f} kbps | {size_mb:.1f} MB{ratio_str}")
+    print(f"      Audio: {audio_desc}")
+    print(f"      Status: {status}")
+    if footprint:
+        print(f"      footprintId: {footprint}")
+    if dur_s:
+        print(f"      Duration: {dur_s / 60:.1f} min")
+    extras = []
+    if sub_streams:
+        codecs = sorted(set(s.get("codec_name", "?") for s in sub_streams))
+        extras.append(f"{len(sub_streams)} sub ({', '.join(codecs)})")
+    if data_streams:
+        codecs = sorted(set(s.get("codec_tag_string", "?") for s in data_streams))
+        extras.append(f"{len(data_streams)} data ({', '.join(codecs)})")
+    if attach_streams:
+        extras.append(f"{len(attach_streams)} attachments")
+    if extras:
+        print(f"      Other: {', '.join(extras)}")
 
 
 def _audio_desc(r: FileReport) -> str:
@@ -877,6 +952,20 @@ def main() -> None:
         help="Local mount point prefix (default: /Volumes). Tdarr paths like "
         "/movies/... map to <prefix>/Movies/...",
     )
+    parser.add_argument(
+        "--search",
+        default=None,
+        metavar="TERM",
+        help="Search for files whose path contains TERM (case-insensitive). "
+        "Shows matching files with full details regardless of --status.",
+    )
+    parser.add_argument(
+        "--requeue-file",
+        default=None,
+        metavar="TERM",
+        help="Requeue files whose path contains TERM (case-insensitive). "
+        "Shows matches and requeues them.",
+    )
     args = parser.parse_args()
 
     # --requeue and --delete-errors don't work with --status errors
@@ -914,28 +1003,70 @@ def main() -> None:
         "warnings": 0,
         "errors": 0,
     }
+    all_json_files: list[dict] = []
+
+    # When outputting JSON, send status messages to stderr so stdout is clean
+    _log = (lambda *a, **kw: print(*a, **kw, file=sys.stderr)) if args.json else print
 
     for host, host_api_key in server_entries:
-        print(f"\nConnecting to {host} ...")
+        _log(f"\nConnecting to {host} ...")
 
         try:
             status = get_status(host, host_api_key)
-            print(f"  Tdarr v{status.get('version', '?')}")
+            _log(f"  Tdarr v{status.get('version', '?')}")
         except Exception as e:
-            print(f"  ERROR: Cannot connect: {e}")
+            _log(f"  ERROR: Cannot connect: {e}")
             continue
 
         try:
             files = get_all_files(host, host_api_key)
         except Exception as e:
-            print(f"  ERROR: Failed to fetch files: {e}")
+            _log(f"  ERROR: Failed to fetch files: {e}")
             continue
 
         if not files:
-            print("  No files found.")
+            _log("  No files found.")
             continue
 
-        print(f"  {len(files)} file records")
+        _log(f"  {len(files)} file records")
+
+        # --search: find files by name and show details
+        if args.search:
+            term = args.search.lower()
+            matches = [
+                f for f in files
+                if isinstance(f, dict)
+                and term in (f.get("_id") or f.get("file") or "").lower()
+            ]
+            if matches:
+                print(f"\n  Search results for '{args.search}' ({len(matches)} matches)")
+                print(f"  {'-' * 76}")
+                for mf in matches:
+                    _print_search_result(mf)
+            else:
+                print(f"\n  No files matching '{args.search}'")
+            continue
+
+        # --requeue-file: find and requeue specific files by name
+        if args.requeue_file:
+            term = args.requeue_file.lower()
+            matches = [
+                f for f in files
+                if isinstance(f, dict)
+                and term in (f.get("_id") or f.get("file") or "").lower()
+            ]
+            if matches:
+                print(f"\n  Requeuing {len(matches)} file(s) matching '{args.requeue_file}':")
+                for mf in matches:
+                    file_id = mf.get("_id") or mf.get("file", "")
+                    short = PurePosixPath(file_id).name if file_id else "(unknown)"
+                    status = mf.get("TranscodeDecisionMaker", "?")
+                    ok = requeue_file(host, file_id, host_api_key)
+                    result = "OK" if ok else "FAILED"
+                    print(f"    [{result}] {short} (was: {status})")
+            else:
+                print(f"\n  No files matching '{args.requeue_file}'")
+            continue
 
         if args.json:
             # Filter by status before dumping
@@ -957,8 +1088,7 @@ def main() -> None:
                     for f in files
                     if f.get("TranscodeDecisionMaker", "") == "Transcode error"
                 ]
-            json.dump(files, sys.stdout, indent=2)
-            print()
+            all_json_files.extend(files)
             continue
 
         # For --status errors, show transcode error files with stream details
@@ -1005,12 +1135,16 @@ def main() -> None:
                     or "none"
                 )
 
+                footprint = ef.get("footprintId", "")
+
                 print(f"\n    {short}")
                 print(
                     f"      {codec} ({tag}) | {res} | {br:.0f} kbps "
                     f"| {size_mb:.1f} MB | {dur_min:.0f} min"
                 )
                 print(f"      Audio: {audio_desc}")
+                if footprint:
+                    print(f"      footprintId: {footprint}")
                 if encoder:
                     print(f"      Muxer: {encoder}")
 
@@ -1162,7 +1296,17 @@ def main() -> None:
             else:
                 print("\n  No files with transcode errors to replace.")
 
-    if len(server_entries) > 1 and not args.json:
+    # Dump combined JSON after processing all servers (single valid array)
+    if args.json and all_json_files:
+        json.dump(all_json_files, sys.stdout, indent=2)
+        print()
+
+    if (
+        len(server_entries) > 1
+        and not args.json
+        and not args.search
+        and not args.requeue_file
+    ):
         print(f"\n{'=' * 80}")
         print(
             f"  GRAND TOTAL: {grand['total']} files | "
