@@ -181,7 +181,7 @@ for (const file of flowFiles) {
       }
     });
 
-    test('cmd_rm_ac3mp3 runs after reorder to prevent re-mapping', () => {
+    test('EAC3 section and audio pipeline route correctly', () => {
       const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
       const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
 
@@ -215,7 +215,12 @@ for (const file of flowFiles) {
       assert.ok(!pluginMap.has('cmd_rm_old_eac3'),
         'cmd_rm_old_eac3 must be removed — it strips source EAC3 surround tracks before EAC3 creation');
 
-      // EAC3 section routes back to cmt_audio (AC3 removal happens later)
+      // cmd_rm_ac3mp3 must be in PASS 2 (not in pass 1 — it destroys
+      // EnsureAudioStream clones that keep source codec_name)
+      assert.ok(pluginMap.has('cmd_rm_ac3mp3'),
+        'cmd_rm_ac3mp3 must exist in pass 2');
+
+      // EAC3 section routes back to cmt_audio
       assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmt_audio',
         'EAC3 eng path should route to cmt_audio');
       assert.strictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmt_audio',
@@ -223,25 +228,27 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_eac3_codec:2'), 'cmt_audio',
         'Non-surround codec path should route to cmt_audio');
 
-      // cmd_rm_ac3mp3 runs AFTER audio creation (before reorder)
-      assert.strictEqual(edgeMap.get('cmd_rm_ac3mp3:1'), 'cmt_reorder',
-        'cmd_rm_ac3mp3 should route to reorder (after all audio creation)');
-
       // cmd_rm_eac3 on non-surround path (no 6+ch surround, strip all eac3)
       assert.strictEqual(edgeMap.get('grd_eac3_ch8:2'), 'cmd_rm_eac3',
         'Non-surround channel path should strip EAC3 first');
 
-      // Second FFmpeg pass must NOT exist (eliminated to prevent ffprobe failures)
+      // Old second-pass nodes from pre-#49 must still be gone
       assert.ok(!pluginMap.has('ffs_reorder'),
-        'ffs_reorder must be removed — second pass ffprobe fails on high-stream-count files');
+        'ffs_reorder must be removed — old second pass');
       assert.ok(!pluginMap.has('ffe_reorder'),
-        'ffe_reorder must be removed — second pass is eliminated');
+        'ffe_reorder must be removed — old second pass');
       assert.ok(!pluginMap.has('cmt_reorder2'),
-        'cmt_reorder2 must be removed — second pass is eliminated');
+        'cmt_reorder2 must be removed — old second pass');
 
-      // ffe_001 routes directly to size validation (no second pass)
-      assert.strictEqual(edgeMap.get('ffe_001:1'), 'cmt_size',
-        'ffe_001 should route directly to size check (no second pass)');
+      // Pass 2 chain: ffe_001 → ffs_002 → cmd_rm_ac3mp3 → ffe_002 → cmt_size
+      assert.strictEqual(edgeMap.get('ffe_001:1'), 'ffs_002',
+        'ffe_001 should route to pass 2 start');
+      assert.strictEqual(edgeMap.get('ffs_002:1'), 'cmd_rm_ac3mp3',
+        'Pass 2 start should route to AC3/MP3 removal');
+      assert.strictEqual(edgeMap.get('cmd_rm_ac3mp3:1'), 'ffe_002',
+        'AC3/MP3 removal should route to pass 2 execute');
+      assert.strictEqual(edgeMap.get('ffe_002:1'), 'cmt_size',
+        'Pass 2 execute should route to size check');
     });
 
     test('guard chain catches orphaned stereo EAC3', () => {
@@ -300,7 +307,7 @@ for (const file of flowFiles) {
           `grd_unwanted should catch ${codec}`);
       }
 
-      // Every codec in the guard must be removable by the pipeline (exact match)
+      // Every codec in the guard must be removable by the pipeline
       const rmaudio = pluginMap.get('cmd_rmaudio');
       const rmac3mp3 = pluginMap.get('cmd_rm_ac3mp3');
       assert.ok(rmaudio && rmac3mp3, 'Missing removal nodes');
@@ -350,17 +357,17 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_dup_und:2'), 'grd_fb_eng',
         'No und audio should check for eng fallback');
 
-      // grd_fb_eng YES → cmd_rm_ac3mp3 (eng pass created AAC, now remove legacy codecs)
-      assert.strictEqual(edgeMap.get('grd_fb_eng:1'), 'cmd_rm_ac3mp3',
-        'Eng audio present should skip fallback');
+      // grd_fb_eng YES → cmt_reorder (eng pass created AAC, proceed to reorder)
+      assert.strictEqual(edgeMap.get('grd_fb_eng:1'), 'cmt_reorder',
+        'Eng audio present should skip fallback and route to reorder');
 
       // grd_fb_eng NO → cmd_ens_fb (fallback AAC creation)
       assert.strictEqual(edgeMap.get('grd_fb_eng:2'), 'cmd_ens_fb',
         'No eng/und audio should route to fallback AAC');
 
-      // cmd_ens_fb → cmd_rm_ac3mp3
-      assert.strictEqual(edgeMap.get('cmd_ens_fb:1'), 'cmd_rm_ac3mp3',
-        'Fallback AAC should route to legacy codec removal');
+      // cmd_ens_fb → cmt_reorder
+      assert.strictEqual(edgeMap.get('cmd_ens_fb:1'), 'cmt_reorder',
+        'Fallback AAC should route to reorder');
 
       // Verify fallback node config
       const fb = pluginMap.get('cmd_ens_fb');
@@ -434,7 +441,7 @@ for (const file of flowFiles) {
         'cmd_vr_rmimages must strip bin_data streams');
     });
 
-    test('DTS is stripped by both audio removal nodes', () => {
+    test('DTS is stripped by audio removal nodes', () => {
       const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
 
       const rmaudio = pluginMap.get('cmd_rmaudio');
@@ -442,10 +449,13 @@ for (const file of flowFiles) {
       assert.ok(rmaudio.inputsDB.valuesToRemove.includes('dts'),
         'cmd_rmaudio must remove dts (ffprobe codec_name variant)');
 
+      // cmd_rm_ac3mp3 is in pass 2 — it handles ac3,mp3 (dts already removed by cmd_rmaudio in pass 1)
       const rmac3mp3 = pluginMap.get('cmd_rm_ac3mp3');
       assert.ok(rmac3mp3, 'Missing node cmd_rm_ac3mp3');
-      assert.ok(rmac3mp3.inputsDB.valuesToRemove.includes('dts'),
-        'cmd_rm_ac3mp3 must remove dts');
+      assert.ok(rmac3mp3.inputsDB.valuesToRemove.includes('ac3'),
+        'cmd_rm_ac3mp3 must remove ac3');
+      assert.ok(rmac3mp3.inputsDB.valuesToRemove.includes('mp3'),
+        'cmd_rm_ac3mp3 must remove mp3');
     });
 
     test('hvc1 tag set in both normal and VR paths', () => {

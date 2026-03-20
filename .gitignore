@@ -17,6 +17,7 @@ npm-debug.log*
 # Python test artifacts
 .pytest_cache/
 .hypothesis/
+__pycache__/
 
 # Local config / secrets — never commit real tokens or API keys
 *.local.json
