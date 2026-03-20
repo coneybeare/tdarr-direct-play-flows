@@ -181,7 +181,7 @@ for (const file of flowFiles) {
       }
     });
 
-    test('cmd_rm_ac3mp3 runs after reorder to prevent re-mapping', () => {
+    test('EAC3 section and audio pipeline route correctly', () => {
       const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
       const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
 
@@ -215,17 +215,18 @@ for (const file of flowFiles) {
       assert.ok(!pluginMap.has('cmd_rm_old_eac3'),
         'cmd_rm_old_eac3 must be removed — it strips source EAC3 surround tracks before EAC3 creation');
 
-      // EAC3 section routes back to cmt_audio (AC3 removal happens later)
+      // cmd_rm_ac3mp3 must NOT exist (it destroys EnsureAudioStream clones that
+      // keep source codec_name; removing ac3 kills clones destined for eac3/aac)
+      assert.ok(!pluginMap.has('cmd_rm_ac3mp3'),
+        'cmd_rm_ac3mp3 must be removed — in single-pass, it destroys EnsureAudioStream clones');
+
+      // EAC3 section routes back to cmt_audio
       assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmt_audio',
         'EAC3 eng path should route to cmt_audio');
       assert.strictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmt_audio',
         'cmd_rm_eac3 should route to cmt_audio');
       assert.strictEqual(edgeMap.get('grd_eac3_codec:2'), 'cmt_audio',
         'Non-surround codec path should route to cmt_audio');
-
-      // cmd_rm_ac3mp3 runs AFTER audio creation (before reorder)
-      assert.strictEqual(edgeMap.get('cmd_rm_ac3mp3:1'), 'cmt_reorder',
-        'cmd_rm_ac3mp3 should route to reorder (after all audio creation)');
 
       // cmd_rm_eac3 on non-surround path (no 6+ch surround, strip all eac3)
       assert.strictEqual(edgeMap.get('grd_eac3_ch8:2'), 'cmd_rm_eac3',
@@ -300,17 +301,21 @@ for (const file of flowFiles) {
           `grd_unwanted should catch ${codec}`);
       }
 
-      // Every codec in the guard must be removable by the pipeline (exact match)
+      // Every codec in the guard must be removable by cmd_rmaudio
+      // (ac3, mp3 are kept in output — EnsureAudioStream clones keep source
+      // codec_name so they can't be selectively removed in single-pass)
       const rmaudio = pluginMap.get('cmd_rmaudio');
-      const rmac3mp3 = pluginMap.get('cmd_rm_ac3mp3');
-      assert.ok(rmaudio && rmac3mp3, 'Missing removal nodes');
-      const removableSet = new Set([
-        ...rmaudio.inputsDB.valuesToRemove.split(',').map(s => s.trim()),
-        ...rmac3mp3.inputsDB.valuesToRemove.split(',').map(s => s.trim()),
-      ]);
+      assert.ok(rmaudio, 'Missing removal node cmd_rmaudio');
+      const removableSet = new Set(
+        rmaudio.inputsDB.valuesToRemove.split(',').map(s => s.trim()),
+      );
+      // ac3 and mp3 are intentionally kept (can't remove without destroying clones)
+      const keptCodecs = new Set(['ac3', 'mp3']);
       for (const codec of grdUnwanted.inputsDB.valuesToMatch.split(',').map(s => s.trim())) {
-        assert.ok(removableSet.has(codec),
-          `grd_unwanted catches "${codec}" but no removal node strips it`);
+        if (!keptCodecs.has(codec)) {
+          assert.ok(removableSet.has(codec),
+            `grd_unwanted catches "${codec}" but no removal node strips it`);
+        }
       }
     });
 
@@ -350,17 +355,17 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_dup_und:2'), 'grd_fb_eng',
         'No und audio should check for eng fallback');
 
-      // grd_fb_eng YES → cmd_rm_ac3mp3 (eng pass created AAC, now remove legacy codecs)
-      assert.strictEqual(edgeMap.get('grd_fb_eng:1'), 'cmd_rm_ac3mp3',
-        'Eng audio present should skip fallback');
+      // grd_fb_eng YES → cmt_reorder (eng pass created AAC, proceed to reorder)
+      assert.strictEqual(edgeMap.get('grd_fb_eng:1'), 'cmt_reorder',
+        'Eng audio present should skip fallback and route to reorder');
 
       // grd_fb_eng NO → cmd_ens_fb (fallback AAC creation)
       assert.strictEqual(edgeMap.get('grd_fb_eng:2'), 'cmd_ens_fb',
         'No eng/und audio should route to fallback AAC');
 
-      // cmd_ens_fb → cmd_rm_ac3mp3
-      assert.strictEqual(edgeMap.get('cmd_ens_fb:1'), 'cmd_rm_ac3mp3',
-        'Fallback AAC should route to legacy codec removal');
+      // cmd_ens_fb → cmt_reorder
+      assert.strictEqual(edgeMap.get('cmd_ens_fb:1'), 'cmt_reorder',
+        'Fallback AAC should route to reorder');
 
       // Verify fallback node config
       const fb = pluginMap.get('cmd_ens_fb');
@@ -442,10 +447,8 @@ for (const file of flowFiles) {
       assert.ok(rmaudio.inputsDB.valuesToRemove.includes('dts'),
         'cmd_rmaudio must remove dts (ffprobe codec_name variant)');
 
-      const rmac3mp3 = pluginMap.get('cmd_rm_ac3mp3');
-      assert.ok(rmac3mp3, 'Missing node cmd_rm_ac3mp3');
-      assert.ok(rmac3mp3.inputsDB.valuesToRemove.includes('dts'),
-        'cmd_rm_ac3mp3 must remove dts');
+      // cmd_rm_ac3mp3 was removed (destroyed EnsureAudioStream clones);
+      // dts is already covered by cmd_rmaudio
     });
 
     test('hvc1 tag set in both normal and VR paths', () => {

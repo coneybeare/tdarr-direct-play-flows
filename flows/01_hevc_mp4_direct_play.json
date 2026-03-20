@@ -964,23 +964,6 @@
       "fpEnabled": true
     },
     {
-      "name": "Remove: ac3, mp3, dts",
-      "sourceRepo": "Community",
-      "pluginName": "ffmpegCommandRemoveStreamByProperty",
-      "version": "1.0.0",
-      "id": "cmd_rm_ac3mp3",
-      "position": {
-        "x": 9810,
-        "y": 0
-      },
-      "inputsDB": {
-        "propertyToCheck": "codec_name",
-        "valuesToRemove": "ac3,mp3,dts",
-        "condition": "includes"
-      },
-      "fpEnabled": true
-    },
-    {
       "name": "Remove incompatible audio",
       "sourceRepo": "Community",
       "pluginName": "comment",
@@ -1018,7 +1001,7 @@
       "id": "cmt_reorder",
       "position": {
         "x": 9810,
-        "y": 170
+        "y": 0
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1031,7 +1014,7 @@
       "id": "cmd_reorder",
       "position": {
         "x": 9810,
-        "y": 360
+        "y": 190
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -1050,7 +1033,7 @@
       "id": "cmt_exec",
       "position": {
         "x": 9810,
-        "y": 530
+        "y": 360
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1063,7 +1046,7 @@
       "id": "cmd_nochapters",
       "position": {
         "x": 9810,
-        "y": 720
+        "y": 550
       },
       "inputsDB": {
         "inputArguments": "",
@@ -1079,7 +1062,7 @@
       "id": "ffe_001",
       "position": {
         "x": 9810,
-        "y": 890
+        "y": 720
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1109,7 +1092,7 @@
       "id": "cmt_size",
       "position": {
         "x": 9810,
-        "y": 1060
+        "y": 890
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1122,7 +1105,7 @@
       "id": "fl_size",
       "position": {
         "x": 9810,
-        "y": 1250
+        "y": 1080
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -1138,7 +1121,7 @@
       "id": "cmt_toobig",
       "position": {
         "x": 9310,
-        "y": 1420
+        "y": 1250
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1151,7 +1134,7 @@
       "id": "fail_toobig",
       "position": {
         "x": 9310,
-        "y": 1610
+        "y": 1440
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1164,7 +1147,7 @@
       "id": "cmt_duration",
       "position": {
         "x": 9810,
-        "y": 1420
+        "y": 1250
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1177,7 +1160,7 @@
       "id": "fl_duration",
       "position": {
         "x": 9810,
-        "y": 1610
+        "y": 1440
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1193,7 +1176,7 @@
       "id": "grd_has_video",
       "position": {
         "x": 9810,
-        "y": 1780
+        "y": 1610
       },
       "inputsDB": {
         "streamType": "video",
@@ -1211,7 +1194,7 @@
       "id": "grd_has_audio",
       "position": {
         "x": 9810,
-        "y": 1950
+        "y": 1780
       },
       "inputsDB": {
         "streamType": "audio",
@@ -1229,7 +1212,7 @@
       "id": "fail_no_streams",
       "position": {
         "x": 9310,
-        "y": 2140
+        "y": 1970
       },
       "inputsDB": {
         "errorMessage": "Output file is missing video or audio streams"
@@ -1244,7 +1227,7 @@
       "id": "cmt_duration_fail",
       "position": {
         "x": 9310,
-        "y": 1780
+        "y": 1610
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1257,7 +1240,7 @@
       "id": "fl_review",
       "position": {
         "x": 9310,
-        "y": 1970
+        "y": 1800
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1270,7 +1253,7 @@
       "id": "cmt_replace",
       "position": {
         "x": 9810,
-        "y": 2290
+        "y": 2120
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1283,7 +1266,7 @@
       "id": "fl_replace",
       "position": {
         "x": 9810,
-        "y": 2480
+        "y": 2310
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1296,7 +1279,7 @@
       "id": "cmt_notify",
       "position": {
         "x": 9810,
-        "y": 2650
+        "y": 2480
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1309,7 +1292,7 @@
       "id": "chk_plex_notify",
       "position": {
         "x": 9810,
-        "y": 2840
+        "y": 2670
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_plex_notify",
@@ -1326,7 +1309,7 @@
       "id": "web_plex",
       "position": {
         "x": 10310,
-        "y": 3010
+        "y": 2840
       },
       "inputsDB": {
         "url": "http://YOUR_PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=YOUR_PLEX_TOKEN",
@@ -1342,7 +1325,7 @@
       "id": "chk_arr_notify",
       "position": {
         "x": 9810,
-        "y": 3180
+        "y": 3010
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_arr_notify",
@@ -1359,7 +1342,7 @@
       "id": "arr_notify",
       "position": {
         "x": 9810,
-        "y": 3350
+        "y": 3180
       },
       "inputsDB": {
         "arr": "radarr",
@@ -1806,7 +1789,7 @@
       "id": "chk_auto_accept",
       "position": {
         "x": 9810,
-        "y": 2120
+        "y": 1950
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1876,7 +1859,7 @@
       "id": "fl_manual_review",
       "position": {
         "x": 9310,
-        "y": 2310
+        "y": 2140
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2570,9 +2553,9 @@
     {
       "source": "cmd_ens_und",
       "sourceHandle": "1",
-      "target": "cmd_rm_ac3mp3",
+      "target": "cmt_reorder",
       "targetHandle": null,
-      "id": "e_ens_und_rmac3"
+      "id": "e_ens_und_reorder"
     },
     {
       "source": "cmd_eac3_eng",
@@ -3270,9 +3253,9 @@
     {
       "source": "grd_fb_eng",
       "sourceHandle": "1",
-      "target": "cmd_rm_ac3mp3",
+      "target": "cmt_reorder",
       "targetHandle": null,
-      "id": "e_fb_eng_yes"
+      "id": "e_fb_eng_reorder"
     },
     {
       "source": "grd_fb_eng",
@@ -3284,9 +3267,9 @@
     {
       "source": "cmd_ens_fb",
       "sourceHandle": "1",
-      "target": "cmd_rm_ac3mp3",
+      "target": "cmt_reorder",
       "targetHandle": null,
-      "id": "e_ens_fb"
+      "id": "e_ens_fb_reorder"
     },
     {
       "source": "grd_vr_fb_eng",
@@ -3308,13 +3291,6 @@
       "target": "cmd_vr_reorder",
       "targetHandle": null,
       "id": "e_vr_ens_fb"
-    },
-    {
-      "source": "cmd_rm_ac3mp3",
-      "sourceHandle": "1",
-      "target": "cmt_reorder",
-      "targetHandle": null,
-      "id": "e_rmac3mp3_reorder"
     },
     {
       "source": "grd_eac3_has_eng",

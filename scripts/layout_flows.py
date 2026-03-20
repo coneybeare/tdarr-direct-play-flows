@@ -966,7 +966,7 @@ def col_map_01() -> dict[str, int]:
         "cmt_audio": M, "grd_has_eng": M, "cmd_ens_eng": M,
         "grd_dup_und": L, "cmd_ens_und": R,
         "grd_fb_eng": L, "cmd_ens_fb": L,
-        "cmd_rm_ac3mp3": M, "cmt_reorder": M, "cmd_reorder": M,
+        "cmt_reorder": M, "cmd_reorder": M,
         "cmt_exec": M, "cmd_nochapters": M, "ffe_001": M,
         # ── Validation ────────────────────────────────────────────────
         "cmt_size": M, "fl_size": M,
