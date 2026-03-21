@@ -27,7 +27,8 @@ Tdarr API notes:
     - To update a file record, use mode "update" with the "obj" field
       (NOT "update"). Using "update" instead of "obj" silently ignores
       the change. Reference: https://github.com/HaveAGitGat/Tdarr/issues/752
-    - File _id equals the file path (the dict key from getAll).
+    - Each file record's _id field contains the file path, regardless of
+      whether getAll returns a dict or list.
     - GET /api/v2/status returns server version, uptime, and OS info.
 """
 
@@ -449,6 +450,9 @@ UNWANTED_AUDIO_CODECS = {
 
 # Statuses that mean the file has been through the flow
 PROCESSED_STATUSES = {"Transcode success", "Not required"}
+
+# Statuses that indicate a failed transcode attempt
+TRANSCODE_ERROR_STATUSES = {"Transcode error", "Transcode cancelled"}
 
 
 @dataclass
@@ -972,11 +976,11 @@ def main() -> None:
     if args.json and (args.search or args.requeue_file):
         parser.error("--json cannot be combined with --search or --requeue-file")
 
-    # --requeue and --delete-errors don't work with --status errors
-    # (use --replace-errors instead for the error-specific workflow)
-    if args.status == "errors" and (args.requeue or args.delete_errors):
+    # --delete-errors doesn't work with --status errors
+    # (use --replace-errors instead for the error deletion/re-search workflow)
+    if args.status == "errors" and args.delete_errors:
         parser.error(
-            "--requeue and --delete-errors are not compatible with --status errors. "
+            "--delete-errors is not compatible with --status errors. "
             "Use --replace-errors for the error deletion/re-search workflow."
         )
 
@@ -1093,7 +1097,7 @@ def main() -> None:
                 files = [
                     f
                     for f in files
-                    if f.get("TranscodeDecisionMaker", "") == "Transcode error"
+                    if f.get("TranscodeDecisionMaker", "") in TRANSCODE_ERROR_STATUSES
                 ]
             all_json_files.extend(files)
             continue
@@ -1104,7 +1108,7 @@ def main() -> None:
                 f
                 for f in files
                 if isinstance(f, dict)
-                and f.get("TranscodeDecisionMaker") == "Transcode error"
+                and f.get("TranscodeDecisionMaker") in TRANSCODE_ERROR_STATUSES
             ]
             print(f"\n  TRANSCODE ERRORS ({len(error_files)} files)")
             print(f"  {'-' * 76}")
@@ -1186,7 +1190,7 @@ def main() -> None:
             queued_count = sum(
                 1 for f in files if isinstance(f, dict)
                 and f.get("TranscodeDecisionMaker", "") not in PROCESSED_STATUSES
-                and f.get("TranscodeDecisionMaker", "") != "Transcode error"
+                and f.get("TranscodeDecisionMaker", "") not in TRANSCODE_ERROR_STATUSES
             )
             grand["errors"] += len(error_files)
             grand["processed"] += processed_count
@@ -1243,9 +1247,7 @@ def main() -> None:
             # 2) Files with Tdarr transcode errors/cancelled status
             transcode_error_files = [
                 f for f in files if isinstance(f, dict)
-                and f.get("TranscodeDecisionMaker", "") in (
-                    "Transcode error", "Transcode cancelled"
-                )
+                and f.get("TranscodeDecisionMaker", "") in TRANSCODE_ERROR_STATUSES
             ]
             # Deduplicate: exclude transcode errors already in analysis reports
             analysis_paths = {r.path for r in error_reports}
@@ -1278,7 +1280,7 @@ def main() -> None:
                 f
                 for f in files
                 if isinstance(f, dict)
-                and f.get("TranscodeDecisionMaker") == "Transcode error"
+                and f.get("TranscodeDecisionMaker") in TRANSCODE_ERROR_STATUSES
             ]
             if error_files:
                 print(f"\n  Found {len(error_files)} file(s) with transcode errors:")
@@ -1331,7 +1333,7 @@ def main() -> None:
                 f
                 for f in files
                 if isinstance(f, dict)
-                and f.get("TranscodeDecisionMaker") == "Transcode error"
+                and f.get("TranscodeDecisionMaker") in TRANSCODE_ERROR_STATUSES
             ]
             if error_files:
                 _replace_error_files(error_files, host, host_api_key)
