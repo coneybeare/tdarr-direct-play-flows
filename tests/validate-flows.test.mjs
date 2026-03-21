@@ -189,13 +189,15 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_eac3_codec:1'), 'grd_eac3_ch',
         'Surround codec path should route to channel check');
 
-      // grd_eac3_codec must match both ac3 and eac3
+      // grd_eac3_codec must match surround codecs (exact token check to avoid
+      // false positives like "eac3" containing "ac3" with String.includes())
       const codecGuard = pluginMap.get('grd_eac3_codec');
       assert.ok(codecGuard, 'Missing node grd_eac3_codec');
-      assert.ok(codecGuard.inputsDB.valuesToMatch.includes('ac3'),
-        'grd_eac3_codec must match ac3');
-      assert.ok(codecGuard.inputsDB.valuesToMatch.includes('eac3'),
-        'grd_eac3_codec must match eac3');
+      const codecTokens = codecGuard.inputsDB.valuesToMatch.split(',').map((s) => s.trim());
+      for (const codec of ['ac3', 'eac3', 'dts', 'dca', 'truehd', 'mlp']) {
+        assert.ok(codecTokens.includes(codec),
+          `grd_eac3_codec must match ${codec}`);
+      }
       assert.strictEqual(codecGuard.inputsDB.condition, 'includes',
         'grd_eac3_codec must use "includes" (not "equals") for comma-separated valuesToMatch');
 
@@ -205,11 +207,21 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_eac3_ch8:1'), 'grd_eac3_has_eng',
         '8 ch surround should check for English audio before EAC3 creation');
 
-      // English audio guard routes to EAC3 creation or skips
+      // English audio guard routes to EAC3 creation (eng or fallback)
       assert.strictEqual(edgeMap.get('grd_eac3_has_eng:1'), 'cmd_eac3_eng',
         'Has English audio should route to EAC3 creation');
-      assert.strictEqual(edgeMap.get('grd_eac3_has_eng:2'), 'cmt_audio',
-        'No English audio should skip EAC3 creation (prevents EnsureAudioStream failure)');
+      assert.strictEqual(edgeMap.get('grd_eac3_has_eng:2'), 'cmd_eac3_fb',
+        'No English audio should route to fallback EAC3 creation');
+      assert.strictEqual(edgeMap.get('cmd_eac3_fb:1'), 'cmt_audio',
+        'Fallback EAC3 should route to audio section');
+
+      // Verify fallback EAC3 config
+      const eac3Fb = pluginMap.get('cmd_eac3_fb');
+      assert.ok(eac3Fb, 'Missing node cmd_eac3_fb');
+      assert.strictEqual(eac3Fb.pluginName, 'ffmpegCommandEnsureAudioStream');
+      assert.strictEqual(eac3Fb.inputsDB.audioEncoder, 'eac3');
+      assert.strictEqual(eac3Fb.inputsDB.language, '',
+        'Fallback EAC3 must use empty language (any source)');
 
       // cmd_rm_old_eac3 must NOT exist (it destroyed source EAC3 before creation)
       assert.ok(!pluginMap.has('cmd_rm_old_eac3'),
@@ -244,15 +256,19 @@ for (const file of flowFiles) {
       assert.ok(!pluginMap.has('cmt_reorder2'),
         'cmt_reorder2 must be removed — old second pass');
 
-      // Pass 2 chain: ffe_001 → ffs_002 → cmd_rm_ac3 → cmd_rm_mp3 → ffe_002 → cmt_size
-      assert.strictEqual(edgeMap.get('ffe_001:1'), 'ffs_002',
-        'ffe_001 should route to pass 2 start');
+      // Pass 2 chain: ffe_001 → chk_health_002 → ffs_002 → cmd_rm_ac3 → cmd_rm_mp3 → cmd_faststart2 → ffe_002 → cmt_size
+      assert.strictEqual(edgeMap.get('ffe_001:1'), 'chk_health_002',
+        'ffe_001 should route to health check before pass 2');
+      assert.strictEqual(edgeMap.get('chk_health_002:1'), 'ffs_002',
+        'Health check should route to pass 2 start');
       assert.strictEqual(edgeMap.get('ffs_002:1'), 'cmd_rm_ac3',
         'Pass 2 start should route to AC3 removal');
       assert.strictEqual(edgeMap.get('cmd_rm_ac3:1'), 'cmd_rm_mp3',
         'AC3 removal should route to MP3 removal');
-      assert.strictEqual(edgeMap.get('cmd_rm_mp3:1'), 'ffe_002',
-        'MP3 removal should route to pass 2 execute');
+      assert.strictEqual(edgeMap.get('cmd_rm_mp3:1'), 'cmd_faststart2',
+        'MP3 removal should route to faststart');
+      assert.strictEqual(edgeMap.get('cmd_faststart2:1'), 'ffe_002',
+        'Faststart should route to pass 2 execute');
       assert.strictEqual(edgeMap.get('ffe_002:1'), 'cmt_size',
         'Pass 2 execute should route to size check');
     });
@@ -475,17 +491,35 @@ for (const file of flowFiles) {
     test('hvc1 tag set in both normal and VR paths', () => {
       const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
 
-      // Normal path (cmd_tags in first pipeline)
+      // Normal path: cmd_tags in pass 1 sets hvc1 + profile
       const tags = pluginMap.get('cmd_tags');
       assert.ok(tags, 'Missing node cmd_tags');
       assert.ok(tags.inputsDB.outputArguments.includes('-tag:v hvc1'),
         'cmd_tags must include -tag:v hvc1');
-      assert.ok(tags.inputsDB.outputArguments.includes('+faststart'),
-        'cmd_tags must include +faststart');
 
-      // VR path remux
+      // Normal path: faststart moved to pass 2 (cmd_faststart2)
+      const faststart2 = pluginMap.get('cmd_faststart2');
+      assert.ok(faststart2, 'Missing node cmd_faststart2');
+      assert.ok(faststart2.inputsDB.outputArguments.includes('+faststart'),
+        'cmd_faststart2 must include +faststart');
+      assert.ok(faststart2.inputsDB.outputArguments.includes('-tag:v hvc1'),
+        'cmd_faststart2 must include -tag:v hvc1 (pass 2 remux may reset tag)');
+
+      // Faststart must NOT be in pass 1 (moved to pass 2 for probe reliability)
+      assert.ok(!tags.inputsDB.outputArguments.includes('+faststart'),
+        'cmd_tags must NOT include +faststart (moved to pass 2)');
+
+      // VR pass 1 tags must NOT include faststart (moved to VR pass 2)
+      const vrTags = pluginMap.get('cmd_vr_tags');
+      assert.ok(vrTags, 'Missing node cmd_vr_tags');
+      assert.ok(!vrTags.inputsDB.outputArguments.includes('+faststart'),
+        'cmd_vr_tags must NOT include +faststart (moved to VR pass 2)');
+
+      // VR path remux (pass 2)
       const vrFaststart2 = pluginMap.get('cmd_vr_faststart2');
       assert.ok(vrFaststart2, 'Missing node cmd_vr_faststart2');
+      assert.ok(vrFaststart2.inputsDB.outputArguments.includes('+faststart'),
+        'cmd_vr_faststart2 must include +faststart');
       assert.ok(vrFaststart2.inputsDB.outputArguments.includes('-tag:v hvc1'),
         'cmd_vr_faststart2 must include -tag:v hvc1 to prevent FFmpeg defaulting to hev1');
     });
