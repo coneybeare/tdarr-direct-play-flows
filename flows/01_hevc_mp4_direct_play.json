@@ -155,6 +155,24 @@
       "fpEnabled": true
     },
     {
+      "name": "Check: DoVi? (non-MP4)",
+      "sourceRepo": "Community",
+      "pluginName": "checkStreamProperty",
+      "version": "1.0.0",
+      "id": "grd_dovi_mkv",
+      "position": {
+        "x": 500,
+        "y": 1400
+      },
+      "inputsDB": {
+        "streamType": "video",
+        "propertyToCheck": "codec_tag_string",
+        "valuesToMatch": "dv",
+        "condition": "includes"
+      },
+      "fpEnabled": true
+    },
+    {
       "name": "Check: hvc1 tag?",
       "sourceRepo": "Community",
       "pluginName": "checkStreamProperty",
@@ -2266,7 +2284,7 @@
     {
       "source": "grd_ext",
       "sourceHandle": "2",
-      "target": "cmt_proc",
+      "target": "grd_dovi_mkv",
       "targetHandle": null,
       "id": "e_ext_no"
     },
@@ -3466,6 +3484,20 @@
       "target": "ffe_002",
       "targetHandle": null,
       "id": "e_faststart2_exec2"
+    },
+    {
+      "source": "grd_dovi_mkv",
+      "sourceHandle": "1",
+      "target": "fl_noop",
+      "targetHandle": null,
+      "id": "e_dovi_mkv_skip"
+    },
+    {
+      "source": "grd_dovi_mkv",
+      "sourceHandle": "2",
+      "target": "cmt_proc",
+      "targetHandle": null,
+      "id": "e_dovi_mkv_proc"
     }
   ]
 }
