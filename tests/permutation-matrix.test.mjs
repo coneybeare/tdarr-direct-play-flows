@@ -227,7 +227,9 @@ function assertAAC(path) {
 }
 
 function assertPass2(path) {
+  has(path, 'chk_health_002', 'Should health-check before pass 2');
   has(path, 'ffs_002', 'Should enter pass 2');
+  has(path, 'cmd_faststart2', 'Should apply faststart in pass 2');
 }
 
 function assertFallbackAAC(path) {
