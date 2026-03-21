@@ -21,13 +21,14 @@ Examples:
 
 Tdarr API notes:
     - POST /api/v2/cruddb is the main endpoint for all DB operations.
-    - FileJSONDB getAll returns a dict keyed by file path, NOT a list.
+    - FileJSONDB getAll may return a dict keyed by file path or a list.
       docFilter is broken server-side; always returns all files regardless
       of filter — filter client-side instead.
     - To update a file record, use mode "update" with the "obj" field
       (NOT "update"). Using "update" instead of "obj" silently ignores
       the change. Reference: https://github.com/HaveAGitGat/Tdarr/issues/752
-    - File _id equals the file path (the dict key from getAll).
+    - Each file record's _id field contains the file path, regardless of
+      whether getAll returns a dict or list.
     - GET /api/v2/status returns server version, uptime, and OS info.
 """
 
@@ -449,6 +450,9 @@ UNWANTED_AUDIO_CODECS = {
 
 # Statuses that mean the file has been through the flow
 PROCESSED_STATUSES = {"Transcode success", "Not required"}
+
+# Statuses that indicate a failed transcode attempt
+TRANSCODE_ERROR_STATUSES = {"Transcode error", "Transcode cancelled"}
 
 
 @dataclass
@@ -972,11 +976,11 @@ def main() -> None:
     if args.json and (args.search or args.requeue_file):
         parser.error("--json cannot be combined with --search or --requeue-file")
 
-    # --requeue and --delete-errors don't work with --status errors
-    # (use --replace-errors instead for the error-specific workflow)
-    if args.status == "errors" and (args.requeue or args.delete_errors):
+    # --delete-errors doesn't work with --status errors
+    # (use --replace-errors instead for the error deletion/re-search workflow)
+    if args.status == "errors" and args.delete_errors:
         parser.error(
-            "--requeue and --delete-errors are not compatible with --status errors. "
+            "--delete-errors is not compatible with --status errors. "
             "Use --replace-errors for the error deletion/re-search workflow."
         )
 
@@ -1093,7 +1097,7 @@ def main() -> None:
                 files = [
                     f
                     for f in files
-                    if f.get("TranscodeDecisionMaker", "") == "Transcode error"
+                    if f.get("TranscodeDecisionMaker", "") in TRANSCODE_ERROR_STATUSES
                 ]
             all_json_files.extend(files)
             continue
@@ -1104,7 +1108,7 @@ def main() -> None:
                 f
                 for f in files
                 if isinstance(f, dict)
-                and f.get("TranscodeDecisionMaker") == "Transcode error"
+                and f.get("TranscodeDecisionMaker") in TRANSCODE_ERROR_STATUSES
             ]
             print(f"\n  TRANSCODE ERRORS ({len(error_files)} files)")
             print(f"  {'-' * 76}")
@@ -1186,7 +1190,7 @@ def main() -> None:
             queued_count = sum(
                 1 for f in files if isinstance(f, dict)
                 and f.get("TranscodeDecisionMaker", "") not in PROCESSED_STATUSES
-                and f.get("TranscodeDecisionMaker", "") != "Transcode error"
+                and f.get("TranscodeDecisionMaker", "") not in TRANSCODE_ERROR_STATUSES
             )
             grand["errors"] += len(error_files)
             grand["processed"] += processed_count
@@ -1196,6 +1200,18 @@ def main() -> None:
             # --replace-errors within --status errors
             if args.replace_errors and error_files:
                 _replace_error_files(error_files, host, host_api_key)
+
+            # --requeue within --status errors
+            if args.requeue and error_files:
+                print(f"\n  Requeuing {len(error_files)} file(s) with transcode errors...")
+                for ef in error_files:
+                    file_id = ef.get("_id") or ef.get("file", "")
+                    if not file_id:
+                        continue
+                    short = PurePosixPath(file_id).name
+                    ok = requeue_file(host, file_id, host_api_key)
+                    status_str = "OK" if ok else "FAILED"
+                    print(f"    [{status_str}] {short}")
 
             continue
 
@@ -1224,16 +1240,37 @@ def main() -> None:
 
         # Requeue files with errors
         if args.requeue:
+            # 1) Files with analysis-level errors (unwanted audio, etc.)
             error_reports = [
                 r for r in reports if any(i.severity == "error" for i in r.issues)
             ]
-            if error_reports:
-                print(f"\n  Requeuing {len(error_reports)} file(s) with errors...")
+            # 2) Files with Tdarr transcode errors/cancelled status
+            transcode_error_files = [
+                f for f in files if isinstance(f, dict)
+                and f.get("TranscodeDecisionMaker", "") in TRANSCODE_ERROR_STATUSES
+            ]
+            # Deduplicate: exclude transcode errors already in analysis reports
+            analysis_paths = {r.path for r in error_reports}
+            extra_errors = [
+                f for f in transcode_error_files
+                if (f.get("_id") or f.get("file", "")) not in analysis_paths
+            ]
+            total = len(error_reports) + len(extra_errors)
+            if total:
+                print(f"\n  Requeuing {total} file(s) with errors...")
                 for r in error_reports:
                     file_id = r.path
                     ok = requeue_file(host, file_id, host_api_key)
                     status_str = "OK" if ok else "FAILED"
                     print(f"    [{status_str}] {r.name}")
+                for ef in extra_errors:
+                    file_id = ef.get("_id") or ef.get("file", "")
+                    if not file_id:
+                        continue
+                    short = PurePosixPath(file_id).name
+                    ok = requeue_file(host, file_id, host_api_key)
+                    status_str = "OK" if ok else "FAILED"
+                    print(f"    [{status_str}] {short}")
             else:
                 print("\n  No files with errors to requeue.")
 
@@ -1243,7 +1280,7 @@ def main() -> None:
                 f
                 for f in files
                 if isinstance(f, dict)
-                and f.get("TranscodeDecisionMaker") == "Transcode error"
+                and f.get("TranscodeDecisionMaker") in TRANSCODE_ERROR_STATUSES
             ]
             if error_files:
                 print(f"\n  Found {len(error_files)} file(s) with transcode errors:")
@@ -1296,7 +1333,7 @@ def main() -> None:
                 f
                 for f in files
                 if isinstance(f, dict)
-                and f.get("TranscodeDecisionMaker") == "Transcode error"
+                and f.get("TranscodeDecisionMaker") in TRANSCODE_ERROR_STATUSES
             ]
             if error_files:
                 _replace_error_files(error_files, host, host_api_key)
