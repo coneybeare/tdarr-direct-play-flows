@@ -380,6 +380,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       has(path, 'grd_av1', 'AV1 guard should be visited');
       has(path, 'cmd_hevc_sw', 'AV1 must use software encoder (T400 can\'t hw decode AV1)');
+      lacks(path, 'chk_nvenc', 'AV1 should bypass NVENC entirely');
       lacks(path, 'chk_resolution', 'AV1 should skip NVENC resolution tier');
       assertNoEAC3(path);
       assertPass2(path);
