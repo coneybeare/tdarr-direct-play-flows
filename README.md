@@ -49,7 +49,7 @@ Designed for a **Synology NAS** with an **NVIDIA T400 GPU** running Tdarr in Doc
 14. Remove incompatible audio codecs (TrueHD, FLAC, Vorbis, WMA, Opus, **DTS**)
 15. Reorder streams (stereo AAC first)
 16. Execute FFmpeg
-17. Validate output size (≤150% of original; fails the flow if larger, preserving original)
+17. Validate output size (≤150% of original, ≤200% for VR; fails the flow if larger, preserving original)
 18. Validate output duration (98–102% of original; catches truncated/corrupt outputs)
 19. Replace original file
 20. Notify Plex (opt-in via `enable_plex_notify` variable)
@@ -206,7 +206,7 @@ Want Plex/arr notifications?
 
 **Files failing with "Transcode error" due to size:**
 
-- Files exceeding 150% of original size are failed (original preserved)
+- Files exceeding 150% of original size are failed (original preserved); VR files use a 200% threshold since H264→HEVC transcodes at high quality can produce larger output
 - Increase `ffmpegQuality` (e.g., 26–28) to reduce output size
 - Check if source files are already highly compressed (HEVC at low bitrate)
 - Short clips (<5 minutes) may have proportionally large container overhead
