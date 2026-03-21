@@ -375,9 +375,12 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertPass2(path);
     });
 
-    test('3e: mkv/av1/aac 2.0 — transcode, keep AAC', () => {
+    test('3e: mkv/av1/aac 2.0 — software transcode (AV1 can\'t hw decode), keep AAC', () => {
       const path = walkFlow(file('mkv', [vid('av1'), aud('aac', 2)]));
       assertProcess(path);
+      has(path, 'grd_av1', 'AV1 guard should be visited');
+      has(path, 'cmd_hevc_sw', 'AV1 must use software encoder (T400 can\'t hw decode AV1)');
+      lacks(path, 'chk_resolution', 'AV1 should skip NVENC resolution tier');
       assertNoEAC3(path);
       assertPass2(path);
     });
