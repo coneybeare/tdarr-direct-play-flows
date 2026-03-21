@@ -1748,7 +1748,7 @@
       },
       "inputsDB": {
         "greaterThan": "0",
-        "lessThan": "150"
+        "lessThan": "200"
       },
       "fpEnabled": true
     },
@@ -1893,7 +1893,7 @@
       },
       "inputsDB": {
         "inputArguments": "",
-        "outputArguments": "-rc vbr -cq 22 -maxrate 12M -bufsize 24M"
+        "outputArguments": "-rc vbr -cq 24 -maxrate 12M -bufsize 24M"
       },
       "fpEnabled": true
     },
