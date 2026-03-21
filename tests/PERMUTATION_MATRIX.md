@@ -115,3 +115,17 @@ with correct codec_names (eac3, aac), so removing by `codec_name: "ac3"` only ta
 
 Pass 2 is a pure stream-copy remux (no transcode) — takes seconds. The pass 1 output has few streams
 (video + 2-4 audio after stripping subs/data/images/incompatible audio), so probing works reliably.
+
+### PR #51 regression (fixed in PR #53)
+
+**Root cause**: `cmd_rm_ac3mp3` in pass 2 used `condition: "includes"` with `valuesToRemove: "ac3,mp3"`.
+The plugin checks `codec_name.includes(value)` for each comma-separated value. Since `"eac3".includes("ac3")`
+is true, EAC3 surround tracks were destroyed alongside AC3 originals → zero audio in output.
+
+**Affected permutations**: All files with EAC3 in pass 2 output (2a, 2b, 2c, 2d, 6a, 6c, 7a, 7b, 10a, 10d).
+Also Squid Game-type files (non-English EAC3 only) where EAC3 was the sole surviving audio.
+
+**Fix**: Replace single `cmd_rm_ac3mp3` node with two separate exact-match nodes:
+- `cmd_rm_ac3` (`valuesToRemove: "ac3"`, `condition: "equals"`) — matches AC3, NOT EAC3
+- `cmd_rm_mp3` (`valuesToRemove: "mp3"`, `condition: "equals"`) — matches MP3
+Chain: `ffs_002 → cmd_rm_ac3 → cmd_rm_mp3 → ffe_002`
