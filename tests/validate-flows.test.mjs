@@ -205,11 +205,21 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_eac3_ch8:1'), 'grd_eac3_has_eng',
         '8 ch surround should check for English audio before EAC3 creation');
 
-      // English audio guard routes to EAC3 creation or skips
+      // English audio guard routes to EAC3 creation (eng or fallback)
       assert.strictEqual(edgeMap.get('grd_eac3_has_eng:1'), 'cmd_eac3_eng',
         'Has English audio should route to EAC3 creation');
-      assert.strictEqual(edgeMap.get('grd_eac3_has_eng:2'), 'cmt_audio',
-        'No English audio should skip EAC3 creation (prevents EnsureAudioStream failure)');
+      assert.strictEqual(edgeMap.get('grd_eac3_has_eng:2'), 'cmd_eac3_fb',
+        'No English audio should route to fallback EAC3 creation');
+      assert.strictEqual(edgeMap.get('cmd_eac3_fb:1'), 'cmt_audio',
+        'Fallback EAC3 should route to audio section');
+
+      // Verify fallback EAC3 config
+      const eac3Fb = pluginMap.get('cmd_eac3_fb');
+      assert.ok(eac3Fb, 'Missing node cmd_eac3_fb');
+      assert.strictEqual(eac3Fb.pluginName, 'ffmpegCommandEnsureAudioStream');
+      assert.strictEqual(eac3Fb.inputsDB.audioEncoder, 'eac3');
+      assert.strictEqual(eac3Fb.inputsDB.language, '',
+        'Fallback EAC3 must use empty language (any source)');
 
       // cmd_rm_old_eac3 must NOT exist (it destroyed source EAC3 before creation)
       assert.ok(!pluginMap.has('cmd_rm_old_eac3'),

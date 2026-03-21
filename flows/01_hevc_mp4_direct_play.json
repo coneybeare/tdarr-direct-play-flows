@@ -906,7 +906,7 @@
       "inputsDB": {
         "streamType": "audio",
         "propertyToCheck": "codec_name",
-        "valuesToMatch": "ac3,eac3",
+        "valuesToMatch": "ac3,eac3,dts,dca,truehd,mlp",
         "condition": "includes"
       },
       "fpEnabled": true,
@@ -2152,6 +2152,27 @@
         "condition": "equals"
       },
       "fpEnabled": true
+    },
+    {
+      "name": "EAC3: fallback",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandEnsureAudioStream",
+      "version": "1.0.0",
+      "id": "cmd_eac3_fb",
+      "position": {
+        "x": 7040,
+        "y": 1930
+      },
+      "inputsDB": {
+        "audioEncoder": "eac3",
+        "language": "",
+        "channels": "6",
+        "enableBitrate": "true",
+        "bitrate": "384k",
+        "enableSamplerate": "false",
+        "samplerate": "48000"
+      },
+      "fpEnabled": true
     }
   ],
   "flowEdges": [
@@ -3362,7 +3383,7 @@
     {
       "source": "grd_eac3_has_eng",
       "sourceHandle": "2",
-      "target": "cmt_audio",
+      "target": "cmd_eac3_fb",
       "targetHandle": null,
       "id": "e_eac3_has_eng_no"
     },
@@ -3393,6 +3414,13 @@
       "target": "ffe_002",
       "targetHandle": null,
       "id": "e_rmmp3_exec2"
+    },
+    {
+      "source": "cmd_eac3_fb",
+      "sourceHandle": "1",
+      "target": "cmt_audio",
+      "targetHandle": null,
+      "id": "e_eac3fb_audio"
     }
   ]
 }

@@ -288,21 +288,18 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertPass2(path);
     });
 
-    // NOTE: grd_eac3_codec only matches "ac3,eac3". DTS codec_name is
-    // "dts" which does not include "ac3" or "eac3" → EAC3 section skipped.
-    // Matrix says EAC3 should be created from DTS surround — flow limitation.
-    test('2c: mkv/hevc/dts 5.1 — remux, rm DTS, AAC (no EAC3 — flow limitation)', () => {
+    test('2c: mkv/hevc/dts 5.1 — remux, rm DTS, create EAC3+AAC', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('dts', 6)]));
       assertProcess(path);
-      assertNoEAC3(path); // Matrix expects EAC3, but grd_eac3_codec skips DTS
+      assertEAC3(path);
       assertAAC(path);
       assertPass2(path);
     });
 
-    test('2d: mkv/hevc/truehd 7.1 — remux, rm TrueHD, AAC (no EAC3 — flow limitation)', () => {
+    test('2d: mkv/hevc/truehd 7.1 — remux, rm TrueHD, create EAC3+AAC', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('truehd', 8)]));
       assertProcess(path);
-      assertNoEAC3(path); // Matrix expects EAC3, but grd_eac3_codec skips TrueHD
+      assertEAC3(path);
       assertAAC(path);
       assertPass2(path);
     });
@@ -406,11 +403,10 @@ describe('Permutation Matrix — Flow Routing', () => {
   // Category 5: M2TS/TS files
   // ────────────────────────────────────────────────────────────────
   describe('5. M2TS/TS files', () => {
-    // Same limitation as 2c/2d: DTS not caught by grd_eac3_codec
-    test('5a: m2ts/h264/dts-hd 7.1 — transcode, rm DTS, AAC (no EAC3 — flow limitation)', () => {
+    test('5a: m2ts/h264/dts-hd 7.1 — transcode, rm DTS, create EAC3+AAC', () => {
       const path = walkFlow(file('m2ts', [vid('h264'), aud('dts', 8)]));
       assertProcess(path);
-      assertNoEAC3(path); // Matrix expects EAC3
+      assertEAC3(path);
       assertAAC(path);
       assertPass2(path);
     });
@@ -688,10 +684,11 @@ describe('Permutation Matrix — Flow Routing', () => {
       lacks(path, 'cmd_eac3_eng', 'No eng audio → skip EAC3');
     });
 
-    test('DTS 5.1 → EAC3 codec guard skips (flow limitation)', () => {
+    test('DTS 5.1 → EAC3 codec guard matches, creates EAC3', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('dts', 6)]));
       has(path, 'grd_eac3_codec');
-      lacks(path, 'grd_eac3_ch', 'DTS not caught by codec guard → skips EAC3 section');
+      has(path, 'grd_eac3_ch', 'DTS caught by codec guard → enters EAC3 section');
+      assertEAC3(path);
     });
   });
 
