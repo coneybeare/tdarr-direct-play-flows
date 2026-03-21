@@ -155,6 +155,24 @@
       "fpEnabled": true
     },
     {
+      "name": "Check: DoVi? (non-MP4)",
+      "sourceRepo": "Community",
+      "pluginName": "checkStreamProperty",
+      "version": "1.0.0",
+      "id": "grd_dovi_non_mp4",
+      "position": {
+        "x": 500,
+        "y": 1400
+      },
+      "inputsDB": {
+        "streamType": "video",
+        "propertyToCheck": "codec_tag_string",
+        "valuesToMatch": "dv",
+        "condition": "includes"
+      },
+      "fpEnabled": true
+    },
+    {
       "name": "Check: hvc1 tag?",
       "sourceRepo": "Community",
       "pluginName": "checkStreamProperty",
@@ -2284,7 +2302,7 @@
     {
       "source": "grd_ext",
       "sourceHandle": "2",
-      "target": "cmt_proc",
+      "target": "grd_dovi_non_mp4",
       "targetHandle": null,
       "id": "e_ext_no"
     },
@@ -3484,6 +3502,20 @@
       "target": "ffe_002",
       "targetHandle": null,
       "id": "e_faststart2_exec2"
+    },
+    {
+      "source": "grd_dovi_non_mp4",
+      "sourceHandle": "1",
+      "target": "fl_noop",
+      "targetHandle": null,
+      "id": "e_dovi_non_mp4_skip"
+    },
+    {
+      "source": "grd_dovi_non_mp4",
+      "sourceHandle": "2",
+      "target": "cmt_proc",
+      "targetHandle": null,
+      "id": "e_dovi_non_mp4_proc"
     },
     {
       "source": "grd_av1",

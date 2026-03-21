@@ -305,6 +305,32 @@ for (const file of flowFiles) {
       assert.strictEqual(hasEac3.inputsDB.condition, 'includes');
     });
 
+    test('DoVi guard covers both MP4 and non-MP4 paths', () => {
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      // MP4 path: grd_vid YES → grd_dovi
+      assert.strictEqual(edgeMap.get('grd_vid:1'), 'grd_dovi',
+        'MP4 HEVC should check for DoVi');
+      assert.strictEqual(edgeMap.get('grd_dovi:1'), 'fl_noop',
+        'DoVi detected (MP4) should skip');
+
+      // Non-MP4 path: grd_ext NO → grd_dovi_non_mp4
+      assert.strictEqual(edgeMap.get('grd_ext:2'), 'grd_dovi_non_mp4',
+        'Non-MP4 should check for DoVi before processing');
+      assert.strictEqual(edgeMap.get('grd_dovi_non_mp4:1'), 'fl_noop',
+        'DoVi detected (non-MP4) should skip');
+      assert.strictEqual(edgeMap.get('grd_dovi_non_mp4:2'), 'cmt_proc',
+        'Non-DoVi non-MP4 should route to processing');
+
+      // Verify grd_dovi_non_mp4 config matches grd_dovi
+      const doviMkv = pluginMap.get('grd_dovi_non_mp4');
+      assert.ok(doviMkv, 'Missing node grd_dovi_non_mp4');
+      assert.strictEqual(doviMkv.inputsDB.propertyToCheck, 'codec_tag_string');
+      assert.strictEqual(doviMkv.inputsDB.valuesToMatch, 'dv');
+      assert.strictEqual(doviMkv.inputsDB.condition, 'includes');
+    });
+
     test('guard chain catches unwanted audio codecs', () => {
       const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
       const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));

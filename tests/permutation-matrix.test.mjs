@@ -499,18 +499,13 @@ describe('Permutation Matrix — Flow Routing', () => {
   // Category 8: DoVi / HDR files
   // ────────────────────────────────────────────────────────────────
   describe('8. DoVi/HDR files', () => {
-    // NOTE: grd_dovi is only reached for MP4 files (after grd_ext).
-    // MKV files fail grd_ext → cmt_proc immediately, never reaching
-    // the DoVi guard. Matrix says 8a (MKV DoVi) should skip, but the
-    // flow processes it. Testing actual behavior here.
-    test('8a: mkv/hevc(dvh1)/eac3 5.1 — process (DoVi guard unreachable for MKV)', () => {
+    test('8a: mkv/hevc(dvh1)/eac3 5.1 — skip (DoVi detected via non-MP4 guard)', () => {
       const path = walkFlow(file('mkv', [
         vid('hevc', { tag: 'dvh1' }),
         aud('eac3', 6),
       ]));
-      // Matrix says skip. Actual: MKV → grd_ext fails → process.
-      assertProcess(path);
-      lacks(path, 'grd_dovi', 'DoVi guard not reached for MKV');
+      has(path, 'grd_dovi_non_mp4', 'Non-MP4 DoVi guard should be reached');
+      assertSkip(path);
     });
 
     test('8a-mp4: mp4/hevc(dvh1)/eac3 5.1 — skip (DoVi detected)', () => {
