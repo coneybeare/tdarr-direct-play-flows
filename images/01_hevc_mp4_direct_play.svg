@@ -139,7 +139,7 @@
 <path d="M1148.2,1840.2 L1148.2,1853.9 Q1148.2,1857.3 1151.6,1857.3 L1194.1,1857.3 Q1197.5,1857.3 1197.5,1860.7 L1197.5,1870.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1246.8,1840.2 L1246.8,1845.2 Q1246.8,1848.6 1250.2,1848.6 L2182.2,1848.6 Q2185.7,1848.6 2185.7,1845.2 L2185.7,842.8 Q2185.7,839.4 2189.1,839.4 L3513.2,839.4 Q3516.6,839.4 3516.6,842.8 L3516.6,847.8" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
 <path d="M3734.1,53.8 L3734.1,84.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2802.2,531.5 L2802.2,566.1 Q2802.2,569.5 2798.8,569.5 L2686.8,569.5 Q2683.3,569.5 2683.3,572.9 L2683.3,619.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2802.2,531.5 L2802.2,555.7 Q2802.2,559.1 2798.8,559.1 L2653.8,559.1 Q2650.4,559.1 2650.4,562.5 L2650.4,619.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,1204.4 L1197.5,1234.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,1268.3 L1197.5,1298.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,1325.5 L1197.5,1355.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
@@ -178,11 +178,12 @@
 <path d="M979.9,918.4 L979.9,932.1 Q979.9,935.5 983.3,935.5 L1025.9,935.5 Q1029.3,935.5 1029.3,938.9 L1029.3,948.7" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
 <path d="M1029.3,975.6 L1029.3,989.3 Q1029.3,992.7 1032.7,992.7 L1194.1,992.7 Q1197.5,992.7 1197.5,996.1 L1197.5,1005.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M2584.7,531.5 L2584.7,545.2 Q2584.7,548.6 2588.1,548.6 L2630.6,548.6 Q2634.0,548.6 2634.0,552.0 L2634.0,561.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2683.3,531.5 L2683.3,555.7 Q2683.3,559.1 2679.9,559.1 L2653.8,559.1 Q2650.4,559.1 2650.4,562.5 L2650.4,619.0" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M2683.3,531.5 L2683.3,545.2 Q2683.3,548.6 2686.8,548.6 L2798.8,548.6 Q2802.2,548.6 2802.2,552.0 L2802.2,561.8" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
 <path d="M3734.1,397.0 L3734.1,427.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M3734.1,168.2 L3734.1,198.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M3734.1,225.4 L3734.1,255.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M3734.1,282.6 L3734.1,312.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2802.2,588.7 L2802.2,602.4 Q2802.2,605.8 2798.8,605.8 L2686.8,605.8 Q2683.3,605.8 2683.3,609.2 L2683.3,619.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M3734.1,111.0 L3734.1,141.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M3734.1,339.8 L3734.1,370.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <rect x="363.3" y="26.9" width="141" height="26.9" rx="5" fill="#90CAF9" stroke="#9E9E9E" stroke-width="0.7"/>
@@ -376,7 +377,7 @@
 <rect x="1127.0" y="376.8" width="141" height="26.9" rx="5" fill="#66BB6A" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1197.5" y="392.75" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Encode: HEVC (VR, NVENC)</tspan></text>
 <rect x="1127.0" y="605.6" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1197.5" y="621.5500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Set: hvc1 + 10bit + faststart …</tspan></text>
+<text x="1197.5" y="621.5500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Set: hvc1 + 10bit (VR)</tspan></text>
 <rect x="1127.0" y="777.1" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1197.5" y="793.0500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Ensure AAC 2.0 eng (VR)</tspan></text>
 <rect x="1295.2" y="891.5" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
@@ -457,6 +458,8 @@
 <text x="3734.1" y="386.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFFFF"><tspan x="3734.1" dy="0">Execute FFmpeg (pass 2)</tspan></text>
 <rect x="3663.6" y="255.7" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="3734.1" y="271.65" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Remove: mp3</tspan></text>
+<rect x="2731.7" y="561.8" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2802.2" y="577.75" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2802.2" dy="0">EAC3: fallback</tspan></text>
 <rect x="3663.6" y="84.1" width="141" height="26.9" rx="5" fill="#EF9A9A" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="3734.1" y="100.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Health Check (pass 2)</tspan></text>
 <rect x="3663.6" y="312.9" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>

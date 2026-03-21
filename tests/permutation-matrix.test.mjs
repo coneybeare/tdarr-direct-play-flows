@@ -212,11 +212,13 @@ function assertProcessVR(path) {
 }
 
 function assertEAC3(path) {
-  has(path, 'cmd_eac3_eng', 'Should create EAC3');
+  const ok = path.includes('cmd_eac3_eng') || path.includes('cmd_eac3_fb');
+  assert.ok(ok, `Should create EAC3 (via eng or fallback). Path: ${path.join(' → ')}`);
 }
 
 function assertNoEAC3(path) {
-  lacks(path, 'cmd_eac3_eng', 'Should NOT create EAC3');
+  lacks(path, 'cmd_eac3_eng', 'Should NOT create EAC3 (eng)');
+  lacks(path, 'cmd_eac3_fb', 'Should NOT create EAC3 (fallback)');
 }
 
 function assertAAC(path) {
@@ -290,21 +292,18 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertPass2(path);
     });
 
-    // NOTE: grd_eac3_codec only matches "ac3,eac3". DTS codec_name is
-    // "dts" which does not include "ac3" or "eac3" → EAC3 section skipped.
-    // Matrix says EAC3 should be created from DTS surround — flow limitation.
-    test('2c: mkv/hevc/dts 5.1 — remux, rm DTS, AAC (no EAC3 — flow limitation)', () => {
+    test('2c: mkv/hevc/dts 5.1 — remux, rm DTS, create EAC3+AAC', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('dts', 6)]));
       assertProcess(path);
-      assertNoEAC3(path); // Matrix expects EAC3, but grd_eac3_codec skips DTS
+      assertEAC3(path);
       assertAAC(path);
       assertPass2(path);
     });
 
-    test('2d: mkv/hevc/truehd 7.1 — remux, rm TrueHD, AAC (no EAC3 — flow limitation)', () => {
+    test('2d: mkv/hevc/truehd 7.1 — remux, rm TrueHD, create EAC3+AAC', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('truehd', 8)]));
       assertProcess(path);
-      assertNoEAC3(path); // Matrix expects EAC3, but grd_eac3_codec skips TrueHD
+      assertEAC3(path);
       assertAAC(path);
       assertPass2(path);
     });
@@ -408,11 +407,10 @@ describe('Permutation Matrix — Flow Routing', () => {
   // Category 5: M2TS/TS files
   // ────────────────────────────────────────────────────────────────
   describe('5. M2TS/TS files', () => {
-    // Same limitation as 2c/2d: DTS not caught by grd_eac3_codec
-    test('5a: m2ts/h264/dts-hd 7.1 — transcode, rm DTS, AAC (no EAC3 — flow limitation)', () => {
+    test('5a: m2ts/h264/dts-hd 7.1 — transcode, rm DTS, create EAC3+AAC', () => {
       const path = walkFlow(file('m2ts', [vid('h264'), aud('dts', 8)]));
       assertProcess(path);
-      assertNoEAC3(path); // Matrix expects EAC3
+      assertEAC3(path);
       assertAAC(path);
       assertPass2(path);
     });
@@ -684,16 +682,19 @@ describe('Permutation Matrix — Flow Routing', () => {
       lacks(path, 'cmd_eac3_eng');
     });
 
-    test('AC3 5.1 with no English audio → skip EAC3 creation', () => {
+    test('AC3 5.1 with no English audio → fallback EAC3 creation', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('ac3', 6, 'jpn')]));
       has(path, 'grd_eac3_has_eng');
-      lacks(path, 'cmd_eac3_eng', 'No eng audio → skip EAC3');
+      lacks(path, 'cmd_eac3_eng', 'No eng audio → skip eng EAC3');
+      has(path, 'cmd_eac3_fb', 'No eng audio → fallback EAC3');
+      assertEAC3(path);
     });
 
-    test('DTS 5.1 → EAC3 codec guard skips (flow limitation)', () => {
+    test('DTS 5.1 → EAC3 codec guard matches, creates EAC3', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('dts', 6)]));
       has(path, 'grd_eac3_codec');
-      lacks(path, 'grd_eac3_ch', 'DTS not caught by codec guard → skips EAC3 section');
+      has(path, 'grd_eac3_ch', 'DTS caught by codec guard → enters EAC3 section');
+      assertEAC3(path);
     });
   });
 
