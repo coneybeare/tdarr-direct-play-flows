@@ -43,7 +43,7 @@ When a new permutation is discovered, add it here and verify the flow handles it
 | 3b | mkv | h264 | aac 2.0 eng | none | Transcode to HEVC/MP4, keep AAC | pass |
 | 3c | mkv | mpeg2 | ac3 2.0 eng | none | Transcode to HEVC/MP4, create AAC, remove AC3 | pass (post-fix) |
 | 3d | mkv | vp9 | opus 2.0 eng | none | Transcode to HEVC/MP4, remove Opus, create AAC | pass |
-| 3e | mkv | av1 | aac 2.0 eng | none | Transcode to HEVC/MP4, keep AAC | pass |
+| 3e | mkv | av1 | aac 2.0 eng | none | Software transcode to HEVC/MP4 (AV1 can't hw decode on T400), keep AAC | pass |
 
 ### 4. AVI files
 

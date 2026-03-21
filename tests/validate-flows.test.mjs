@@ -348,10 +348,12 @@ for (const file of flowFiles) {
       assert.ok(grdUnwanted, 'Missing node grd_unwanted');
       assert.strictEqual(grdUnwanted.inputsDB.streamType, 'audio');
       assert.strictEqual(grdUnwanted.inputsDB.propertyToCheck, 'codec_name');
-      assert.strictEqual(grdUnwanted.inputsDB.condition, 'includes');
-      // Should catch common unwanted codecs
+      assert.strictEqual(grdUnwanted.inputsDB.condition, 'equals',
+        'grd_unwanted must use "equals" to avoid false positives (e.g., "eac3".includes("ac3") = true)');
+      // Should catch common unwanted codecs (exact token check)
+      const unwantedTokens = grdUnwanted.inputsDB.valuesToMatch.split(',').map((s) => s.trim());
       for (const codec of ['ac3', 'dts', 'dca', 'mp3', 'truehd', 'flac']) {
-        assert.ok(grdUnwanted.inputsDB.valuesToMatch.includes(codec),
+        assert.ok(unwantedTokens.includes(codec),
           `grd_unwanted should catch ${codec}`);
       }
 
