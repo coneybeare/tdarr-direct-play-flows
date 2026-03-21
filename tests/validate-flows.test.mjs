@@ -215,10 +215,14 @@ for (const file of flowFiles) {
       assert.ok(!pluginMap.has('cmd_rm_old_eac3'),
         'cmd_rm_old_eac3 must be removed — it strips source EAC3 surround tracks before EAC3 creation');
 
-      // cmd_rm_ac3mp3 must be in PASS 2 (not in pass 1 — it destroys
-      // EnsureAudioStream clones that keep source codec_name)
-      assert.ok(pluginMap.has('cmd_rm_ac3mp3'),
-        'cmd_rm_ac3mp3 must exist in pass 2');
+      // Pass 2 AC3/MP3 removal uses exact-match ("equals") to avoid
+      // destroying EAC3 ("eac3".includes("ac3") = true with "includes")
+      assert.ok(pluginMap.has('cmd_rm_ac3'),
+        'cmd_rm_ac3 must exist in pass 2');
+      assert.ok(pluginMap.has('cmd_rm_mp3'),
+        'cmd_rm_mp3 must exist in pass 2');
+      assert.ok(!pluginMap.has('cmd_rm_ac3mp3'),
+        'cmd_rm_ac3mp3 must be replaced by separate exact-match nodes');
 
       // EAC3 section routes back to cmt_audio
       assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmt_audio',
@@ -240,13 +244,15 @@ for (const file of flowFiles) {
       assert.ok(!pluginMap.has('cmt_reorder2'),
         'cmt_reorder2 must be removed — old second pass');
 
-      // Pass 2 chain: ffe_001 → ffs_002 → cmd_rm_ac3mp3 → ffe_002 → cmt_size
+      // Pass 2 chain: ffe_001 → ffs_002 → cmd_rm_ac3 → cmd_rm_mp3 → ffe_002 → cmt_size
       assert.strictEqual(edgeMap.get('ffe_001:1'), 'ffs_002',
         'ffe_001 should route to pass 2 start');
-      assert.strictEqual(edgeMap.get('ffs_002:1'), 'cmd_rm_ac3mp3',
-        'Pass 2 start should route to AC3/MP3 removal');
-      assert.strictEqual(edgeMap.get('cmd_rm_ac3mp3:1'), 'ffe_002',
-        'AC3/MP3 removal should route to pass 2 execute');
+      assert.strictEqual(edgeMap.get('ffs_002:1'), 'cmd_rm_ac3',
+        'Pass 2 start should route to AC3 removal');
+      assert.strictEqual(edgeMap.get('cmd_rm_ac3:1'), 'cmd_rm_mp3',
+        'AC3 removal should route to MP3 removal');
+      assert.strictEqual(edgeMap.get('cmd_rm_mp3:1'), 'ffe_002',
+        'MP3 removal should route to pass 2 execute');
       assert.strictEqual(edgeMap.get('ffe_002:1'), 'cmt_size',
         'Pass 2 execute should route to size check');
     });
@@ -309,11 +315,13 @@ for (const file of flowFiles) {
 
       // Every codec in the guard must be removable by the pipeline
       const rmaudio = pluginMap.get('cmd_rmaudio');
-      const rmac3mp3 = pluginMap.get('cmd_rm_ac3mp3');
-      assert.ok(rmaudio && rmac3mp3, 'Missing removal nodes');
+      const rmAc3 = pluginMap.get('cmd_rm_ac3');
+      const rmMp3 = pluginMap.get('cmd_rm_mp3');
+      assert.ok(rmaudio && rmAc3 && rmMp3, 'Missing removal nodes');
       const removableSet = new Set([
         ...rmaudio.inputsDB.valuesToRemove.split(',').map(s => s.trim()),
-        ...rmac3mp3.inputsDB.valuesToRemove.split(',').map(s => s.trim()),
+        rmAc3.inputsDB.valuesToRemove.trim(),
+        rmMp3.inputsDB.valuesToRemove.trim(),
       ]);
       for (const codec of grdUnwanted.inputsDB.valuesToMatch.split(',').map(s => s.trim())) {
         assert.ok(removableSet.has(codec),
@@ -449,13 +457,19 @@ for (const file of flowFiles) {
       assert.ok(rmaudio.inputsDB.valuesToRemove.includes('dts'),
         'cmd_rmaudio must remove dts (ffprobe codec_name variant)');
 
-      // cmd_rm_ac3mp3 is in pass 2 — it handles ac3,mp3 (dts already removed by cmd_rmaudio in pass 1)
-      const rmac3mp3 = pluginMap.get('cmd_rm_ac3mp3');
-      assert.ok(rmac3mp3, 'Missing node cmd_rm_ac3mp3');
-      assert.ok(rmac3mp3.inputsDB.valuesToRemove.includes('ac3'),
-        'cmd_rm_ac3mp3 must remove ac3');
-      assert.ok(rmac3mp3.inputsDB.valuesToRemove.includes('mp3'),
-        'cmd_rm_ac3mp3 must remove mp3');
+      // Pass 2 uses exact-match nodes for ac3 and mp3 (dts already removed by cmd_rmaudio in pass 1)
+      const rmAc3 = pluginMap.get('cmd_rm_ac3');
+      const rmMp3 = pluginMap.get('cmd_rm_mp3');
+      assert.ok(rmAc3, 'Missing node cmd_rm_ac3');
+      assert.ok(rmMp3, 'Missing node cmd_rm_mp3');
+      assert.strictEqual(rmAc3.inputsDB.valuesToRemove, 'ac3',
+        'cmd_rm_ac3 must target exactly ac3');
+      assert.strictEqual(rmMp3.inputsDB.valuesToRemove, 'mp3',
+        'cmd_rm_mp3 must target exactly mp3');
+      assert.strictEqual(rmAc3.inputsDB.condition, 'equals',
+        'cmd_rm_ac3 must use equals to avoid matching eac3');
+      assert.strictEqual(rmMp3.inputsDB.condition, 'equals',
+        'cmd_rm_mp3 must use equals to avoid matching eac3');
     });
 
     test('hvc1 tag set in both normal and VR paths', () => {
@@ -516,14 +530,22 @@ for (const file of flowFiles) {
         'cmd_vr_hevc forceEncoding must be "false" — 8K HEVC files exceed T400 VRAM and only need retagging');
     });
 
-    test('ffmpegCommandRemoveStreamByProperty nodes use includes condition', () => {
-      // All RemoveStreamByProperty nodes must use "includes" — "equals" silently fails
+    test('ffmpegCommandRemoveStreamByProperty nodes use correct condition', () => {
+      // Most RemoveStreamByProperty nodes use "includes" for multi-value matching.
+      // Pass 2 AC3/MP3 nodes use "equals" for exact matching — "includes" would
+      // destroy EAC3 because "eac3".includes("ac3") is true.
+      const equalsNodes = new Set(['cmd_rm_ac3', 'cmd_rm_mp3']);
       const removeNodes = flow.flowPlugins.filter(
         (p) => p.pluginName === 'ffmpegCommandRemoveStreamByProperty'
       );
       for (const node of removeNodes) {
-        assert.strictEqual(node.inputsDB.condition, 'includes',
-          `${node.id} must use "includes" — "equals" silently fails on ffmpegCommandRemoveStreamByProperty`);
+        if (equalsNodes.has(node.id)) {
+          assert.strictEqual(node.inputsDB.condition, 'equals',
+            `${node.id} must use "equals" — "includes" would match eac3 via substring`);
+        } else {
+          assert.strictEqual(node.inputsDB.condition, 'includes',
+            `${node.id} must use "includes" for multi-value matching`);
+        }
       }
     });
 

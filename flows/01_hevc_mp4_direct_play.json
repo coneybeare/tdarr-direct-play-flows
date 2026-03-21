@@ -670,7 +670,7 @@
       "id": "cmt_tags",
       "position": {
         "x": 6540,
-        "y": 510
+        "y": 340
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -682,8 +682,8 @@
       "version": "1.0.0",
       "id": "chk_br_low",
       "position": {
-        "x": 6540,
-        "y": 0
+        "x": 3270,
+        "y": 3350
       },
       "inputsDB": {
         "unit": "kbps",
@@ -700,7 +700,7 @@
       "id": "chk_br_mid",
       "position": {
         "x": 6540,
-        "y": 170
+        "y": 0
       },
       "inputsDB": {
         "unit": "kbps",
@@ -749,8 +749,8 @@
       "version": "1.0.0",
       "id": "cmd_cap_low",
       "position": {
-        "x": 6040,
-        "y": 170
+        "x": 2770,
+        "y": 3520
       },
       "inputsDB": {
         "inputArguments": "",
@@ -766,7 +766,7 @@
       "id": "cmd_cap_mid",
       "position": {
         "x": 6040,
-        "y": 340
+        "y": 170
       },
       "inputsDB": {
         "inputArguments": "",
@@ -782,7 +782,7 @@
       "id": "cmd_tags",
       "position": {
         "x": 6540,
-        "y": 700
+        "y": 530
       },
       "inputsDB": {
         "inputArguments": "",
@@ -798,7 +798,7 @@
       "id": "cmt_audio",
       "position": {
         "x": 6540,
-        "y": 2270
+        "y": 2100
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -811,7 +811,7 @@
       "id": "cmd_ens_eng",
       "position": {
         "x": 6540,
-        "y": 2630
+        "y": 2460
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -832,7 +832,7 @@
       "id": "cmd_ens_und",
       "position": {
         "x": 7040,
-        "y": 2970
+        "y": 2800
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -853,7 +853,7 @@
       "id": "grd_dup_und",
       "position": {
         "x": 6040,
-        "y": 2800
+        "y": 2630
       },
       "inputsDB": {
         "streamType": "audio",
@@ -871,7 +871,7 @@
       "id": "grd_has_eng",
       "position": {
         "x": 6540,
-        "y": 2460
+        "y": 2290
       },
       "inputsDB": {
         "streamType": "audio",
@@ -889,7 +889,7 @@
       "id": "cmt_eac3",
       "position": {
         "x": 6540,
-        "y": 1230
+        "y": 1060
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -901,7 +901,7 @@
       "version": "1.0.0",
       "position": {
         "x": 6540,
-        "y": 1420
+        "y": 1250
       },
       "inputsDB": {
         "streamType": "audio",
@@ -919,7 +919,7 @@
       "version": "1.0.0",
       "position": {
         "x": 6540,
-        "y": 1590
+        "y": 1420
       },
       "inputsDB": {
         "channelCount": "6"
@@ -934,7 +934,7 @@
       "version": "1.0.0",
       "position": {
         "x": 6040,
-        "y": 1760
+        "y": 1590
       },
       "inputsDB": {
         "channelCount": "8"
@@ -950,7 +950,7 @@
       "id": "cmd_eac3_eng",
       "position": {
         "x": 6540,
-        "y": 2100
+        "y": 1930
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -971,7 +971,7 @@
       "id": "cmt_rmaudio",
       "position": {
         "x": 6540,
-        "y": 870
+        "y": 700
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -984,7 +984,7 @@
       "id": "cmd_rmaudio",
       "position": {
         "x": 6540,
-        "y": 1060
+        "y": 890
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -1001,7 +1001,7 @@
       "id": "cmt_reorder",
       "position": {
         "x": 6540,
-        "y": 3310
+        "y": 3140
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1013,8 +1013,8 @@
       "version": "1.0.0",
       "id": "cmd_reorder",
       "position": {
-        "x": 9810,
-        "y": 0
+        "x": 6540,
+        "y": 3330
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -1033,7 +1033,7 @@
       "id": "cmt_exec",
       "position": {
         "x": 9810,
-        "y": 170
+        "y": 0
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1046,7 +1046,7 @@
       "id": "cmd_nochapters",
       "position": {
         "x": 9810,
-        "y": 360
+        "y": 190
       },
       "inputsDB": {
         "inputArguments": "",
@@ -1062,7 +1062,7 @@
       "id": "ffe_001",
       "position": {
         "x": 9810,
-        "y": 530
+        "y": 360
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1075,7 +1075,7 @@
       "id": "cmd_rm_eac3",
       "position": {
         "x": 7040,
-        "y": 1930
+        "y": 1760
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -1990,7 +1990,7 @@
       "id": "grd_fb_eng",
       "position": {
         "x": 6040,
-        "y": 2970
+        "y": 2800
       },
       "inputsDB": {
         "streamType": "audio",
@@ -2008,7 +2008,7 @@
       "id": "cmd_ens_fb",
       "position": {
         "x": 6040,
-        "y": 3140
+        "y": 2970
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -2083,7 +2083,7 @@
       "id": "grd_eac3_has_eng",
       "position": {
         "x": 6540,
-        "y": 1930
+        "y": 1760
       },
       "inputsDB": {
         "streamType": "audio",
@@ -2101,25 +2101,25 @@
       "id": "ffs_002",
       "position": {
         "x": 9810,
-        "y": 700
+        "y": 530
       },
       "inputsDB": {},
       "fpEnabled": true
     },
     {
-      "name": "Remove: ac3, mp3",
+      "name": "Remove: ac3",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveStreamByProperty",
       "version": "1.0.0",
-      "id": "cmd_rm_ac3mp3",
+      "id": "cmd_rm_ac3",
       "position": {
         "x": 9810,
-        "y": 870
+        "y": 700
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
-        "valuesToRemove": "ac3,mp3",
-        "condition": "includes"
+        "valuesToRemove": "ac3",
+        "condition": "equals"
       },
       "fpEnabled": true
     },
@@ -2134,6 +2134,23 @@
         "y": 1040
       },
       "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Remove: mp3",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRemoveStreamByProperty",
+      "version": "1.0.0",
+      "id": "cmd_rm_mp3",
+      "position": {
+        "x": 9810,
+        "y": 870
+      },
+      "inputsDB": {
+        "propertyToCheck": "codec_name",
+        "valuesToRemove": "mp3",
+        "condition": "equals"
+      },
       "fpEnabled": true
     }
   ],
@@ -3350,25 +3367,32 @@
       "id": "e_eac3_has_eng_no"
     },
     {
-      "source": "ffs_002",
-      "sourceHandle": "1",
-      "target": "cmd_rm_ac3mp3",
-      "targetHandle": null,
-      "id": "e_pass2_rmac3"
-    },
-    {
-      "source": "cmd_rm_ac3mp3",
-      "sourceHandle": "1",
-      "target": "ffe_002",
-      "targetHandle": null,
-      "id": "e_rmac3_exec2"
-    },
-    {
       "source": "ffe_002",
       "sourceHandle": "1",
       "target": "cmt_size",
       "targetHandle": null,
       "id": "e_exec2_size"
+    },
+    {
+      "source": "ffs_002",
+      "sourceHandle": "1",
+      "target": "cmd_rm_ac3",
+      "targetHandle": null,
+      "id": "e_pass2_rmac3"
+    },
+    {
+      "source": "cmd_rm_ac3",
+      "sourceHandle": "1",
+      "target": "cmd_rm_mp3",
+      "targetHandle": null,
+      "id": "e_rmac3_rmmp3"
+    },
+    {
+      "source": "cmd_rm_mp3",
+      "sourceHandle": "1",
+      "target": "ffe_002",
+      "targetHandle": null,
+      "id": "e_rmmp3_exec2"
     }
   ]
 }
