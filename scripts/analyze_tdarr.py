@@ -21,7 +21,7 @@ Examples:
 
 Tdarr API notes:
     - POST /api/v2/cruddb is the main endpoint for all DB operations.
-    - FileJSONDB getAll returns a dict keyed by file path, NOT a list.
+    - FileJSONDB getAll may return a dict keyed by file path or a list.
       docFilter is broken server-side; always returns all files regardless
       of filter — filter client-side instead.
     - To update a file record, use mode "update" with the "obj" field
@@ -1197,6 +1197,18 @@ def main() -> None:
             if args.replace_errors and error_files:
                 _replace_error_files(error_files, host, host_api_key)
 
+            # --requeue within --status errors
+            if args.requeue and error_files:
+                print(f"\n  Requeuing {len(error_files)} file(s) with transcode errors...")
+                for ef in error_files:
+                    file_id = ef.get("_id") or ef.get("file", "")
+                    if not file_id:
+                        continue
+                    short = PurePosixPath(file_id).name
+                    ok = requeue_file(host, file_id, host_api_key)
+                    status_str = "OK" if ok else "FAILED"
+                    print(f"    [{status_str}] {short}")
+
             continue
 
         check_processed = args.status == "processed"
@@ -1224,16 +1236,39 @@ def main() -> None:
 
         # Requeue files with errors
         if args.requeue:
+            # 1) Files with analysis-level errors (unwanted audio, etc.)
             error_reports = [
                 r for r in reports if any(i.severity == "error" for i in r.issues)
             ]
-            if error_reports:
-                print(f"\n  Requeuing {len(error_reports)} file(s) with errors...")
+            # 2) Files with Tdarr transcode errors/cancelled status
+            transcode_error_files = [
+                f for f in files if isinstance(f, dict)
+                and f.get("TranscodeDecisionMaker", "") in (
+                    "Transcode error", "Transcode cancelled"
+                )
+            ]
+            # Deduplicate: exclude transcode errors already in analysis reports
+            analysis_paths = {r.path for r in error_reports}
+            extra_errors = [
+                f for f in transcode_error_files
+                if (f.get("_id") or f.get("file", "")) not in analysis_paths
+            ]
+            total = len(error_reports) + len(extra_errors)
+            if total:
+                print(f"\n  Requeuing {total} file(s) with errors...")
                 for r in error_reports:
                     file_id = r.path
                     ok = requeue_file(host, file_id, host_api_key)
                     status_str = "OK" if ok else "FAILED"
                     print(f"    [{status_str}] {r.name}")
+                for ef in extra_errors:
+                    file_id = ef.get("_id") or ef.get("file", "")
+                    if not file_id:
+                        continue
+                    short = PurePosixPath(file_id).name
+                    ok = requeue_file(host, file_id, host_api_key)
+                    status_str = "OK" if ok else "FAILED"
+                    print(f"    [{status_str}] {short}")
             else:
                 print("\n  No files with errors to requeue.")
 
