@@ -1978,7 +1978,7 @@
         "streamType": "audio",
         "propertyToCheck": "codec_name",
         "valuesToMatch": "ac3,dts,dca,mp3,truehd,mlp,flac,vorbis,opus,wma,wmav2,wmapro,pcm_s16le,pcm_s24le",
-        "condition": "includes"
+        "condition": "equals"
       },
       "fpEnabled": true
     },

@@ -252,18 +252,13 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertSkip(path);
     });
 
-    // NOTE: grd_unwanted uses condition:"includes" and valuesToMatch
-    // contains "ac3". Since "eac3".includes("ac3") === true, files with
-    // EAC3 are falsely flagged as having unwanted audio → processed
-    // instead of skipped. This is a known flow limitation.
-    test('1b: mp4/hevc(hvc1) + aac 2.0 + eac3 5.1 — process (grd_unwanted false positive)', () => {
+    test('1b: mp4/hevc(hvc1) + aac 2.0 + eac3 5.1 — skip (already optimal)', () => {
       const path = walkFlow(file('mp4', [
         vid('hevc'),
         aud('aac', 2),
         aud('eac3', 6),
       ]));
-      // Matrix says: skip (fl_noop). Actual: processes due to substring match.
-      assertProcess(path);
+      assertSkip(path);
     });
 
     test('1c: mp4/hevc(hev1) + aac 2.0 — process (retag to hvc1)', () => {
