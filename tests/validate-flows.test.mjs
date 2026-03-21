@@ -497,9 +497,17 @@ for (const file of flowFiles) {
       assert.ok(!tags.inputsDB.outputArguments.includes('+faststart'),
         'cmd_tags must NOT include +faststart (moved to pass 2)');
 
-      // VR path remux
+      // VR pass 1 tags must NOT include faststart (moved to VR pass 2)
+      const vrTags = pluginMap.get('cmd_vr_tags');
+      assert.ok(vrTags, 'Missing node cmd_vr_tags');
+      assert.ok(!vrTags.inputsDB.outputArguments.includes('+faststart'),
+        'cmd_vr_tags must NOT include +faststart (moved to VR pass 2)');
+
+      // VR path remux (pass 2)
       const vrFaststart2 = pluginMap.get('cmd_vr_faststart2');
       assert.ok(vrFaststart2, 'Missing node cmd_vr_faststart2');
+      assert.ok(vrFaststart2.inputsDB.outputArguments.includes('+faststart'),
+        'cmd_vr_faststart2 must include +faststart');
       assert.ok(vrFaststart2.inputsDB.outputArguments.includes('-tag:v hvc1'),
         'cmd_vr_faststart2 must include -tag:v hvc1 to prevent FFmpeg defaulting to hev1');
     });
