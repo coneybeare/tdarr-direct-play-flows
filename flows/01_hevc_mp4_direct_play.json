@@ -159,7 +159,7 @@
       "sourceRepo": "Community",
       "pluginName": "checkStreamProperty",
       "version": "1.0.0",
-      "id": "grd_dovi_mkv",
+      "id": "grd_dovi_non_mp4",
       "position": {
         "x": 500,
         "y": 1400
@@ -2284,7 +2284,7 @@
     {
       "source": "grd_ext",
       "sourceHandle": "2",
-      "target": "grd_dovi_mkv",
+      "target": "grd_dovi_non_mp4",
       "targetHandle": null,
       "id": "e_ext_no"
     },
@@ -3486,18 +3486,18 @@
       "id": "e_faststart2_exec2"
     },
     {
-      "source": "grd_dovi_mkv",
+      "source": "grd_dovi_non_mp4",
       "sourceHandle": "1",
       "target": "fl_noop",
       "targetHandle": null,
-      "id": "e_dovi_mkv_skip"
+      "id": "e_dovi_non_mp4_skip"
     },
     {
-      "source": "grd_dovi_mkv",
+      "source": "grd_dovi_non_mp4",
       "sourceHandle": "2",
       "target": "cmt_proc",
       "targetHandle": null,
-      "id": "e_dovi_mkv_proc"
+      "id": "e_dovi_non_mp4_proc"
     }
   ]
 }

@@ -936,7 +936,7 @@ def col_map_01() -> dict[str, int]:
         "cmt_guards": M,
         "grd_ext": M, "grd_vid": M, "grd_aud": M, "grd_ch": M,
         "grd_surr_ch": M, "grd_has_eac3": R,
-        "grd_dovi": M, "grd_dovi_mkv": R, "grd_tag": M, "grd_unwanted": M,
+        "grd_dovi": M, "grd_dovi_non_mp4": R, "grd_tag": M, "grd_unwanted": M,
         "cmt_optimal": L, "fl_noop": L,
         "cmt_proc": R,
         # ── Low-bitrate skip ──────────────────────────────────────────

@@ -315,17 +315,17 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_dovi:1'), 'fl_noop',
         'DoVi detected (MP4) should skip');
 
-      // Non-MP4 path: grd_ext NO → grd_dovi_mkv
-      assert.strictEqual(edgeMap.get('grd_ext:2'), 'grd_dovi_mkv',
+      // Non-MP4 path: grd_ext NO → grd_dovi_non_mp4
+      assert.strictEqual(edgeMap.get('grd_ext:2'), 'grd_dovi_non_mp4',
         'Non-MP4 should check for DoVi before processing');
-      assert.strictEqual(edgeMap.get('grd_dovi_mkv:1'), 'fl_noop',
+      assert.strictEqual(edgeMap.get('grd_dovi_non_mp4:1'), 'fl_noop',
         'DoVi detected (non-MP4) should skip');
-      assert.strictEqual(edgeMap.get('grd_dovi_mkv:2'), 'cmt_proc',
+      assert.strictEqual(edgeMap.get('grd_dovi_non_mp4:2'), 'cmt_proc',
         'Non-DoVi non-MP4 should route to processing');
 
-      // Verify grd_dovi_mkv config matches grd_dovi
-      const doviMkv = pluginMap.get('grd_dovi_mkv');
-      assert.ok(doviMkv, 'Missing node grd_dovi_mkv');
+      // Verify grd_dovi_non_mp4 config matches grd_dovi
+      const doviMkv = pluginMap.get('grd_dovi_non_mp4');
+      assert.ok(doviMkv, 'Missing node grd_dovi_non_mp4');
       assert.strictEqual(doviMkv.inputsDB.propertyToCheck, 'codec_tag_string');
       assert.strictEqual(doviMkv.inputsDB.valuesToMatch, 'dv');
       assert.strictEqual(doviMkv.inputsDB.condition, 'includes');

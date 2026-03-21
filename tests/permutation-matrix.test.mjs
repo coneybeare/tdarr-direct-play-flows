@@ -505,7 +505,7 @@ describe('Permutation Matrix — Flow Routing', () => {
         vid('hevc', { tag: 'dvh1' }),
         aud('eac3', 6),
       ]));
-      has(path, 'grd_dovi_mkv', 'Non-MP4 DoVi guard should be reached');
+      has(path, 'grd_dovi_non_mp4', 'Non-MP4 DoVi guard should be reached');
       assertSkip(path);
     });
 
