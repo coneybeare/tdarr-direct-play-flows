@@ -189,13 +189,15 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_eac3_codec:1'), 'grd_eac3_ch',
         'Surround codec path should route to channel check');
 
-      // grd_eac3_codec must match both ac3 and eac3
+      // grd_eac3_codec must match surround codecs (exact token check to avoid
+      // false positives like "eac3" containing "ac3" with String.includes())
       const codecGuard = pluginMap.get('grd_eac3_codec');
       assert.ok(codecGuard, 'Missing node grd_eac3_codec');
-      assert.ok(codecGuard.inputsDB.valuesToMatch.includes('ac3'),
-        'grd_eac3_codec must match ac3');
-      assert.ok(codecGuard.inputsDB.valuesToMatch.includes('eac3'),
-        'grd_eac3_codec must match eac3');
+      const codecTokens = codecGuard.inputsDB.valuesToMatch.split(',').map((s) => s.trim());
+      for (const codec of ['ac3', 'eac3', 'dts', 'dca', 'truehd', 'mlp']) {
+        assert.ok(codecTokens.includes(codec),
+          `grd_eac3_codec must match ${codec}`);
+      }
       assert.strictEqual(codecGuard.inputsDB.condition, 'includes',
         'grd_eac3_codec must use "includes" (not "equals") for comma-separated valuesToMatch');
 
