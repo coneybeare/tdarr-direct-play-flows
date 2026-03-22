@@ -592,6 +592,63 @@ for (const file of flowFiles) {
         'cmd_vr_hevc forceEncoding must be "false" — 8K HEVC files exceed T400 VRAM and only need retagging');
     });
 
+    test('VR retag shortcut guards and pipeline wiring', () => {
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      // chk_vr YES → VR retag guard chain (not directly to cmt_vr)
+      assert.strictEqual(edgeMap.get('chk_vr:1'), 'grd_vr_ismp4',
+        'chk_vr YES must route to VR retag guard chain');
+
+      // Guard chain routing
+      assert.strictEqual(edgeMap.get('grd_vr_ismp4:1'), 'grd_vr_ishevc');
+      assert.strictEqual(edgeMap.get('grd_vr_ismp4:2'), 'cmt_vr');
+      assert.strictEqual(edgeMap.get('grd_vr_ishevc:1'), 'grd_vr_nowanted');
+      assert.strictEqual(edgeMap.get('grd_vr_ishevc:2'), 'cmt_vr');
+      assert.strictEqual(edgeMap.get('grd_vr_nowanted:1'), 'cmt_vr',
+        'HAS unwanted audio → full VR pipeline');
+      assert.strictEqual(edgeMap.get('grd_vr_nowanted:2'), 'grd_vr_hasaac',
+        'clean audio → check AAC');
+      assert.strictEqual(edgeMap.get('grd_vr_hasaac:1'), 'cmt_vr_retag',
+        'has AAC → retag shortcut');
+      assert.strictEqual(edgeMap.get('grd_vr_hasaac:2'), 'cmt_vr',
+        'no AAC → full VR pipeline');
+
+      // Retag pipeline wiring
+      assert.strictEqual(edgeMap.get('cmt_vr_retag:1'), 'ffs_vr_retag');
+      assert.strictEqual(edgeMap.get('ffs_vr_retag:1'), 'cmd_vr_retag_mp4');
+      assert.strictEqual(edgeMap.get('cmd_vr_retag_mp4:1'), 'cmd_vr_retag_enc');
+      assert.strictEqual(edgeMap.get('cmd_vr_retag_enc:1'), 'cmd_vr_retag_tags');
+      assert.strictEqual(edgeMap.get('cmd_vr_retag_tags:1'), 'ffe_vr_retag');
+      assert.strictEqual(edgeMap.get('ffe_vr_retag:1'), 'fl_vr_size',
+        'retag output joins existing VR validation chain');
+
+      // Retag encoder must NOT use hardware
+      const retagEnc = pluginMap.get('cmd_vr_retag_enc');
+      assert.ok(retagEnc, 'Missing node cmd_vr_retag_enc');
+      assert.strictEqual(retagEnc.inputsDB.forceEncoding, 'false');
+      assert.strictEqual(retagEnc.inputsDB.hardwareEncoding, 'false',
+        'VR retag must not use hardware encoding');
+      assert.strictEqual(retagEnc.inputsDB.hardwareDecoding, 'false',
+        'VR retag must not use hardware decoding');
+
+      // Retag container must preserve spherical metadata
+      const retagMp4 = pluginMap.get('cmd_vr_retag_mp4');
+      assert.ok(retagMp4, 'Missing node cmd_vr_retag_mp4');
+      assert.strictEqual(retagMp4.inputsDB.forceConform, 'false',
+        'VR retag must preserve spherical metadata (forceConform=false)');
+
+      // Retag tags must include hvc1, faststart, and audio copy
+      const retagTags = pluginMap.get('cmd_vr_retag_tags');
+      assert.ok(retagTags, 'Missing node cmd_vr_retag_tags');
+      assert.ok(retagTags.inputsDB.outputArguments.includes('-tag:v hvc1'),
+        'VR retag must set hvc1 tag');
+      assert.ok(retagTags.inputsDB.outputArguments.includes('+faststart'),
+        'VR retag must set faststart');
+      assert.ok(retagTags.inputsDB.outputArguments.includes('-c:a copy'),
+        'VR retag must copy audio (no re-encode)');
+    });
+
     test('ffmpegCommandRemoveStreamByProperty nodes use correct condition', () => {
       // Most RemoveStreamByProperty nodes use "includes" for multi-value matching.
       // Pass 2 AC3/MP3 nodes use "equals" for exact matching — "includes" would

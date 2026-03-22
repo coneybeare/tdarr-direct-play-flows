@@ -902,8 +902,18 @@ M, L, R = 0, -500, 500
 
 VR_01 = -1000
 
+VR_RETAG = -500  # retag shortcut column (between M and VR_01)
+
 VR_NODES_01 = {
     "chk_vr": M,
+    # ── VR retag guards ──────────────────────────────────────────────
+    "grd_vr_ismp4": M, "grd_vr_ishevc": M,
+    "grd_vr_nowanted": M, "grd_vr_hasaac": M,
+    # ── VR retag shortcut pipeline ───────────────────────────────────
+    "cmt_vr_retag": VR_RETAG, "ffs_vr_retag": VR_RETAG,
+    "cmd_vr_retag_mp4": VR_RETAG, "cmd_vr_retag_enc": VR_RETAG,
+    "cmd_vr_retag_tags": VR_RETAG, "ffe_vr_retag": VR_RETAG,
+    # ── VR full pipeline ─────────────────────────────────────────────
     "cmt_vr": VR_01, "ffs_vr": VR_01,
     "cmd_vr_mp4": VR_01, "cmd_vr_rmsub": VR_01, "cmd_vr_rmimages": VR_01,
     "cmd_vr_hevc": VR_01,
