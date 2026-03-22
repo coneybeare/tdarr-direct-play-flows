@@ -206,8 +206,17 @@ function assertProcess(path) {
 }
 
 function assertProcessVR(path) {
-  has(path, 'ffs_vr', 'Should enter VR pipeline');
+  has(path, 'ffs_vr', 'Should enter full VR pipeline');
   has(path, 'fl_vr_replace', 'Should reach fl_vr_replace');
+  lacks(path, 'ffs_001', 'Should not enter normal pipeline');
+  lacks(path, 'ffs_vr_retag', 'Should not enter VR retag shortcut');
+}
+
+function assertProcessVRRetag(path) {
+  has(path, 'ffs_vr_retag', 'Should enter VR retag pipeline');
+  has(path, 'ffe_vr_retag', 'Should execute VR retag');
+  has(path, 'fl_vr_replace', 'Should reach fl_vr_replace');
+  lacks(path, 'ffs_vr', 'Should NOT enter full VR pipeline');
   lacks(path, 'ffs_001', 'Should not enter normal pipeline');
 }
 
@@ -547,6 +556,48 @@ describe('Permutation Matrix — Flow Routing', () => {
         aud('aac', 2),
       ], { filePath: '/media/Virtual Reality/Movie.mkv' }));
       assertProcessVR(path);
+    });
+
+    test('9c: mp4/hevc(hev1)/aac 2.0 in /Virtual Reality/ — VR retag only', () => {
+      const path = walkFlow(file('mp4', [
+        vid('hevc', { tag: 'hev1', height: 2160 }),
+        aud('aac', 2),
+      ], { filePath: '/media/Virtual Reality/Movie.mp4' }));
+      assertProcessVRRetag(path);
+      has(path, 'grd_vr_ismp4', 'Should check MP4');
+      has(path, 'grd_vr_ishevc', 'Should check HEVC');
+      has(path, 'grd_vr_hasaac', 'Should check AAC');
+      has(path, 'cmt_vr_retag', 'Should enter retag path');
+    });
+
+    test('9d: mkv/hevc(hev1)/aac 2.0 in /Virtual Reality/ — full VR (not MP4)', () => {
+      const path = walkFlow(file('mkv', [
+        vid('hevc', { tag: 'hev1', height: 2160 }),
+        aud('aac', 2),
+      ], { filePath: '/media/Virtual Reality/Movie.mkv' }));
+      assertProcessVR(path);
+      has(path, 'grd_vr_ismp4', 'Should check MP4');
+      lacks(path, 'cmt_vr_retag', 'Should NOT enter retag path');
+    });
+
+    test('9e: mp4/h264/aac 2.0 in /Virtual Reality/ — full VR (not HEVC)', () => {
+      const path = walkFlow(file('mp4', [
+        vid('h264', { height: 2160 }),
+        aud('aac', 2),
+      ], { filePath: '/media/Virtual Reality/Movie.mp4' }));
+      assertProcessVR(path);
+      has(path, 'grd_vr_ishevc', 'Should check HEVC');
+      lacks(path, 'cmt_vr_retag', 'Should NOT enter retag path');
+    });
+
+    test('9f: mp4/hevc(hev1)/dts 6ch in /Virtual Reality/ — full VR (unwanted audio)', () => {
+      const path = walkFlow(file('mp4', [
+        vid('hevc', { tag: 'hev1', height: 2160 }),
+        aud('dts', 6),
+      ], { filePath: '/media/Virtual Reality/Movie.mp4' }));
+      assertProcessVR(path);
+      has(path, 'grd_vr_nowanted', 'Should check unwanted audio');
+      lacks(path, 'cmt_vr_retag', 'Should NOT enter retag path');
     });
   });
 
