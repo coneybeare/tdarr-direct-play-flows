@@ -339,25 +339,44 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_unwanted:1'), 'cmt_proc',
         'Unwanted audio should route to processing');
 
-      // grd_unwanted NO → cmt_optimal (clean audio, already optimal)
-      assert.strictEqual(edgeMap.get('grd_unwanted:2'), 'cmt_optimal',
+      // grd_unwanted NO → grd_unwanted_ac3 (check AC3 separately)
+      assert.strictEqual(edgeMap.get('grd_unwanted:2'), 'grd_unwanted_ac3',
+        'No non-AC3 unwanted audio should check for AC3');
+
+      // grd_unwanted_ac3 YES → cmt_proc (has AC3)
+      assert.strictEqual(edgeMap.get('grd_unwanted_ac3:1'), 'cmt_proc',
+        'AC3 detected should route to processing');
+
+      // grd_unwanted_ac3 NO → cmt_optimal (truly clean)
+      assert.strictEqual(edgeMap.get('grd_unwanted_ac3:2'), 'cmt_optimal',
         'No unwanted audio should be optimal');
 
-      // Verify grd_unwanted config
+      // Verify grd_unwanted config — uses "includes" for multi-value matching
+      // (checkStreamProperty "equals" compares against FULL string, not per-value)
       const grdUnwanted = pluginMap.get('grd_unwanted');
       assert.ok(grdUnwanted, 'Missing node grd_unwanted');
       assert.strictEqual(grdUnwanted.inputsDB.streamType, 'audio');
       assert.strictEqual(grdUnwanted.inputsDB.propertyToCheck, 'codec_name');
-      assert.strictEqual(grdUnwanted.inputsDB.condition, 'equals',
-        'grd_unwanted must use "equals" to avoid false positives (e.g., "eac3".includes("ac3") = true)');
-      // Should catch common unwanted codecs (exact token check)
+      assert.strictEqual(grdUnwanted.inputsDB.condition, 'includes',
+        'grd_unwanted must use "includes" for multi-value matching');
+      // Must NOT contain "ac3" — "eac3".includes("ac3") is true (substring match)
       const unwantedTokens = grdUnwanted.inputsDB.valuesToMatch.split(',').map((s) => s.trim());
-      for (const codec of ['ac3', 'dts', 'dca', 'mp3', 'truehd', 'flac']) {
+      assert.ok(!unwantedTokens.includes('ac3'),
+        'grd_unwanted must NOT contain "ac3" — would match "eac3" via substring');
+      for (const codec of ['dts', 'dca', 'mp3', 'truehd', 'flac']) {
         assert.ok(unwantedTokens.includes(codec),
           `grd_unwanted should catch ${codec}`);
       }
 
-      // Every codec in the guard must be removable by the pipeline
+      // Verify grd_unwanted_ac3 uses single-value "equals" (safe for AC3 vs EAC3)
+      const grdAc3 = pluginMap.get('grd_unwanted_ac3');
+      assert.ok(grdAc3, 'Missing node grd_unwanted_ac3');
+      assert.strictEqual(grdAc3.inputsDB.valuesToMatch, 'ac3',
+        'grd_unwanted_ac3 must check for exactly "ac3"');
+      assert.strictEqual(grdAc3.inputsDB.condition, 'equals',
+        'grd_unwanted_ac3 must use "equals" — single value, safe for exact match');
+
+      // Every codec in both guards must be removable by the pipeline
       const rmaudio = pluginMap.get('cmd_rmaudio');
       const rmAc3 = pluginMap.get('cmd_rm_ac3');
       const rmMp3 = pluginMap.get('cmd_rm_mp3');
@@ -367,9 +386,10 @@ for (const file of flowFiles) {
         rmAc3.inputsDB.valuesToRemove.trim(),
         rmMp3.inputsDB.valuesToRemove.trim(),
       ]);
-      for (const codec of grdUnwanted.inputsDB.valuesToMatch.split(',').map(s => s.trim())) {
+      const allGuardedCodecs = [...unwantedTokens, grdAc3.inputsDB.valuesToMatch];
+      for (const codec of allGuardedCodecs) {
         assert.ok(removableSet.has(codec),
-          `grd_unwanted catches "${codec}" but no removal node strips it`);
+          `Guard catches "${codec}" but no removal node strips it`);
       }
     });
 
@@ -606,8 +626,12 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_vr_ishevc:1'), 'grd_vr_nowanted');
       assert.strictEqual(edgeMap.get('grd_vr_ishevc:2'), 'cmt_vr');
       assert.strictEqual(edgeMap.get('grd_vr_nowanted:1'), 'cmt_vr',
-        'HAS unwanted audio → full VR pipeline');
-      assert.strictEqual(edgeMap.get('grd_vr_nowanted:2'), 'grd_vr_hasaac',
+        'HAS unwanted non-AC3 audio → full VR pipeline');
+      assert.strictEqual(edgeMap.get('grd_vr_nowanted:2'), 'grd_vr_nowanted_ac3',
+        'no non-AC3 unwanted → check AC3 separately');
+      assert.strictEqual(edgeMap.get('grd_vr_nowanted_ac3:1'), 'cmt_vr',
+        'HAS AC3 → full VR pipeline');
+      assert.strictEqual(edgeMap.get('grd_vr_nowanted_ac3:2'), 'grd_vr_hasaac',
         'clean audio → check AAC');
       assert.strictEqual(edgeMap.get('grd_vr_hasaac:1'), 'cmt_vr_retag',
         'has AAC → retag shortcut');
