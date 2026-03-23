@@ -100,6 +100,7 @@ When a new permutation is discovered, add it here and verify the flow handles it
 | 10e | mp4 | hevc (hvc1) | aac 2.0 eng + mp3 2.0 eng | none | Process — guard catches unwanted MP3 | pass |
 | 10f | mp4 | hevc (hvc1) | aac 2.0 eng + ac3 2.0 eng | none | Process — guard catches unwanted AC3 | pass |
 | 10g | mp4 | hevc (hvc1) | aac 2.0 eng + eac3 5.1 eng | none | Skip — EAC3 surround is not unwanted | pass |
+| 10h | mp4 | hevc (hvc1) | eac3 6ch kor + eac3 6ch chi (no AAC) | none | Process — grd_aud catches missing AAC, fallback AAC creation | pass |
 
 ## Known Regressions
 

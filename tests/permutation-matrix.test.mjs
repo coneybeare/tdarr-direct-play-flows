@@ -665,6 +665,19 @@ describe('Permutation Matrix — Flow Routing', () => {
       has(path, 'grd_unwanted_ac3');
       assertSkip(path);
     });
+
+    test('10h: mp4/hevc(hvc1)/eac3 6ch only (no AAC, non-eng) — process, create AAC', () => {
+      const path = walkFlow(file('mp4', [
+        vid('hevc'),
+        aud('eac3', 6, 'kor'),
+        aud('eac3', 6, 'chi'),
+      ]));
+      // grd_aud detects no AAC → routes to processing
+      has(path, 'grd_aud', 'Should reach AAC guard');
+      lacks(path, 'grd_ch', 'Should not pass AAC guard (no AAC present)');
+      assertProcess(path);
+      assertFallbackAAC(path);
+    });
   });
 
   // ────────────────────────────────────────────────────────────────
