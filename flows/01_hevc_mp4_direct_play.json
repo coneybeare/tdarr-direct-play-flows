@@ -2540,7 +2540,7 @@
       "inputsDB": {
         "streamType": "audio",
         "propertyToCheck": "codec_name",
-        "valuesToMatch": "pcm",
+        "valuesToMatch": "pcm_",
         "condition": "includes"
       },
       "fpEnabled": true
@@ -2720,7 +2720,7 @@
       "inputsDB": {
         "streamType": "audio",
         "propertyToCheck": "codec_name",
-        "valuesToMatch": "pcm",
+        "valuesToMatch": "pcm_",
         "condition": "includes"
       },
       "fpEnabled": true

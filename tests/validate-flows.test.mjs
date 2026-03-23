@@ -338,7 +338,7 @@ for (const file of flowFiles) {
         { id: 'grd_unwanted_flac',   value: 'flac',   condition: 'equals' },
         { id: 'grd_unwanted_vorbis', value: 'vorbis', condition: 'equals' },
         { id: 'grd_unwanted_opus',   value: 'opus',   condition: 'equals' },
-        { id: 'grd_unwanted_pcm',    value: 'pcm',    condition: 'includes' },
+        { id: 'grd_unwanted_pcm',    value: 'pcm_',   condition: 'includes' },
         { id: 'grd_unwanted_wma',    value: 'wma',    condition: 'includes' },
         { id: 'grd_unwanted_ac3',    value: 'ac3',    condition: 'equals' },
       ];
