@@ -53,11 +53,13 @@ function evaluateNode(node, file, vars) {
       return vid && vid.codec_name === db.codec ? '1' : '2';
     }
 
-    // checkStreamProperty condition behavior (matches real Tdarr plugin):
-    //   "includes": splits valuesToMatch on commas, checks propStr.includes(val) for each
-    //   "equals":   compares propStr against the FULL valuesToMatch string (no comma splitting)
-    // This means "equals" with comma-separated values NEVER matches individual codecs.
-    // Use "includes" for multi-value matching, "equals" only for single-value exact match.
+    // checkStreamProperty condition behavior in Tdarr v2.62.01:
+    //   Neither "includes" nor "equals" splits comma-separated valuesToMatch.
+    //   The ENTIRE valuesToMatch string is used as a single value.
+    //   "includes": propStr.includes(valuesToMatch) — substring match against full string
+    //   "equals":   propStr === valuesToMatch — exact match against full string
+    //   This means multi-value comma lists NEVER match individual codecs.
+    //   Each unwanted codec needs its own guard node with a single value.
     case 'checkStreamProperty': {
       const streams = file.streams.filter(
         (s) => !db.streamType || s.codec_type === db.streamType
@@ -66,12 +68,7 @@ function evaluateNode(node, file, vars) {
         const prop = getNestedProp(stream, db.propertyToCheck);
         if (prop == null) continue;
         const propStr = String(prop);
-        if (db.condition === 'includes') {
-          const values = db.valuesToMatch.split(',').map((s) => s.trim());
-          for (const val of values) {
-            if (propStr.includes(val)) return '1';
-          }
-        }
+        if (db.condition === 'includes' && propStr.includes(db.valuesToMatch)) return '1';
         if (db.condition === 'equals' && propStr === db.valuesToMatch) return '1';
       }
       return '2';
@@ -603,7 +600,7 @@ describe('Permutation Matrix — Flow Routing', () => {
         aud('dts', 6),
       ], { filePath: '/media/Virtual Reality/Movie.mp4' }));
       assertProcessVR(path);
-      has(path, 'grd_vr_nowanted', 'Should check unwanted audio');
+      has(path, 'grd_vr_nw_dts', 'Should check unwanted audio');
       lacks(path, 'cmt_vr_retag', 'Should NOT enter retag path');
     });
   });
@@ -648,7 +645,7 @@ describe('Permutation Matrix — Flow Routing', () => {
 
     test('10e: mp4/hevc(hvc1)/aac 2.0 + mp3 2.0 — process (guard catches unwanted mp3)', () => {
       const path = walkFlow(file('mp4', [vid('hevc'), aud('aac', 2), aud('mp3', 2)]));
-      has(path, 'grd_unwanted', 'Should reach unwanted audio guard');
+      has(path, 'grd_unwanted_mp3', 'Should reach MP3 guard in unwanted chain');
       assertProcess(path);
     });
 
@@ -660,8 +657,8 @@ describe('Permutation Matrix — Flow Routing', () => {
 
     test('10g: mp4/hevc(hvc1)/aac 2.0 + eac3 6ch — skip (eac3 surround is NOT unwanted)', () => {
       const path = walkFlow(file('mp4', [vid('hevc'), aud('aac', 2), aud('eac3', 6)]));
-      // Has surround → grd_surr_ch YES → grd_unwanted → should NOT match eac3
-      has(path, 'grd_unwanted');
+      // Has surround → grd_surr_ch YES → unwanted chain → should NOT match eac3
+      has(path, 'grd_unwanted_dts');
       has(path, 'grd_unwanted_ac3');
       assertSkip(path);
     });
@@ -694,7 +691,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       has(path, 'grd_aud');
       has(path, 'grd_ch');
       has(path, 'grd_surr_ch');
-      has(path, 'grd_unwanted');
+      has(path, 'grd_unwanted_dts');
       has(path, 'grd_unwanted_ac3');
       has(path, 'cmt_optimal');
       has(path, 'fl_noop');
@@ -744,7 +741,6 @@ describe('Permutation Matrix — Flow Routing', () => {
   describe('EAC3 section detail', () => {
     test('AC3 5.1 eng → creates EAC3', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('ac3', 6)]));
-      has(path, 'grd_eac3_codec');
       has(path, 'grd_eac3_ch');
       has(path, 'grd_eac3_has_eng');
       has(path, 'cmd_eac3_eng');
@@ -761,7 +757,6 @@ describe('Permutation Matrix — Flow Routing', () => {
 
     test('AC3 2.0 → EAC3 section skips (not enough channels)', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('ac3', 2)]));
-      has(path, 'grd_eac3_codec');
       has(path, 'grd_eac3_ch');
       has(path, 'grd_eac3_ch8');
       has(path, 'cmd_rm_eac3', 'Should clean up any orphaned EAC3');
@@ -776,10 +771,9 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertEAC3(path);
     });
 
-    test('DTS 5.1 → EAC3 codec guard matches, creates EAC3', () => {
+    test('DTS 5.1 → EAC3 channel check matches, creates EAC3', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('dts', 6)]));
-      has(path, 'grd_eac3_codec');
-      has(path, 'grd_eac3_ch', 'DTS caught by codec guard → enters EAC3 section');
+      has(path, 'grd_eac3_ch', 'DTS 6ch enters EAC3 section via channel check');
       assertEAC3(path);
     });
   });
