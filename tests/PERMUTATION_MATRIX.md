@@ -97,6 +97,9 @@ When a new permutation is discovered, add it here and verify the flow handles it
 | 10b | mp4 | hevc | none (video only) | none | grd_has_audio → fail_no_streams | pass |
 | 10c | mkv | hevc | pcm_s24le 2.0 eng | none | Remove PCM, create AAC | pass |
 | 10d | mkv | hevc | ac3 5.1 eng + mp3 2.0 eng | srt | Create EAC3+AAC, remove AC3+MP3, strip subs | pass (post-fix) |
+| 10e | mp4 | hevc (hvc1) | aac 2.0 eng + mp3 2.0 eng | none | Process — guard catches unwanted MP3 | pass |
+| 10f | mp4 | hevc (hvc1) | aac 2.0 eng + ac3 2.0 eng | none | Process — guard catches unwanted AC3 | pass |
+| 10g | mp4 | hevc (hvc1) | aac 2.0 eng + eac3 5.1 eng | none | Skip — EAC3 surround is not unwanted | pass |
 
 ## Known Regressions
 
@@ -115,6 +118,25 @@ with correct codec_names (eac3, aac), so removing by `codec_name: "ac3"` only ta
 
 Pass 2 is a pure stream-copy remux (no transcode) — takes seconds. The pass 1 output has few streams
 (video + 2-4 audio after stripping subs/data/images/incompatible audio), so probing works reliably.
+
+### Guard chain silent passthrough (fixed in PR #62)
+
+**Root cause**: `grd_unwanted` (checkStreamProperty) used `condition: "equals"` with comma-separated
+`valuesToMatch: "ac3,dts,dca,mp3,..."`. The `checkStreamProperty` plugin with `condition: "equals"`
+compares `codec_name` against the **entire string** as one value (no comma iteration) — so the guard
+never matched any individual codec. Files that passed all other guards (mp4/hevc/hvc1/aac) but still
+had unwanted stereo audio (mp3, ac3) were incorrectly marked "Not required."
+
+**Affected permutations**: 10e, 10f — any MP4/HEVC/hvc1 file with AAC + unwanted stereo audio.
+The test evaluator was also masking this bug by iterating comma-separated values for "equals."
+
+**Fix**: Split unwanted audio detection into two guards:
+- `grd_unwanted` — changed to `condition: "includes"` (correctly iterates comma values), with
+  "ac3" removed from the list (since `"eac3".includes("ac3")` would falsely match EAC3)
+- `grd_unwanted_ac3` — new node with `condition: "equals"` and single value `"ac3"` (exact match,
+  safe for AC3 vs EAC3). Same fix applied to VR guard (`grd_vr_nowanted` / `grd_vr_nowanted_ac3`).
+
+Also fixed test evaluator: `checkStreamProperty` "equals" no longer iterates comma-separated values.
 
 ### PR #51 regression (fixed in PR #53)
 

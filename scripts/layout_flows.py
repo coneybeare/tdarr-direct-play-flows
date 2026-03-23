@@ -908,7 +908,7 @@ VR_NODES_01 = {
     "chk_vr": M,
     # ── VR retag guards ──────────────────────────────────────────────
     "grd_vr_ismp4": M, "grd_vr_ishevc": M,
-    "grd_vr_nowanted": M, "grd_vr_hasaac": M,
+    "grd_vr_nowanted": M, "grd_vr_nowanted_ac3": M, "grd_vr_hasaac": M,
     # ── VR retag shortcut pipeline ───────────────────────────────────
     "cmt_vr_retag": VR_RETAG, "ffs_vr_retag": VR_RETAG,
     "cmd_vr_retag_mp4": VR_RETAG, "cmd_vr_retag_enc": VR_RETAG,
@@ -946,7 +946,7 @@ def col_map_01() -> dict[str, int]:
         "cmt_guards": M,
         "grd_ext": M, "grd_vid": M, "grd_aud": M, "grd_ch": M,
         "grd_surr_ch": M, "grd_has_eac3": R,
-        "grd_dovi": M, "grd_dovi_non_mp4": R, "grd_tag": M, "grd_unwanted": M,
+        "grd_dovi": M, "grd_dovi_non_mp4": R, "grd_tag": M, "grd_unwanted": M, "grd_unwanted_ac3": M,
         "cmt_optimal": L, "fl_noop": L,
         "cmt_proc": R,
         # ── Low-bitrate skip ──────────────────────────────────────────

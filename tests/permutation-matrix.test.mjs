@@ -53,19 +53,26 @@ function evaluateNode(node, file, vars) {
       return vid && vid.codec_name === db.codec ? '1' : '2';
     }
 
+    // checkStreamProperty condition behavior (matches real Tdarr plugin):
+    //   "includes": splits valuesToMatch on commas, checks propStr.includes(val) for each
+    //   "equals":   compares propStr against the FULL valuesToMatch string (no comma splitting)
+    // This means "equals" with comma-separated values NEVER matches individual codecs.
+    // Use "includes" for multi-value matching, "equals" only for single-value exact match.
     case 'checkStreamProperty': {
       const streams = file.streams.filter(
         (s) => !db.streamType || s.codec_type === db.streamType
       );
-      const values = db.valuesToMatch.split(',').map((s) => s.trim());
       for (const stream of streams) {
         const prop = getNestedProp(stream, db.propertyToCheck);
         if (prop == null) continue;
         const propStr = String(prop);
-        for (const val of values) {
-          if (db.condition === 'includes' && propStr.includes(val)) return '1';
-          if (db.condition === 'equals' && propStr === val) return '1';
+        if (db.condition === 'includes') {
+          const values = db.valuesToMatch.split(',').map((s) => s.trim());
+          for (const val of values) {
+            if (propStr.includes(val)) return '1';
+          }
         }
+        if (db.condition === 'equals' && propStr === db.valuesToMatch) return '1';
       }
       return '2';
     }
@@ -638,6 +645,26 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertEAC3(path);
       assertPass2(path);
     });
+
+    test('10e: mp4/hevc(hvc1)/aac 2.0 + mp3 2.0 — process (guard catches unwanted mp3)', () => {
+      const path = walkFlow(file('mp4', [vid('hevc'), aud('aac', 2), aud('mp3', 2)]));
+      has(path, 'grd_unwanted', 'Should reach unwanted audio guard');
+      assertProcess(path);
+    });
+
+    test('10f: mp4/hevc(hvc1)/aac 2.0 + ac3 2.0 — process (guard catches unwanted ac3)', () => {
+      const path = walkFlow(file('mp4', [vid('hevc'), aud('aac', 2), aud('ac3', 2)]));
+      has(path, 'grd_unwanted_ac3', 'Should reach AC3 guard');
+      assertProcess(path);
+    });
+
+    test('10g: mp4/hevc(hvc1)/aac 2.0 + eac3 6ch — skip (eac3 surround is NOT unwanted)', () => {
+      const path = walkFlow(file('mp4', [vid('hevc'), aud('aac', 2), aud('eac3', 6)]));
+      // Has surround → grd_surr_ch YES → grd_unwanted → should NOT match eac3
+      has(path, 'grd_unwanted');
+      has(path, 'grd_unwanted_ac3');
+      assertSkip(path);
+    });
   });
 
   // ────────────────────────────────────────────────────────────────
@@ -655,6 +682,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       has(path, 'grd_ch');
       has(path, 'grd_surr_ch');
       has(path, 'grd_unwanted');
+      has(path, 'grd_unwanted_ac3');
       has(path, 'cmt_optimal');
       has(path, 'fl_noop');
     });
