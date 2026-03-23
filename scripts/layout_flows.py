@@ -908,7 +908,11 @@ VR_NODES_01 = {
     "chk_vr": M,
     # ── VR retag guards ──────────────────────────────────────────────
     "grd_vr_ismp4": M, "grd_vr_ishevc": M,
-    "grd_vr_nowanted": M, "grd_vr_nowanted_ac3": M, "grd_vr_hasaac": M,
+    "grd_vr_nw_dts": M, "grd_vr_nw_dca": M, "grd_vr_nw_mp3": M,
+    "grd_vr_nw_truehd": M, "grd_vr_nw_mlp": M, "grd_vr_nw_flac": M,
+    "grd_vr_nw_vorbis": M, "grd_vr_nw_opus": M,
+    "grd_vr_nw_pcm": M, "grd_vr_nw_wma": M,
+    "grd_vr_nowanted_ac3": M, "grd_vr_hasaac": M,
     # ── VR retag shortcut pipeline ───────────────────────────────────
     "cmt_vr_retag": VR_RETAG, "ffs_vr_retag": VR_RETAG,
     "cmd_vr_retag_mp4": VR_RETAG, "cmd_vr_retag_enc": VR_RETAG,
@@ -946,7 +950,11 @@ def col_map_01() -> dict[str, int]:
         "cmt_guards": M,
         "grd_ext": M, "grd_vid": M, "grd_aud": M, "grd_ch": M,
         "grd_surr_ch": M, "grd_has_eac3": R,
-        "grd_dovi": M, "grd_dovi_non_mp4": R, "grd_tag": M, "grd_unwanted": M, "grd_unwanted_ac3": M,
+        "grd_dovi": M, "grd_dovi_non_mp4": R, "grd_tag": M,
+        "grd_unwanted_dts": M, "grd_unwanted_dca": M, "grd_unwanted_mp3": M,
+        "grd_unwanted_truehd": M, "grd_unwanted_mlp": M, "grd_unwanted_flac": M,
+        "grd_unwanted_vorbis": M, "grd_unwanted_opus": M,
+        "grd_unwanted_pcm": M, "grd_unwanted_wma": M, "grd_unwanted_ac3": M,
         "cmt_optimal": L, "fl_noop": L,
         "cmt_proc": R,
         # ── Low-bitrate skip ──────────────────────────────────────────
@@ -971,7 +979,7 @@ def col_map_01() -> dict[str, int]:
         "cmt_tags": M, "cmd_tags": M,
         # ── Audio ─────────────────────────────────────────────────────
         "cmt_rmaudio": M, "cmd_rmaudio": M,
-        "cmt_eac3": M, "grd_eac3_codec": M, "grd_eac3_ch": M, "grd_eac3_ch8": L,
+        "cmt_eac3": M, "grd_eac3_ch": M, "grd_eac3_ch8": L,
         "grd_eac3_has_eng": M, "cmd_eac3_eng": M, "cmd_eac3_fb": R, "cmd_rm_eac3": R,
         "cmt_audio": M, "grd_has_eng": M, "cmd_ens_eng": M,
         "grd_dup_und": L, "cmd_ens_und": R,
