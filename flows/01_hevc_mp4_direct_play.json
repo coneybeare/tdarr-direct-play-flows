@@ -1110,7 +1110,7 @@
       "id": "cmt_size",
       "position": {
         "x": 9810,
-        "y": 1910
+        "y": 2080
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1123,7 +1123,7 @@
       "id": "fl_size",
       "position": {
         "x": 9810,
-        "y": 2100
+        "y": 2270
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -1139,7 +1139,7 @@
       "id": "cmt_toobig",
       "position": {
         "x": 9310,
-        "y": 2270
+        "y": 2440
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1152,7 +1152,7 @@
       "id": "fail_toobig",
       "position": {
         "x": 9310,
-        "y": 2460
+        "y": 2630
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1165,7 +1165,7 @@
       "id": "cmt_duration",
       "position": {
         "x": 9810,
-        "y": 2270
+        "y": 2440
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1178,7 +1178,7 @@
       "id": "fl_duration",
       "position": {
         "x": 9810,
-        "y": 2460
+        "y": 2630
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1194,7 +1194,7 @@
       "id": "grd_has_video",
       "position": {
         "x": 9810,
-        "y": 2630
+        "y": 2800
       },
       "inputsDB": {
         "streamType": "video",
@@ -1212,7 +1212,7 @@
       "id": "grd_has_audio",
       "position": {
         "x": 9810,
-        "y": 2800
+        "y": 2970
       },
       "inputsDB": {
         "streamType": "audio",
@@ -1230,7 +1230,7 @@
       "id": "fail_no_streams",
       "position": {
         "x": 9310,
-        "y": 2990
+        "y": 3160
       },
       "inputsDB": {
         "errorMessage": "Output file is missing video or audio streams"
@@ -1245,7 +1245,7 @@
       "id": "cmt_duration_fail",
       "position": {
         "x": 9310,
-        "y": 2630
+        "y": 2800
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1258,7 +1258,7 @@
       "id": "fl_review",
       "position": {
         "x": 9310,
-        "y": 2820
+        "y": 2990
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1271,7 +1271,7 @@
       "id": "cmt_replace",
       "position": {
         "x": 9810,
-        "y": 3140
+        "y": 3310
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1284,7 +1284,7 @@
       "id": "fl_replace",
       "position": {
         "x": 9810,
-        "y": 3330
+        "y": 3500
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1297,7 +1297,7 @@
       "id": "cmt_notify",
       "position": {
         "x": 9810,
-        "y": 3500
+        "y": 3670
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1310,7 +1310,7 @@
       "id": "chk_plex_notify",
       "position": {
         "x": 9810,
-        "y": 3690
+        "y": 3860
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_plex_notify",
@@ -1327,7 +1327,7 @@
       "id": "web_plex",
       "position": {
         "x": 10310,
-        "y": 3860
+        "y": 4030
       },
       "inputsDB": {
         "url": "http://YOUR_PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=YOUR_PLEX_TOKEN",
@@ -1343,7 +1343,7 @@
       "id": "chk_arr_notify",
       "position": {
         "x": 9810,
-        "y": 4030
+        "y": 4200
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_arr_notify",
@@ -1360,7 +1360,7 @@
       "id": "arr_notify",
       "position": {
         "x": 9810,
-        "y": 4200
+        "y": 4370
       },
       "inputsDB": {
         "arr": "radarr",
@@ -1807,7 +1807,7 @@
       "id": "chk_auto_accept",
       "position": {
         "x": 9810,
-        "y": 2970
+        "y": 3140
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1877,7 +1877,7 @@
       "id": "fl_manual_review",
       "position": {
         "x": 9310,
-        "y": 3160
+        "y": 3330
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2107,6 +2107,22 @@
       "fpEnabled": true
     },
     {
+      "name": "Set: MP4 (pass 2)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandSetContainer",
+      "version": "1.0.0",
+      "id": "cmd_mp4_002",
+      "position": {
+        "x": 9810,
+        "y": 1230
+      },
+      "inputsDB": {
+        "container": "mp4",
+        "forceConform": "false"
+      },
+      "fpEnabled": true
+    },
+    {
       "name": "Remove: ac3",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandRemoveStreamByProperty",
@@ -2114,7 +2130,7 @@
       "id": "cmd_rm_ac3",
       "position": {
         "x": 9810,
-        "y": 1230
+        "y": 1400
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -2131,7 +2147,7 @@
       "id": "ffe_002",
       "position": {
         "x": 9810,
-        "y": 1740
+        "y": 1910
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2144,7 +2160,7 @@
       "id": "cmd_rm_mp3",
       "position": {
         "x": 9810,
-        "y": 1400
+        "y": 1570
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -2197,7 +2213,7 @@
       "id": "cmd_faststart2",
       "position": {
         "x": 9810,
-        "y": 1570
+        "y": 1740
       },
       "inputsDB": {
         "inputArguments": "",
@@ -3917,9 +3933,16 @@
     {
       "source": "ffs_002",
       "sourceHandle": "1",
+      "target": "cmd_mp4_002",
+      "targetHandle": null,
+      "id": "e_pass2_mp4"
+    },
+    {
+      "source": "cmd_mp4_002",
+      "sourceHandle": "1",
       "target": "cmd_rm_ac3",
       "targetHandle": null,
-      "id": "e_pass2_rmac3"
+      "id": "e_mp4_002_rmac3"
     },
     {
       "source": "cmd_rm_ac3",
