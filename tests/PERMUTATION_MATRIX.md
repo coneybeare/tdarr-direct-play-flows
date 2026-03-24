@@ -155,3 +155,17 @@ Chain: `ffs_002 → cmd_reorder_002 → cmd_rm_ac3 → cmd_rm_mp3 → cmd_fastst
 
 Note: `condition: "equals"` does NOT exist in `ffmpegCommandRemoveStreamByProperty` (Tdarr v2.62.01).
 Unknown conditions fall through to `not_includes` behavior, which inverts the removal logic.
+
+### PR #66 regression (fixed in PR #67)
+
+**Root cause**: `cmd_rm_ac3` and `cmd_rm_mp3` in pass 2 used `condition: "equals"` with
+`ffmpegCommandRemoveStreamByProperty`. This plugin only recognizes `condition: "includes"` — any other
+value falls through to `not_includes` logic, which **inverts** removal: removes streams that DON'T
+match and keeps streams that DO. Job report confirmed: HEVC+AAC removed, AC3 kept.
+
+**Affected permutations**: All files reaching pass 2 with AC3 or MP3 (2a, 2b, 2g, 2h, 3a, 3c, 4a, 4b,
+5b, 6a, 6c, 7a, 7b, 10d, 10e, 10f, 10i).
+
+**Fix**: Switch `cmd_rm_ac3` to `propertyToCheck: "codec_tag_string"`, `valuesToRemove: "ac-3"`,
+`condition: "includes"`. In MP4 containers, AC3 tag is "ac-3" and EAC3 tag is "ec-3" — no substring
+overlap. Switch `cmd_rm_mp3` to `condition: "includes"` (no ambiguity for "mp3").
