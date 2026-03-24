@@ -247,13 +247,15 @@ for (const file of flowFiles) {
       assert.ok(!pluginMap.has('cmt_reorder2'),
         'cmt_reorder2 must be removed — old second pass');
 
-      // Pass 2 chain: ffe_001 → chk_health_002 → ffs_002 → cmd_rm_ac3 → cmd_rm_mp3 → cmd_faststart2 → ffe_002 → cmt_size
+      // Pass 2 chain: ffe_001 → chk_health_002 → ffs_002 → cmd_mp4_002 → cmd_rm_ac3 → cmd_rm_mp3 → cmd_faststart2 → ffe_002 → cmt_size
       assert.strictEqual(edgeMap.get('ffe_001:1'), 'chk_health_002',
         'ffe_001 should route to health check before pass 2');
       assert.strictEqual(edgeMap.get('chk_health_002:1'), 'ffs_002',
         'Health check should route to pass 2 start');
-      assert.strictEqual(edgeMap.get('ffs_002:1'), 'cmd_rm_ac3',
-        'Pass 2 start should route to AC3 removal');
+      assert.strictEqual(edgeMap.get('ffs_002:1'), 'cmd_mp4_002',
+        'Pass 2 start should route to container mapping');
+      assert.strictEqual(edgeMap.get('cmd_mp4_002:1'), 'cmd_rm_ac3',
+        'Container mapping should route to AC3 removal');
       assert.strictEqual(edgeMap.get('cmd_rm_ac3:1'), 'cmd_rm_mp3',
         'AC3 removal should route to MP3 removal');
       assert.strictEqual(edgeMap.get('cmd_rm_mp3:1'), 'cmd_faststart2',
@@ -262,6 +264,16 @@ for (const file of flowFiles) {
         'Faststart should route to pass 2 execute');
       assert.strictEqual(edgeMap.get('ffe_002:1'), 'cmt_size',
         'Pass 2 execute should route to size check');
+
+      // cmd_mp4_002 must use forceConform=false to avoid stripping streams
+      const mp4Pass2 = pluginMap.get('cmd_mp4_002');
+      assert.ok(mp4Pass2, 'Missing node cmd_mp4_002');
+      assert.strictEqual(mp4Pass2.pluginName, 'ffmpegCommandSetContainer',
+        'cmd_mp4_002 must be a SetContainer plugin');
+      assert.strictEqual(mp4Pass2.inputsDB.container, 'mp4',
+        'cmd_mp4_002 must target mp4 container');
+      assert.strictEqual(mp4Pass2.inputsDB.forceConform, 'false',
+        'cmd_mp4_002 must use forceConform=false');
     });
 
     test('guard chain catches orphaned stereo EAC3', () => {
