@@ -648,12 +648,30 @@ describe('Permutation Matrix — Flow Routing', () => {
       const path = walkFlow(file('mp4', [vid('hevc'), aud('aac', 2), aud('mp3', 2)]));
       has(path, 'grd_unwanted_mp3', 'Should reach MP3 guard in unwanted chain');
       assertProcess(path);
+      assertPass2(path);
     });
 
     test('10f: mp4/hevc(hvc1)/aac 2.0 + ac3 2.0 — process (guard catches unwanted ac3)', () => {
       const path = walkFlow(file('mp4', [vid('hevc'), aud('aac', 2), aud('ac3', 2)]));
       has(path, 'grd_unwanted_ac3', 'Should reach AC3 guard');
       assertProcess(path);
+      assertPass2(path);
+    });
+
+    test('10i: mp4/hevc(hvc1)/aac 2.0 + eac3 6ch + ac3 6ch — pass 2 removes AC3 (regression)', () => {
+      // Exact profile from production failures: "almost optimal" except legacy AC3 surround.
+      // Before this fix, pass 2 failed with "No streams mapped" because ffmpegCommandStart
+      // does not map streams — cmd_mp4_002 (SetContainer) is required.
+      const path = walkFlow(file('mp4', [
+        vid('hevc'),
+        aud('aac', 2),
+        aud('eac3', 6),
+        aud('ac3', 6),
+      ]));
+      has(path, 'grd_unwanted_ac3', 'Should reach AC3 guard in unwanted chain');
+      assertProcess(path);
+      assertEAC3(path);
+      assertPass2(path);
     });
 
     test('10g: mp4/hevc(hvc1)/aac 2.0 + eac3 6ch — skip (eac3 surround is NOT unwanted)', () => {
@@ -675,6 +693,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       lacks(path, 'grd_ch', 'Should not pass AAC guard (no AAC present)');
       assertProcess(path);
       assertFallbackAAC(path);
+      assertPass2(path);
     });
   });
 
