@@ -2136,9 +2136,9 @@
         "y": 1400
       },
       "inputsDB": {
-        "propertyToCheck": "codec_name",
-        "valuesToRemove": "ac3",
-        "condition": "equals"
+        "propertyToCheck": "codec_tag_string",
+        "valuesToRemove": "ac-3",
+        "condition": "includes"
       },
       "fpEnabled": true
     },
@@ -2168,7 +2168,7 @@
       "inputsDB": {
         "propertyToCheck": "codec_name",
         "valuesToRemove": "mp3",
-        "condition": "equals"
+        "condition": "includes"
       },
       "fpEnabled": true
     },

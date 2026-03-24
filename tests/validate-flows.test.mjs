@@ -386,9 +386,15 @@ for (const file of flowFiles) {
       const rmAc3 = pluginMap.get('cmd_rm_ac3');
       const rmMp3 = pluginMap.get('cmd_rm_mp3');
       assert.ok(rmaudio && rmAc3 && rmMp3, 'Missing removal nodes');
+      // cmd_rm_ac3 uses codec_tag_string "ac-3" to avoid eac3 substring match —
+      // map it back to codec_name "ac3" for guard cross-reference
+      const tagToCodec = { 'ac-3': 'ac3' };
+      const rmAc3Codecs = rmAc3.inputsDB.propertyToCheck === 'codec_tag_string'
+        ? rmAc3.inputsDB.valuesToRemove.split(',').map(s => tagToCodec[s.trim()] || s.trim())
+        : rmAc3.inputsDB.valuesToRemove.split(',').map(s => s.trim());
       const removableSet = new Set([
         ...rmaudio.inputsDB.valuesToRemove.split(',').map(s => s.trim()),
-        rmAc3.inputsDB.valuesToRemove.trim(),
+        ...rmAc3Codecs,
         rmMp3.inputsDB.valuesToRemove.trim(),
       ]);
       for (const guard of guardChain) {
@@ -533,19 +539,23 @@ for (const file of flowFiles) {
       assert.ok(rmaudio.inputsDB.valuesToRemove.includes('dts'),
         'cmd_rmaudio must remove dts (ffprobe codec_name variant)');
 
-      // Pass 2 uses exact-match nodes for ac3 and mp3 (dts already removed by cmd_rmaudio in pass 1)
+      // Pass 2 removal: AC3 uses codec_tag_string "ac-3" (avoids eac3 substring match),
+      // MP3 uses codec_name "mp3" (no ambiguity). Both use "includes" — the only working
+      // condition in ffmpegCommandRemoveStreamByProperty (Tdarr v2.62.01 has no "equals").
       const rmAc3 = pluginMap.get('cmd_rm_ac3');
       const rmMp3 = pluginMap.get('cmd_rm_mp3');
       assert.ok(rmAc3, 'Missing node cmd_rm_ac3');
       assert.ok(rmMp3, 'Missing node cmd_rm_mp3');
-      assert.strictEqual(rmAc3.inputsDB.valuesToRemove, 'ac3',
-        'cmd_rm_ac3 must target exactly ac3');
+      assert.strictEqual(rmAc3.inputsDB.propertyToCheck, 'codec_tag_string',
+        'cmd_rm_ac3 must use codec_tag_string to distinguish ac-3 from ec-3');
+      assert.strictEqual(rmAc3.inputsDB.valuesToRemove, 'ac-3',
+        'cmd_rm_ac3 must target ac-3 (MP4 tag for AC3)');
+      assert.strictEqual(rmAc3.inputsDB.condition, 'includes',
+        'cmd_rm_ac3 must use includes (only working condition in RemoveStreamByProperty)');
       assert.strictEqual(rmMp3.inputsDB.valuesToRemove, 'mp3',
-        'cmd_rm_mp3 must target exactly mp3');
-      assert.strictEqual(rmAc3.inputsDB.condition, 'equals',
-        'cmd_rm_ac3 must use equals to avoid matching eac3');
-      assert.strictEqual(rmMp3.inputsDB.condition, 'equals',
-        'cmd_rm_mp3 must use equals to avoid matching eac3');
+        'cmd_rm_mp3 must target mp3');
+      assert.strictEqual(rmMp3.inputsDB.condition, 'includes',
+        'cmd_rm_mp3 must use includes (only working condition in RemoveStreamByProperty)');
     });
 
     test('hvc1 tag set in both normal and VR paths', () => {
@@ -697,21 +707,16 @@ for (const file of flowFiles) {
     });
 
     test('ffmpegCommandRemoveStreamByProperty nodes use correct condition', () => {
-      // Most RemoveStreamByProperty nodes use "includes" for multi-value matching.
-      // Pass 2 AC3/MP3 nodes use "equals" for exact matching — "includes" would
-      // destroy EAC3 because "eac3".includes("ac3") is true.
-      const equalsNodes = new Set(['cmd_rm_ac3', 'cmd_rm_mp3']);
+      // All RemoveStreamByProperty nodes must use "includes" — it's the only working
+      // condition in Tdarr v2.62.01 (unrecognized conditions like "equals" fall through
+      // to not_includes, which inverts the logic and removes wrong streams).
+      // AC3 removal uses codec_tag_string "ac-3" to avoid the eac3 substring match.
       const removeNodes = flow.flowPlugins.filter(
         (p) => p.pluginName === 'ffmpegCommandRemoveStreamByProperty'
       );
       for (const node of removeNodes) {
-        if (equalsNodes.has(node.id)) {
-          assert.strictEqual(node.inputsDB.condition, 'equals',
-            `${node.id} must use "equals" — "includes" would match eac3 via substring`);
-        } else {
-          assert.strictEqual(node.inputsDB.condition, 'includes',
-            `${node.id} must use "includes" for multi-value matching`);
-        }
+        assert.strictEqual(node.inputsDB.condition, 'includes',
+          `${node.id} must use "includes" — the only working condition in RemoveStreamByProperty`);
       }
     });
 

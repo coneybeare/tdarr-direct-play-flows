@@ -148,7 +148,10 @@ is true, EAC3 surround tracks were destroyed alongside AC3 originals → zero au
 **Affected permutations**: All files with EAC3 in pass 2 output (2a, 2b, 2c, 2d, 6a, 6c, 7a, 7b, 10a, 10d).
 Also Squid Game-type files (non-English EAC3 only) where EAC3 was the sole surviving audio.
 
-**Fix**: Replace single `cmd_rm_ac3mp3` node with two separate exact-match nodes:
-- `cmd_rm_ac3` (`valuesToRemove: "ac3"`, `condition: "equals"`) — matches AC3, NOT EAC3
-- `cmd_rm_mp3` (`valuesToRemove: "mp3"`, `condition: "equals"`) — matches MP3
-Chain: `ffs_002 → cmd_rm_ac3 → cmd_rm_mp3 → ffe_002`
+**Fix**: Replace single `cmd_rm_ac3mp3` node with two separate nodes:
+- `cmd_rm_ac3` (`propertyToCheck: "codec_tag_string"`, `valuesToRemove: "ac-3"`, `condition: "includes"`) — MP4 tag "ac-3" does not substring-match EAC3 tag "ec-3"
+- `cmd_rm_mp3` (`valuesToRemove: "mp3"`, `condition: "includes"`) — no ambiguity
+Chain: `ffs_002 → cmd_reorder_002 → cmd_rm_ac3 → cmd_rm_mp3 → cmd_faststart2 → ffe_002`
+
+Note: `condition: "equals"` does NOT exist in `ffmpegCommandRemoveStreamByProperty` (Tdarr v2.62.01).
+Unknown conditions fall through to `not_includes` behavior, which inverts the removal logic.
