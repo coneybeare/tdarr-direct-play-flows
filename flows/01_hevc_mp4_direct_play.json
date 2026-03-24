@@ -2107,18 +2107,21 @@
       "fpEnabled": true
     },
     {
-      "name": "Set: MP4 (pass 2)",
+      "name": "Reorder (pass 2)",
       "sourceRepo": "Community",
-      "pluginName": "ffmpegCommandSetContainer",
+      "pluginName": "ffmpegCommandRorderStreams",
       "version": "1.0.0",
-      "id": "cmd_mp4_002",
+      "id": "cmd_reorder_002",
       "position": {
         "x": 9810,
         "y": 1230
       },
       "inputsDB": {
-        "container": "mp4",
-        "forceConform": "false"
+        "processOrder": "codecs,channels,streamTypes",
+        "languages": "eng,und",
+        "channels": "2,6,8",
+        "codecs": "hevc,h264,aac,eac3,ac3,mp3",
+        "streamTypes": "video,audio"
       },
       "fpEnabled": true
     },
@@ -3933,16 +3936,16 @@
     {
       "source": "ffs_002",
       "sourceHandle": "1",
-      "target": "cmd_mp4_002",
+      "target": "cmd_reorder_002",
       "targetHandle": null,
-      "id": "e_pass2_mp4"
+      "id": "e_pass2_reorder"
     },
     {
-      "source": "cmd_mp4_002",
+      "source": "cmd_reorder_002",
       "sourceHandle": "1",
       "target": "cmd_rm_ac3",
       "targetHandle": null,
-      "id": "e_mp4_002_rmac3"
+      "id": "e_reorder_002_rmac3"
     },
     {
       "source": "cmd_rm_ac3",
