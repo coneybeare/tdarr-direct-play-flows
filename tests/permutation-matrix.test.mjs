@@ -660,8 +660,12 @@ describe('Permutation Matrix — Flow Routing', () => {
 
     test('10i: mp4/hevc(hvc1)/aac 2.0 + eac3 6ch + ac3 6ch — pass 2 removes AC3 (regression)', () => {
       // Exact profile from production failures: "almost optimal" except legacy AC3 surround.
-      // Before this fix, pass 2 failed with "No streams mapped" because ffmpegCommandStart
-      // does not map streams — cmd_reorder_002 (ffmpegCommandRorderStreams) is required.
+      // Two regressions fixed here:
+      // 1. ffmpegCommandStart does not map streams — cmd_reorder_002 (RorderStreams) required
+      // 2. condition "equals" does not exist in RemoveStreamByProperty — falls through to
+      //    not_includes which INVERTS removal (removes non-matching, keeps matching).
+      //    Fix: cmd_rm_ac3 uses codec_tag_string "ac-3" with condition "includes" (MP4
+      //    tags "ac-3" vs "ec-3" have no substring overlap, preserving EAC3).
       const path = walkFlow(file('mp4', [
         vid('hevc'),
         aud('aac', 2),
@@ -672,6 +676,22 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertEAC3(path);
       assertPass2(path);
+    });
+
+    test('10j: mp4/hevc(hvc1)/aac 2.0 + mp3 2.0 + ac3 6ch — pass 2 removes both AC3 and MP3', () => {
+      // File with both legacy codecs: AC3 surround + MP3 stereo. Pass 2 must remove both.
+      const path = walkFlow(file('mp4', [
+        vid('hevc'),
+        aud('aac', 2),
+        aud('mp3', 2),
+        aud('ac3', 6),
+      ]));
+      has(path, 'grd_unwanted_mp3', 'Should reach MP3 guard in unwanted chain');
+      assertProcess(path);
+      assertEAC3(path);
+      assertPass2(path);
+      has(path, 'cmd_rm_ac3', 'Pass 2 must traverse AC3 removal node');
+      has(path, 'cmd_rm_mp3', 'Pass 2 must traverse MP3 removal node');
     });
 
     test('10g: mp4/hevc(hvc1)/aac 2.0 + eac3 6ch — skip (eac3 surround is NOT unwanted)', () => {
