@@ -270,6 +270,8 @@ for (const file of flowFiles) {
       assert.ok(mp4Pass2, 'Missing node cmd_mp4_002');
       assert.strictEqual(mp4Pass2.pluginName, 'ffmpegCommandSetContainer',
         'cmd_mp4_002 must be a SetContainer plugin');
+      assert.strictEqual(mp4Pass2.inputsDB.container, 'mp4',
+        'cmd_mp4_002 must target mp4 container');
       assert.strictEqual(mp4Pass2.inputsDB.forceConform, 'false',
         'cmd_mp4_002 must use forceConform=false');
     });
