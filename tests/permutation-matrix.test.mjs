@@ -244,7 +244,7 @@ function assertAAC(path) {
 function assertPass2(path) {
   has(path, 'chk_health_002', 'Should health-check before pass 2');
   has(path, 'ffs_002', 'Should enter pass 2');
-  has(path, 'cmd_mp4_002', 'Should map streams in pass 2');
+  has(path, 'cmd_reorder_002', 'Should map streams in pass 2');
   has(path, 'cmd_faststart2', 'Should apply faststart in pass 2');
 }
 
@@ -661,7 +661,7 @@ describe('Permutation Matrix — Flow Routing', () => {
     test('10i: mp4/hevc(hvc1)/aac 2.0 + eac3 6ch + ac3 6ch — pass 2 removes AC3 (regression)', () => {
       // Exact profile from production failures: "almost optimal" except legacy AC3 surround.
       // Before this fix, pass 2 failed with "No streams mapped" because ffmpegCommandStart
-      // does not map streams — cmd_mp4_002 (SetContainer) is required.
+      // does not map streams — cmd_reorder_002 (SetContainer) is required.
       const path = walkFlow(file('mp4', [
         vid('hevc'),
         aud('aac', 2),
