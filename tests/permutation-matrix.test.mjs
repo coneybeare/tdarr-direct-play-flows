@@ -690,6 +690,8 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertEAC3(path);
       assertPass2(path);
+      has(path, 'cmd_rm_ac3', 'Pass 2 must traverse AC3 removal node');
+      has(path, 'cmd_rm_mp3', 'Pass 2 must traverse MP3 removal node');
     });
 
     test('10g: mp4/hevc(hvc1)/aac 2.0 + eac3 6ch — skip (eac3 surround is NOT unwanted)', () => {
