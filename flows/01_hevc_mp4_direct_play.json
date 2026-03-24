@@ -2120,7 +2120,7 @@
         "processOrder": "codecs,channels,streamTypes",
         "languages": "eng,und",
         "channels": "2,6,8",
-        "codecs": "hevc,h264,aac,eac3,ac3",
+        "codecs": "hevc,h264,aac,eac3,ac3,mp3",
         "streamTypes": "video,audio"
       },
       "fpEnabled": true

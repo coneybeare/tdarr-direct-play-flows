@@ -270,6 +270,11 @@ for (const file of flowFiles) {
       assert.ok(reorderPass2, 'Missing node cmd_reorder_002');
       assert.strictEqual(reorderPass2.pluginName, 'ffmpegCommandRorderStreams',
         'cmd_reorder_002 must be a RorderStreams plugin to map all streams');
+      assert.ok(reorderPass2.inputsDB, 'cmd_reorder_002 must define inputsDB to map streams');
+      assert.strictEqual(typeof reorderPass2.inputsDB, 'object',
+        'cmd_reorder_002 inputsDB must be an object');
+      assert.ok(Object.keys(reorderPass2.inputsDB).length > 0,
+        'cmd_reorder_002 inputsDB must have at least one mapping entry');
     });
 
     test('guard chain catches orphaned stereo EAC3', () => {

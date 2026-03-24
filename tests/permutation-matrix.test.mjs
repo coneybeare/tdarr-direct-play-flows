@@ -661,7 +661,7 @@ describe('Permutation Matrix — Flow Routing', () => {
     test('10i: mp4/hevc(hvc1)/aac 2.0 + eac3 6ch + ac3 6ch — pass 2 removes AC3 (regression)', () => {
       // Exact profile from production failures: "almost optimal" except legacy AC3 surround.
       // Before this fix, pass 2 failed with "No streams mapped" because ffmpegCommandStart
-      // does not map streams — cmd_reorder_002 (SetContainer) is required.
+      // does not map streams — cmd_reorder_002 (ffmpegCommandRorderStreams) is required.
       const path = walkFlow(file('mp4', [
         vid('hevc'),
         aud('aac', 2),

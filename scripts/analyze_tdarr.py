@@ -718,7 +718,6 @@ def print_host_report(
     reports: list[FileReport],
     host: str,
     show_clean: bool,
-    transcode_errors: list | None = None,
 ) -> dict:
     """Print analysis for one host and return summary counts."""
     processed = [r for r in reports if r.transcode_status in PROCESSED_STATUSES]
@@ -1207,7 +1206,6 @@ def main() -> None:
                 and f.get("TranscodeDecisionMaker", "") not in PROCESSED_STATUSES
                 and f.get("TranscodeDecisionMaker", "") not in TRANSCODE_ERROR_STATUSES
             )
-            grand["errors"] += len(error_files)
             grand["transcode_errors"] += len(error_files)
             grand["processed"] += processed_count
             grand["queued"] += queued_count
