@@ -714,10 +714,17 @@ def _print_file(r: FileReport) -> None:
         print(f"      [{SEV.get(issue.severity, '?')}] {issue.message}")
 
 
-def print_host_report(reports: list[FileReport], host: str, show_clean: bool) -> dict:
+def print_host_report(
+    reports: list[FileReport],
+    host: str,
+    show_clean: bool,
+    transcode_errors: list | None = None,
+) -> dict:
     """Print analysis for one host and return summary counts."""
     processed = [r for r in reports if r.transcode_status in PROCESSED_STATUSES]
-    queued = [r for r in reports if r.transcode_status not in PROCESSED_STATUSES]
+    queued = [r for r in reports if r.transcode_status not in PROCESSED_STATUSES
+              and r.transcode_status not in TRANSCODE_ERROR_STATUSES]
+    tc_errors = [r for r in reports if r.transcode_status in TRANSCODE_ERROR_STATUSES]
 
     errors = [r for r in processed if any(i.severity == "error" for i in r.issues)]
     warnings = [
@@ -736,9 +743,15 @@ def print_host_report(reports: list[FileReport], host: str, show_clean: bool) ->
     print(
         f"  {len(reports)} total files | {len(processed)} processed "
         f"({len(clean)} clean, {len(warnings)} warnings, {len(errors)} errors) "
-        f"| {len(queued)} queued"
+        f"| {len(tc_errors)} transcode errors | {len(queued)} queued"
     )
     print(f"{'=' * 80}")
+
+    if tc_errors:
+        print(f"\n  TRANSCODE ERRORS ({len(tc_errors)} files)")
+        print(f"  {'-' * 76}")
+        for r in sorted(tc_errors, key=lambda r: r.name):
+            _print_file(r)
 
     if errors:
         print(f"\n  ERRORS ({len(errors)} files)")
@@ -783,6 +796,7 @@ def print_host_report(reports: list[FileReport], host: str, show_clean: bool) ->
         "clean": len(clean),
         "warnings": len(warnings),
         "errors": len(errors),
+        "transcode_errors": len(tc_errors),
     }
 
 
@@ -1010,6 +1024,7 @@ def main() -> None:
         "clean": 0,
         "warnings": 0,
         "errors": 0,
+        "transcode_errors": 0,
     }
     all_json_files: list[dict] = []
 
@@ -1193,6 +1208,7 @@ def main() -> None:
                 and f.get("TranscodeDecisionMaker", "") not in TRANSCODE_ERROR_STATUSES
             )
             grand["errors"] += len(error_files)
+            grand["transcode_errors"] += len(error_files)
             grand["processed"] += processed_count
             grand["queued"] += queued_count
             grand["total"] += len(files)
@@ -1224,6 +1240,7 @@ def main() -> None:
                 if (
                     args.status == "processed"
                     and r.transcode_status not in PROCESSED_STATUSES
+                    and r.transcode_status not in TRANSCODE_ERROR_STATUSES
                 ):
                     continue
                 if args.status == "queued" and r.transcode_status in PROCESSED_STATUSES:
@@ -1356,7 +1373,9 @@ def main() -> None:
             f"  GRAND TOTAL: {grand['total']} files | "
             f"{grand['processed']} processed "
             f"({grand['clean']} clean, {grand['warnings']} warnings, "
-            f"{grand['errors']} errors) | {grand['queued']} queued"
+            f"{grand['errors']} errors) | "
+            f"{grand['transcode_errors']} transcode errors | "
+            f"{grand['queued']} queued"
         )
         print(f"{'=' * 80}")
 
