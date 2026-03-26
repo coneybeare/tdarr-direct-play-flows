@@ -67,6 +67,8 @@ When a new permutation is discovered, add it here and verify the flow handles it
 | 6b | mkv | hevc | aac 2.0 und | none | Create AAC (und pass), keep existing | pass |
 | 6c | mkv | hevc | ac3 5.1 eng + aac 2.0 und | none | Create EAC3 (eng) + keep AAC (und), remove AC3 | pass (post-fix) |
 | 6d | mkv | hevc | aac 2.0 jpn (no eng, no und) | none | Fallback AAC creation (cmd_ens_fb) | pass |
+| 6e | mkv | h264 | dts 5.1 swe (no eng, no und) | srt subs | Known limitation: EnsureAudioStream language fallback uses "en" (loadDefaultValues replaces ""), misses non-eng/non-und → failFlow after pass 2 removes DTS | fail (known) |
+| 6f | mp4 | hevc (hvc1) | ac3 5.1 cze (no eng, no und) | none | Same limitation as 6e — AC3 removed in pass 2, no AAC/EAC3 created | fail (known) |
 
 ### 7. Many-stream files (40+ streams)
 
@@ -88,6 +90,10 @@ When a new permutation is discovered, add it here and verify the flow handles it
 |---|-----------|-------|-------|-------|-----------------|--------|
 | 9a | mkv | hevc | aac 2.0 eng | spherical metadata | VR branch: remux to MP4, preserve spherical, no EAC3 | pass |
 | 9b | mkv | h264 | aac 2.0 eng | spherical metadata | VR branch: transcode to HEVC, preserve spherical | pass |
+| 9c | mp4 | hevc (hev1) | aac 2.0 eng | spherical metadata | VR retag shortcut: stream-copy remux with hvc1 + faststart (no NVENC) | pass |
+| 9d | mkv | hevc (hev1) | aac 2.0 eng | spherical metadata | Full VR pipeline (not MP4 — retag shortcut requires MP4) | pass |
+| 9e | mp4 | h264 | aac 2.0 eng | spherical metadata | Full VR pipeline (not HEVC — retag shortcut requires HEVC) | pass |
+| 9f | mp4 | hevc (hev1) | dts 5.1 eng | spherical metadata | Full VR pipeline (unwanted DTS audio — retag shortcut requires clean audio) | pass |
 
 ### 10. Edge cases
 
@@ -101,6 +107,26 @@ When a new permutation is discovered, add it here and verify the flow handles it
 | 10f | mp4 | hevc (hvc1) | aac 2.0 eng + ac3 2.0 eng | none | Process — guard catches unwanted AC3 | pass |
 | 10g | mp4 | hevc (hvc1) | aac 2.0 eng + eac3 5.1 eng | none | Skip — EAC3 surround is not unwanted | pass |
 | 10h | mp4 | hevc (hvc1) | eac3 6ch kor + eac3 6ch chi (no AAC) | none | Process — grd_aud catches missing AAC, fallback AAC creation | pass |
+
+## Known Limitations
+
+### Non-English/non-undefined audio language (permutations 6e, 6f)
+
+**Root cause**: `ffmpegCommandEnsureAudioStream` uses a `language` input parameter. Tdarr's `loadDefaultValues`
+function silently replaces `language: ""` (intended as "any language") with the default value `"en"`. The plugin's
+built-in fallback then tries `"und"`. Neither matches language tags like `"swe"`, `"cze"`, `"fre"`.
+
+**Affected files**: Any file where ALL audio streams have a non-English, non-undefined language tag (e.g. Swedish
+DTS, Czech AC3). Files with at least one "eng" or "und" stream are not affected.
+
+**Impact**: <0.1% of library (4 files out of ~5000). The flow correctly fails these files (Transcode error) rather
+than producing silent/broken output, because the post-pass-2 audio guard catches missing audio.
+
+**Workaround**: Re-tag the audio language to "und" via `ffmpeg -c copy -metadata:s:a:0 language=und`, then requeue.
+The flow handles "und" audio correctly.
+
+**Potential fix**: A Tdarr plugin update to support `language: "*"` (match any) or a special sentinel value that
+bypasses `loadDefaultValues`. Until then, this is a known limitation of the community `EnsureAudioStream` plugin.
 
 ## Known Regressions
 
