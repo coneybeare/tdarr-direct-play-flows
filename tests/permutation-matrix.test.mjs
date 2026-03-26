@@ -480,6 +480,23 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertFallbackAAC(path);
       assertPass2(path);
     });
+
+    // Known limitation: EnsureAudioStream language fallback uses "en" (loadDefaultValues
+    // replaces ""), then "und" — neither matches "swe"/"cze". Routing is correct (reaches
+    // fallback nodes) but audio creation silently fails at runtime. See PERMUTATION_MATRIX.md.
+    test('6e: mkv/h264/dts 5.1 swe (no eng, no und) — routes to fallback (known limitation)', () => {
+      const path = walkFlow(file('mkv', [vid('h264'), aud('dts', 6, 'swe')]));
+      assertProcess(path);
+      assertFallbackAAC(path);
+      assertPass2(path);
+    });
+
+    test('6f: mp4/hevc(hvc1)/ac3 5.1 cze (no eng, no und) — routes to fallback (known limitation)', () => {
+      const path = walkFlow(file('mp4', [vid('hevc', { tag: 'hvc1' }), aud('ac3', 6, 'cze')]));
+      assertProcess(path);
+      assertFallbackAAC(path);
+      assertPass2(path);
+    });
   });
 
   // ────────────────────────────────────────────────────────────────
