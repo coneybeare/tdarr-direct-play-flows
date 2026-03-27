@@ -3267,14 +3267,14 @@
     {
       "source": "cmd_ens_und",
       "sourceHandle": "1",
-      "target": "cmt_reorder",
+      "target": "cmd_reorder_002",
       "targetHandle": null,
       "id": "e_ens_und_reorder"
     },
     {
       "source": "cmd_eac3_eng",
       "sourceHandle": "1",
-      "target": "cmt_audio",
+      "target": "cmt_reorder",
       "targetHandle": null,
       "id": "e_eac3_eng_audio"
     },
@@ -3722,7 +3722,7 @@
     {
       "source": "cmd_rm_eac3",
       "sourceHandle": "1",
-      "target": "cmt_audio",
+      "target": "cmt_reorder",
       "targetHandle": null,
       "id": "e_rmeac3_audio"
     },
@@ -3918,7 +3918,7 @@
     {
       "source": "grd_fb_eng",
       "sourceHandle": "1",
-      "target": "cmt_reorder",
+      "target": "cmd_reorder_002",
       "targetHandle": null,
       "id": "e_fb_eng_reorder"
     },
@@ -3932,7 +3932,7 @@
     {
       "source": "cmd_ens_fb",
       "sourceHandle": "1",
-      "target": "cmt_reorder",
+      "target": "cmd_reorder_002",
       "targetHandle": null,
       "id": "e_ens_fb_reorder"
     },
@@ -3981,7 +3981,7 @@
     {
       "source": "ffs_002",
       "sourceHandle": "1",
-      "target": "cmd_reorder_002",
+      "target": "cmt_audio",
       "targetHandle": null,
       "id": "e_pass2_reorder"
     },
@@ -4009,7 +4009,7 @@
     {
       "source": "cmd_eac3_fb",
       "sourceHandle": "1",
-      "target": "cmt_audio",
+      "target": "cmt_reorder",
       "targetHandle": null,
       "id": "e_eac3fb_audio"
     },

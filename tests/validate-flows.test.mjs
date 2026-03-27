@@ -478,17 +478,17 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_dup_und:2'), 'grd_fb_eng',
         'No und audio should check for eng fallback');
 
-      // grd_fb_eng YES → cmt_reorder (eng pass created AAC, proceed to reorder)
-      assert.strictEqual(edgeMap.get('grd_fb_eng:1'), 'cmt_reorder',
-        'Eng audio present should skip fallback and route to reorder');
+      // grd_fb_eng YES → cmd_reorder_002 (eng pass created AAC, proceed to pass 2 reorder)
+      assert.strictEqual(edgeMap.get('grd_fb_eng:1'), 'cmd_reorder_002',
+        'Eng audio present should skip fallback and route to pass 2 reorder');
 
       // grd_fb_eng NO → cmd_ens_fb (fallback AAC creation)
       assert.strictEqual(edgeMap.get('grd_fb_eng:2'), 'cmd_ens_fb',
         'No eng/und audio should route to fallback AAC');
 
-      // cmd_ens_fb → cmt_reorder
-      assert.strictEqual(edgeMap.get('cmd_ens_fb:1'), 'cmt_reorder',
-        'Fallback AAC should route to reorder');
+      // cmd_ens_fb → cmd_reorder_002 (pass 2 reorder)
+      assert.strictEqual(edgeMap.get('cmd_ens_fb:1'), 'cmd_reorder_002',
+        'Fallback AAC should route to pass 2 reorder');
 
       // Verify fallback node config
       const fb = pluginMap.get('cmd_ens_fb');
