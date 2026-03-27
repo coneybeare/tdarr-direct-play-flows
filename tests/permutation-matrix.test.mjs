@@ -524,6 +524,18 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertAAC(path);
       assertPass2(path);
     });
+
+    test('7c: mkv/hevc/eac3 5.1 — keep EAC3, create AAC, pass 2', () => {
+      const path = walkFlow(file('mkv', [
+        vid('hevc'),
+        aud('eac3', 6),
+      ]));
+      assertProcess(path);
+      // EAC3 already present — flow routes through EAC3 section but doesn't strip it
+      lacks(path, 'cmd_rm_eac3', 'Should NOT remove existing EAC3');
+      assertAAC(path);
+      assertPass2(path);
+    });
   });
 
   // ────────────────────────────────────────────────────────────────
