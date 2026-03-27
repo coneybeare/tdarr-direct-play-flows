@@ -918,7 +918,7 @@ VR_NODES_01 = {
     "cmd_vr_retag_mp4": VR_RETAG, "cmd_vr_retag_enc": VR_RETAG,
     "cmd_vr_retag_tags": VR_RETAG, "ffe_vr_retag": VR_RETAG,
     # ── VR full pipeline ─────────────────────────────────────────────
-    "cmt_vr": VR_01, "ffs_vr": VR_01,
+    "cmt_vr": VR_01, "ffs_vr": VR_01, "cmd_vr_loglevel": VR_01,
     "cmd_vr_mp4": VR_01, "cmd_vr_rmsub": VR_01, "cmd_vr_rmimages": VR_01,
     "cmd_vr_hevc": VR_01,
     "grd_vr_codec": VR_01,
@@ -963,7 +963,7 @@ def col_map_01() -> dict[str, int]:
         # ── Health check ──────────────────────────────────────────────
         "cmt_health": M, "chk_health": M,
         # ── FFmpeg pipeline ───────────────────────────────────────────
-        "ffs_001": M,
+        "ffs_001": M, "cmd_loglevel": M,
         "cmt_mp4": M, "cmd_mp4": M,
         "cmt_subs": M, "cmd_rmsub": M,
         "cmt_commentary": M, "chk_rm_commentary": M,
@@ -987,7 +987,7 @@ def col_map_01() -> dict[str, int]:
         "cmt_reorder": M, "cmd_reorder": M,
         "cmt_exec": M, "cmd_nochapters": M, "ffe_001": M,
         # ── Pass 2: health check, strip AC3/MP3, faststart ────────────
-        "chk_health_002": M, "ffs_002": M, "cmd_reorder_002": M, "cmd_rm_ac3": M, "cmd_rm_mp3": M, "cmd_faststart2": M, "ffe_002": M,
+        "chk_health_002": M, "fail_health2": M, "ffs_002": M, "cmd_reorder_002": M, "cmd_rm_ac3": M, "cmd_rm_mp3": M, "cmd_faststart2": M, "ffe_002": M,
         # ── Validation ────────────────────────────────────────────────
         "cmt_size": M, "fl_size": M,
         "cmt_toobig": L, "fail_toobig": L,

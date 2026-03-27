@@ -76,6 +76,7 @@ When a new permutation is discovered, add it here and verify the flow handles it
 |---|-----------|-------|-------|-------|-----------------|--------|
 | 7a | mkv | hevc | ac3 5.1 eng | 30+ srt/ass subs, fonts | Pass 1 strips subs+fonts, creates EAC3+AAC; pass 2 removes AC3 | pass (post-fix) |
 | 7b | mkv | h264 | dts 5.1 eng + ac3 5.1 eng | 40+ pgs subs | Pass 1 strips subs, removes DTS, creates EAC3+AAC; pass 2 removes AC3 | pass (post-fix) |
+| 7c | mkv | hevc | eac3 5.1 eng | 30+ srt subs | Keep EAC3, create AAC; pass 2 (Netflix-style many-subtitle file) | pass |
 
 ### 8. DoVi / HDR files
 
@@ -195,3 +196,19 @@ match and keeps streams that DO. Job report confirmed: HEVC+AAC removed, AC3 kep
 **Fix**: Switch `cmd_rm_ac3` to `propertyToCheck: "codec_tag_string"`, `valuesToRemove: "ac-3"`,
 `condition: "includes"`. In MP4 containers, AC3 tag is "ac-3" and EAC3 tag is "ec-3" — no substring
 overlap. Switch `cmd_rm_mp3` to `condition: "includes"` (no ambiguity for "mp3").
+
+### Many-stream stderr overflow (fixed in PR #70)
+
+**Root cause**: FFmpeg demuxes ALL input streams regardless of `-map` flags. Files with 28+ subtitle
+streams generate massive stderr output that overwhelms Tdarr's worker job report queue (992K+ dropped
+requests observed). This destabilizes the worker and produces corrupt output. The pass 2 health check
+(`chk_health_002`) also had no failure edge, so corrupt pass 1 output was silently accepted.
+
+**Affected permutations**: 7a, 7b, 7c — any file with many subtitle/attachment streams (common in
+Netflix content with 30+ subtitle languages).
+
+**Fix**: Add `ffmpegCommandCustomArguments` nodes (`cmd_loglevel`, `cmd_vr_loglevel`) with
+`-loglevel warning -nostdin` as input arguments to both normal and VR FFmpeg pipelines. This suppresses
+verbose demux/mux progress output that floods stderr. Also add `fail_health2` (failFlow) as target for
+`chk_health_002` handle "2" — corrupt pass 1 output now correctly fails the flow instead of silently
+passing through.
