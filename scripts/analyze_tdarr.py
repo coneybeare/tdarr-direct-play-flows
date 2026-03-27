@@ -1316,6 +1316,53 @@ def main() -> None:
                 if enc_tag and ("nvenc" in enc_tag or "libx265" in enc_tag):
                     print(f"      [!] Encoded by flow ({enc_tag})")
 
+                # Auto-fetch transcode report summary
+                if footprint and not args.no_report:
+                    try:
+                        from datetime import datetime, timezone
+
+                        rpt_list = list_reports(host, footprint, host_api_key)
+                        latest = _latest_transcode_report(rpt_list)
+                        if latest:
+                            job_id, rpt_filename = latest
+                            # Extract timestamp (last field before .txt, ms since epoch)
+                            ts_str = rpt_filename.rsplit("()", 1)[-1].replace(".txt", "")
+                            try:
+                                ts_ms = int(ts_str)
+                                rpt_date = datetime.fromtimestamp(
+                                    ts_ms / 1000, tz=timezone.utc
+                                ).strftime("%Y-%m-%d %H:%M")
+                            except (ValueError, OSError):
+                                rpt_date = ts_str
+                            rpt_text = read_report(host, footprint, job_id, rpt_filename, host_api_key)
+                            if rpt_text:
+                                summary = _parse_report_summary(rpt_text)
+                                print(f"      Report: {job_id} ({rpt_date})")
+                                path_nodes = summary["path"]
+                                if len(path_nodes) > 10:
+                                    condensed = (
+                                        path_nodes[:3]
+                                        + ["..."]
+                                        + path_nodes[-5:]
+                                    )
+                                else:
+                                    condensed = path_nodes
+                                if condensed:
+                                    print(f"        Path: {' -> '.join(condensed)}")
+                                if summary["ffmpeg_cmd"]:
+                                    cmd = summary["ffmpeg_cmd"]
+                                    if len(cmd) > 120:
+                                        cmd = cmd[:117] + "..."
+                                    print(f"        Cmd: {cmd}")
+                                for w in summary["warnings"]:
+                                    print(f"        [!] {w}")
+                                if summary["size_check"]:
+                                    print(f"        [!] {summary['size_check']}")
+                                for e in summary["errors"]:
+                                    print(f"        [X] {e}")
+                    except Exception:
+                        pass
+
                 # Local disk probe
                 if args.probe and file_id:
                     local_path = _tdarr_path_to_local(
