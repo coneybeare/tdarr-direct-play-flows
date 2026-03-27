@@ -36,6 +36,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 import urllib.error
@@ -161,6 +162,119 @@ def delete_file(
         return False, f"Connection error: {e.reason}"
     except Exception as e:
         return False, str(e)
+
+
+def list_reports(
+    host: str, footprint_id: str, api_key: str | None = None
+) -> list[str]:
+    """List available job reports for a file by its footprintId.
+
+    Returns filenames like: footprintId()version()type()jobId()timestamp.txt
+    """
+    payload = {"data": {"footprintId": footprint_id}}
+    try:
+        resp = _post(f"{host}/api/v2/list-footprintId-reports", payload, api_key)
+        if isinstance(resp, list):
+            return resp
+        return []
+    except (urllib.error.URLError, Exception):
+        return []
+
+
+def read_report(
+    host: str,
+    footprint_id: str,
+    job_id: str,
+    job_file_id: str,
+    api_key: str | None = None,
+) -> str:
+    """Read a specific job report. Returns the report text, or empty string."""
+    payload = {
+        "data": {
+            "footprintId": footprint_id,
+            "jobId": job_id,
+            "jobFileId": job_file_id,
+        }
+    }
+    try:
+        resp = _post(f"{host}/api/v2/read-job-file", payload, api_key)
+        if isinstance(resp, dict):
+            return resp.get("text", "")
+        return ""
+    except (urllib.error.URLError, Exception):
+        return ""
+
+
+def _parse_report_summary(report_text: str) -> dict:
+    """Extract key diagnostic lines from a transcode report.
+
+    Returns dict with keys: path, ffmpeg_cmd, warnings, errors, size_check.
+    """
+    lines = report_text.split("\n")
+    result: dict = {
+        "path": [],
+        "ffmpeg_cmd": "",
+        "warnings": [],
+        "errors": [],
+        "size_check": "",
+    }
+
+    for line in lines:
+        # Flow step path: [C##] ... pluginName: Node Name
+        m = re.search(r"\[C(\d+)\].*?:\s+(\S+):\s+(.+?)(?:\s*$)", line)
+        if m:
+            result["path"].append(m.group(2).split(":")[-1].strip())
+            continue
+
+        # FFmpeg command
+        if "Running tdarr-ffmpeg" in line:
+            idx = line.index("Running tdarr-ffmpeg")
+            result["ffmpeg_cmd"] = line[idx:]
+            continue
+
+        # FFmpeg warnings about -ac or -codec conflicts
+        if "Multiple -ac" in line or "Multiple -codec" in line:
+            cleaned = re.sub(r"^\S+\s+\S+:", "", line).strip()
+            result["warnings"].append(cleaned)
+            continue
+
+        # Size check result
+        if "New file size not within limits" in line:
+            cleaned = re.sub(r"^\S+\s+\S+:", "", line).strip()
+            result["size_check"] = cleaned
+            continue
+
+        # Error lines
+        if "[-error-]" in line or "Forcing flow to fail" in line:
+            cleaned = re.sub(r"^\S+\s+\S+:", "", line).strip()
+            if cleaned and cleaned not in result["errors"]:
+                result["errors"].append(cleaned)
+
+    return result
+
+
+def _latest_transcode_report(
+    reports: list[str],
+) -> tuple[str, str] | None:
+    """Find the most recent transcode report from a list of report filenames.
+
+    Returns (job_id, filename) or None. Report format:
+    footprintId()version()type()jobId()timestamp.txt
+    """
+    transcode_reports = [r for r in reports if "()transcode()" in r]
+    if not transcode_reports:
+        return None
+    transcode_reports.sort(
+        key=lambda r: r.rsplit("()", 1)[-1].replace(".txt", ""),
+        reverse=True,
+    )
+    latest = transcode_reports[0]
+    parts = latest.split("()")
+    if len(parts) >= 4:
+        job_id = parts[3]
+    else:
+        job_id = "unknown"
+    return job_id, latest
 
 
 def _tdarr_path_to_local(tdarr_path: str, mount_prefix: str = "/Volumes") -> str:
