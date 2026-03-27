@@ -1097,6 +1097,23 @@ def main() -> None:
         help="Requeue files whose path contains TERM (case-insensitive). "
         "Shows matches and requeues them.",
     )
+    parser.add_argument(
+        "--report",
+        default=None,
+        metavar="TERM",
+        help="Fetch and display the latest transcode report for files matching "
+        "TERM (case-insensitive path match).",
+    )
+    parser.add_argument(
+        "--report-list",
+        action="store_true",
+        help="With --report, list available reports instead of displaying content.",
+    )
+    parser.add_argument(
+        "--no-report",
+        action="store_true",
+        help="With --status errors, skip auto-fetching transcode reports.",
+    )
     args = parser.parse_args()
 
     # --search and --requeue-file are not compatible with --json
@@ -1110,6 +1127,9 @@ def main() -> None:
             "--delete-errors is not compatible with --status errors. "
             "Use --replace-errors for the error deletion/re-search workflow."
         )
+
+    if args.report_list and not args.report:
+        parser.error("--report-list requires --report")
 
     # Build list of (host, api_key) pairs
     server_entries: list[tuple[str, str | None]] = []
