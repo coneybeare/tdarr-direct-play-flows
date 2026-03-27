@@ -1250,6 +1250,67 @@ def main() -> None:
             all_json_files.extend(files)
             continue
 
+        # --report: find files matching TERM and show their transcode reports
+        if args.report:
+            from datetime import datetime, timezone
+
+            term = args.report.lower()
+            matches = [
+                f for f in files
+                if isinstance(f, dict)
+                and term in (f.get("_id") or f.get("file") or "").lower()
+            ]
+            if not matches:
+                print(f"\n  No files matching '{args.report}'")
+            else:
+                print(f"\n  Report results for '{args.report}' ({len(matches)} match(es))")
+                print(f"  {'-' * 76}")
+                for mf in matches:
+                    file_id = mf.get("_id") or mf.get("file", "")
+                    short = PurePosixPath(file_id).name if file_id else "(unknown)"
+                    footprint = mf.get("footprintId", "")
+                    print(f"\n    {short}")
+                    if not footprint:
+                        print("      (no footprintId — no reports available)")
+                        continue
+                    rpt_list = list_reports(host, footprint, host_api_key)
+                    if not rpt_list:
+                        print("      (no reports found)")
+                        continue
+                    if args.report_list:
+                        # List all available reports with type, job ID, and date
+                        print(f"      {len(rpt_list)} report(s):")
+                        for rpt_filename in sorted(rpt_list):
+                            parts = rpt_filename.split("()")
+                            rpt_type = parts[2] if len(parts) > 2 else "?"
+                            rpt_job = parts[3] if len(parts) > 3 else "?"
+                            ts_str = rpt_filename.rsplit("()", 1)[-1].replace(".txt", "")
+                            try:
+                                ts_ms = int(ts_str)
+                                rpt_date = datetime.fromtimestamp(
+                                    ts_ms / 1000, tz=timezone.utc
+                                ).strftime("%Y-%m-%d %H:%M")
+                            except (ValueError, OSError):
+                                rpt_date = ts_str
+                            print(f"        [{rpt_type}] {rpt_job} ({rpt_date})")
+                    else:
+                        # Fetch and display the full latest transcode report
+                        latest = _latest_transcode_report(rpt_list)
+                        if not latest:
+                            print("      (no transcode reports found)")
+                            continue
+                        job_id, rpt_filename = latest
+                        rpt_text = read_report(
+                            host, footprint, job_id, rpt_filename, host_api_key
+                        )
+                        if rpt_text:
+                            print(f"      --- Report: {job_id} ---")
+                            for line in rpt_text.split("\n"):
+                                print(f"      {line}")
+                        else:
+                            print("      (report text empty or unreadable)")
+            continue
+
         # For --status errors, show transcode error files with stream details
         if args.status == "errors":
             error_files = [
