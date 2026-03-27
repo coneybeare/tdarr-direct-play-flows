@@ -254,6 +254,12 @@ function assertSeparatePasses(path) {
   const ffs2 = path.indexOf('ffs_002');
   const ffe2 = path.indexOf('ffe_002');
 
+  // Boundary nodes must be present for ordering checks to be meaningful
+  assert.ok(ffs1 !== -1, 'ffs_001 must be in path for pass boundary check');
+  assert.ok(ffe1 !== -1, 'ffe_001 must be in path for pass boundary check');
+  assert.ok(ffs2 !== -1, 'ffs_002 must be in path for pass boundary check');
+  assert.ok(ffe2 !== -1, 'ffe_002 must be in path for pass boundary check');
+
   // EAC3 nodes must be in pass 1
   for (const eac3Node of ['cmd_eac3_eng', 'cmd_eac3_fb']) {
     const idx = path.indexOf(eac3Node);

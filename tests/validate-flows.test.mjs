@@ -254,6 +254,8 @@ for (const file of flowFiles) {
         'Health check should route to pass 2 start');
       assert.strictEqual(edgeMap.get('chk_health_002:2'), 'fail_health2',
         'Health check failure must route to failFlow (corrupt pass 1 output)');
+      assert.ok(pluginMap.has('fail_health2'),
+        'fail_health2 plugin node must exist');
       assert.strictEqual(pluginMap.get('fail_health2').pluginName, 'failFlow',
         'fail_health2 must be a failFlow node');
       assert.strictEqual(edgeMap.get('ffs_002:1'), 'cmt_audio',

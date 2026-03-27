@@ -220,10 +220,10 @@ def _parse_report_summary(report_text: str) -> dict:
     }
 
     for line in lines:
-        # Flow step path: [C##] ... pluginName: Node Name
-        m = re.search(r"\[C(\d+)\].*?:\s+(\S+):\s+(.+?)(?:\s*$)", line)
+        # Flow node ID from "Found next plugin: flowId::nodeId Node Name"
+        m = re.search(r"Found next plugin:\s+\S+::(\S+)\s", line)
         if m:
-            result["path"].append(m.group(2).split(":")[-1].strip())
+            result["path"].append(m.group(1))
             continue
 
         # FFmpeg command
