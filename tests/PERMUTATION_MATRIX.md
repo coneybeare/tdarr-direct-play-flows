@@ -76,7 +76,7 @@ When a new permutation is discovered, add it here and verify the flow handles it
 |---|-----------|-------|-------|-------|-----------------|--------|
 | 7a | mkv | hevc | ac3 5.1 eng | 30+ srt/ass subs, fonts | Pass 1 strips subs+fonts, creates EAC3+AAC; pass 2 removes AC3 | pass (post-fix) |
 | 7b | mkv | h264 | dts 5.1 eng + ac3 5.1 eng | 40+ pgs subs | Pass 1 strips subs, removes DTS, creates EAC3+AAC; pass 2 removes AC3 | pass (post-fix) |
-| 7c | mkv | hevc | eac3 5.1 eng | 30+ srt subs | Keep EAC3, create AAC; pass 2 (Netflix-style many-subtitle file) | pass |
+| 7c | mkv | hevc | eac3 5.1 eng | none | Keep EAC3, create AAC; pass 2 (representative of Netflix-style many-subtitle files) | pass |
 
 ### 8. DoVi / HDR files
 

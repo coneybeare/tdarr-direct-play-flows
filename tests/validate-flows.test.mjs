@@ -252,6 +252,10 @@ for (const file of flowFiles) {
         'ffe_001 should route to health check before pass 2');
       assert.strictEqual(edgeMap.get('chk_health_002:1'), 'ffs_002',
         'Health check should route to pass 2 start');
+      assert.strictEqual(edgeMap.get('chk_health_002:2'), 'fail_health2',
+        'Health check failure must route to failFlow (corrupt pass 1 output)');
+      assert.strictEqual(pluginMap.get('fail_health2').pluginName, 'failFlow',
+        'fail_health2 must be a failFlow node');
       assert.strictEqual(edgeMap.get('ffs_002:1'), 'cmd_reorder_002',
         'Pass 2 start should route to stream reorder/mapping');
       assert.strictEqual(edgeMap.get('cmd_reorder_002:1'), 'cmd_rm_ac3',
