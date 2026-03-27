@@ -205,8 +205,8 @@ for (const file of flowFiles) {
         'Has English audio should route to EAC3 creation');
       assert.strictEqual(edgeMap.get('grd_eac3_has_eng:2'), 'cmd_eac3_fb',
         'No English audio should route to fallback EAC3 creation');
-      assert.strictEqual(edgeMap.get('cmd_eac3_fb:1'), 'cmt_audio',
-        'Fallback EAC3 should route to audio section');
+      assert.strictEqual(edgeMap.get('cmd_eac3_fb:1'), 'cmt_reorder',
+        'Fallback EAC3 should route to cmt_reorder (AAC is in pass 2)');
 
       // Verify fallback EAC3 config
       const eac3Fb = pluginMap.get('cmd_eac3_fb');
@@ -229,11 +229,11 @@ for (const file of flowFiles) {
       assert.ok(!pluginMap.has('cmd_rm_ac3mp3'),
         'cmd_rm_ac3mp3 must be replaced by separate exact-match nodes');
 
-      // EAC3 section routes back to cmt_audio
-      assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmt_audio',
-        'EAC3 eng path should route to cmt_audio');
-      assert.strictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmt_audio',
-        'cmd_rm_eac3 should route to cmt_audio');
+      // EAC3 section routes to cmt_reorder (AAC stereo moved to pass 2)
+      assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmt_reorder',
+        'EAC3 eng path should route to cmt_reorder (AAC is in pass 2)');
+      assert.strictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmt_reorder',
+        'cmd_rm_eac3 should route to cmt_reorder (AAC is in pass 2)');
 
       // cmd_rm_eac3 on non-surround path (no 6+ch surround, strip all eac3)
       assert.strictEqual(edgeMap.get('grd_eac3_ch8:2'), 'cmd_rm_eac3',
@@ -256,8 +256,8 @@ for (const file of flowFiles) {
         'Health check failure must route to failFlow (corrupt pass 1 output)');
       assert.strictEqual(pluginMap.get('fail_health2').pluginName, 'failFlow',
         'fail_health2 must be a failFlow node');
-      assert.strictEqual(edgeMap.get('ffs_002:1'), 'cmd_reorder_002',
-        'Pass 2 start should route to stream reorder/mapping');
+      assert.strictEqual(edgeMap.get('ffs_002:1'), 'cmt_audio',
+        'Pass 2 start should route to AAC stereo section (moved from pass 1)');
       assert.strictEqual(edgeMap.get('cmd_reorder_002:1'), 'cmd_rm_ac3',
         'Stream reorder should route to AC3 removal');
       assert.strictEqual(edgeMap.get('cmd_rm_ac3:1'), 'cmd_rm_mp3',
@@ -279,6 +279,33 @@ for (const file of flowFiles) {
         'cmd_reorder_002 inputsDB must be an object');
       assert.ok(Object.keys(reorderPass2.inputsDB).length > 0,
         'cmd_reorder_002 inputsDB must have at least one mapping entry');
+    });
+
+    test('AAC stereo creation is in pass 2, not pass 1 (prevents -ac conflict)', () => {
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      // AAC stereo nodes must NOT be reachable from pass 1 EAC3 section
+      assert.notStrictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmt_audio',
+        'cmd_eac3_eng must NOT route to cmt_audio (AAC is in pass 2)');
+      assert.notStrictEqual(edgeMap.get('cmd_eac3_fb:1'), 'cmt_audio',
+        'cmd_eac3_fb must NOT route to cmt_audio (AAC is in pass 2)');
+      assert.notStrictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmt_audio',
+        'cmd_rm_eac3 must NOT route to cmt_audio (AAC is in pass 2)');
+
+      // AAC stereo section must be wired into pass 2
+      assert.strictEqual(edgeMap.get('ffs_002:1'), 'cmt_audio',
+        'ffs_002 must route to cmt_audio (AAC stereo section)');
+
+      // AAC section terminals must route to cmd_reorder_002
+      const aacTerminals = ['cmd_ens_und', 'cmd_ens_fb'];
+      for (const nodeId of aacTerminals) {
+        const target = edgeMap.get(`${nodeId}:1`);
+        assert.strictEqual(target, 'cmd_reorder_002',
+          `${nodeId} must route to cmd_reorder_002 in pass 2`);
+      }
+      assert.strictEqual(edgeMap.get('grd_fb_eng:1'), 'cmd_reorder_002',
+        'grd_fb_eng YES must route to cmd_reorder_002 in pass 2');
     });
 
     test('guard chain catches orphaned stereo EAC3', () => {

@@ -248,6 +248,33 @@ function assertPass2(path) {
   has(path, 'cmd_faststart2', 'Should apply faststart in pass 2');
 }
 
+function assertSeparatePasses(path) {
+  const ffs1 = path.indexOf('ffs_001');
+  const ffe1 = path.indexOf('ffe_001');
+  const ffs2 = path.indexOf('ffs_002');
+  const ffe2 = path.indexOf('ffe_002');
+
+  // EAC3 nodes must be in pass 1
+  for (const eac3Node of ['cmd_eac3_eng', 'cmd_eac3_fb']) {
+    const idx = path.indexOf(eac3Node);
+    if (idx !== -1) {
+      assert.ok(idx > ffs1 && idx < ffe1,
+        `${eac3Node} must be in pass 1 (between ffs_001 and ffe_001)`);
+    }
+  }
+
+  // AAC stereo nodes must be in pass 2
+  for (const aacNode of ['cmd_ens_eng', 'cmd_ens_und', 'cmd_ens_fb']) {
+    const idx = path.indexOf(aacNode);
+    if (idx !== -1) {
+      assert.ok(idx > ffs2 && idx < ffe2,
+        `${aacNode} must be in pass 2 (between ffs_002 and ffe_002), not pass 1. ` +
+        `Found at index ${idx}, ffs_002 at ${ffs2}, ffe_002 at ${ffe2}. ` +
+        `This prevents FFmpeg -ac flag conflicts between EAC3 6ch and AAC 2ch.`);
+    }
+  }
+}
+
 function assertFallbackAAC(path) {
   lacks(path, 'cmd_ens_eng', 'Should skip eng AAC');
   lacks(path, 'cmd_ens_und', 'Should skip und AAC');
@@ -292,6 +319,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertEAC3(path);
       assertAAC(path);
       assertPass2(path);
+      assertSeparatePasses(path);
     });
 
     test('2b: mkv/hevc/ac3 5.1 + aac 2.0 — remux, EAC3, pass 2 rm AC3', () => {
@@ -307,6 +335,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertEAC3(path);
       assertAAC(path);
       assertPass2(path);
+      assertSeparatePasses(path);
     });
 
     test('2d: mkv/hevc/truehd 7.1 — remux, rm TrueHD, create EAC3+AAC', () => {
@@ -315,6 +344,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertEAC3(path);
       assertAAC(path);
       assertPass2(path);
+      assertSeparatePasses(path);
     });
 
     test('2e: mkv/hevc/aac 2.0 + subs — remux, strip subs', () => {
@@ -359,6 +389,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertEAC3(path);
       assertAAC(path);
       assertPass2(path);
+      assertSeparatePasses(path);
     });
 
     test('3b: mkv/h264/aac 2.0 — transcode, keep AAC', () => {
@@ -451,6 +482,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertEAC3(path);
       assertAAC(path);
       assertPass2(path);
+      assertSeparatePasses(path);
     });
 
     test('6b: mkv/hevc/aac 2.0 und — keep existing', () => {
@@ -472,6 +504,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertEAC3(path);
       assertPass2(path);
+      assertSeparatePasses(path);
     });
 
     test('6d: mkv/hevc/aac 2.0 jpn (no eng, no und) — fallback AAC', () => {
@@ -705,6 +738,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertEAC3(path);
       assertPass2(path);
+      assertSeparatePasses(path);
     });
 
     test('10j: mp4/hevc(hvc1)/aac 2.0 + mp3 2.0 + ac3 6ch — pass 2 removes both AC3 and MP3', () => {
@@ -743,6 +777,28 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertFallbackAAC(path);
       assertPass2(path);
+    });
+
+    test('10k: mp4/h264/aac 5.1 eng only — EAC3 from AAC source, AAC stereo in pass 2', () => {
+      // The Conspirator scenario: h264 MP4 with single AAC 5.1 track.
+      // EAC3 must be created in pass 1, AAC stereo in pass 2 to avoid
+      // FFmpeg -ac flag conflict (bare -ac 2 overrides -ac 6 globally).
+      const path = walkFlow(file('mp4', [vid('h264'), aud('aac', 6, 'eng')]));
+      assertProcess(path);
+      assertEAC3(path);
+      assertAAC(path);
+      assertPass2(path);
+      assertSeparatePasses(path);
+    });
+
+    test('10l: mp4/hevc(hvc1)/eac3 6ch eng, no stereo — AAC stereo created in pass 2', () => {
+      // File already has EAC3 surround but is missing AAC stereo.
+      // AAC stereo creation must happen in pass 2.
+      const path = walkFlow(file('mp4', [vid('hevc'), aud('eac3', 6, 'eng')]));
+      assertProcess(path);
+      assertAAC(path);
+      assertPass2(path);
+      assertSeparatePasses(path);
     });
   });
 
