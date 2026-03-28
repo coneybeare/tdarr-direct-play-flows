@@ -753,6 +753,29 @@ for (const file of flowFiles) {
       }
     });
 
+    test('timestamp normalization applied to all FFmpeg pipelines', () => {
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+      const FLAG = '-avoid_negative_ts make_zero';
+
+      // Normal path: cmd_loglevel injects outputArguments into pass 1
+      const cmdLoglevel = pluginMap.get('cmd_loglevel');
+      assert.ok(cmdLoglevel, 'cmd_loglevel node must exist');
+      assert.ok(cmdLoglevel.inputsDB.outputArguments.includes(FLAG),
+        `cmd_loglevel must include "${FLAG}" to prevent corrupt MP4 from non-monotonic DTS`);
+
+      // VR full path: cmd_vr_loglevel injects outputArguments into VR pipeline
+      const cmdVrLoglevel = pluginMap.get('cmd_vr_loglevel');
+      assert.ok(cmdVrLoglevel, 'cmd_vr_loglevel node must exist');
+      assert.ok(cmdVrLoglevel.inputsDB.outputArguments.includes(FLAG),
+        `cmd_vr_loglevel must include "${FLAG}" to prevent corrupt MP4 from non-monotonic DTS`);
+
+      // VR retag shortcut: cmd_vr_retag_tags carries output arguments for the retag pipeline
+      const cmdVrRetagTags = pluginMap.get('cmd_vr_retag_tags');
+      assert.ok(cmdVrRetagTags, 'cmd_vr_retag_tags node must exist');
+      assert.ok(cmdVrRetagTags.inputsDB.outputArguments.includes(FLAG),
+        `cmd_vr_retag_tags must include "${FLAG}" to prevent corrupt MP4 from non-monotonic DTS`);
+    });
+
     test('onFlowError does not replace original file', () => {
       const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
 
