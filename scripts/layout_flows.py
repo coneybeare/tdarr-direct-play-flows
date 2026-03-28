@@ -986,8 +986,12 @@ def col_map_01() -> dict[str, int]:
         "grd_fb_eng": L, "cmd_ens_fb": L,
         "cmt_reorder": M, "cmd_reorder": M,
         "cmt_exec": M, "cmd_nochapters": M, "ffe_001": M,
-        # ── Pass 2: health check, strip AC3/MP3, faststart ────────────
-        "chk_health_002": M, "fail_health2": M, "ffs_002": M, "cmd_reorder_002": M, "cmd_rm_ac3": M, "cmd_rm_mp3": M, "cmd_faststart2": M, "ffe_002": M,
+        # ── Pass 2: AAC creation ─────────────────────────────────────────
+        "chk_health_002": M, "fail_health2": M, "ffs_002": M,
+        # ── Pass 2→3 boundary: execute AAC, rescan ───────────────────
+        "ffe_aac": M, "ffs_003": M,
+        # ── Pass 3: cleanup — reorder, strip AC3/MP3, faststart ──────
+        "cmd_reorder_002": M, "cmd_rm_ac3": M, "cmd_rm_mp3": M, "cmd_faststart2": M, "ffe_002": M,
         # ── Validation ────────────────────────────────────────────────
         "cmt_size": M, "fl_size": M,
         "cmt_toobig": L, "fail_toobig": L,

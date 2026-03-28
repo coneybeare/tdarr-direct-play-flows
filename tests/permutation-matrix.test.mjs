@@ -244,20 +244,26 @@ function assertAAC(path) {
 function assertPass2(path) {
   has(path, 'chk_health_002', 'Should health-check before pass 2');
   has(path, 'ffs_002', 'Should enter pass 2');
-  has(path, 'cmd_reorder_002', 'Should map streams in pass 2');
-  has(path, 'cmd_faststart2', 'Should apply faststart in pass 2');
+  has(path, 'ffe_aac', 'Should execute AAC pass');
+  has(path, 'ffs_003', 'Should start cleanup pass');
+  has(path, 'cmd_reorder_002', 'Should map streams in cleanup pass');
+  has(path, 'cmd_faststart2', 'Should apply faststart in cleanup pass');
 }
 
 function assertSeparatePasses(path) {
   const ffs1 = path.indexOf('ffs_001');
   const ffe1 = path.indexOf('ffe_001');
   const ffs2 = path.indexOf('ffs_002');
+  const ffeAac = path.indexOf('ffe_aac');
+  const ffs3 = path.indexOf('ffs_003');
   const ffe2 = path.indexOf('ffe_002');
 
   // Boundary nodes must be present for ordering checks to be meaningful
   assert.ok(ffs1 !== -1, 'ffs_001 must be in path for pass boundary check');
   assert.ok(ffe1 !== -1, 'ffe_001 must be in path for pass boundary check');
   assert.ok(ffs2 !== -1, 'ffs_002 must be in path for pass boundary check');
+  assert.ok(ffeAac !== -1, 'ffe_aac must be in path for pass boundary check');
+  assert.ok(ffs3 !== -1, 'ffs_003 must be in path for pass boundary check');
   assert.ok(ffe2 !== -1, 'ffe_002 must be in path for pass boundary check');
 
   // EAC3 nodes must be in pass 1
@@ -269,16 +275,20 @@ function assertSeparatePasses(path) {
     }
   }
 
-  // AAC stereo nodes must be in pass 2
+  // AAC stereo nodes must be in the AAC pass (between ffs_002 and ffe_aac)
   for (const aacNode of ['cmd_ens_eng', 'cmd_ens_und', 'cmd_ens_fb']) {
     const idx = path.indexOf(aacNode);
     if (idx !== -1) {
-      assert.ok(idx > ffs2 && idx < ffe2,
-        `${aacNode} must be in pass 2 (between ffs_002 and ffe_002), not pass 1. ` +
-        `Found at index ${idx}, ffs_002 at ${ffs2}, ffe_002 at ${ffe2}. ` +
-        `This prevents FFmpeg -ac flag conflicts between EAC3 6ch and AAC 2ch.`);
+      assert.ok(idx > ffs2 && idx < ffeAac,
+        `${aacNode} must be in AAC pass (between ffs_002 and ffe_aac), not cleanup pass. ` +
+        `Found at index ${idx}, ffs_002 at ${ffs2}, ffe_aac at ${ffeAac}. ` +
+        `AAC clones must be executed before cleanup to avoid mp3 clone destruction.`);
     }
   }
+
+  // Cleanup nodes must be in pass 3 (between ffs_003 and ffe_002)
+  assert.ok(ffeAac < ffs3, 'ffe_aac must come before ffs_003');
+  assert.ok(ffs3 < ffe2, 'ffs_003 must come before ffe_002');
 }
 
 function assertFallbackAAC(path) {
@@ -805,6 +815,23 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertAAC(path);
       assertPass2(path);
       assertSeparatePasses(path);
+    });
+
+    test('10m: mkv/hevc/mp3 2ch eng — AAC created from mp3, mp3 removed in cleanup pass', () => {
+      // MP3-only file: AAC clone from mp3 must be executed (ffe_aac) before
+      // mp3 removal (cmd_rm_mp3) to avoid clone destruction.
+      const path = walkFlow(file('mkv', [vid('hevc'), aud('mp3', 2, 'eng')]));
+      assertProcess(path);
+      assertAAC(path);
+      assertPass2(path);
+      // Verify the 3-pass structure: AAC execute before cleanup
+      has(path, 'ffe_aac', 'AAC pass must execute before cleanup');
+      has(path, 'ffs_003', 'Cleanup pass must start after AAC execute');
+      const ffeAac = path.indexOf('ffe_aac');
+      const ffs3 = path.indexOf('ffs_003');
+      const rmMp3 = path.indexOf('cmd_rm_mp3');
+      assert.ok(ffeAac < ffs3, 'ffe_aac must come before ffs_003');
+      assert.ok(ffs3 < rmMp3, 'ffs_003 must come before cmd_rm_mp3');
     });
   });
 
