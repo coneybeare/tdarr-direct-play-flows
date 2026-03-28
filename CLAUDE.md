@@ -146,10 +146,11 @@ during stream-copy. These files fail the pass 2 health check (`chk_health_002`)
 with "Running CLI failed". The flow cannot fix these automatically because
 stream-copy preserves the broken timestamps.
 
-Use `fix_dts_files.sh` to re-encode on a machine with a hardware HEVC encoder:
+Use `fix_dts_files.sh` to re-encode. A hardware HEVC encoder (VideoToolbox/NVENC)
+is recommended for speed, but not required — falls back to libx265.
 
 ```bash
-# Fix specific files (auto-detects VideoToolbox/NVENC/libx265)
+# Fix specific files (auto-detects VideoToolbox/NVENC with libx265 fallback)
 scripts/fix_dts_files.sh /path/to/file.mkv
 
 # Fix from a file list
