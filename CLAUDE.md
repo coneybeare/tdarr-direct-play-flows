@@ -131,4 +131,30 @@ python3 scripts/analyze_tdarr.py --json http://HOST:PORT
 
 # Delete files with transcode errors (prompts per file)
 python3 scripts/analyze_tdarr.py --delete-errors http://HOST:PORT
+
+# Fetch transcode report for a specific file
+python3 scripts/analyze_tdarr.py --servers --report "search term"
+
+# Show errors with auto-fetched report summaries
+python3 scripts/analyze_tdarr.py --servers --status errors
+```
+
+### Fixing files with non-monotonic DTS
+
+Some MKV/HEVC files have non-monotonic decode timestamps that corrupt MP4 output
+during stream-copy. These files fail the pass 2 health check (`chk_health_002`)
+with "Running CLI failed". The flow cannot fix these automatically because
+stream-copy preserves the broken timestamps.
+
+Use `fix_dts_files.sh` to re-encode on a machine with a hardware HEVC encoder:
+
+```bash
+# Fix specific files (auto-detects VideoToolbox/NVENC/libx265)
+scripts/fix_dts_files.sh /path/to/file.mkv
+
+# Fix from a file list
+scripts/fix_dts_files.sh --from-file /tmp/affected_files.txt
+
+# Dry run
+scripts/fix_dts_files.sh --dry-run /path/to/file.mkv
 ```
