@@ -36,6 +36,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 import urllib.error
@@ -161,6 +162,119 @@ def delete_file(
         return False, f"Connection error: {e.reason}"
     except Exception as e:
         return False, str(e)
+
+
+def list_reports(
+    host: str, footprint_id: str, api_key: str | None = None
+) -> list[str]:
+    """List available job reports for a file by its footprintId.
+
+    Returns filenames like: footprintId()version()type()jobId()timestamp.txt
+    """
+    payload = {"data": {"footprintId": footprint_id}}
+    try:
+        resp = _post(f"{host}/api/v2/list-footprintId-reports", payload, api_key)
+        if isinstance(resp, list):
+            return resp
+        return []
+    except (urllib.error.URLError, Exception):
+        return []
+
+
+def read_report(
+    host: str,
+    footprint_id: str,
+    job_id: str,
+    job_file_id: str,
+    api_key: str | None = None,
+) -> str:
+    """Read a specific job report. Returns the report text, or empty string."""
+    payload = {
+        "data": {
+            "footprintId": footprint_id,
+            "jobId": job_id,
+            "jobFileId": job_file_id,
+        }
+    }
+    try:
+        resp = _post(f"{host}/api/v2/read-job-file", payload, api_key)
+        if isinstance(resp, dict):
+            return resp.get("text", "")
+        return ""
+    except (urllib.error.URLError, Exception):
+        return ""
+
+
+def _parse_report_summary(report_text: str) -> dict:
+    """Extract key diagnostic lines from a transcode report.
+
+    Returns dict with keys: path, ffmpeg_cmd, warnings, errors, size_check.
+    """
+    lines = report_text.split("\n")
+    result: dict = {
+        "path": [],
+        "ffmpeg_cmd": "",
+        "warnings": [],
+        "errors": [],
+        "size_check": "",
+    }
+
+    for line in lines:
+        # Flow node ID from "Found next plugin: flowId::nodeId Node Name"
+        m = re.search(r"Found next plugin:\s+\S+::(\S+)\s", line)
+        if m:
+            result["path"].append(m.group(1))
+            continue
+
+        # FFmpeg command
+        if "Running tdarr-ffmpeg" in line:
+            idx = line.index("Running tdarr-ffmpeg")
+            result["ffmpeg_cmd"] = line[idx:]
+            continue
+
+        # FFmpeg warnings about -ac or -codec conflicts
+        if "Multiple -ac" in line or "Multiple -codec" in line:
+            cleaned = re.sub(r"^\S+\s+\S+:", "", line).strip()
+            result["warnings"].append(cleaned)
+            continue
+
+        # Size check result
+        if "New file size not within limits" in line:
+            cleaned = re.sub(r"^\S+\s+\S+:", "", line).strip()
+            result["size_check"] = cleaned
+            continue
+
+        # Error lines
+        if "[-error-]" in line or "Forcing flow to fail" in line:
+            cleaned = re.sub(r"^\S+\s+\S+:", "", line).strip()
+            if cleaned and cleaned not in result["errors"]:
+                result["errors"].append(cleaned)
+
+    return result
+
+
+def _latest_transcode_report(
+    reports: list[str],
+) -> tuple[str, str] | None:
+    """Find the most recent transcode report from a list of report filenames.
+
+    Returns (job_id, filename) or None. Report format:
+    footprintId()version()type()jobId()timestamp.txt
+    """
+    transcode_reports = [r for r in reports if "()transcode()" in r]
+    if not transcode_reports:
+        return None
+    transcode_reports.sort(
+        key=lambda r: r.rsplit("()", 1)[-1].replace(".txt", ""),
+        reverse=True,
+    )
+    latest = transcode_reports[0]
+    parts = latest.split("()")
+    if len(parts) >= 4:
+        job_id = parts[3]
+    else:
+        job_id = "unknown"
+    return job_id, latest
 
 
 def _tdarr_path_to_local(tdarr_path: str, mount_prefix: str = "/Volumes") -> str:
@@ -983,6 +1097,23 @@ def main() -> None:
         help="Requeue files whose path contains TERM (case-insensitive). "
         "Shows matches and requeues them.",
     )
+    parser.add_argument(
+        "--report",
+        default=None,
+        metavar="TERM",
+        help="Fetch and display the latest transcode report for files matching "
+        "TERM (case-insensitive path match).",
+    )
+    parser.add_argument(
+        "--report-list",
+        action="store_true",
+        help="With --report, list available reports instead of displaying content.",
+    )
+    parser.add_argument(
+        "--no-report",
+        action="store_true",
+        help="With --status errors, skip auto-fetching transcode reports.",
+    )
     args = parser.parse_args()
 
     # --search and --requeue-file are not compatible with --json
@@ -996,6 +1127,9 @@ def main() -> None:
             "--delete-errors is not compatible with --status errors. "
             "Use --replace-errors for the error deletion/re-search workflow."
         )
+
+    if args.report_list and not args.report:
+        parser.error("--report-list requires --report")
 
     # Build list of (host, api_key) pairs
     server_entries: list[tuple[str, str | None]] = []
@@ -1116,6 +1250,67 @@ def main() -> None:
             all_json_files.extend(files)
             continue
 
+        # --report: find files matching TERM and show their transcode reports
+        if args.report:
+            from datetime import datetime, timezone
+
+            term = args.report.lower()
+            matches = [
+                f for f in files
+                if isinstance(f, dict)
+                and term in (f.get("_id") or f.get("file") or "").lower()
+            ]
+            if not matches:
+                print(f"\n  No files matching '{args.report}'")
+            else:
+                print(f"\n  Report results for '{args.report}' ({len(matches)} match(es))")
+                print(f"  {'-' * 76}")
+                for mf in matches:
+                    file_id = mf.get("_id") or mf.get("file", "")
+                    short = PurePosixPath(file_id).name if file_id else "(unknown)"
+                    footprint = mf.get("footprintId", "")
+                    print(f"\n    {short}")
+                    if not footprint:
+                        print("      (no footprintId — no reports available)")
+                        continue
+                    rpt_list = list_reports(host, footprint, host_api_key)
+                    if not rpt_list:
+                        print("      (no reports found)")
+                        continue
+                    if args.report_list:
+                        # List all available reports with type, job ID, and date
+                        print(f"      {len(rpt_list)} report(s):")
+                        for rpt_filename in sorted(rpt_list):
+                            parts = rpt_filename.split("()")
+                            rpt_type = parts[2] if len(parts) > 2 else "?"
+                            rpt_job = parts[3] if len(parts) > 3 else "?"
+                            ts_str = rpt_filename.rsplit("()", 1)[-1].replace(".txt", "")
+                            try:
+                                ts_ms = int(ts_str)
+                                rpt_date = datetime.fromtimestamp(
+                                    ts_ms / 1000, tz=timezone.utc
+                                ).strftime("%Y-%m-%d %H:%M")
+                            except (ValueError, OSError):
+                                rpt_date = ts_str
+                            print(f"        [{rpt_type}] {rpt_job} ({rpt_date})")
+                    else:
+                        # Fetch and display the full latest transcode report
+                        latest = _latest_transcode_report(rpt_list)
+                        if not latest:
+                            print("      (no transcode reports found)")
+                            continue
+                        job_id, rpt_filename = latest
+                        rpt_text = read_report(
+                            host, footprint, job_id, rpt_filename, host_api_key
+                        )
+                        if rpt_text:
+                            print(f"      --- Report: {job_id} ---")
+                            for line in rpt_text.split("\n"):
+                                print(f"      {line}")
+                        else:
+                            print("      (report text empty or unreadable)")
+            continue
+
         # For --status errors, show transcode error files with stream details
         if args.status == "errors":
             error_files = [
@@ -1181,6 +1376,53 @@ def main() -> None:
                 enc_tag = vs.get("tags", {}).get("encoder", "")
                 if enc_tag and ("nvenc" in enc_tag or "libx265" in enc_tag):
                     print(f"      [!] Encoded by flow ({enc_tag})")
+
+                # Auto-fetch transcode report summary
+                if footprint and not args.no_report:
+                    try:
+                        from datetime import datetime, timezone
+
+                        rpt_list = list_reports(host, footprint, host_api_key)
+                        latest = _latest_transcode_report(rpt_list)
+                        if latest:
+                            job_id, rpt_filename = latest
+                            # Extract timestamp (last field before .txt, ms since epoch)
+                            ts_str = rpt_filename.rsplit("()", 1)[-1].replace(".txt", "")
+                            try:
+                                ts_ms = int(ts_str)
+                                rpt_date = datetime.fromtimestamp(
+                                    ts_ms / 1000, tz=timezone.utc
+                                ).strftime("%Y-%m-%d %H:%M")
+                            except (ValueError, OSError):
+                                rpt_date = ts_str
+                            rpt_text = read_report(host, footprint, job_id, rpt_filename, host_api_key)
+                            if rpt_text:
+                                summary = _parse_report_summary(rpt_text)
+                                print(f"      Report: {job_id} ({rpt_date})")
+                                path_nodes = summary["path"]
+                                if len(path_nodes) > 10:
+                                    condensed = (
+                                        path_nodes[:3]
+                                        + ["..."]
+                                        + path_nodes[-5:]
+                                    )
+                                else:
+                                    condensed = path_nodes
+                                if condensed:
+                                    print(f"        Path: {' -> '.join(condensed)}")
+                                if summary["ffmpeg_cmd"]:
+                                    cmd = summary["ffmpeg_cmd"]
+                                    if len(cmd) > 120:
+                                        cmd = cmd[:117] + "..."
+                                    print(f"        Cmd: {cmd}")
+                                for w in summary["warnings"]:
+                                    print(f"        [!] {w}")
+                                if summary["size_check"]:
+                                    print(f"        [!] {summary['size_check']}")
+                                for e in summary["errors"]:
+                                    print(f"        [X] {e}")
+                    except Exception:
+                        pass
 
                 # Local disk probe
                 if args.probe and file_id:
