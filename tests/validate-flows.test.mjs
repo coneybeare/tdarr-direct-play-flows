@@ -707,7 +707,8 @@ for (const file of flowFiles) {
       // Retag pipeline wiring
       assert.strictEqual(edgeMap.get('cmt_vr_retag:1'), 'ffs_vr_retag');
       assert.strictEqual(edgeMap.get('ffs_vr_retag:1'), 'cmd_vr_retag_mp4');
-      assert.strictEqual(edgeMap.get('cmd_vr_retag_mp4:1'), 'cmd_vr_retag_enc');
+      assert.strictEqual(edgeMap.get('cmd_vr_retag_mp4:1'), 'cmd_vr_retag_rmdata');
+      assert.strictEqual(edgeMap.get('cmd_vr_retag_rmdata:1'), 'cmd_vr_retag_enc');
       assert.strictEqual(edgeMap.get('cmd_vr_retag_enc:1'), 'cmd_vr_retag_tags');
       assert.strictEqual(edgeMap.get('cmd_vr_retag_tags:1'), 'ffe_vr_retag');
       assert.strictEqual(edgeMap.get('ffe_vr_retag:1'), 'fl_vr_size',
@@ -727,6 +728,12 @@ for (const file of flowFiles) {
       assert.ok(retagMp4, 'Missing node cmd_vr_retag_mp4');
       assert.strictEqual(retagMp4.inputsDB.forceConform, 'false',
         'VR retag must preserve spherical metadata (forceConform=false)');
+
+      // Retag pipeline must strip data streams (tmcd etc. cause MP4 muxer failure)
+      const retagRmdata = pluginMap.get('cmd_vr_retag_rmdata');
+      assert.ok(retagRmdata, 'Missing node cmd_vr_retag_rmdata');
+      assert.strictEqual(retagRmdata.pluginName, 'ffmpegCommandRemoveDataStreams',
+        'VR retag must remove data streams to avoid MP4 muxer errors');
 
       // Retag tags must include hvc1, faststart, and audio copy
       const retagTags = pluginMap.get('cmd_vr_retag_tags');

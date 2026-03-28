@@ -706,7 +706,7 @@
       "id": "cmt_tags",
       "position": {
         "x": 6540,
-        "y": 2080
+        "y": 2250
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -770,7 +770,7 @@
       "id": "cmd_cap_vlow",
       "position": {
         "x": 6040,
-        "y": 1570
+        "y": 1740
       },
       "inputsDB": {
         "inputArguments": "",
@@ -786,7 +786,7 @@
       "id": "cmd_cap_low",
       "position": {
         "x": 6040,
-        "y": 1740
+        "y": 1910
       },
       "inputsDB": {
         "inputArguments": "",
@@ -802,7 +802,7 @@
       "id": "cmd_cap_mid",
       "position": {
         "x": 6040,
-        "y": 1910
+        "y": 2080
       },
       "inputsDB": {
         "inputArguments": "",
@@ -818,7 +818,7 @@
       "id": "cmd_tags",
       "position": {
         "x": 6540,
-        "y": 2270
+        "y": 2440
       },
       "inputsDB": {
         "inputArguments": "",
@@ -925,7 +925,7 @@
       "id": "cmt_eac3",
       "position": {
         "x": 6540,
-        "y": 2800
+        "y": 2970
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -937,7 +937,7 @@
       "version": "1.0.0",
       "position": {
         "x": 6540,
-        "y": 2990
+        "y": 3160
       },
       "inputsDB": {
         "channelCount": "6"
@@ -952,7 +952,7 @@
       "version": "1.0.0",
       "position": {
         "x": 6040,
-        "y": 3270
+        "y": 3440
       },
       "inputsDB": {
         "channelCount": "8"
@@ -968,7 +968,7 @@
       "id": "cmd_eac3_eng",
       "position": {
         "x": 6540,
-        "y": 3610
+        "y": 3780
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -989,7 +989,7 @@
       "id": "cmt_rmaudio",
       "position": {
         "x": 6540,
-        "y": 2440
+        "y": 2610
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1002,7 +1002,7 @@
       "id": "cmd_rmaudio",
       "position": {
         "x": 6540,
-        "y": 2630
+        "y": 2800
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -1019,7 +1019,7 @@
       "id": "cmt_reorder",
       "position": {
         "x": 6540,
-        "y": 3780
+        "y": 3950
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1032,7 +1032,7 @@
       "id": "cmd_reorder",
       "position": {
         "x": 6540,
-        "y": 3970
+        "y": 4140
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -1051,7 +1051,7 @@
       "id": "cmt_exec",
       "position": {
         "x": 6540,
-        "y": 4140
+        "y": 4310
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1064,7 +1064,7 @@
       "id": "cmd_nochapters",
       "position": {
         "x": 6540,
-        "y": 4330
+        "y": 4500
       },
       "inputsDB": {
         "inputArguments": "",
@@ -1080,7 +1080,7 @@
       "id": "ffe_001",
       "position": {
         "x": 6540,
-        "y": 4500
+        "y": 4670
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1093,7 +1093,7 @@
       "id": "cmd_rm_eac3",
       "position": {
         "x": 7040,
-        "y": 3440
+        "y": 3610
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -1503,7 +1503,7 @@
       "id": "cmd_vr_tags",
       "position": {
         "x": 5540,
-        "y": 2250
+        "y": 2420
       },
       "inputsDB": {
         "inputArguments": "",
@@ -1519,7 +1519,7 @@
       "id": "cmd_vr_aac_eng",
       "position": {
         "x": 5540,
-        "y": 2760
+        "y": 2930
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -1540,7 +1540,7 @@
       "id": "cmd_vr_aac_und",
       "position": {
         "x": 6040,
-        "y": 3100
+        "y": 3270
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -1561,7 +1561,7 @@
       "id": "grd_vr_has_eng",
       "position": {
         "x": 5540,
-        "y": 2590
+        "y": 2760
       },
       "inputsDB": {
         "streamType": "audio",
@@ -1579,7 +1579,7 @@
       "id": "grd_vr_dup_und",
       "position": {
         "x": 5040,
-        "y": 2930
+        "y": 3100
       },
       "inputsDB": {
         "streamType": "audio",
@@ -1597,7 +1597,7 @@
       "id": "cmd_vr_rmaudio",
       "position": {
         "x": 5540,
-        "y": 2420
+        "y": 2590
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -1614,7 +1614,7 @@
       "id": "cmd_vr_reorder",
       "position": {
         "x": 5540,
-        "y": 3440
+        "y": 3610
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -1633,7 +1633,7 @@
       "id": "cmd_vr_nochapters",
       "position": {
         "x": 5540,
-        "y": 3610
+        "y": 3780
       },
       "inputsDB": {
         "inputArguments": "",
@@ -1649,7 +1649,7 @@
       "id": "cmd_vr_rmdata",
       "position": {
         "x": 5540,
-        "y": 3780
+        "y": 3950
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1662,7 +1662,7 @@
       "id": "ffe_vr",
       "position": {
         "x": 5540,
-        "y": 3950
+        "y": 4120
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1675,7 +1675,7 @@
       "id": "cmt_vr_reorder2",
       "position": {
         "x": 5540,
-        "y": 4120
+        "y": 4290
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1688,7 +1688,7 @@
       "id": "ffs_vr_reorder",
       "position": {
         "x": 5540,
-        "y": 4310
+        "y": 4480
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1701,7 +1701,7 @@
       "id": "cmd_vr_rmdata2",
       "position": {
         "x": 5540,
-        "y": 4480
+        "y": 4650
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1714,7 +1714,7 @@
       "id": "cmd_vr_reorder2",
       "position": {
         "x": 5540,
-        "y": 4650
+        "y": 4820
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -1733,7 +1733,7 @@
       "id": "cmd_vr_faststart2",
       "position": {
         "x": 5540,
-        "y": 4820
+        "y": 4990
       },
       "inputsDB": {
         "inputArguments": "",
@@ -1749,7 +1749,7 @@
       "id": "ffe_vr_reorder",
       "position": {
         "x": 5540,
-        "y": 4990
+        "y": 5160
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1762,7 +1762,7 @@
       "id": "fl_vr_size",
       "position": {
         "x": 5540,
-        "y": 5160
+        "y": 5330
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -1778,7 +1778,7 @@
       "id": "fl_vr_dur",
       "position": {
         "x": 5540,
-        "y": 5330
+        "y": 5500
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1794,7 +1794,7 @@
       "id": "fl_vr_replace",
       "position": {
         "x": 5540,
-        "y": 6010
+        "y": 6180
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1824,7 +1824,7 @@
       "id": "chk_auto_accept_vr",
       "position": {
         "x": 5540,
-        "y": 5840
+        "y": 6010
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1841,7 +1841,7 @@
       "id": "grd_vr_has_video",
       "position": {
         "x": 5540,
-        "y": 5500
+        "y": 5670
       },
       "inputsDB": {
         "streamType": "video",
@@ -1859,7 +1859,7 @@
       "id": "grd_vr_has_audio",
       "position": {
         "x": 5540,
-        "y": 5670
+        "y": 5840
       },
       "inputsDB": {
         "streamType": "audio",
@@ -1923,7 +1923,7 @@
       "id": "cmd_vr_cap_high",
       "position": {
         "x": 6040,
-        "y": 2080
+        "y": 2250
       },
       "inputsDB": {
         "inputArguments": "",
@@ -2029,7 +2029,7 @@
       "id": "grd_vr_fb_eng",
       "position": {
         "x": 5040,
-        "y": 3100
+        "y": 3270
       },
       "inputsDB": {
         "streamType": "audio",
@@ -2047,7 +2047,7 @@
       "id": "cmd_vr_ens_fb",
       "position": {
         "x": 5040,
-        "y": 3270
+        "y": 3440
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -2083,7 +2083,7 @@
       "id": "grd_eac3_has_eng",
       "position": {
         "x": 6540,
-        "y": 3440
+        "y": 3610
       },
       "inputsDB": {
         "streamType": "audio",
@@ -2180,7 +2180,7 @@
       "id": "cmd_eac3_fb",
       "position": {
         "x": 7040,
-        "y": 3610
+        "y": 3780
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -2360,6 +2360,19 @@
       "fpEnabled": true
     },
     {
+      "name": "Remove data (VR retag)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRemoveDataStreams",
+      "version": "1.0.0",
+      "id": "cmd_vr_retag_rmdata",
+      "position": {
+        "x": 6040,
+        "y": 870
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
       "name": "Stream copy HEVC (VR retag)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandSetVideoEncoder",
@@ -2367,7 +2380,7 @@
       "id": "cmd_vr_retag_enc",
       "position": {
         "x": 6040,
-        "y": 870
+        "y": 1040
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -2390,7 +2403,7 @@
       "id": "cmd_vr_retag_tags",
       "position": {
         "x": 6040,
-        "y": 1040
+        "y": 1400
       },
       "inputsDB": {
         "inputArguments": "",
@@ -2406,7 +2419,7 @@
       "id": "ffe_vr_retag",
       "position": {
         "x": 6040,
-        "y": 1400
+        "y": 1570
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -4106,6 +4119,13 @@
     },
     {
       "source": "cmd_vr_retag_mp4",
+      "sourceHandle": "1",
+      "target": "cmd_vr_retag_rmdata",
+      "targetHandle": null,
+      "id": "e_vr_retag_rmdata"
+    },
+    {
+      "source": "cmd_vr_retag_rmdata",
       "sourceHandle": "1",
       "target": "cmd_vr_retag_enc",
       "targetHandle": null,

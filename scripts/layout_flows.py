@@ -915,7 +915,7 @@ VR_NODES_01 = {
     "grd_vr_nowanted_ac3": M, "grd_vr_hasaac": M,
     # ── VR retag shortcut pipeline ───────────────────────────────────
     "cmt_vr_retag": VR_RETAG, "ffs_vr_retag": VR_RETAG,
-    "cmd_vr_retag_mp4": VR_RETAG, "cmd_vr_retag_enc": VR_RETAG,
+    "cmd_vr_retag_mp4": VR_RETAG, "cmd_vr_retag_rmdata": VR_RETAG, "cmd_vr_retag_enc": VR_RETAG,
     "cmd_vr_retag_tags": VR_RETAG, "ffe_vr_retag": VR_RETAG,
     # ── VR full pipeline ─────────────────────────────────────────────
     "cmt_vr": VR_01, "ffs_vr": VR_01, "cmd_vr_loglevel": VR_01,
