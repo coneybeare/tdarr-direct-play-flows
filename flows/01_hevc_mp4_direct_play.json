@@ -2220,7 +2220,7 @@
       },
       "inputsDB": {
         "inputArguments": "-loglevel warning -nostdin",
-        "outputArguments": ""
+        "outputArguments": "-avoid_negative_ts make_zero"
       },
       "fpEnabled": true
     },
@@ -2236,7 +2236,7 @@
       },
       "inputsDB": {
         "inputArguments": "-loglevel warning -nostdin",
-        "outputArguments": ""
+        "outputArguments": "-avoid_negative_ts make_zero"
       },
       "fpEnabled": true
     },
@@ -2394,7 +2394,7 @@
       },
       "inputsDB": {
         "inputArguments": "",
-        "outputArguments": "-tag:v hvc1 -movflags +faststart -c:a copy"
+        "outputArguments": "-tag:v hvc1 -movflags +faststart -c:a copy -avoid_negative_ts make_zero"
       },
       "fpEnabled": true
     },
