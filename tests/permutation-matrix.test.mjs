@@ -241,9 +241,9 @@ function assertAAC(path) {
   assert.ok(ok, 'Should create stereo AAC via EnsureAudioStream');
 }
 
-function assertPass2(path) {
-  has(path, 'chk_health_002', 'Should health-check before pass 2');
-  has(path, 'ffs_002', 'Should enter pass 2');
+function assertPostEncodePasses(path) {
+  has(path, 'chk_health_002', 'Should health-check after encode');
+  has(path, 'ffs_002', 'Should enter AAC pass');
   has(path, 'ffe_aac', 'Should execute AAC pass');
   has(path, 'ffs_003', 'Should start cleanup pass');
   has(path, 'cmd_reorder_002', 'Should map streams in cleanup pass');
@@ -334,7 +334,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertEAC3(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
       assertSeparatePasses(path);
     });
 
@@ -342,7 +342,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('ac3', 6), aud('aac', 2)]));
       assertProcess(path);
       assertEAC3(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('2c: mkv/hevc/dts 5.1 — remux, rm DTS, create EAC3+AAC', () => {
@@ -350,7 +350,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertEAC3(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
       assertSeparatePasses(path);
     });
 
@@ -359,7 +359,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertEAC3(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
       assertSeparatePasses(path);
     });
 
@@ -367,7 +367,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('aac', 2)]));
       assertProcess(path);
       assertNoEAC3(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('2f: mkv/hevc/flac 2.0 — remux, rm FLAC, create AAC', () => {
@@ -375,7 +375,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertNoEAC3(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('2g: mkv/hevc/ac3 2.0 — remux, create AAC, rm AC3 (no EAC3 — <6ch)', () => {
@@ -383,7 +383,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertNoEAC3(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('2h: mkv/hevc/mp3 2.0 — remux, create AAC, rm MP3', () => {
@@ -391,7 +391,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertNoEAC3(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
   });
 
@@ -404,7 +404,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertEAC3(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
       assertSeparatePasses(path);
     });
 
@@ -412,7 +412,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       const path = walkFlow(file('mkv', [vid('h264'), aud('aac', 2)]));
       assertProcess(path);
       assertNoEAC3(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('3c: mkv/mpeg2/ac3 2.0 — transcode, create AAC, rm AC3', () => {
@@ -420,7 +420,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertNoEAC3(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('3d: mkv/vp9/opus 2.0 — transcode, rm Opus, create AAC', () => {
@@ -428,7 +428,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertNoEAC3(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('3e: mkv/av1/aac 2.0 — software transcode (AV1 can\'t hw decode), keep AAC', () => {
@@ -439,7 +439,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       lacks(path, 'chk_nvenc', 'AV1 should bypass NVENC entirely');
       lacks(path, 'chk_resolution', 'AV1 should skip NVENC resolution tier');
       assertNoEAC3(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
   });
 
@@ -451,7 +451,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       const path = walkFlow(file('avi', [vid('h264', { height: 480 }), aud('mp3', 2)]));
       assertProcess(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('4b: avi/mpeg4/ac3 5.1 — transcode, EAC3+AAC, rm AC3', () => {
@@ -459,7 +459,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertEAC3(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
   });
 
@@ -472,7 +472,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertEAC3(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('5b: ts/h264/ac3 5.1 — transcode, EAC3+AAC, rm AC3', () => {
@@ -480,7 +480,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertEAC3(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
   });
 
@@ -497,7 +497,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertEAC3(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
       assertSeparatePasses(path);
     });
 
@@ -508,7 +508,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       // eng AAC skipped (no eng audio), und AAC created
       lacks(path, 'cmd_ens_eng', 'No eng → skip eng AAC');
       has(path, 'cmd_ens_und', 'Has und → create und AAC');
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('6c: mkv/hevc/ac3 5.1 eng + aac 2.0 und — EAC3(eng) + keep AAC(und), rm AC3', () => {
@@ -519,7 +519,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       ]));
       assertProcess(path);
       assertEAC3(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
       assertSeparatePasses(path);
     });
 
@@ -527,7 +527,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('aac', 2, 'jpn')]));
       assertProcess(path);
       assertFallbackAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     // Known limitation: EnsureAudioStream language fallback uses "en" (loadDefaultValues
@@ -537,14 +537,14 @@ describe('Permutation Matrix — Flow Routing', () => {
       const path = walkFlow(file('mkv', [vid('h264'), aud('dts', 6, 'swe')]));
       assertProcess(path);
       assertFallbackAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('6f: mp4/hevc(hvc1)/ac3 5.1 cze (no eng, no und) — routes to fallback (known limitation)', () => {
       const path = walkFlow(file('mp4', [vid('hevc', { tag: 'hvc1' }), aud('ac3', 6, 'cze')]));
       assertProcess(path);
       assertFallbackAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
   });
 
@@ -558,7 +558,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertEAC3(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('7b: mkv/h264/dts 5.1 + ac3 5.1 + subs — EAC3+AAC, pass 2 rm AC3', () => {
@@ -571,7 +571,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       // AC3 present → grd_eac3_codec matches → EAC3 created from AC3
       assertEAC3(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('7c: mkv/hevc/eac3 5.1 — keep EAC3, create AAC, pass 2', () => {
@@ -583,7 +583,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       // EAC3 already present — flow routes through EAC3 section but doesn't strip it
       lacks(path, 'cmd_rm_eac3', 'Should NOT remove existing EAC3');
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
   });
 
@@ -695,7 +695,7 @@ describe('Permutation Matrix — Flow Routing', () => {
         aud('eac3', 6),
       ]));
       assertProcess(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('10b: mp4/hevc(hvc1)/no audio — fail_no_streams', () => {
@@ -708,7 +708,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('pcm_s24le', 2)]));
       assertProcess(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('10d: mkv/hevc/ac3 5.1 + mp3 2.0 — EAC3+AAC, rm AC3+MP3', () => {
@@ -719,21 +719,21 @@ describe('Permutation Matrix — Flow Routing', () => {
       ]));
       assertProcess(path);
       assertEAC3(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('10e: mp4/hevc(hvc1)/aac 2.0 + mp3 2.0 — process (guard catches unwanted mp3)', () => {
       const path = walkFlow(file('mp4', [vid('hevc'), aud('aac', 2), aud('mp3', 2)]));
       has(path, 'grd_unwanted_mp3', 'Should reach MP3 guard in unwanted chain');
       assertProcess(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('10f: mp4/hevc(hvc1)/aac 2.0 + ac3 2.0 — process (guard catches unwanted ac3)', () => {
       const path = walkFlow(file('mp4', [vid('hevc'), aud('aac', 2), aud('ac3', 2)]));
       has(path, 'grd_unwanted_ac3', 'Should reach AC3 guard');
       assertProcess(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('10i: mp4/hevc(hvc1)/aac 2.0 + eac3 6ch + ac3 6ch — pass 2 removes AC3 (regression)', () => {
@@ -753,7 +753,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       has(path, 'grd_unwanted_ac3', 'Should reach AC3 guard in unwanted chain');
       assertProcess(path);
       assertEAC3(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
       assertSeparatePasses(path);
     });
 
@@ -768,7 +768,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       has(path, 'grd_unwanted_mp3', 'Should reach MP3 guard in unwanted chain');
       assertProcess(path);
       assertEAC3(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
       has(path, 'cmd_rm_ac3', 'Pass 2 must traverse AC3 removal node');
       has(path, 'cmd_rm_mp3', 'Pass 2 must traverse MP3 removal node');
     });
@@ -792,7 +792,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       lacks(path, 'grd_ch', 'Should not pass AAC guard (no AAC present)');
       assertProcess(path);
       assertFallbackAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
     });
 
     test('10k: mp4/h264/aac 5.1 eng only — EAC3 from AAC source, AAC stereo in pass 2', () => {
@@ -803,7 +803,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertProcess(path);
       assertEAC3(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
       assertSeparatePasses(path);
     });
 
@@ -813,7 +813,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       const path = walkFlow(file('mp4', [vid('hevc'), aud('eac3', 6, 'eng')]));
       assertProcess(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
       assertSeparatePasses(path);
     });
 
@@ -823,7 +823,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('mp3', 2, 'eng')]));
       assertProcess(path);
       assertAAC(path);
-      assertPass2(path);
+      assertPostEncodePasses(path);
       // Verify the 3-pass structure: AAC execute before cleanup
       has(path, 'ffe_aac', 'AAC pass must execute before cleanup');
       has(path, 'ffs_003', 'Cleanup pass must start after AAC execute');

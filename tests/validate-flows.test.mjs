@@ -247,11 +247,15 @@ for (const file of flowFiles) {
       assert.ok(!pluginMap.has('cmt_reorder2'),
         'cmt_reorder2 must be removed — old second pass');
 
-      // Pass 2/3 chain: ffe_001 → chk_health_002 → ffs_002 → [AAC section] → ffe_aac → ffs_003 → cmd_reorder_002 → cmd_rm_ac3 → cmd_rm_mp3 → cmd_faststart2 → ffe_002 → cmt_size
+      // Post-encode chain:
+      //   ffe_001 → chk_health_002 →
+      //   AAC pass:     ffs_002 → [AAC section] → ffe_aac →
+      //   Cleanup pass: ffs_003 → cmd_reorder_002 → cmd_rm_ac3 → cmd_rm_mp3 → cmd_faststart2 → ffe_002 →
+      //   cmt_size
       assert.strictEqual(edgeMap.get('ffe_001:1'), 'chk_health_002',
-        'ffe_001 should route to health check before pass 2');
+        'ffe_001 should route to health check');
       assert.strictEqual(edgeMap.get('chk_health_002:1'), 'ffs_002',
-        'Health check should route to pass 2 start');
+        'Health check should route to AAC pass start');
       assert.strictEqual(edgeMap.get('chk_health_002:2'), 'fail_health2',
         'Health check failure must route to failFlow (corrupt pass 1 output)');
       assert.ok(pluginMap.has('fail_health2'),
@@ -259,7 +263,7 @@ for (const file of flowFiles) {
       assert.strictEqual(pluginMap.get('fail_health2').pluginName, 'failFlow',
         'fail_health2 must be a failFlow node');
       assert.strictEqual(edgeMap.get('ffs_002:1'), 'cmt_audio',
-        'Pass 2 start should route to AAC stereo section (moved from pass 1)');
+        'AAC pass start should route to AAC stereo section');
 
       // ffe_aac executes AAC creation, ffs_003 rescans so clones have real codec_name
       assert.ok(pluginMap.has('ffe_aac'), 'ffe_aac plugin node must exist');
