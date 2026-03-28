@@ -247,11 +247,15 @@ for (const file of flowFiles) {
       assert.ok(!pluginMap.has('cmt_reorder2'),
         'cmt_reorder2 must be removed — old second pass');
 
-      // Pass 2 chain: ffe_001 → chk_health_002 → ffs_002 → cmd_reorder_002 → cmd_rm_ac3 → cmd_rm_mp3 → cmd_faststart2 → ffe_002 → cmt_size
+      // Post-encode chain:
+      //   ffe_001 → chk_health_002 →
+      //   AAC pass:     ffs_002 → [AAC section] → ffe_aac →
+      //   Cleanup pass: ffs_003 → cmd_reorder_002 → cmd_rm_ac3 → cmd_rm_mp3 → cmd_faststart2 → ffe_002 →
+      //   cmt_size
       assert.strictEqual(edgeMap.get('ffe_001:1'), 'chk_health_002',
-        'ffe_001 should route to health check before pass 2');
+        'ffe_001 should route to health check');
       assert.strictEqual(edgeMap.get('chk_health_002:1'), 'ffs_002',
-        'Health check should route to pass 2 start');
+        'Health check should route to AAC pass start');
       assert.strictEqual(edgeMap.get('chk_health_002:2'), 'fail_health2',
         'Health check failure must route to failFlow (corrupt pass 1 output)');
       assert.ok(pluginMap.has('fail_health2'),
@@ -259,7 +263,20 @@ for (const file of flowFiles) {
       assert.strictEqual(pluginMap.get('fail_health2').pluginName, 'failFlow',
         'fail_health2 must be a failFlow node');
       assert.strictEqual(edgeMap.get('ffs_002:1'), 'cmt_audio',
-        'Pass 2 start should route to AAC stereo section (moved from pass 1)');
+        'AAC pass start should route to AAC stereo section');
+
+      // ffe_aac executes AAC creation, ffs_003 rescans so clones have real codec_name
+      assert.ok(pluginMap.has('ffe_aac'), 'ffe_aac plugin node must exist');
+      assert.strictEqual(pluginMap.get('ffe_aac').pluginName, 'ffmpegCommandExecute',
+        'ffe_aac must be an ffmpegCommandExecute node');
+      assert.ok(pluginMap.has('ffs_003'), 'ffs_003 plugin node must exist');
+      assert.strictEqual(pluginMap.get('ffs_003').pluginName, 'ffmpegCommandStart',
+        'ffs_003 must be an ffmpegCommandStart node');
+      assert.strictEqual(edgeMap.get('ffe_aac:1'), 'ffs_003',
+        'AAC execute should route to cleanup pass start');
+      assert.strictEqual(edgeMap.get('ffs_003:1'), 'cmd_reorder_002',
+        'Cleanup pass start should route to stream reorder');
+
       assert.strictEqual(edgeMap.get('cmd_reorder_002:1'), 'cmd_rm_ac3',
         'Stream reorder should route to AC3 removal');
       assert.strictEqual(edgeMap.get('cmd_rm_ac3:1'), 'cmd_rm_mp3',
@@ -299,15 +316,15 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('ffs_002:1'), 'cmt_audio',
         'ffs_002 must route to cmt_audio (AAC stereo section)');
 
-      // AAC section terminals must route to cmd_reorder_002
+      // AAC section terminals must route to ffe_aac (execute AAC pass before cleanup)
       const aacTerminals = ['cmd_ens_und', 'cmd_ens_fb'];
       for (const nodeId of aacTerminals) {
         const target = edgeMap.get(`${nodeId}:1`);
-        assert.strictEqual(target, 'cmd_reorder_002',
-          `${nodeId} must route to cmd_reorder_002 in pass 2`);
+        assert.strictEqual(target, 'ffe_aac',
+          `${nodeId} must route to ffe_aac to execute AAC creation before cleanup`);
       }
-      assert.strictEqual(edgeMap.get('grd_fb_eng:1'), 'cmd_reorder_002',
-        'grd_fb_eng YES must route to cmd_reorder_002 in pass 2');
+      assert.strictEqual(edgeMap.get('grd_fb_eng:1'), 'ffe_aac',
+        'grd_fb_eng YES must route to ffe_aac (AAC already created by eng pass)');
     });
 
     test('guard chain catches orphaned stereo EAC3', () => {
@@ -480,17 +497,17 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_dup_und:2'), 'grd_fb_eng',
         'No und audio should check for eng fallback');
 
-      // grd_fb_eng YES → cmd_reorder_002 (eng pass created AAC, proceed to pass 2 reorder)
-      assert.strictEqual(edgeMap.get('grd_fb_eng:1'), 'cmd_reorder_002',
-        'Eng audio present should skip fallback and route to pass 2 reorder');
+      // grd_fb_eng YES → ffe_aac (eng pass created AAC, execute before cleanup)
+      assert.strictEqual(edgeMap.get('grd_fb_eng:1'), 'ffe_aac',
+        'Eng audio present should skip fallback and route to AAC execute');
 
       // grd_fb_eng NO → cmd_ens_fb (fallback AAC creation)
       assert.strictEqual(edgeMap.get('grd_fb_eng:2'), 'cmd_ens_fb',
         'No eng/und audio should route to fallback AAC');
 
-      // cmd_ens_fb → cmd_reorder_002 (pass 2 reorder)
-      assert.strictEqual(edgeMap.get('cmd_ens_fb:1'), 'cmd_reorder_002',
-        'Fallback AAC should route to pass 2 reorder');
+      // cmd_ens_fb → ffe_aac (execute AAC pass before cleanup)
+      assert.strictEqual(edgeMap.get('cmd_ens_fb:1'), 'ffe_aac',
+        'Fallback AAC should route to AAC execute before cleanup');
 
       // Verify fallback node config
       const fb = pluginMap.get('cmd_ens_fb');
