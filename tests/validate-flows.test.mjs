@@ -149,12 +149,12 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('chk_br_low:1'), 'cmd_cap_low');
       assert.strictEqual(edgeMap.get('chk_br_low:2'), 'chk_br_mid');
 
-      // chk_br_mid → cmd_cap_mid (yes) / cmt_tags (no)
+      // chk_br_mid → cmd_cap_mid (yes) / cmd_cap_high (no = above 10 Mbps)
       assert.strictEqual(edgeMap.get('chk_br_mid:1'), 'cmd_cap_mid');
-      assert.strictEqual(edgeMap.get('chk_br_mid:2'), 'cmt_tags');
+      assert.strictEqual(edgeMap.get('chk_br_mid:2'), 'cmd_cap_high');
 
       // All caps → cmt_tags
-      for (const cap of ['cmd_cap_vlow', 'cmd_cap_low', 'cmd_cap_mid']) {
+      for (const cap of ['cmd_cap_vlow', 'cmd_cap_low', 'cmd_cap_mid', 'cmd_cap_high']) {
         assert.strictEqual(edgeMap.get(`${cap}:1`), 'cmt_tags', `${cap} should route to cmt_tags`);
       }
 
@@ -167,8 +167,9 @@ for (const file of flowFiles) {
 
       const caps = [
         { id: 'cmd_cap_vlow', minCQ: 28 },
-        { id: 'cmd_cap_low', minCQ: 26 },
+        { id: 'cmd_cap_low', minCQ: 28 },
         { id: 'cmd_cap_mid', minCQ: 24 },
+        { id: 'cmd_cap_high', minCQ: 22 },
       ];
 
       for (const { id, minCQ } of caps) {
