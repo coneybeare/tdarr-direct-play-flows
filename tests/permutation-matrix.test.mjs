@@ -456,14 +456,12 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertPostEncodePasses(path);
     });
 
-    test('3e: mkv/av1/aac 2.0 — software transcode (AV1 can\'t hw decode), keep AAC', () => {
+    test('3e: mkv/av1/aac 2.0 — force encode (MKV gate intercepts before AV1 guard)', () => {
       const path = walkFlow(file('mkv', [vid('av1'), aud('aac', 2)]));
       assertProcess(path);
       assertForceEncode(path);
-      has(path, 'grd_av1', 'AV1 guard should be visited');
-      has(path, 'cmd_hevc_sw', 'AV1 must use software encoder (T400 can\'t hw decode AV1)');
-      lacks(path, 'chk_nvenc', 'AV1 should bypass NVENC entirely');
-      lacks(path, 'chk_resolution', 'AV1 should skip NVENC resolution tier');
+      lacks(path, 'grd_av1', 'MKV gate routes before AV1 guard');
+      lacks(path, 'cmd_hevc_sw', 'MKV force-encode takes priority over AV1 sw path');
       assertNoEAC3(path);
       assertPostEncodePasses(path);
     });

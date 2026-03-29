@@ -535,6 +535,44 @@
       "fpEnabled": true
     },
     {
+      "name": "Check: MKV source?",
+      "sourceRepo": "Community",
+      "pluginName": "checkFileExtension",
+      "version": "1.0.0",
+      "id": "grd_is_mkv",
+      "position": {
+        "x": 6540,
+        "y": 100
+      },
+      "inputsDB": {
+        "extensions": "mkv"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Encode: HEVC (force)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandSetVideoEncoder",
+      "version": "1.0.0",
+      "id": "cmd_hevc_force",
+      "position": {
+        "x": 6540,
+        "y": 200
+      },
+      "inputsDB": {
+        "outputCodec": "hevc",
+        "ffmpegPresetEnabled": "true",
+        "ffmpegPreset": "slow",
+        "ffmpegQualityEnabled": "true",
+        "ffmpegQuality": "24",
+        "hardwareEncoding": "true",
+        "hardwareType": "nvenc",
+        "hardwareDecoding": "false",
+        "forceEncoding": "true"
+      },
+      "fpEnabled": true
+    },
+    {
       "name": "Check: AV1 input?",
       "sourceRepo": "Community",
       "pluginName": "checkStreamProperty",
@@ -3077,9 +3115,9 @@
     {
       "source": "cmt_nvenc",
       "sourceHandle": "1",
-      "target": "grd_av1",
+      "target": "grd_is_mkv",
       "targetHandle": null,
-      "id": "e_cmt_nvenc_av1"
+      "id": "e_cmt_nvenc_mkv"
     },
     {
       "source": "chk_nvenc",
@@ -4571,6 +4609,27 @@
       "target": "cmd_reorder_002",
       "targetHandle": null,
       "id": "e_cleanup_start_reorder"
+    },
+    {
+      "source": "grd_is_mkv",
+      "sourceHandle": "1",
+      "target": "cmd_hevc_force",
+      "targetHandle": null,
+      "id": "e_mkv_force"
+    },
+    {
+      "source": "grd_is_mkv",
+      "sourceHandle": "2",
+      "target": "grd_av1",
+      "targetHandle": null,
+      "id": "e_mkv_normal"
+    },
+    {
+      "source": "cmd_hevc_force",
+      "sourceHandle": "1",
+      "target": "chk_br_vlow",
+      "targetHandle": null,
+      "id": "e_force_brcap"
     }
   ]
 }
