@@ -137,7 +137,7 @@ for (const file of flowFiles) {
       const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
 
       // NVENC encoders → chk_br_vlow
-      for (const enc of ['cmd_hevc_sd', 'cmd_hevc_1080', 'cmd_hevc_4k']) {
+      for (const enc of ['cmd_hevc_sd', 'cmd_hevc_1080', 'cmd_hevc_4k', 'cmd_hevc_force']) {
         assert.strictEqual(edgeMap.get(`${enc}:1`), 'chk_br_vlow', `${enc} should route to chk_br_vlow`);
       }
 
@@ -160,6 +160,40 @@ for (const file of flowFiles) {
 
       // SW encoder bypasses caps → cmt_tags
       assert.strictEqual(edgeMap.get('cmd_hevc_sw:1'), 'cmt_tags');
+    });
+
+    test('MKV force-encode gate is wired correctly', () => {
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      // grd_is_mkv exists and is a checkFileExtension node
+      const grdMkv = pluginMap.get('grd_is_mkv');
+      assert.ok(grdMkv, 'Missing node grd_is_mkv');
+      assert.strictEqual(grdMkv.pluginName, 'checkFileExtension');
+      assert.strictEqual(grdMkv.inputsDB.extensions, 'mkv');
+
+      // cmd_hevc_force exists with forceEncoding true
+      const forceEnc = pluginMap.get('cmd_hevc_force');
+      assert.ok(forceEnc, 'Missing node cmd_hevc_force');
+      assert.strictEqual(forceEnc.pluginName, 'ffmpegCommandSetVideoEncoder');
+      assert.strictEqual(forceEnc.inputsDB.forceEncoding, 'true');
+      assert.strictEqual(forceEnc.inputsDB.outputCodec, 'hevc');
+
+      // cmt_nvenc → grd_is_mkv (replaces cmt_nvenc → grd_av1)
+      assert.strictEqual(edgeMap.get('cmt_nvenc:1'), 'grd_is_mkv',
+        'cmt_nvenc should route to grd_is_mkv');
+
+      // grd_is_mkv YES → cmd_hevc_force
+      assert.strictEqual(edgeMap.get('grd_is_mkv:1'), 'cmd_hevc_force',
+        'MKV files should route to force encoder');
+
+      // grd_is_mkv NO → grd_av1 (existing path)
+      assert.strictEqual(edgeMap.get('grd_is_mkv:2'), 'grd_av1',
+        'Non-MKV files should route to existing AV1 check');
+
+      // cmd_hevc_force → chk_br_vlow (rejoin bitrate cap chain)
+      assert.strictEqual(edgeMap.get('cmd_hevc_force:1'), 'chk_br_vlow',
+        'Force encoder should route to bitrate cap chain');
     });
 
     test('bitrate cap CQ values are not below encoder QP', () => {
