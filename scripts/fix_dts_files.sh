@@ -83,13 +83,16 @@ process_file() {
     return
   fi
 
-  local filename dir stem ext output tmp
+  local filename dir stem ext output tmp local_raw local_fast
   filename=$(basename "$src")
   dir=$(dirname "$src")
   stem="${filename%.*}"
   ext=$(printf '%s' "${filename##*.}" | tr '[:upper:]' '[:lower:]')
   output="${dir}/${stem}.mp4"
   tmp="${dir}/.fixing_${stem}.mp4"
+  # Encode to local temp dir to avoid SMB +faststart re-open failure
+  local_raw="/tmp/fix_dts_$$_${RANDOM}.mp4"
+  local_fast="/tmp/fix_dts_fast_$$_${RANDOM}.mp4"
 
   # Skip if already MP4
   if [[ "$ext" == "mp4" ]]; then
@@ -188,23 +191,33 @@ process_file() {
     cmd+=(-map 0:a:0 -c:a:0 aac -ac:a:0 2 -b:a:0 192k)
   fi
 
-  # Strip subtitles, data streams, chapters; enable faststart
-  cmd+=(-sn -dn -movflags +faststart -map_chapters -1)
-  cmd+=("$tmp")
+  # Strip subtitles, data streams, chapters (faststart applied in step 2)
+  cmd+=(-sn -dn -map_chapters -1)
+  cmd+=("$local_raw")
 
-  log "  Encoding..."
+  log "  Encoding to local temp..."
   local start_time end_time elapsed
   start_time=$(date +%s)
 
   if "${cmd[@]}" >> "$LOG" 2>&1; then
     end_time=$(date +%s)
     elapsed=$(( end_time - start_time ))
+    log "  Encode time: ${elapsed}s"
+
+    # Step 2: Apply faststart via local stream-copy (avoids SMB re-open bug)
+    log "  Applying faststart..."
+    if "$FFMPEG" -y -i "$local_raw" -c copy -movflags +faststart "$local_fast" >> "$LOG" 2>&1; then
+      rm -f "$local_raw"
+    else
+      log "  [WARN] faststart failed, using non-faststart output"
+      mv "$local_raw" "$local_fast"
+    fi
 
     # Verify output is readable
-    if "$FFPROBE" -v error -show_format -print_format json "$tmp" 2>/dev/null | grep -q '"nb_streams"'; then
+    if "$FFPROBE" -v error -show_format -print_format json "$local_fast" 2>/dev/null | grep -q '"nb_streams"'; then
       local orig_size new_size
       orig_size=$(stat -f%z "$src" 2>/dev/null || stat -c%s "$src" 2>/dev/null || echo 0)
-      new_size=$(stat -f%z "$tmp" 2>/dev/null || stat -c%s "$tmp" 2>/dev/null || echo 0)
+      new_size=$(stat -f%z "$local_fast" 2>/dev/null || stat -c%s "$local_fast" 2>/dev/null || echo 0)
 
       if [[ "$orig_size" =~ ^[0-9]+$ ]] && [[ "$new_size" =~ ^[0-9]+$ ]] && (( orig_size > 0 )); then
         local ratio=$(( new_size * 100 / orig_size ))
@@ -212,20 +225,22 @@ process_file() {
       elif [[ "$new_size" =~ ^[0-9]+$ ]]; then
         log "  Size: $(( new_size / 1048576 )) MB"
       fi
-      log "  Time: ${elapsed}s"
 
+      # Move to final location on SMB mount
+      log "  Moving to destination..."
+      mv "$local_fast" "$tmp"
       mv "$tmp" "$output"
       rm -f "$src"
       log "  [OK] Replaced with MP4"
       ((ok++))
     else
       log "  [FAIL] Output not readable by ffprobe"
-      rm -f "$tmp"
+      rm -f "$local_raw" "$local_fast"
       ((fail++))
     fi
   else
     log "  [FAIL] FFmpeg error (see $LOG)"
-    rm -f "$tmp"
+    rm -f "$local_raw"
     ((fail++))
   fi
 }
