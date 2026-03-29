@@ -888,7 +888,7 @@
       "id": "cmt_audio",
       "position": {
         "x": 9810,
-        "y": 340
+        "y": 170
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -901,7 +901,7 @@
       "id": "cmd_ens_eng",
       "position": {
         "x": 9810,
-        "y": 700
+        "y": 530
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -922,7 +922,7 @@
       "id": "cmd_ens_und",
       "position": {
         "x": 10310,
-        "y": 1040
+        "y": 870
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -943,7 +943,7 @@
       "id": "grd_dup_und",
       "position": {
         "x": 9310,
-        "y": 870
+        "y": 700
       },
       "inputsDB": {
         "streamType": "audio",
@@ -961,7 +961,7 @@
       "id": "grd_has_eng",
       "position": {
         "x": 9810,
-        "y": 530
+        "y": 360
       },
       "inputsDB": {
         "streamType": "audio",
@@ -2044,7 +2044,7 @@
       "id": "grd_fb_eng",
       "position": {
         "x": 9310,
-        "y": 1040
+        "y": 870
       },
       "inputsDB": {
         "streamType": "audio",
@@ -2062,7 +2062,7 @@
       "id": "cmd_ens_fb",
       "position": {
         "x": 9310,
-        "y": 1210
+        "y": 1040
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -2154,8 +2154,8 @@
       "version": "1.0.0",
       "id": "ffs_002",
       "position": {
-        "x": 9810,
-        "y": 0
+        "x": 6540,
+        "y": 4900
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2302,7 +2302,7 @@
       "id": "fail_health2",
       "position": {
         "x": 9810,
-        "y": 170
+        "y": 0
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2882,7 +2882,7 @@
       "id": "ffe_aac",
       "position": {
         "x": 9810,
-        "y": 1380
+        "y": 1210
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2893,6 +2893,19 @@
       "pluginName": "ffmpegCommandStart",
       "version": "1.0.0",
       "id": "ffs_003",
+      "position": {
+        "x": 9810,
+        "y": 1380
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Remove data streams",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRemoveDataStreams",
+      "version": "1.0.0",
+      "id": "cmd_rmdata_003",
       "position": {
         "x": 9810,
         "y": 1550
@@ -4606,9 +4619,16 @@
     {
       "source": "ffs_003",
       "sourceHandle": "1",
+      "target": "cmd_rmdata_003",
+      "targetHandle": null,
+      "id": "e_cleanup_start_rmdata"
+    },
+    {
+      "source": "cmd_rmdata_003",
+      "sourceHandle": "1",
       "target": "cmd_reorder_002",
       "targetHandle": null,
-      "id": "e_cleanup_start_reorder"
+      "id": "e_cleanup_rmdata_reorder"
     },
     {
       "source": "grd_is_mkv",
