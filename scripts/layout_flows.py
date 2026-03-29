@@ -979,9 +979,8 @@ def col_map_01() -> dict[str, int]:
         "cmd_cap_vlow": L, "cmd_cap_low": L, "cmd_cap_mid": L, "cmd_cap_high": L,
         "cmt_tags": M, "cmd_tags": M,
         # ── Audio ─────────────────────────────────────────────────────
-        "cmt_rmaudio": M, "cmd_rmaudio": M,
         "cmt_eac3": M, "grd_eac3_ch": M, "grd_eac3_ch8": L,
-        "grd_eac3_has_eng": M, "cmd_eac3_eng": M, "cmd_eac3_fb": R, "cmd_rm_eac3": R,
+        "grd_eac3_has_eng": M, "cmd_eac3_eng": M, "cmd_eac3_fb": R,
         "cmt_audio": M, "grd_has_eng": M, "cmd_ens_eng": M,
         "grd_dup_und": L, "cmd_ens_und": R,
         "grd_fb_eng": L, "cmd_ens_fb": L,
@@ -991,8 +990,8 @@ def col_map_01() -> dict[str, int]:
         "chk_health_002": M, "fail_health2": M, "ffs_002": M,
         # ── Pass 2→3 boundary: execute AAC, rescan ───────────────────
         "ffe_aac": M, "ffs_003": M,
-        # ── Pass 3: cleanup — strip data, reorder, strip AC3/MP3, faststart ──
-        "cmd_rmdata_003": M, "cmd_reorder_002": M, "cmd_rm_ac3": M, "cmd_rm_mp3": M, "cmd_faststart2": M, "ffe_002": M,
+        # ── Pass 3: cleanup — strip data, rm audio, reorder, strip AC3/MP3, faststart
+        "cmd_rmdata_003": M, "cmt_rmaudio": M, "cmd_rmaudio": M, "cmd_reorder_002": M, "cmd_rm_ac3": M, "cmd_rm_mp3": M, "cmd_faststart2": M, "ffe_002": M,
         # ── Validation ────────────────────────────────────────────────
         "cmt_size": M, "fl_size": M,
         "cmt_toobig": L, "fail_toobig": L,

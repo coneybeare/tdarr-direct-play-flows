@@ -267,12 +267,10 @@ for (const file of flowFiles) {
       // EAC3 section routes to cmt_reorder (AAC stereo moved to pass 2)
       assert.strictEqual(edgeMap.get('cmd_eac3_eng:1'), 'cmt_reorder',
         'EAC3 eng path should route to cmt_reorder (AAC is in pass 2)');
-      assert.strictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmt_reorder',
-        'cmd_rm_eac3 should route to cmt_reorder (AAC is in pass 2)');
 
-      // cmd_rm_eac3 on non-surround path (no 6+ch surround, strip all eac3)
-      assert.strictEqual(edgeMap.get('grd_eac3_ch8:2'), 'cmd_rm_eac3',
-        'Non-surround channel path should strip EAC3 first');
+      // Non-surround path skips EAC3 removal (preserves audio for pass 2 AAC creation)
+      assert.strictEqual(edgeMap.get('grd_eac3_ch8:2'), 'cmt_reorder',
+        'Non-surround channel path should skip to reorder (no EAC3 removal)');
 
       // Old second-pass nodes from pre-#49 must still be gone
       assert.ok(!pluginMap.has('ffs_reorder'),
@@ -285,7 +283,7 @@ for (const file of flowFiles) {
       // Post-encode chain:
       //   ffe_001 → chk_health_002 →
       //   AAC pass:     ffs_002 → [AAC section] → ffe_aac →
-      //   Cleanup pass: ffs_003 → cmd_rmdata_003 → cmd_reorder_002 → cmd_rm_ac3 → cmd_rm_mp3 → cmd_faststart2 → ffe_002 →
+      //   Cleanup pass: ffs_003 → cmd_rmdata_003 → cmt_rmaudio → cmd_rmaudio → cmd_reorder_002 → cmd_rm_ac3 → cmd_rm_mp3 → cmd_faststart2 → ffe_002 →
       //   cmt_size
       assert.strictEqual(edgeMap.get('ffe_001:1'), 'chk_health_002',
         'ffe_001 should route to health check');
@@ -314,8 +312,12 @@ for (const file of flowFiles) {
       assert.ok(pluginMap.has('cmd_rmdata_003'), 'cmd_rmdata_003 plugin node must exist');
       assert.strictEqual(pluginMap.get('cmd_rmdata_003').pluginName, 'ffmpegCommandRemoveDataStreams',
         'cmd_rmdata_003 must be a RemoveDataStreams plugin');
-      assert.strictEqual(edgeMap.get('cmd_rmdata_003:1'), 'cmd_reorder_002',
-        'Data stream removal should route to stream reorder');
+      assert.strictEqual(edgeMap.get('cmd_rmdata_003:1'), 'cmt_rmaudio',
+        'Data stream removal should route to incompatible audio removal');
+      assert.strictEqual(edgeMap.get('cmt_rmaudio:1'), 'cmd_rmaudio',
+        'Audio removal comment should route to audio removal');
+      assert.strictEqual(edgeMap.get('cmd_rmaudio:1'), 'cmd_reorder_002',
+        'Audio removal should route to stream reorder');
 
       assert.strictEqual(edgeMap.get('cmd_reorder_002:1'), 'cmd_rm_ac3',
         'Stream reorder should route to AC3 removal');
@@ -349,8 +351,9 @@ for (const file of flowFiles) {
         'cmd_eac3_eng must NOT route to cmt_audio (AAC is in pass 2)');
       assert.notStrictEqual(edgeMap.get('cmd_eac3_fb:1'), 'cmt_audio',
         'cmd_eac3_fb must NOT route to cmt_audio (AAC is in pass 2)');
-      assert.notStrictEqual(edgeMap.get('cmd_rm_eac3:1'), 'cmt_audio',
-        'cmd_rm_eac3 must NOT route to cmt_audio (AAC is in pass 2)');
+      // cmd_rm_eac3 removed — orphaned EAC3 preserved for pass 2 AAC source
+      assert.ok(!pluginMap.has('cmd_rm_eac3'),
+        'cmd_rm_eac3 must be removed (audio preserved for pass 2)');
 
       // AAC stereo section must be wired into pass 2
       assert.strictEqual(edgeMap.get('ffs_002:1'), 'cmt_audio',

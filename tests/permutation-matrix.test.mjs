@@ -247,6 +247,7 @@ function assertPostEncodePasses(path) {
   has(path, 'ffe_aac', 'Should execute AAC pass');
   has(path, 'ffs_003', 'Should start cleanup pass');
   has(path, 'cmd_rmdata_003', 'Should strip data streams in cleanup pass');
+  has(path, 'cmd_rmaudio', 'Should strip incompatible audio in cleanup pass');
   has(path, 'cmd_reorder_002', 'Should map streams in cleanup pass');
   has(path, 'cmd_faststart2', 'Should apply faststart in cleanup pass');
 }
@@ -942,7 +943,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('ac3', 2)]));
       has(path, 'grd_eac3_ch');
       has(path, 'grd_eac3_ch8');
-      has(path, 'cmd_rm_eac3', 'Should clean up any orphaned EAC3');
+      lacks(path, 'cmd_rm_eac3', 'Orphaned EAC3 removal moved — audio preserved for pass 2');
       lacks(path, 'cmd_eac3_eng');
     });
 
