@@ -91,8 +91,23 @@ process_file() {
   output="${dir}/${stem}.mp4"
   tmp="${dir}/.fixing_${stem}.mp4"
   # Encode to local temp dir to avoid SMB +faststart re-open failure
-  local_raw="/tmp/fix_dts_$$_${RANDOM}.mp4"
-  local_fast="/tmp/fix_dts_fast_$$_${RANDOM}.mp4"
+  local_raw="$(mktemp "${TMPDIR:-/tmp}/fix_dts_XXXXXXXX.mp4")" || {
+    log "[FAIL] mktemp failed for raw temp file (src: $filename)"
+    ((fail++))
+    return
+  }
+  local_fast="$(mktemp "${TMPDIR:-/tmp}/fix_dts_fast_XXXXXXXX.mp4")" || {
+    log "[FAIL] mktemp failed for faststart temp file (src: $filename)"
+    rm -f "$local_raw"
+    ((fail++))
+    return
+  }
+
+  # Ensure intermediates are cleaned up on interruption
+  cleanup_local_temp() {
+    rm -f "$local_raw" "$local_fast"
+  }
+  trap cleanup_local_temp INT TERM EXIT
 
   # Skip if already MP4
   if [[ "$ext" == "mp4" ]]; then
@@ -228,11 +243,21 @@ process_file() {
 
       # Move to final location on SMB mount
       log "  Moving to destination..."
-      mv "$local_fast" "$tmp"
-      mv "$tmp" "$output"
-      rm -f "$src"
-      log "  [OK] Replaced with MP4"
-      ((ok++))
+      if mv "$local_fast" "$tmp"; then
+        if mv "$tmp" "$output"; then
+          rm -f "$src"
+          log "  [OK] Replaced with MP4"
+          ((ok++))
+        else
+          log "  [FAIL] Failed moving temp file to destination"
+          rm -f "$tmp"
+          ((fail++))
+        fi
+      else
+        log "  [FAIL] Failed moving faststart file to destination"
+        rm -f "$local_fast"
+        ((fail++))
+      fi
     else
       log "  [FAIL] Output not readable by ffprobe"
       rm -f "$local_raw" "$local_fast"
