@@ -246,6 +246,7 @@ function assertPostEncodePasses(path) {
   has(path, 'ffs_002', 'Should enter AAC pass');
   has(path, 'ffe_aac', 'Should execute AAC pass');
   has(path, 'ffs_003', 'Should start cleanup pass');
+  has(path, 'cmd_rmdata_003', 'Should strip data streams in cleanup pass');
   has(path, 'cmd_reorder_002', 'Should map streams in cleanup pass');
   has(path, 'cmd_faststart2', 'Should apply faststart in cleanup pass');
 }

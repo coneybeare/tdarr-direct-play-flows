@@ -285,7 +285,7 @@ for (const file of flowFiles) {
       // Post-encode chain:
       //   ffe_001 → chk_health_002 →
       //   AAC pass:     ffs_002 → [AAC section] → ffe_aac →
-      //   Cleanup pass: ffs_003 → cmd_reorder_002 → cmd_rm_ac3 → cmd_rm_mp3 → cmd_faststart2 → ffe_002 →
+      //   Cleanup pass: ffs_003 → cmd_rmdata_003 → cmd_reorder_002 → cmd_rm_ac3 → cmd_rm_mp3 → cmd_faststart2 → ffe_002 →
       //   cmt_size
       assert.strictEqual(edgeMap.get('ffe_001:1'), 'chk_health_002',
         'ffe_001 should route to health check');
@@ -309,8 +309,13 @@ for (const file of flowFiles) {
         'ffs_003 must be an ffmpegCommandStart node');
       assert.strictEqual(edgeMap.get('ffe_aac:1'), 'ffs_003',
         'AAC execute should route to cleanup pass start');
-      assert.strictEqual(edgeMap.get('ffs_003:1'), 'cmd_reorder_002',
-        'Cleanup pass start should route to stream reorder');
+      assert.strictEqual(edgeMap.get('ffs_003:1'), 'cmd_rmdata_003',
+        'Cleanup pass start should route to data stream removal');
+      assert.ok(pluginMap.has('cmd_rmdata_003'), 'cmd_rmdata_003 plugin node must exist');
+      assert.strictEqual(pluginMap.get('cmd_rmdata_003').pluginName, 'ffmpegCommandRemoveDataStreams',
+        'cmd_rmdata_003 must be a RemoveDataStreams plugin');
+      assert.strictEqual(edgeMap.get('cmd_rmdata_003:1'), 'cmd_reorder_002',
+        'Data stream removal should route to stream reorder');
 
       assert.strictEqual(edgeMap.get('cmd_reorder_002:1'), 'cmd_rm_ac3',
         'Stream reorder should route to AC3 removal');
