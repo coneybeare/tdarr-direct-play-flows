@@ -91,17 +91,31 @@ process_file() {
   output="${dir}/${stem}.mp4"
   tmp="${dir}/.fixing_${stem}.mp4"
   # Encode to local temp dir to avoid SMB +faststart re-open failure
-  local_raw="$(mktemp "${TMPDIR:-/tmp}/fix_dts_XXXXXXXX.mp4")" || {
+  local_raw="$(mktemp "${TMPDIR:-/tmp}/fix_dts_raw_XXXXXXXX")" || {
     log "[FAIL] mktemp failed for raw temp file (src: $filename)"
     ((fail++))
     return
   }
-  local_fast="$(mktemp "${TMPDIR:-/tmp}/fix_dts_fast_XXXXXXXX.mp4")" || {
+  if ! mv "$local_raw" "${local_raw}.mp4"; then
+    log "[FAIL] mv failed for raw temp file (src: $filename)"
+    rm -f "$local_raw"
+    ((fail++))
+    return
+  fi
+  local_raw="${local_raw}.mp4"
+  local_fast="$(mktemp "${TMPDIR:-/tmp}/fix_dts_fast_XXXXXXXX")" || {
     log "[FAIL] mktemp failed for faststart temp file (src: $filename)"
     rm -f "$local_raw"
     ((fail++))
     return
   }
+  if ! mv "$local_fast" "${local_fast}.mp4"; then
+    log "[FAIL] mv failed for faststart temp file (src: $filename)"
+    rm -f "$local_raw" "$local_fast"
+    ((fail++))
+    return
+  fi
+  local_fast="${local_fast}.mp4"
 
   # Ensure intermediates are cleaned up on interruption
   cleanup_local_temp() {
