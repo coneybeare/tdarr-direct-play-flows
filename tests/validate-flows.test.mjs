@@ -169,7 +169,7 @@ for (const file of flowFiles) {
         { id: 'cmd_cap_vlow', minCQ: 28 },
         { id: 'cmd_cap_low', minCQ: 28 },
         { id: 'cmd_cap_mid', minCQ: 24 },
-        { id: 'cmd_cap_high', minCQ: 22 },
+        { id: 'cmd_cap_high', minCQ: 24 },
       ];
 
       for (const { id, minCQ } of caps) {
