@@ -297,6 +297,18 @@ function assertFallbackAAC(path) {
   has(path, 'cmd_ens_fb', 'Should use fallback AAC');
 }
 
+function assertForceEncode(path) {
+  has(path, 'grd_is_mkv', 'Should check MKV gate');
+  has(path, 'cmd_hevc_force', 'MKV should use force encoder');
+  lacks(path, 'chk_nvenc', 'MKV should bypass NVENC check');
+  lacks(path, 'chk_resolution', 'MKV should bypass resolution tiers');
+}
+
+function assertNoForceEncode(path) {
+  has(path, 'grd_is_mkv', 'Should check MKV gate');
+  lacks(path, 'cmd_hevc_force', 'Non-MKV should not use force encoder');
+}
+
 // ── Tests ─────────────────────────────────────────────────────────
 describe('Permutation Matrix — Flow Routing', () => {
 
@@ -321,6 +333,7 @@ describe('Permutation Matrix — Flow Routing', () => {
     test('1c: mp4/hevc(hev1) + aac 2.0 — process (retag to hvc1)', () => {
       const path = walkFlow(file('mp4', [vid('hevc', { tag: 'hev1' }), aud('aac', 2)]));
       assertProcess(path);
+      assertNoForceEncode(path);
       has(path, 'grd_tag', 'Should reach hvc1 tag check');
     });
   });
@@ -329,66 +342,74 @@ describe('Permutation Matrix — Flow Routing', () => {
   // Category 2: MKV with HEVC video
   // ────────────────────────────────────────────────────────────────
   describe('2. MKV with HEVC video', () => {
-    test('2a: mkv/hevc/ac3 5.1 — remux, EAC3+AAC, pass 2 rm AC3', () => {
+    test('2a: mkv/hevc/ac3 5.1 — force encode, EAC3+AAC, pass 2 rm AC3', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('ac3', 6)]));
       assertProcess(path);
+      assertForceEncode(path);
       assertEAC3(path);
       assertAAC(path);
       assertPostEncodePasses(path);
       assertSeparatePasses(path);
     });
 
-    test('2b: mkv/hevc/ac3 5.1 + aac 2.0 — remux, EAC3, pass 2 rm AC3', () => {
+    test('2b: mkv/hevc/ac3 5.1 + aac 2.0 — force encode, EAC3, pass 2 rm AC3', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('ac3', 6), aud('aac', 2)]));
       assertProcess(path);
+      assertForceEncode(path);
       assertEAC3(path);
       assertPostEncodePasses(path);
     });
 
-    test('2c: mkv/hevc/dts 5.1 — remux, rm DTS, create EAC3+AAC', () => {
+    test('2c: mkv/hevc/dts 5.1 — force encode, rm DTS, create EAC3+AAC', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('dts', 6)]));
       assertProcess(path);
+      assertForceEncode(path);
       assertEAC3(path);
       assertAAC(path);
       assertPostEncodePasses(path);
       assertSeparatePasses(path);
     });
 
-    test('2d: mkv/hevc/truehd 7.1 — remux, rm TrueHD, create EAC3+AAC', () => {
+    test('2d: mkv/hevc/truehd 7.1 — force encode, rm TrueHD, create EAC3+AAC', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('truehd', 8)]));
       assertProcess(path);
+      assertForceEncode(path);
       assertEAC3(path);
       assertAAC(path);
       assertPostEncodePasses(path);
       assertSeparatePasses(path);
     });
 
-    test('2e: mkv/hevc/aac 2.0 + subs — remux, strip subs', () => {
+    test('2e: mkv/hevc/aac 2.0 + subs — force encode, strip subs', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('aac', 2)]));
       assertProcess(path);
+      assertForceEncode(path);
       assertNoEAC3(path);
       assertPostEncodePasses(path);
     });
 
-    test('2f: mkv/hevc/flac 2.0 — remux, rm FLAC, create AAC', () => {
+    test('2f: mkv/hevc/flac 2.0 — force encode, rm FLAC, create AAC', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('flac', 2)]));
       assertProcess(path);
+      assertForceEncode(path);
       assertNoEAC3(path);
       assertAAC(path);
       assertPostEncodePasses(path);
     });
 
-    test('2g: mkv/hevc/ac3 2.0 — remux, create AAC, rm AC3 (no EAC3 — <6ch)', () => {
+    test('2g: mkv/hevc/ac3 2.0 — force encode, create AAC, rm AC3 (no EAC3 — <6ch)', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('ac3', 2)]));
       assertProcess(path);
+      assertForceEncode(path);
       assertNoEAC3(path);
       assertAAC(path);
       assertPostEncodePasses(path);
     });
 
-    test('2h: mkv/hevc/mp3 2.0 — remux, create AAC, rm MP3', () => {
+    test('2h: mkv/hevc/mp3 2.0 — force encode, create AAC, rm MP3', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('mp3', 2)]));
       assertProcess(path);
+      assertForceEncode(path);
       assertNoEAC3(path);
       assertAAC(path);
       assertPostEncodePasses(path);
@@ -402,6 +423,7 @@ describe('Permutation Matrix — Flow Routing', () => {
     test('3a: mkv/h264/ac3 5.1 — transcode, EAC3+AAC, rm AC3', () => {
       const path = walkFlow(file('mkv', [vid('h264'), aud('ac3', 6)]));
       assertProcess(path);
+      assertForceEncode(path);
       assertEAC3(path);
       assertAAC(path);
       assertPostEncodePasses(path);
@@ -411,6 +433,7 @@ describe('Permutation Matrix — Flow Routing', () => {
     test('3b: mkv/h264/aac 2.0 — transcode, keep AAC', () => {
       const path = walkFlow(file('mkv', [vid('h264'), aud('aac', 2)]));
       assertProcess(path);
+      assertForceEncode(path);
       assertNoEAC3(path);
       assertPostEncodePasses(path);
     });
@@ -418,6 +441,7 @@ describe('Permutation Matrix — Flow Routing', () => {
     test('3c: mkv/mpeg2/ac3 2.0 — transcode, create AAC, rm AC3', () => {
       const path = walkFlow(file('mkv', [vid('mpeg2video', { height: 480 }), aud('ac3', 2)]));
       assertProcess(path);
+      assertForceEncode(path);
       assertNoEAC3(path);
       assertAAC(path);
       assertPostEncodePasses(path);
@@ -426,18 +450,18 @@ describe('Permutation Matrix — Flow Routing', () => {
     test('3d: mkv/vp9/opus 2.0 — transcode, rm Opus, create AAC', () => {
       const path = walkFlow(file('mkv', [vid('vp9'), aud('opus', 2)]));
       assertProcess(path);
+      assertForceEncode(path);
       assertNoEAC3(path);
       assertAAC(path);
       assertPostEncodePasses(path);
     });
 
-    test('3e: mkv/av1/aac 2.0 — software transcode (AV1 can\'t hw decode), keep AAC', () => {
+    test('3e: mkv/av1/aac 2.0 — force encode (MKV gate intercepts before AV1 guard)', () => {
       const path = walkFlow(file('mkv', [vid('av1'), aud('aac', 2)]));
       assertProcess(path);
-      has(path, 'grd_av1', 'AV1 guard should be visited');
-      has(path, 'cmd_hevc_sw', 'AV1 must use software encoder (T400 can\'t hw decode AV1)');
-      lacks(path, 'chk_nvenc', 'AV1 should bypass NVENC entirely');
-      lacks(path, 'chk_resolution', 'AV1 should skip NVENC resolution tier');
+      assertForceEncode(path);
+      lacks(path, 'grd_av1', 'MKV gate routes before AV1 guard');
+      lacks(path, 'cmd_hevc_sw', 'MKV force-encode takes priority over AV1 sw path');
       assertNoEAC3(path);
       assertPostEncodePasses(path);
     });
