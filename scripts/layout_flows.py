@@ -985,6 +985,7 @@ def col_map_01() -> dict[str, int]:
         "grd_dup_und": L, "cmd_ens_und": R,
         "grd_fb_eng": L, "cmd_ens_fb": L,
         "cmt_reorder": M, "cmd_reorder": M,
+        "cmt_rmmux": M, "cmd_rmmux": M,
         "cmt_exec": M, "cmd_nochapters": M, "ffe_001": M,
         # ── Pass 2: AAC creation ─────────────────────────────────────────
         "chk_health_002": M, "fail_health2": M, "ffs_002": M,
@@ -994,7 +995,7 @@ def col_map_01() -> dict[str, int]:
         "cmd_rmdata_003": M, "cmt_rmaudio": M, "cmd_rmaudio": M, "cmd_reorder_002": M, "cmd_rm_ac3": M, "cmd_rm_mp3": M, "cmd_faststart2": M, "ffe_002": M,
         # ── Validation ────────────────────────────────────────────────
         "cmt_size": M, "fl_size": M,
-        "cmt_toobig": L, "fail_toobig": L,
+        "cmt_toobig": L,
         "fl_review": L,
         "cmt_duration": M, "fl_duration": M,
         "cmt_duration_fail": L,

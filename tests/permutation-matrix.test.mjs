@@ -277,6 +277,12 @@ function assertSeparatePasses(path) {
     }
   }
 
+  // MP4-incompatible audio removal must be in pass 1 (before mux)
+  const rmmuxIdx = path.indexOf('cmd_rmmux');
+  assert.ok(rmmuxIdx !== -1, 'cmd_rmmux must be in path');
+  assert.ok(rmmuxIdx > ffs1 && rmmuxIdx < ffe1,
+    'cmd_rmmux must be in pass 1 (between ffs_001 and ffe_001)');
+
   // AAC stereo nodes must be in the AAC pass (between ffs_002 and ffe_aac)
   for (const aacNode of ['cmd_ens_eng', 'cmd_ens_und', 'cmd_ens_fb']) {
     const idx = path.indexOf(aacNode);

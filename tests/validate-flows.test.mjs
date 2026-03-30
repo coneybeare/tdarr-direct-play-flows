@@ -272,6 +272,27 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_eac3_ch8:2'), 'cmt_reorder',
         'Non-surround channel path should skip to reorder (no EAC3 removal)');
 
+      // Pass 1 ending: reorder → strip MP4-incompatible audio → execute
+      assert.strictEqual(edgeMap.get('cmd_reorder:1'), 'cmt_rmmux',
+        'Stream reorder should route to mux-incompatible removal');
+      assert.ok(pluginMap.has('cmt_rmmux'), 'cmt_rmmux comment node must exist');
+      assert.ok(pluginMap.has('cmd_rmmux'), 'cmd_rmmux removal node must exist');
+      assert.strictEqual(pluginMap.get('cmd_rmmux').pluginName, 'ffmpegCommandRemoveStreamByProperty',
+        'cmd_rmmux must be a RemoveStreamByProperty plugin');
+      assert.strictEqual(edgeMap.get('cmt_rmmux:1'), 'cmd_rmmux',
+        'Mux-incompatible comment should route to removal');
+      assert.strictEqual(edgeMap.get('cmd_rmmux:1'), 'cmt_exec',
+        'Mux-incompatible removal should route to execute comment');
+
+      // cmd_rmmux strips codecs that cannot be muxed into MP4 (vorbis, opus, wma, adpcm)
+      const rmmuxNode = pluginMap.get('cmd_rmmux');
+      assert.strictEqual(rmmuxNode.inputsDB.condition, 'includes',
+        'cmd_rmmux must use "includes" condition');
+      for (const codec of ['vorbis', 'opus', 'wma', 'adpcm']) {
+        assert.ok(rmmuxNode.inputsDB.valuesToRemove.includes(codec),
+          `cmd_rmmux must strip ${codec} (MP4-incompatible)`);
+      }
+
       // Old second-pass nodes from pre-#49 must still be gone
       assert.ok(!pluginMap.has('ffs_reorder'),
         'ffs_reorder must be removed — old second pass');
@@ -279,6 +300,10 @@ for (const file of flowFiles) {
         'ffe_reorder must be removed — old second pass');
       assert.ok(!pluginMap.has('cmt_reorder2'),
         'cmt_reorder2 must be removed — old second pass');
+
+      // fail_toobig must not exist — oversized files route to manual review
+      assert.ok(!pluginMap.has('fail_toobig'),
+        'fail_toobig must be removed — oversized files route to fl_manual_review');
 
       // Post-encode chain:
       //   ffe_001 → chk_health_002 →
@@ -476,9 +501,10 @@ for (const file of flowFiles) {
 
       // Every guarded codec must be removable by the pipeline
       const rmaudio = pluginMap.get('cmd_rmaudio');
+      const rmmux = pluginMap.get('cmd_rmmux');
       const rmAc3 = pluginMap.get('cmd_rm_ac3');
       const rmMp3 = pluginMap.get('cmd_rm_mp3');
-      assert.ok(rmaudio && rmAc3 && rmMp3, 'Missing removal nodes');
+      assert.ok(rmaudio && rmmux && rmAc3 && rmMp3, 'Missing removal nodes');
       // cmd_rm_ac3 uses codec_tag_string "ac-3" to avoid eac3 substring match —
       // map it back to codec_name "ac3" for guard cross-reference
       const tagToCodec = { 'ac-3': 'ac3' };
@@ -487,6 +513,7 @@ for (const file of flowFiles) {
         : rmAc3.inputsDB.valuesToRemove.split(',').map(s => s.trim());
       const removableSet = new Set([
         ...rmaudio.inputsDB.valuesToRemove.split(',').map(s => s.trim()),
+        ...rmmux.inputsDB.valuesToRemove.split(',').map(s => s.trim()),
         ...rmAc3Codecs,
         rmMp3.inputsDB.valuesToRemove.trim(),
       ]);
