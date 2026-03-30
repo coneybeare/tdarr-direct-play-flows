@@ -308,8 +308,10 @@ for (const file of flowFiles) {
       // Post-encode chain:
       //   ffe_001 → chk_health_002 →
       //   AAC pass:     ffs_002 → [AAC section] → ffe_aac →
-      //   Cleanup pass: ffs_003 → cmd_rmdata_003 → cmt_rmaudio → cmd_rmaudio → cmd_reorder_002 → cmd_rm_ac3 → cmd_rm_mp3 → cmd_faststart2 → ffe_002 →
-      //   cmt_size
+      //   Cleanup pass: ffs_003 → cmd_rmdata_003 → grd_p3_has_aac
+      //     YES → cmt_rmaudio → cmd_rmaudio → cmd_rm_ac3 → cmd_rm_mp3 → cmd_reorder_002 → cmd_faststart2 → ffe_002
+      //     NO  → cmd_reorder_002 → cmd_faststart2 → ffe_002
+      //   → cmt_size
       assert.strictEqual(edgeMap.get('ffe_001:1'), 'chk_health_002',
         'ffe_001 should route to health check');
       assert.strictEqual(edgeMap.get('chk_health_002:1'), 'ffs_002',
@@ -337,19 +339,26 @@ for (const file of flowFiles) {
       assert.ok(pluginMap.has('cmd_rmdata_003'), 'cmd_rmdata_003 plugin node must exist');
       assert.strictEqual(pluginMap.get('cmd_rmdata_003').pluginName, 'ffmpegCommandRemoveDataStreams',
         'cmd_rmdata_003 must be a RemoveDataStreams plugin');
-      assert.strictEqual(edgeMap.get('cmd_rmdata_003:1'), 'cmt_rmaudio',
-        'Data stream removal should route to incompatible audio removal');
+      // Cleanup pass AAC guard: skip audio removal if no AAC was created
+      assert.strictEqual(edgeMap.get('cmd_rmdata_003:1'), 'grd_p3_has_aac',
+        'Data stream removal should route to AAC guard');
+      assert.ok(pluginMap.has('grd_p3_has_aac'), 'grd_p3_has_aac must exist');
+      assert.strictEqual(pluginMap.get('grd_p3_has_aac').pluginName, 'checkStreamProperty',
+        'grd_p3_has_aac must be a checkStreamProperty plugin');
+      assert.strictEqual(edgeMap.get('grd_p3_has_aac:1'), 'cmt_rmaudio',
+        'AAC guard YES should route to audio removal');
+      assert.strictEqual(edgeMap.get('grd_p3_has_aac:2'), 'cmd_reorder_002',
+        'AAC guard NO should skip removal and route to reorder');
       assert.strictEqual(edgeMap.get('cmt_rmaudio:1'), 'cmd_rmaudio',
         'Audio removal comment should route to audio removal');
-      assert.strictEqual(edgeMap.get('cmd_rmaudio:1'), 'cmd_reorder_002',
-        'Audio removal should route to stream reorder');
-
-      assert.strictEqual(edgeMap.get('cmd_reorder_002:1'), 'cmd_rm_ac3',
-        'Stream reorder should route to AC3 removal');
+      assert.strictEqual(edgeMap.get('cmd_rmaudio:1'), 'cmd_rm_ac3',
+        'Audio removal should route to AC3 removal');
       assert.strictEqual(edgeMap.get('cmd_rm_ac3:1'), 'cmd_rm_mp3',
         'AC3 removal should route to MP3 removal');
-      assert.strictEqual(edgeMap.get('cmd_rm_mp3:1'), 'cmd_faststart2',
-        'MP3 removal should route to faststart');
+      assert.strictEqual(edgeMap.get('cmd_rm_mp3:1'), 'cmd_reorder_002',
+        'MP3 removal should route to reorder');
+      assert.strictEqual(edgeMap.get('cmd_reorder_002:1'), 'cmd_faststart2',
+        'Stream reorder should route to faststart');
       assert.strictEqual(edgeMap.get('cmd_faststart2:1'), 'ffe_002',
         'Faststart should route to pass 2 execute');
       assert.strictEqual(edgeMap.get('ffe_002:1'), 'cmt_size',

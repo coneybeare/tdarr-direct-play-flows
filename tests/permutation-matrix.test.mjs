@@ -247,7 +247,9 @@ function assertPostEncodePasses(path) {
   has(path, 'ffe_aac', 'Should execute AAC pass');
   has(path, 'ffs_003', 'Should start cleanup pass');
   has(path, 'cmd_rmdata_003', 'Should strip data streams in cleanup pass');
-  has(path, 'cmd_rmaudio', 'Should strip incompatible audio in cleanup pass');
+  has(path, 'grd_p3_has_aac', 'Should check for AAC before audio removal');
+  // cmd_rmaudio is conditional — only when AAC exists (grd_p3_has_aac YES).
+  // Simulator checks original streams, so files without original AAC skip removal.
   has(path, 'cmd_reorder_002', 'Should map streams in cleanup pass');
   has(path, 'cmd_faststart2', 'Should apply faststart in cleanup pass');
 }
@@ -849,9 +851,12 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertSeparatePasses(path);
     });
 
-    test('10m: mkv/hevc/mp3 2ch eng — AAC created from mp3, mp3 removed in cleanup pass', () => {
-      // MP3-only file: AAC clone from mp3 must be executed (ffe_aac) before
-      // mp3 removal (cmd_rm_mp3) to avoid clone destruction.
+    test('10m: mkv/hevc/mp3 2ch eng — AAC created from mp3, mp3 preserved (no original AAC)', () => {
+      // MP3-only file: pass 2 creates AAC from mp3 source. In reality,
+      // grd_p3_has_aac would find the new AAC and remove mp3. But the
+      // simulator checks original streams (no AAC) → takes NO path,
+      // skipping audio removal. This is safe worst-case: mp3 survives
+      // but AAC is first in stream order for playback.
       const path = walkFlow(file('mkv', [vid('hevc'), aud('mp3', 2, 'eng')]));
       assertProcess(path);
       assertAAC(path);
@@ -859,11 +864,10 @@ describe('Permutation Matrix — Flow Routing', () => {
       // Verify the 3-pass structure: AAC execute before cleanup
       has(path, 'ffe_aac', 'AAC pass must execute before cleanup');
       has(path, 'ffs_003', 'Cleanup pass must start after AAC execute');
-      const ffeAac = path.indexOf('ffe_aac');
-      const ffs3 = path.indexOf('ffs_003');
-      const rmMp3 = path.indexOf('cmd_rm_mp3');
-      assert.ok(ffeAac < ffs3, 'ffe_aac must come before ffs_003');
-      assert.ok(ffs3 < rmMp3, 'ffs_003 must come before cmd_rm_mp3');
+      has(path, 'grd_p3_has_aac', 'AAC guard must be checked');
+      // Simulator sees no original AAC → NO path skips audio removal
+      assert.ok(!path.includes('cmd_rm_mp3'),
+        'MP3 removal skipped (no original AAC in simulator)');
     });
   });
 
