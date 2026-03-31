@@ -2497,402 +2497,6 @@
       "fpEnabled": true
     },
     {
-      "name": "Guard: has AC3?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_unwanted_ac3",
-      "position": {
-        "x": 0,
-        "y": 4290
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "ac3",
-        "condition": "equals"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "VR: has AC3?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_vr_nowanted_ac3",
-      "position": {
-        "x": 3270,
-        "y": 4160
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "ac3",
-        "condition": "equals"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "Guard: has DTS?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_unwanted_dts",
-      "position": {
-        "x": 0,
-        "y": 2590
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "dts",
-        "condition": "equals"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "Guard: has DCA?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_unwanted_dca",
-      "position": {
-        "x": 0,
-        "y": 2760
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "dca",
-        "condition": "equals"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "Guard: has MP3?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_unwanted_mp3",
-      "position": {
-        "x": 0,
-        "y": 2930
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "mp3",
-        "condition": "equals"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "Guard: has TrueHD?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_unwanted_truehd",
-      "position": {
-        "x": 0,
-        "y": 3100
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "truehd",
-        "condition": "equals"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "Guard: has MLP?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_unwanted_mlp",
-      "position": {
-        "x": 0,
-        "y": 3270
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "mlp",
-        "condition": "equals"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "Guard: has FLAC?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_unwanted_flac",
-      "position": {
-        "x": 0,
-        "y": 3440
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "flac",
-        "condition": "equals"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "Guard: has Vorbis?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_unwanted_vorbis",
-      "position": {
-        "x": 0,
-        "y": 3610
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "vorbis",
-        "condition": "equals"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "Guard: has Opus?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_unwanted_opus",
-      "position": {
-        "x": 0,
-        "y": 3780
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "opus",
-        "condition": "equals"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "Guard: has PCM?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_unwanted_pcm",
-      "position": {
-        "x": 0,
-        "y": 3950
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "pcm_",
-        "condition": "includes"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "Guard: has WMA?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_unwanted_wma",
-      "position": {
-        "x": 0,
-        "y": 4120
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "wma",
-        "condition": "includes"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "VR: has DTS?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_vr_nw_dts",
-      "position": {
-        "x": 3270,
-        "y": 850
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "dts",
-        "condition": "equals"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "VR: has DCA?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_vr_nw_dca",
-      "position": {
-        "x": 3270,
-        "y": 1210
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "dca",
-        "condition": "equals"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "VR: has MP3?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_vr_nw_mp3",
-      "position": {
-        "x": 3270,
-        "y": 1550
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "mp3",
-        "condition": "equals"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "VR: has TrueHD?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_vr_nw_truehd",
-      "position": {
-        "x": 3270,
-        "y": 1910
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "truehd",
-        "condition": "equals"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "VR: has MLP?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_vr_nw_mlp",
-      "position": {
-        "x": 3270,
-        "y": 2250
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "mlp",
-        "condition": "equals"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "VR: has FLAC?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_vr_nw_flac",
-      "position": {
-        "x": 3270,
-        "y": 2610
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "flac",
-        "condition": "equals"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "VR: has Vorbis?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_vr_nw_vorbis",
-      "position": {
-        "x": 3270,
-        "y": 2950
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "vorbis",
-        "condition": "equals"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "VR: has Opus?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_vr_nw_opus",
-      "position": {
-        "x": 3270,
-        "y": 3120
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "opus",
-        "condition": "equals"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "VR: has PCM?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_vr_nw_pcm",
-      "position": {
-        "x": 3270,
-        "y": 3480
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "pcm_",
-        "condition": "includes"
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "VR: has WMA?",
-      "sourceRepo": "Community",
-      "pluginName": "checkStreamProperty",
-      "version": "1.0.0",
-      "id": "grd_vr_nw_wma",
-      "position": {
-        "x": 3270,
-        "y": 3820
-      },
-      "inputsDB": {
-        "streamType": "audio",
-        "propertyToCheck": "codec_name",
-        "valuesToMatch": "wma",
-        "condition": "includes"
-      },
-      "fpEnabled": true
-    },
-    {
       "name": "Execute AAC pass",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandExecute",
@@ -2929,6 +2533,114 @@
         "y": 1190
       },
       "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Unwanted audio? (exact)",
+      "sourceRepo": "local",
+      "pluginName": "checkStreamPropertyMultiValue",
+      "version": "1.0.0",
+      "id": "grd_unwanted_exact",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "inputsDB": {
+        "streamType": "audio",
+        "propertyToCheck": "codec_name",
+        "valuesToMatch": "dts,dca,mp3,truehd,mlp,flac,vorbis,opus,ac3",
+        "condition": "equals"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Unwanted audio? (partial)",
+      "sourceRepo": "local",
+      "pluginName": "checkStreamPropertyMultiValue",
+      "version": "1.0.0",
+      "id": "grd_unwanted_partial",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "inputsDB": {
+        "streamType": "audio",
+        "propertyToCheck": "codec_name",
+        "valuesToMatch": "pcm,wma",
+        "condition": "includes"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "VR unwanted? (exact)",
+      "sourceRepo": "local",
+      "pluginName": "checkStreamPropertyMultiValue",
+      "version": "1.0.0",
+      "id": "grd_vr_unwanted_exact",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "inputsDB": {
+        "streamType": "audio",
+        "propertyToCheck": "codec_name",
+        "valuesToMatch": "dts,dca,mp3,truehd,mlp,flac,vorbis,opus,ac3",
+        "condition": "equals"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "VR unwanted? (partial)",
+      "sourceRepo": "local",
+      "pluginName": "checkStreamPropertyMultiValue",
+      "version": "1.0.0",
+      "id": "grd_vr_unwanted_partial",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "inputsDB": {
+        "streamType": "audio",
+        "propertyToCheck": "codec_name",
+        "valuesToMatch": "pcm,wma",
+        "condition": "includes"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Mux-incompatible audio?",
+      "sourceRepo": "local",
+      "pluginName": "checkStreamPropertyMultiValue",
+      "version": "1.0.0",
+      "id": "grd_has_muxincompat",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "inputsDB": {
+        "streamType": "audio",
+        "propertyToCheck": "codec_name",
+        "valuesToMatch": "wma,adpcm,vorbis,opus",
+        "condition": "includes"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Has safe audio?",
+      "sourceRepo": "local",
+      "pluginName": "checkStreamPropertyMultiValue",
+      "version": "1.0.0",
+      "id": "grd_has_safe_audio",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "inputsDB": {
+        "streamType": "audio",
+        "propertyToCheck": "codec_name",
+        "valuesToMatch": "aac,ac3,eac3,mp3,dts,dca,truehd,mlp,flac,pcm",
+        "condition": "includes"
+      },
       "fpEnabled": true
     }
   ],
@@ -3634,13 +3346,6 @@
       "id": "e_vr_yes"
     },
     {
-      "source": "chk_vr",
-      "sourceHandle": "2",
-      "target": "ffs_001",
-      "targetHandle": null,
-      "id": "e_vr_no"
-    },
-    {
       "source": "cmt_vr",
       "sourceHandle": "1",
       "target": "ffs_vr",
@@ -4264,335 +3969,6 @@
       "id": "e_vr_retag_validate"
     },
     {
-      "source": "grd_unwanted_ac3",
-      "sourceHandle": "1",
-      "target": "cmt_proc",
-      "targetHandle": null,
-      "id": "e_unwanted_ac3_yes"
-    },
-    {
-      "source": "grd_unwanted_ac3",
-      "sourceHandle": "2",
-      "target": "cmt_optimal",
-      "targetHandle": null,
-      "id": "e_unwanted_ac3_no"
-    },
-    {
-      "source": "grd_vr_nowanted_ac3",
-      "sourceHandle": "1",
-      "target": "cmt_vr",
-      "targetHandle": null,
-      "id": "e_vr_nowanted_ac3_yes"
-    },
-    {
-      "source": "grd_vr_nowanted_ac3",
-      "sourceHandle": "2",
-      "target": "grd_vr_hasaac",
-      "targetHandle": null,
-      "id": "e_vr_nowanted_ac3_no"
-    },
-    {
-      "source": "grd_surr_ch",
-      "sourceHandle": "1",
-      "target": "grd_unwanted_dts",
-      "targetHandle": null,
-      "id": "e_surr_ch_yes"
-    },
-    {
-      "source": "grd_has_eac3",
-      "sourceHandle": "2",
-      "target": "grd_unwanted_dts",
-      "targetHandle": null,
-      "id": "e_has_eac3_no"
-    },
-    {
-      "source": "grd_unwanted_dts",
-      "sourceHandle": "1",
-      "target": "cmt_proc",
-      "targetHandle": null,
-      "id": "e_unwanted_dts_yes"
-    },
-    {
-      "source": "grd_unwanted_dts",
-      "sourceHandle": "2",
-      "target": "grd_unwanted_dca",
-      "targetHandle": null,
-      "id": "e_unwanted_dts_no"
-    },
-    {
-      "source": "grd_unwanted_dca",
-      "sourceHandle": "1",
-      "target": "cmt_proc",
-      "targetHandle": null,
-      "id": "e_unwanted_dca_yes"
-    },
-    {
-      "source": "grd_unwanted_dca",
-      "sourceHandle": "2",
-      "target": "grd_unwanted_mp3",
-      "targetHandle": null,
-      "id": "e_unwanted_dca_no"
-    },
-    {
-      "source": "grd_unwanted_mp3",
-      "sourceHandle": "1",
-      "target": "cmt_proc",
-      "targetHandle": null,
-      "id": "e_unwanted_mp3_yes"
-    },
-    {
-      "source": "grd_unwanted_mp3",
-      "sourceHandle": "2",
-      "target": "grd_unwanted_truehd",
-      "targetHandle": null,
-      "id": "e_unwanted_mp3_no"
-    },
-    {
-      "source": "grd_unwanted_truehd",
-      "sourceHandle": "1",
-      "target": "cmt_proc",
-      "targetHandle": null,
-      "id": "e_unwanted_truehd_yes"
-    },
-    {
-      "source": "grd_unwanted_truehd",
-      "sourceHandle": "2",
-      "target": "grd_unwanted_mlp",
-      "targetHandle": null,
-      "id": "e_unwanted_truehd_no"
-    },
-    {
-      "source": "grd_unwanted_mlp",
-      "sourceHandle": "1",
-      "target": "cmt_proc",
-      "targetHandle": null,
-      "id": "e_unwanted_mlp_yes"
-    },
-    {
-      "source": "grd_unwanted_mlp",
-      "sourceHandle": "2",
-      "target": "grd_unwanted_flac",
-      "targetHandle": null,
-      "id": "e_unwanted_mlp_no"
-    },
-    {
-      "source": "grd_unwanted_flac",
-      "sourceHandle": "1",
-      "target": "cmt_proc",
-      "targetHandle": null,
-      "id": "e_unwanted_flac_yes"
-    },
-    {
-      "source": "grd_unwanted_flac",
-      "sourceHandle": "2",
-      "target": "grd_unwanted_vorbis",
-      "targetHandle": null,
-      "id": "e_unwanted_flac_no"
-    },
-    {
-      "source": "grd_unwanted_vorbis",
-      "sourceHandle": "1",
-      "target": "cmt_proc",
-      "targetHandle": null,
-      "id": "e_unwanted_vorbis_yes"
-    },
-    {
-      "source": "grd_unwanted_vorbis",
-      "sourceHandle": "2",
-      "target": "grd_unwanted_opus",
-      "targetHandle": null,
-      "id": "e_unwanted_vorbis_no"
-    },
-    {
-      "source": "grd_unwanted_opus",
-      "sourceHandle": "1",
-      "target": "cmt_proc",
-      "targetHandle": null,
-      "id": "e_unwanted_opus_yes"
-    },
-    {
-      "source": "grd_unwanted_opus",
-      "sourceHandle": "2",
-      "target": "grd_unwanted_pcm",
-      "targetHandle": null,
-      "id": "e_unwanted_opus_no"
-    },
-    {
-      "source": "grd_unwanted_pcm",
-      "sourceHandle": "1",
-      "target": "cmt_proc",
-      "targetHandle": null,
-      "id": "e_unwanted_pcm_yes"
-    },
-    {
-      "source": "grd_unwanted_pcm",
-      "sourceHandle": "2",
-      "target": "grd_unwanted_wma",
-      "targetHandle": null,
-      "id": "e_unwanted_pcm_no"
-    },
-    {
-      "source": "grd_unwanted_wma",
-      "sourceHandle": "1",
-      "target": "cmt_proc",
-      "targetHandle": null,
-      "id": "e_unwanted_wma_yes"
-    },
-    {
-      "source": "grd_unwanted_wma",
-      "sourceHandle": "2",
-      "target": "grd_unwanted_ac3",
-      "targetHandle": null,
-      "id": "e_unwanted_wma_no"
-    },
-    {
-      "source": "grd_vr_ishevc",
-      "sourceHandle": "1",
-      "target": "grd_vr_nw_dts",
-      "targetHandle": null,
-      "id": "e_vr_ishevc_yes"
-    },
-    {
-      "source": "grd_vr_nw_dts",
-      "sourceHandle": "1",
-      "target": "cmt_vr",
-      "targetHandle": null,
-      "id": "e_vr_nw_dts_yes"
-    },
-    {
-      "source": "grd_vr_nw_dts",
-      "sourceHandle": "2",
-      "target": "grd_vr_nw_dca",
-      "targetHandle": null,
-      "id": "e_vr_nw_dts_no"
-    },
-    {
-      "source": "grd_vr_nw_dca",
-      "sourceHandle": "1",
-      "target": "cmt_vr",
-      "targetHandle": null,
-      "id": "e_vr_nw_dca_yes"
-    },
-    {
-      "source": "grd_vr_nw_dca",
-      "sourceHandle": "2",
-      "target": "grd_vr_nw_mp3",
-      "targetHandle": null,
-      "id": "e_vr_nw_dca_no"
-    },
-    {
-      "source": "grd_vr_nw_mp3",
-      "sourceHandle": "1",
-      "target": "cmt_vr",
-      "targetHandle": null,
-      "id": "e_vr_nw_mp3_yes"
-    },
-    {
-      "source": "grd_vr_nw_mp3",
-      "sourceHandle": "2",
-      "target": "grd_vr_nw_truehd",
-      "targetHandle": null,
-      "id": "e_vr_nw_mp3_no"
-    },
-    {
-      "source": "grd_vr_nw_truehd",
-      "sourceHandle": "1",
-      "target": "cmt_vr",
-      "targetHandle": null,
-      "id": "e_vr_nw_truehd_yes"
-    },
-    {
-      "source": "grd_vr_nw_truehd",
-      "sourceHandle": "2",
-      "target": "grd_vr_nw_mlp",
-      "targetHandle": null,
-      "id": "e_vr_nw_truehd_no"
-    },
-    {
-      "source": "grd_vr_nw_mlp",
-      "sourceHandle": "1",
-      "target": "cmt_vr",
-      "targetHandle": null,
-      "id": "e_vr_nw_mlp_yes"
-    },
-    {
-      "source": "grd_vr_nw_mlp",
-      "sourceHandle": "2",
-      "target": "grd_vr_nw_flac",
-      "targetHandle": null,
-      "id": "e_vr_nw_mlp_no"
-    },
-    {
-      "source": "grd_vr_nw_flac",
-      "sourceHandle": "1",
-      "target": "cmt_vr",
-      "targetHandle": null,
-      "id": "e_vr_nw_flac_yes"
-    },
-    {
-      "source": "grd_vr_nw_flac",
-      "sourceHandle": "2",
-      "target": "grd_vr_nw_vorbis",
-      "targetHandle": null,
-      "id": "e_vr_nw_flac_no"
-    },
-    {
-      "source": "grd_vr_nw_vorbis",
-      "sourceHandle": "1",
-      "target": "cmt_vr",
-      "targetHandle": null,
-      "id": "e_vr_nw_vorbis_yes"
-    },
-    {
-      "source": "grd_vr_nw_vorbis",
-      "sourceHandle": "2",
-      "target": "grd_vr_nw_opus",
-      "targetHandle": null,
-      "id": "e_vr_nw_vorbis_no"
-    },
-    {
-      "source": "grd_vr_nw_opus",
-      "sourceHandle": "1",
-      "target": "cmt_vr",
-      "targetHandle": null,
-      "id": "e_vr_nw_opus_yes"
-    },
-    {
-      "source": "grd_vr_nw_opus",
-      "sourceHandle": "2",
-      "target": "grd_vr_nw_pcm",
-      "targetHandle": null,
-      "id": "e_vr_nw_opus_no"
-    },
-    {
-      "source": "grd_vr_nw_pcm",
-      "sourceHandle": "1",
-      "target": "cmt_vr",
-      "targetHandle": null,
-      "id": "e_vr_nw_pcm_yes"
-    },
-    {
-      "source": "grd_vr_nw_pcm",
-      "sourceHandle": "2",
-      "target": "grd_vr_nw_wma",
-      "targetHandle": null,
-      "id": "e_vr_nw_pcm_no"
-    },
-    {
-      "source": "grd_vr_nw_wma",
-      "sourceHandle": "1",
-      "target": "cmt_vr",
-      "targetHandle": null,
-      "id": "e_vr_nw_wma_yes"
-    },
-    {
-      "source": "grd_vr_nw_wma",
-      "sourceHandle": "2",
-      "target": "grd_vr_nowanted_ac3",
-      "targetHandle": null,
-      "id": "e_vr_nw_wma_no"
-    },
-    {
       "source": "cmt_eac3",
       "sourceHandle": "1",
       "target": "grd_eac3_ch",
@@ -4689,6 +4065,118 @@
       "target": "chk_br_vlow",
       "targetHandle": null,
       "id": "e_force_brcap"
+    },
+    {
+      "source": "grd_surr_ch",
+      "sourceHandle": "1",
+      "target": "grd_unwanted_exact",
+      "targetHandle": null,
+      "id": "e_surr_to_unwanted_exact"
+    },
+    {
+      "source": "grd_has_eac3",
+      "sourceHandle": "2",
+      "target": "grd_unwanted_exact",
+      "targetHandle": null,
+      "id": "e_eac3_to_unwanted_exact"
+    },
+    {
+      "source": "grd_unwanted_exact",
+      "sourceHandle": "1",
+      "target": "cmt_proc",
+      "targetHandle": null,
+      "id": "e_unwanted_exact_yes"
+    },
+    {
+      "source": "grd_unwanted_exact",
+      "sourceHandle": "2",
+      "target": "grd_unwanted_partial",
+      "targetHandle": null,
+      "id": "e_unwanted_exact_no"
+    },
+    {
+      "source": "grd_unwanted_partial",
+      "sourceHandle": "1",
+      "target": "cmt_proc",
+      "targetHandle": null,
+      "id": "e_unwanted_partial_yes"
+    },
+    {
+      "source": "grd_unwanted_partial",
+      "sourceHandle": "2",
+      "target": "cmt_optimal",
+      "targetHandle": null,
+      "id": "e_unwanted_partial_no"
+    },
+    {
+      "source": "grd_vr_ishevc",
+      "sourceHandle": "1",
+      "target": "grd_vr_unwanted_exact",
+      "targetHandle": null,
+      "id": "e_vr_hevc_to_unwanted_exact"
+    },
+    {
+      "source": "grd_vr_unwanted_exact",
+      "sourceHandle": "1",
+      "target": "cmt_vr",
+      "targetHandle": null,
+      "id": "e_vr_unwanted_exact_yes"
+    },
+    {
+      "source": "grd_vr_unwanted_exact",
+      "sourceHandle": "2",
+      "target": "grd_vr_unwanted_partial",
+      "targetHandle": null,
+      "id": "e_vr_unwanted_exact_no"
+    },
+    {
+      "source": "grd_vr_unwanted_partial",
+      "sourceHandle": "1",
+      "target": "cmt_vr",
+      "targetHandle": null,
+      "id": "e_vr_unwanted_partial_yes"
+    },
+    {
+      "source": "grd_vr_unwanted_partial",
+      "sourceHandle": "2",
+      "target": "grd_vr_hasaac",
+      "targetHandle": null,
+      "id": "e_vr_unwanted_partial_no"
+    },
+    {
+      "source": "chk_vr",
+      "sourceHandle": "2",
+      "target": "grd_has_muxincompat",
+      "targetHandle": null,
+      "id": "e_vr_no_muxcheck"
+    },
+    {
+      "source": "grd_has_muxincompat",
+      "sourceHandle": "2",
+      "target": "ffs_001",
+      "targetHandle": null,
+      "id": "e_muxcheck_safe"
+    },
+    {
+      "source": "grd_has_muxincompat",
+      "sourceHandle": "1",
+      "target": "grd_has_safe_audio",
+      "targetHandle": null,
+      "id": "e_muxcheck_has_incompat"
+    },
+    {
+      "source": "grd_has_safe_audio",
+      "sourceHandle": "1",
+      "target": "ffs_001",
+      "targetHandle": null,
+      "id": "e_safeaudio_yes"
+    },
+    {
+      "source": "grd_has_safe_audio",
+      "sourceHandle": "2",
+      "target": "fl_manual_review",
+      "targetHandle": null,
+      "id": "e_safeaudio_no_review"
     }
   ]
 }
