@@ -991,7 +991,7 @@ def col_map_01() -> dict[str, int]:
         "chk_health_002": M, "fail_health2": M, "ffs_002": M,
         # ── Pass 2→3 boundary: execute AAC, rescan ───────────────────
         "ffe_aac": M, "ffs_003": M,
-        # ── Pass 3: cleanup — strip data, AAC guard → rm audio, reorder, faststart
+        # ── Pass 3: cleanup — strip data → AAC guard → rm audio → rm AC3/MP3 → reorder → faststart
         "cmd_rmdata_003": M, "grd_p3_has_aac": M, "cmt_rmaudio": R, "cmd_rmaudio": R, "cmd_rm_ac3": R, "cmd_rm_mp3": R, "cmd_reorder_002": M, "cmd_faststart2": M, "ffe_002": M,
         # ── Validation ────────────────────────────────────────────────
         "cmt_size": M, "fl_size": M,
