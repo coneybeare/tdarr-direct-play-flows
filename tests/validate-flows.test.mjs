@@ -412,8 +412,8 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_ch:1'), 'grd_surr_ch',
         '2ch check should route to surround channel check');
 
-      // grd_surr_ch YES → grd_unwanted_dts (has surround, start unwanted audio chain)
-      assert.strictEqual(edgeMap.get('grd_surr_ch:1'), 'grd_unwanted_dts',
+      // grd_surr_ch YES → grd_unwanted_exact (has surround, start unwanted audio chain)
+      assert.strictEqual(edgeMap.get('grd_surr_ch:1'), 'grd_unwanted_exact',
         'Files with surround should start unwanted audio chain');
 
       // grd_surr_ch NO → grd_has_eac3 (no surround, check for orphaned EAC3)
@@ -424,8 +424,8 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_has_eac3:1'), 'cmt_proc',
         'Orphaned EAC3 should route to processing');
 
-      // grd_has_eac3 NO → grd_unwanted_dts (no EAC3, start unwanted audio chain)
-      assert.strictEqual(edgeMap.get('grd_has_eac3:2'), 'grd_unwanted_dts',
+      // grd_has_eac3 NO → grd_unwanted_exact (no EAC3, start unwanted audio chain)
+      assert.strictEqual(edgeMap.get('grd_has_eac3:2'), 'grd_unwanted_exact',
         'No EAC3 should start unwanted audio chain');
 
       // Verify grd_has_eac3 config matches eac3
@@ -462,50 +462,70 @@ for (const file of flowFiles) {
       assert.strictEqual(doviMkv.inputsDB.condition, 'includes');
     });
 
-    test('guard chain catches unwanted audio codecs (individual single-value guards)', () => {
+    test('guard chain catches unwanted audio codecs (multi-value guards)', () => {
       const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
       const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
 
-      // Individual guard chain: each node checks one codec, YES → cmt_proc, NO → next guard
-      // Tdarr v2.62.01 checkStreamProperty does NOT split comma-separated values,
-      // so each codec must be its own guard node with a single valuesToMatch.
-      const guardChain = [
-        { id: 'grd_unwanted_dts',    value: 'dts',    condition: 'equals' },
-        { id: 'grd_unwanted_dca',    value: 'dca',    condition: 'equals' },
-        { id: 'grd_unwanted_mp3',    value: 'mp3',    condition: 'equals' },
-        { id: 'grd_unwanted_truehd', value: 'truehd', condition: 'equals' },
-        { id: 'grd_unwanted_mlp',    value: 'mlp',    condition: 'equals' },
-        { id: 'grd_unwanted_flac',   value: 'flac',   condition: 'equals' },
-        { id: 'grd_unwanted_vorbis', value: 'vorbis', condition: 'equals' },
-        { id: 'grd_unwanted_opus',   value: 'opus',   condition: 'equals' },
-        { id: 'grd_unwanted_pcm',    value: 'pcm_',   condition: 'includes' },
-        { id: 'grd_unwanted_wma',    value: 'wma',    condition: 'includes' },
-        { id: 'grd_unwanted_ac3',    value: 'ac3',    condition: 'equals' },
+      // Two-node replacement for the old 11-node single-value chain.
+      // grd_unwanted_exact: exact-match codecs (codec_name equals any of the listed values)
+      const exactNode = pluginMap.get('grd_unwanted_exact');
+      assert.ok(exactNode, 'Missing node grd_unwanted_exact');
+      assert.strictEqual(exactNode.pluginName, 'checkStreamPropertyMultiValue',
+        'grd_unwanted_exact must use checkStreamPropertyMultiValue');
+      assert.strictEqual(exactNode.sourceRepo, 'local',
+        'grd_unwanted_exact must have sourceRepo "local"');
+      assert.strictEqual(exactNode.inputsDB.streamType, 'audio',
+        'grd_unwanted_exact must check audio streams');
+      assert.strictEqual(exactNode.inputsDB.propertyToCheck, 'codec_name',
+        'grd_unwanted_exact must check codec_name');
+      assert.strictEqual(exactNode.inputsDB.condition, 'equals',
+        'grd_unwanted_exact must use "equals" condition');
+      for (const codec of ['dts', 'dca', 'mp3', 'truehd', 'mlp', 'flac', 'vorbis', 'opus', 'ac3']) {
+        assert.ok(exactNode.inputsDB.valuesToMatch.includes(codec),
+          `grd_unwanted_exact must match "${codec}"`);
+      }
+
+      // grd_unwanted_partial: partial-match codecs (codec_name includes any of the listed values)
+      const partialNode = pluginMap.get('grd_unwanted_partial');
+      assert.ok(partialNode, 'Missing node grd_unwanted_partial');
+      assert.strictEqual(partialNode.pluginName, 'checkStreamPropertyMultiValue',
+        'grd_unwanted_partial must use checkStreamPropertyMultiValue');
+      assert.strictEqual(partialNode.sourceRepo, 'local',
+        'grd_unwanted_partial must have sourceRepo "local"');
+      assert.strictEqual(partialNode.inputsDB.streamType, 'audio',
+        'grd_unwanted_partial must check audio streams');
+      assert.strictEqual(partialNode.inputsDB.propertyToCheck, 'codec_name',
+        'grd_unwanted_partial must check codec_name');
+      assert.strictEqual(partialNode.inputsDB.condition, 'includes',
+        'grd_unwanted_partial must use "includes" condition');
+      for (const codec of ['pcm', 'wma']) {
+        assert.ok(partialNode.inputsDB.valuesToMatch.includes(codec),
+          `grd_unwanted_partial must match "${codec}"`);
+      }
+
+      // Edge wiring
+      assert.strictEqual(edgeMap.get('grd_surr_ch:1'), 'grd_unwanted_exact',
+        'grd_surr_ch YES should route to grd_unwanted_exact');
+      assert.strictEqual(edgeMap.get('grd_has_eac3:2'), 'grd_unwanted_exact',
+        'grd_has_eac3 NO should route to grd_unwanted_exact');
+      assert.strictEqual(edgeMap.get('grd_unwanted_exact:1'), 'cmt_proc',
+        'grd_unwanted_exact YES should route to processing');
+      assert.strictEqual(edgeMap.get('grd_unwanted_exact:2'), 'grd_unwanted_partial',
+        'grd_unwanted_exact NO should route to grd_unwanted_partial');
+      assert.strictEqual(edgeMap.get('grd_unwanted_partial:1'), 'cmt_proc',
+        'grd_unwanted_partial YES should route to processing');
+      assert.strictEqual(edgeMap.get('grd_unwanted_partial:2'), 'cmt_optimal',
+        'grd_unwanted_partial NO should route to cmt_optimal');
+
+      // All 11 old single-value guard nodes must no longer exist
+      const oldGuards = [
+        'grd_unwanted_dts', 'grd_unwanted_dca', 'grd_unwanted_mp3',
+        'grd_unwanted_truehd', 'grd_unwanted_mlp', 'grd_unwanted_flac',
+        'grd_unwanted_vorbis', 'grd_unwanted_opus', 'grd_unwanted_pcm',
+        'grd_unwanted_wma', 'grd_unwanted_ac3',
       ];
-
-      for (let i = 0; i < guardChain.length; i++) {
-        const guard = guardChain[i];
-        const node = pluginMap.get(guard.id);
-        assert.ok(node, `Missing node ${guard.id}`);
-        assert.strictEqual(node.inputsDB.streamType, 'audio',
-          `${guard.id} must check audio streams`);
-        assert.strictEqual(node.inputsDB.propertyToCheck, 'codec_name',
-          `${guard.id} must check codec_name`);
-        assert.strictEqual(node.inputsDB.valuesToMatch, guard.value,
-          `${guard.id} must match "${guard.value}"`);
-        assert.strictEqual(node.inputsDB.condition, guard.condition,
-          `${guard.id} must use "${guard.condition}" condition`);
-
-        // YES → cmt_proc (has unwanted audio)
-        assert.strictEqual(edgeMap.get(`${guard.id}:1`), 'cmt_proc',
-          `${guard.id} YES should route to processing`);
-
-        // NO → next guard (or cmt_optimal for last)
-        const expectedNext = i < guardChain.length - 1
-          ? guardChain[i + 1].id
-          : 'cmt_optimal';
-        assert.strictEqual(edgeMap.get(`${guard.id}:2`), expectedNext,
-          `${guard.id} NO should route to ${expectedNext}`);
+      for (const id of oldGuards) {
+        assert.ok(!pluginMap.has(id), `Old guard node "${id}" must be removed`);
       }
 
       // Every guarded codec must be removable by the pipeline
@@ -526,17 +546,18 @@ for (const file of flowFiles) {
         ...rmAc3Codecs,
         rmMp3.inputsDB.valuesToRemove.trim(),
       ]);
-      for (const guard of guardChain) {
-        // For "includes" guards (pcm, wma), the guard value is a substring —
-        // check that at least one removable codec contains it
-        if (guard.condition === 'includes') {
-          const hasMatch = [...removableSet].some(r => r.includes(guard.value));
-          assert.ok(hasMatch,
-            `Guard "${guard.id}" catches "${guard.value}" (includes) but no removal node strips a matching codec`);
-        } else {
-          assert.ok(removableSet.has(guard.value),
-            `Guard "${guard.id}" catches "${guard.value}" but no removal node strips it`);
-        }
+      // Exact-match guard codecs must each appear in the removable set
+      const exactCodecs = exactNode.inputsDB.valuesToMatch.split(',').map(s => s.trim());
+      for (const codec of exactCodecs) {
+        assert.ok(removableSet.has(codec),
+          `Guard grd_unwanted_exact catches "${codec}" but no removal node strips it`);
+      }
+      // Partial-match guard values are substrings — at least one removable codec must contain each
+      const partialValues = partialNode.inputsDB.valuesToMatch.split(',').map(s => s.trim());
+      for (const val of partialValues) {
+        const hasMatch = [...removableSet].some(r => r.includes(val));
+        assert.ok(hasMatch,
+          `Guard grd_unwanted_partial catches "${val}" (includes) but no removal node strips a matching codec`);
       }
     });
 
@@ -774,27 +795,31 @@ for (const file of flowFiles) {
       // Guard chain routing
       assert.strictEqual(edgeMap.get('grd_vr_ismp4:1'), 'grd_vr_ishevc');
       assert.strictEqual(edgeMap.get('grd_vr_ismp4:2'), 'cmt_vr');
-      assert.strictEqual(edgeMap.get('grd_vr_ishevc:1'), 'grd_vr_nw_dts',
+      assert.strictEqual(edgeMap.get('grd_vr_ishevc:1'), 'grd_vr_unwanted_exact',
         'HEVC VR should start unwanted audio chain');
       assert.strictEqual(edgeMap.get('grd_vr_ishevc:2'), 'cmt_vr');
 
-      // VR unwanted audio guard chain (individual single-value guards)
-      const vrGuardChain = [
+      // VR unwanted audio guard chain (2-node multi-value replacement)
+      assert.strictEqual(edgeMap.get('grd_vr_unwanted_exact:1'), 'cmt_vr',
+        'grd_vr_unwanted_exact YES → full VR pipeline');
+      assert.strictEqual(edgeMap.get('grd_vr_unwanted_exact:2'), 'grd_vr_unwanted_partial',
+        'grd_vr_unwanted_exact NO → grd_vr_unwanted_partial');
+      assert.strictEqual(edgeMap.get('grd_vr_unwanted_partial:1'), 'cmt_vr',
+        'grd_vr_unwanted_partial YES → full VR pipeline');
+      assert.strictEqual(edgeMap.get('grd_vr_unwanted_partial:2'), 'grd_vr_hasaac',
+        'grd_vr_unwanted_partial NO → grd_vr_hasaac');
+
+      // All 11 old VR single-value guard nodes must no longer exist
+      const oldVrGuards = [
         'grd_vr_nw_dts', 'grd_vr_nw_dca', 'grd_vr_nw_mp3',
         'grd_vr_nw_truehd', 'grd_vr_nw_mlp', 'grd_vr_nw_flac',
         'grd_vr_nw_vorbis', 'grd_vr_nw_opus', 'grd_vr_nw_pcm',
         'grd_vr_nw_wma', 'grd_vr_nowanted_ac3',
       ];
-      for (let i = 0; i < vrGuardChain.length; i++) {
-        const id = vrGuardChain[i];
-        assert.strictEqual(edgeMap.get(`${id}:1`), 'cmt_vr',
-          `${id} YES → full VR pipeline`);
-        const expectedNext = i < vrGuardChain.length - 1
-          ? vrGuardChain[i + 1]
-          : 'grd_vr_hasaac';
-        assert.strictEqual(edgeMap.get(`${id}:2`), expectedNext,
-          `${id} NO → ${expectedNext}`);
+      for (const id of oldVrGuards) {
+        assert.ok(!pluginMap.has(id), `Old VR guard node "${id}" must be removed`);
       }
+
       assert.strictEqual(edgeMap.get('grd_vr_hasaac:1'), 'cmt_vr_retag',
         'has AAC → retag shortcut');
       assert.strictEqual(edgeMap.get('grd_vr_hasaac:2'), 'cmt_vr',
@@ -840,6 +865,59 @@ for (const file of flowFiles) {
         'VR retag must set faststart');
       assert.ok(retagTags.inputsDB.outputArguments.includes('-c:a copy'),
         'VR retag must copy audio (no re-encode)');
+    });
+
+    test('mux-incompatible-only audio routes to manual review', () => {
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      // chk_vr NO → grd_has_muxincompat (not directly to ffs_001)
+      assert.strictEqual(edgeMap.get('chk_vr:2'), 'grd_has_muxincompat',
+        'chk_vr NO must route to grd_has_muxincompat, not directly to ffs_001');
+
+      // grd_has_muxincompat config
+      const muxIncompat = pluginMap.get('grd_has_muxincompat');
+      assert.ok(muxIncompat, 'Missing node grd_has_muxincompat');
+      assert.strictEqual(muxIncompat.pluginName, 'checkStreamPropertyMultiValue',
+        'grd_has_muxincompat must use checkStreamPropertyMultiValue');
+      assert.strictEqual(muxIncompat.sourceRepo, 'local',
+        'grd_has_muxincompat must have sourceRepo "local"');
+      assert.strictEqual(muxIncompat.inputsDB.condition, 'includes',
+        'grd_has_muxincompat must use "includes" condition');
+      for (const codec of ['wma', 'adpcm', 'vorbis', 'opus']) {
+        assert.ok(muxIncompat.inputsDB.valuesToMatch.includes(codec),
+          `grd_has_muxincompat must match "${codec}"`);
+      }
+
+      // grd_has_muxincompat NO → ffs_001 (no mux-incompatible = normal path)
+      assert.strictEqual(edgeMap.get('grd_has_muxincompat:2'), 'ffs_001',
+        'grd_has_muxincompat NO should route to ffs_001 (normal path)');
+
+      // grd_has_muxincompat YES → grd_has_safe_audio
+      assert.strictEqual(edgeMap.get('grd_has_muxincompat:1'), 'grd_has_safe_audio',
+        'grd_has_muxincompat YES should route to grd_has_safe_audio');
+
+      // grd_has_safe_audio config
+      const safeAudio = pluginMap.get('grd_has_safe_audio');
+      assert.ok(safeAudio, 'Missing node grd_has_safe_audio');
+      assert.strictEqual(safeAudio.pluginName, 'checkStreamPropertyMultiValue',
+        'grd_has_safe_audio must use checkStreamPropertyMultiValue');
+      assert.strictEqual(safeAudio.sourceRepo, 'local',
+        'grd_has_safe_audio must have sourceRepo "local"');
+      assert.strictEqual(safeAudio.inputsDB.condition, 'equals',
+        'grd_has_safe_audio must use "equals" condition (avoids false positive on adpcm_ima_wav containing "pcm")');
+      for (const codec of ['aac', 'ac3', 'eac3', 'pcm_s16le', 'pcm_s24le']) {
+        assert.ok(safeAudio.inputsDB.valuesToMatch.includes(codec),
+          `grd_has_safe_audio must match "${codec}"`);
+      }
+
+      // grd_has_safe_audio YES → ffs_001 (has safe audio = proceed to processing)
+      assert.strictEqual(edgeMap.get('grd_has_safe_audio:1'), 'ffs_001',
+        'grd_has_safe_audio YES should route to ffs_001 (proceed to processing)');
+
+      // grd_has_safe_audio NO → fl_manual_review (no safe audio = manual review)
+      assert.strictEqual(edgeMap.get('grd_has_safe_audio:2'), 'fl_manual_review',
+        'grd_has_safe_audio NO should route to fl_manual_review (no safe audio to preserve)');
     });
 
     test('ffmpegCommandRemoveStreamByProperty nodes use correct condition', () => {
