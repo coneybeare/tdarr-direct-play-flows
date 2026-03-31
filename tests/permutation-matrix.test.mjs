@@ -902,15 +902,12 @@ describe('Permutation Matrix — Flow Routing', () => {
       lacks(path, 'ffs_001', 'Should NOT enter encoding pipeline');
     });
 
-    test('11b: mkv/hevc/adpcm_ima_wav 2ch — processes normally (adpcm contains "pcm" substring)', () => {
-      // adpcm_ima_wav contains "pcm" as a substring, so grd_has_safe_audio matches
-      // via "includes" condition. The file enters the pipeline where cmd_rmmux strips
-      // the adpcm track. This is safe — adpcm is removed before MP4 mux.
+    test('11b: mkv/hevc/adpcm_ima_wav 2ch — routes to manual review', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('adpcm_ima_wav', 2, '')]));
       has(path, 'grd_has_muxincompat', 'Should detect adpcm');
-      has(path, 'grd_has_safe_audio', 'Should find safe audio (adpcm contains pcm)');
-      has(path, 'ffs_001', 'Should enter encoding pipeline');
-      lacks(path, 'fl_manual_review', 'Should NOT route to manual review');
+      has(path, 'grd_has_safe_audio', 'Should check for safe audio');
+      has(path, 'fl_manual_review', 'Should route to manual review');
+      lacks(path, 'ffs_001', 'Should NOT enter encoding pipeline');
     });
 
     test('11c: mkv/hevc/wmav2 2ch + ac3 5.1 — processes normally (has safe audio)', () => {
