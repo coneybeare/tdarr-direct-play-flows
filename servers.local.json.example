@@ -5,6 +5,7 @@
       "host": "http://<HOST_A>:8266",
       "flow_id": "<FLOW_ID_A>",
       "api_key": "<TDARR_API_KEY_A>",
+      "plugin_path": "/path/to/Tdarr/server/Tdarr/Plugins/FlowPlugins/LocalFlowPlugins",
       "overrides": {
         "var_rm_commentary": { "value": "true" },
         "var_enable_plex": { "value": "false" },
@@ -26,6 +27,7 @@
       "host": "http://<HOST_B>:8266",
       "flow_id": "<FLOW_ID_B>",
       "api_key": "<TDARR_API_KEY_B>",
+      "plugin_path": "/path/to/Tdarr/server/Tdarr/Plugins/FlowPlugins/LocalFlowPlugins",
       "overrides": {
         "var_rm_commentary": { "value": "true" },
         "var_enable_plex": { "value": "false" },
