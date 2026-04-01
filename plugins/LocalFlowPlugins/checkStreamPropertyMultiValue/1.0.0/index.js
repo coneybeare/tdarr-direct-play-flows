@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 function getNestedProp(obj, path) {
+  if (!path) return undefined;
   return path.split('.').reduce((o, k) => (o != null ? o[k] : undefined), obj);
 }
 

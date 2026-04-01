@@ -8,14 +8,14 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Import the plugin module
 const pluginPath = join(__dirname, '..', 'plugins', 'LocalFlowPlugins',
   'checkStreamPropertyMultiValue', '1.0.0', 'index.js');
-const { plugin, details } = await import(pluginPath);
+const { plugin, details } = await import(pathToFileURL(pluginPath).href);
 
 // ── Helper: build mock args ──────────────────────────────────────
 function mockArgs(streams, inputsDB) {

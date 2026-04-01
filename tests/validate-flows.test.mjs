@@ -480,8 +480,9 @@ for (const file of flowFiles) {
         'grd_unwanted_exact must check codec_name');
       assert.strictEqual(exactNode.inputsDB.condition, 'equals',
         'grd_unwanted_exact must use "equals" condition');
+      const exactValues = exactNode.inputsDB.valuesToMatch.split(',').map(s => s.trim());
       for (const codec of ['dts', 'dca', 'mp3', 'truehd', 'mlp', 'flac', 'vorbis', 'opus', 'ac3']) {
-        assert.ok(exactNode.inputsDB.valuesToMatch.includes(codec),
+        assert.ok(exactValues.includes(codec),
           `grd_unwanted_exact must match "${codec}"`);
       }
 
@@ -906,8 +907,9 @@ for (const file of flowFiles) {
         'grd_has_safe_audio must have sourceRepo "local"');
       assert.strictEqual(safeAudio.inputsDB.condition, 'equals',
         'grd_has_safe_audio must use "equals" condition (avoids false positive on adpcm_ima_wav containing "pcm")');
+      const safeValues = safeAudio.inputsDB.valuesToMatch.split(',').map(s => s.trim());
       for (const codec of ['aac', 'ac3', 'eac3', 'pcm_s16le', 'pcm_s24le']) {
-        assert.ok(safeAudio.inputsDB.valuesToMatch.includes(codec),
+        assert.ok(safeValues.includes(codec),
           `grd_has_safe_audio must match "${codec}"`);
       }
 

@@ -109,7 +109,7 @@ Inserted after VR detection NO path, before pass 1 FFmpeg start.
 | ID | pluginName | condition | valuesToMatch |
 |----|-----------|-----------|---------------|
 | `grd_has_muxincompat` | checkStreamPropertyMultiValue | `includes` | `wma,adpcm,vorbis,opus` |
-| `grd_has_safe_audio` | checkStreamPropertyMultiValue | `includes` | `aac,ac3,eac3,mp3,dts,dca,truehd,mlp,flac,pcm` |
+| `grd_has_safe_audio` | checkStreamPropertyMultiValue | `equals` | `aac,ac3,eac3,mp3,dts,dca,truehd,mlp,flac,pcm_s16le,pcm_s24le` |
 
 Both: `streamType: "audio"`, `propertyToCheck: "codec_name"`, `sourceRepo: "local"`.
 
@@ -122,7 +122,7 @@ grd_has_safe_audio YES(1) → [pass 1 start, as before]
 grd_has_safe_audio NO(2) → fl_manual_review
 ```
 
-**Why `includes` for safe audio:** `ac3` catches both AC3 and EAC3 (both MP4-safe). `pcm` catches all PCM variants. `dts` catches DTS and DTS-HD. If an unlisted exotic codec is the only safe audio, the file goes to manual review — safe false positive.
+**Why `equals` for safe audio:** Uses exact matching with explicit PCM variants (`pcm_s16le`, `pcm_s24le`) instead of substring `includes` with `pcm` — `adpcm_ima_wav` contains "pcm" as a substring, which would cause a false positive. If an unlisted exotic codec is the only safe audio, the file goes to manual review — safe false positive.
 
 **Not added to VR pipeline:** No VR files have hit this issue. Can be added later if needed.
 

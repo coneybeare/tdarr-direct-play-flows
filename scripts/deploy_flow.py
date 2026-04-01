@@ -74,8 +74,8 @@ def deploy_plugins(server, dry_run=False):
     dest = Path(plugin_path)
 
     if not PLUGINS_DIR.exists():
-        print(f"  Plugins: SKIPPED — source directory not found: {PLUGINS_DIR}")
-        return True
+        print(f"  Plugins: FAILED — source directory not found: {PLUGINS_DIR}")
+        return False
 
     plugin_files = list(PLUGINS_DIR.rglob("*"))
     file_count = sum(1 for p in plugin_files if p.is_file())
@@ -207,10 +207,11 @@ def main():
     parser.add_argument("--server", help="Deploy to a specific server by name")
     parser.add_argument("--dry-run", action="store_true",
                         help="Show overrides without deploying")
-    parser.add_argument("--no-plugins", action="store_true",
-                        help="Skip plugin deployment, deploy flow only")
-    parser.add_argument("--plugins-only", action="store_true",
-                        help="Deploy only plugins, skip flow deployment")
+    plugin_group = parser.add_mutually_exclusive_group()
+    plugin_group.add_argument("--no-plugins", action="store_true",
+                              help="Skip plugin deployment, deploy flow only")
+    plugin_group.add_argument("--plugins-only", action="store_true",
+                              help="Deploy only plugins, skip flow deployment")
     parser.add_argument("--config", type=Path, default=CONFIG_PATH,
                         help="Path to servers config JSON")
     parser.add_argument("--flow", type=Path, default=FLOW_PATH,
