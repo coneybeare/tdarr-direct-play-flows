@@ -19,6 +19,9 @@ npm-debug.log*
 .hypothesis/
 __pycache__/
 
+# Superpowers specs/plans — internal workflow docs, not for public repo
+docs/superpowers/
+
 # Local config / secrets — never commit real tokens or API keys
 *.local.json
 .env
