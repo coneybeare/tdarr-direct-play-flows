@@ -298,7 +298,7 @@
       "version": "1.0.0",
       "sourceRepo": "Community",
       "fpEnabled": true,
-      "name": "⏭ SKIP: Below bitrate threshold",
+      "name": "\u23ed SKIP: Below bitrate threshold",
       "inputsDB": {},
       "position": {
         "x": -500,
@@ -1217,7 +1217,7 @@
       "fpEnabled": true
     },
     {
-      "name": "Too big — review",
+      "name": "Too big \u2014 review",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
@@ -2143,7 +2143,7 @@
         "y": 170
       },
       "inputsDB": {
-        "comment": "Flow errored. Do NOT replace original file — preserve it for diagnosis."
+        "comment": "Flow errored. Do NOT replace original file \u2014 preserve it for diagnosis."
       },
       "fpEnabled": true
     },
@@ -2537,7 +2537,7 @@
     },
     {
       "name": "Unwanted audio? (exact)",
-      "sourceRepo": "local",
+      "sourceRepo": "Local",
       "pluginName": "checkStreamPropertyMultiValue",
       "version": "1.0.0",
       "id": "grd_unwanted_exact",
@@ -2555,7 +2555,7 @@
     },
     {
       "name": "Unwanted audio? (partial)",
-      "sourceRepo": "local",
+      "sourceRepo": "Local",
       "pluginName": "checkStreamPropertyMultiValue",
       "version": "1.0.0",
       "id": "grd_unwanted_partial",
@@ -2573,7 +2573,7 @@
     },
     {
       "name": "VR unwanted? (exact)",
-      "sourceRepo": "local",
+      "sourceRepo": "Local",
       "pluginName": "checkStreamPropertyMultiValue",
       "version": "1.0.0",
       "id": "grd_vr_unwanted_exact",
@@ -2591,7 +2591,7 @@
     },
     {
       "name": "VR unwanted? (partial)",
-      "sourceRepo": "local",
+      "sourceRepo": "Local",
       "pluginName": "checkStreamPropertyMultiValue",
       "version": "1.0.0",
       "id": "grd_vr_unwanted_partial",
@@ -2609,7 +2609,7 @@
     },
     {
       "name": "Mux-incompatible audio?",
-      "sourceRepo": "local",
+      "sourceRepo": "Local",
       "pluginName": "checkStreamPropertyMultiValue",
       "version": "1.0.0",
       "id": "grd_has_muxincompat",
@@ -2627,7 +2627,7 @@
     },
     {
       "name": "Has safe audio?",
-      "sourceRepo": "local",
+      "sourceRepo": "Local",
       "pluginName": "checkStreamPropertyMultiValue",
       "version": "1.0.0",
       "id": "grd_has_safe_audio",
