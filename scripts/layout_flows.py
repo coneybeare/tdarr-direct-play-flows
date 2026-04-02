@@ -908,11 +908,8 @@ VR_NODES_01 = {
     "chk_vr": M,
     # ── VR retag guards ──────────────────────────────────────────────
     "grd_vr_ismp4": M, "grd_vr_ishevc": M,
-    "grd_vr_nw_dts": M, "grd_vr_nw_dca": M, "grd_vr_nw_mp3": M,
-    "grd_vr_nw_truehd": M, "grd_vr_nw_mlp": M, "grd_vr_nw_flac": M,
-    "grd_vr_nw_vorbis": M, "grd_vr_nw_opus": M,
-    "grd_vr_nw_pcm": M, "grd_vr_nw_wma": M,
-    "grd_vr_nowanted_ac3": M, "grd_vr_hasaac": M,
+    "grd_vr_unwanted_exact": M, "grd_vr_unwanted_partial": M,
+    "grd_vr_hasaac": M,
     # ── VR retag shortcut pipeline ───────────────────────────────────
     "cmt_vr_retag": VR_RETAG, "ffs_vr_retag": VR_RETAG,
     "cmd_vr_retag_mp4": VR_RETAG, "cmd_vr_retag_rmdata": VR_RETAG, "cmd_vr_retag_enc": VR_RETAG,
@@ -951,10 +948,7 @@ def col_map_01() -> dict[str, int]:
         "grd_ext": M, "grd_vid": M, "grd_aud": M, "grd_ch": M,
         "grd_surr_ch": M, "grd_has_eac3": R,
         "grd_dovi": M, "grd_dovi_non_mp4": R, "grd_tag": M,
-        "grd_unwanted_dts": M, "grd_unwanted_dca": M, "grd_unwanted_mp3": M,
-        "grd_unwanted_truehd": M, "grd_unwanted_mlp": M, "grd_unwanted_flac": M,
-        "grd_unwanted_vorbis": M, "grd_unwanted_opus": M,
-        "grd_unwanted_pcm": M, "grd_unwanted_wma": M, "grd_unwanted_ac3": M,
+        "grd_unwanted_exact": M, "grd_unwanted_partial": M,
         "cmt_optimal": L, "fl_noop": L,
         "cmt_proc": R,
         # ── Low-bitrate skip ──────────────────────────────────────────
@@ -962,6 +956,7 @@ def col_map_01() -> dict[str, int]:
         "cmt_skip_lowbit": L, "fl_skip_lowbit": L,
         # ── Health check ──────────────────────────────────────────────
         "cmt_health": M, "chk_health": M,
+        "grd_has_muxincompat": M, "grd_has_safe_audio": R,
         # ── FFmpeg pipeline ───────────────────────────────────────────
         "ffs_001": M, "cmd_loglevel": M,
         "cmt_mp4": M, "cmd_mp4": M,

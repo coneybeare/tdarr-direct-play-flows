@@ -74,6 +74,24 @@ function evaluateNode(node, file, vars) {
       return '2';
     }
 
+    case 'checkStreamPropertyMultiValue': {
+      const streams = file.streams.filter(
+        (s) => db.streamType === 'all' || s.codec_type === db.streamType
+      );
+      const values = (db.valuesToMatch || '').split(',').map((v) => v.trim().toLowerCase()).filter((v) => v.length > 0);
+      if (values.length === 0) return '2';
+      for (const stream of streams) {
+        const prop = getNestedProp(stream, db.propertyToCheck);
+        if (prop == null) continue;
+        const propStr = String(prop).toLowerCase();
+        for (const val of values) {
+          if (db.condition === 'equals' && propStr === val) return '1';
+          if (db.condition === 'includes' && propStr.includes(val)) return '1';
+        }
+      }
+      return '2';
+    }
+
     // checkChannelCount uses exact-match (== N channels).
     // This is required by the flow design: grd_eac3_ch (==6) falls through
     // to grd_eac3_ch8 (==8) for 7.1 sources. With >=, the ch8 node would
@@ -457,13 +475,14 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertPostEncodePasses(path);
     });
 
-    test('3d: mkv/vp9/opus 2.0 — transcode, rm Opus, create AAC', () => {
+    test('3d: mkv/vp9/opus 2.0 — manual review (opus is only audio, mux-incompatible)', () => {
+      // Opus is mux-incompatible with MP4. With no safe audio to clone from,
+      // the file routes to manual review instead of the encoding pipeline.
       const path = walkFlow(file('mkv', [vid('vp9'), aud('opus', 2)]));
-      assertProcess(path);
-      assertForceEncode(path);
-      assertNoEAC3(path);
-      assertAAC(path);
-      assertPostEncodePasses(path);
+      has(path, 'grd_has_muxincompat', 'Should detect mux-incompatible opus');
+      has(path, 'grd_has_safe_audio', 'Should check for safe audio');
+      has(path, 'fl_manual_review', 'Should route to manual review');
+      lacks(path, 'ffs_001', 'Should NOT enter encoding pipeline');
     });
 
     test('3e: mkv/av1/aac 2.0 — force encode (MKV gate intercepts before AV1 guard)', () => {
@@ -713,7 +732,7 @@ describe('Permutation Matrix — Flow Routing', () => {
         aud('dts', 6),
       ], { filePath: '/media/Virtual Reality/Movie.mp4' }));
       assertProcessVR(path);
-      has(path, 'grd_vr_nw_dts', 'Should check unwanted audio');
+      has(path, 'grd_vr_unwanted_exact', 'Should check unwanted audio');
       lacks(path, 'cmt_vr_retag', 'Should NOT enter retag path');
     });
   });
@@ -758,14 +777,14 @@ describe('Permutation Matrix — Flow Routing', () => {
 
     test('10e: mp4/hevc(hvc1)/aac 2.0 + mp3 2.0 — process (guard catches unwanted mp3)', () => {
       const path = walkFlow(file('mp4', [vid('hevc'), aud('aac', 2), aud('mp3', 2)]));
-      has(path, 'grd_unwanted_mp3', 'Should reach MP3 guard in unwanted chain');
+      has(path, 'grd_unwanted_exact', 'Should reach unwanted guard (mp3 is exact match)');
       assertProcess(path);
       assertPostEncodePasses(path);
     });
 
     test('10f: mp4/hevc(hvc1)/aac 2.0 + ac3 2.0 — process (guard catches unwanted ac3)', () => {
       const path = walkFlow(file('mp4', [vid('hevc'), aud('aac', 2), aud('ac3', 2)]));
-      has(path, 'grd_unwanted_ac3', 'Should reach AC3 guard');
+      has(path, 'grd_unwanted_exact', 'Should reach unwanted guard (ac3 is exact match)');
       assertProcess(path);
       assertPostEncodePasses(path);
     });
@@ -784,7 +803,7 @@ describe('Permutation Matrix — Flow Routing', () => {
         aud('eac3', 6),
         aud('ac3', 6),
       ]));
-      has(path, 'grd_unwanted_ac3', 'Should reach AC3 guard in unwanted chain');
+      has(path, 'grd_unwanted_exact', 'Should reach unwanted guard (ac3 is exact match)');
       assertProcess(path);
       assertEAC3(path);
       assertPostEncodePasses(path);
@@ -799,7 +818,7 @@ describe('Permutation Matrix — Flow Routing', () => {
         aud('mp3', 2),
         aud('ac3', 6),
       ]));
-      has(path, 'grd_unwanted_mp3', 'Should reach MP3 guard in unwanted chain');
+      has(path, 'grd_unwanted_exact', 'Should reach unwanted guard (mp3 is exact match)');
       assertProcess(path);
       assertEAC3(path);
       assertPostEncodePasses(path);
@@ -810,8 +829,8 @@ describe('Permutation Matrix — Flow Routing', () => {
     test('10g: mp4/hevc(hvc1)/aac 2.0 + eac3 6ch — skip (eac3 surround is NOT unwanted)', () => {
       const path = walkFlow(file('mp4', [vid('hevc'), aud('aac', 2), aud('eac3', 6)]));
       // Has surround → grd_surr_ch YES → unwanted chain → should NOT match eac3
-      has(path, 'grd_unwanted_dts');
-      has(path, 'grd_unwanted_ac3');
+      has(path, 'grd_unwanted_exact');
+      has(path, 'grd_unwanted_partial');
       assertSkip(path);
     });
 
@@ -872,6 +891,42 @@ describe('Permutation Matrix — Flow Routing', () => {
   });
 
   // ────────────────────────────────────────────────────────────────
+  // Category 11: Mux-incompatible audio detection
+  // ────────────────────────────────────────────────────────────────
+  describe('11. Mux-incompatible audio detection', () => {
+    test('11a: wmv/wmv2/wmav2 2ch — routes to manual review (only mux-incompatible audio)', () => {
+      const path = walkFlow(file('wmv', [vid('wmv2', { tag: '' }), aud('wmav2', 2, '')]));
+      has(path, 'grd_has_muxincompat', 'Should check for mux-incompatible audio');
+      has(path, 'grd_has_safe_audio', 'Should check for safe audio');
+      has(path, 'fl_manual_review', 'Should route to manual review');
+      lacks(path, 'ffs_001', 'Should NOT enter encoding pipeline');
+    });
+
+    test('11b: mkv/hevc/adpcm_ima_wav 2ch — routes to manual review', () => {
+      const path = walkFlow(file('mkv', [vid('hevc'), aud('adpcm_ima_wav', 2, '')]));
+      has(path, 'grd_has_muxincompat', 'Should detect adpcm');
+      has(path, 'grd_has_safe_audio', 'Should check for safe audio');
+      has(path, 'fl_manual_review', 'Should route to manual review');
+      lacks(path, 'ffs_001', 'Should NOT enter encoding pipeline');
+    });
+
+    test('11c: mkv/hevc/wmav2 2ch + ac3 5.1 — processes normally (has safe audio)', () => {
+      const path = walkFlow(file('mkv', [vid('hevc'), aud('wmav2', 2, 'hun'), aud('ac3', 6, 'eng')]));
+      has(path, 'grd_has_muxincompat', 'Should detect mux-incompatible');
+      has(path, 'grd_has_safe_audio', 'Should find safe audio');
+      has(path, 'ffs_001', 'Should enter encoding pipeline');
+      lacks(path, 'fl_manual_review', 'Should NOT route to manual review');
+    });
+
+    test('11d: mkv/hevc/ac3 5.1 — no mux-incompatible, proceeds normally', () => {
+      const path = walkFlow(file('mkv', [vid('hevc'), aud('ac3', 6, 'eng')]));
+      has(path, 'grd_has_muxincompat', 'Should check mux-incompatible');
+      lacks(path, 'grd_has_safe_audio', 'Should skip safe audio check (no mux-incompatible found)');
+      has(path, 'ffs_001', 'Should enter encoding pipeline');
+    });
+  });
+
+  // ────────────────────────────────────────────────────────────────
   // Guard chain: detailed routing verification
   // ────────────────────────────────────────────────────────────────
   describe('Guard chain detail', () => {
@@ -885,9 +940,8 @@ describe('Permutation Matrix — Flow Routing', () => {
       has(path, 'grd_aud');
       has(path, 'grd_ch');
       has(path, 'grd_surr_ch');
-      has(path, 'grd_unwanted_dts');
-      has(path, 'grd_unwanted_ac3');
-      has(path, 'cmt_optimal');
+      has(path, 'grd_unwanted_exact');
+      has(path, 'grd_unwanted_partial');
       has(path, 'fl_noop');
     });
 
