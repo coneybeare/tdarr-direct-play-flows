@@ -55,7 +55,7 @@ for (const file of flowFiles) {
     });
 
     test('all plugins have a valid sourceRepo', () => {
-      const VALID_REPOS = new Set(['Community', 'local']);
+      const VALID_REPOS = new Set(['Community', 'Local']);
       for (const plugin of flow.flowPlugins) {
         assert.ok(
           VALID_REPOS.has(plugin.sourceRepo),
@@ -472,8 +472,8 @@ for (const file of flowFiles) {
       assert.ok(exactNode, 'Missing node grd_unwanted_exact');
       assert.strictEqual(exactNode.pluginName, 'checkStreamPropertyMultiValue',
         'grd_unwanted_exact must use checkStreamPropertyMultiValue');
-      assert.strictEqual(exactNode.sourceRepo, 'local',
-        'grd_unwanted_exact must have sourceRepo "local"');
+      assert.strictEqual(exactNode.sourceRepo, 'Local',
+        'grd_unwanted_exact must have sourceRepo "Local"');
       assert.strictEqual(exactNode.inputsDB.streamType, 'audio',
         'grd_unwanted_exact must check audio streams');
       assert.strictEqual(exactNode.inputsDB.propertyToCheck, 'codec_name',
@@ -491,8 +491,8 @@ for (const file of flowFiles) {
       assert.ok(partialNode, 'Missing node grd_unwanted_partial');
       assert.strictEqual(partialNode.pluginName, 'checkStreamPropertyMultiValue',
         'grd_unwanted_partial must use checkStreamPropertyMultiValue');
-      assert.strictEqual(partialNode.sourceRepo, 'local',
-        'grd_unwanted_partial must have sourceRepo "local"');
+      assert.strictEqual(partialNode.sourceRepo, 'Local',
+        'grd_unwanted_partial must have sourceRepo "Local"');
       assert.strictEqual(partialNode.inputsDB.streamType, 'audio',
         'grd_unwanted_partial must check audio streams');
       assert.strictEqual(partialNode.inputsDB.propertyToCheck, 'codec_name',
@@ -881,8 +881,8 @@ for (const file of flowFiles) {
       assert.ok(muxIncompat, 'Missing node grd_has_muxincompat');
       assert.strictEqual(muxIncompat.pluginName, 'checkStreamPropertyMultiValue',
         'grd_has_muxincompat must use checkStreamPropertyMultiValue');
-      assert.strictEqual(muxIncompat.sourceRepo, 'local',
-        'grd_has_muxincompat must have sourceRepo "local"');
+      assert.strictEqual(muxIncompat.sourceRepo, 'Local',
+        'grd_has_muxincompat must have sourceRepo "Local"');
       assert.strictEqual(muxIncompat.inputsDB.condition, 'includes',
         'grd_has_muxincompat must use "includes" condition');
       for (const codec of ['wma', 'adpcm', 'vorbis', 'opus']) {
@@ -903,8 +903,8 @@ for (const file of flowFiles) {
       assert.ok(safeAudio, 'Missing node grd_has_safe_audio');
       assert.strictEqual(safeAudio.pluginName, 'checkStreamPropertyMultiValue',
         'grd_has_safe_audio must use checkStreamPropertyMultiValue');
-      assert.strictEqual(safeAudio.sourceRepo, 'local',
-        'grd_has_safe_audio must have sourceRepo "local"');
+      assert.strictEqual(safeAudio.sourceRepo, 'Local',
+        'grd_has_safe_audio must have sourceRepo "Local"');
       assert.strictEqual(safeAudio.inputsDB.condition, 'equals',
         'grd_has_safe_audio must use "equals" condition (avoids false positive on adpcm_ima_wav containing "pcm")');
       const safeValues = safeAudio.inputsDB.valuesToMatch.split(',').map(s => s.trim());

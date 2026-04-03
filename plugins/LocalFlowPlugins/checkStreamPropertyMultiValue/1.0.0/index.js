@@ -80,4 +80,5 @@ function plugin(args) {
   return { outputFileObj: args.inputFileObj, outputNumber: '2', variables: args.variables };
 }
 
-export { details, plugin };
+// Tdarr loads plugins via require() (CJS), not import (ESM)
+module.exports = { details, plugin };
