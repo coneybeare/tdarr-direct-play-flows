@@ -860,7 +860,7 @@
       },
       "inputsDB": {
         "inputArguments": "",
-        "outputArguments": "-rc vbr -cq 24 -maxrate 10M -bufsize 20M"
+        "outputArguments": "-rc vbr -cq 24"
       },
       "fpEnabled": true
     },
