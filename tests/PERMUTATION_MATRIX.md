@@ -208,7 +208,7 @@ requests observed). This destabilizes the worker and produces corrupt output. Th
 Netflix content with 30+ subtitle languages).
 
 **Fix**: Add `ffmpegCommandCustomArguments` nodes (`cmd_loglevel`, `cmd_vr_loglevel`) with
-`-loglevel warning -nostdin` as input arguments to both normal and VR FFmpeg pipelines. This suppresses
-verbose demux/mux progress output that floods stderr. Also add `fail_health2` (failFlow) as target for
+`-loglevel warning -stats -nostdin` as input arguments to both normal and VR FFmpeg pipelines. This suppresses
+verbose demux/mux progress output that floods stderr while `-stats` re-enables the progress line for the Tdarr UI. Also add `fail_health2` (failFlow) as target for
 `chk_health_002` handle "2" — corrupt pass 1 output now correctly fails the flow instead of silently
 passing through.
