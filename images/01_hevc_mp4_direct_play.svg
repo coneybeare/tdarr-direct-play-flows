@@ -512,9 +512,9 @@
 <rect x="2563.5" y="1032.8" width="141" height="26.9" rx="5" fill="#EF9A9A" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="2634.0" y="1048.75" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Health Check (pass 2)</tspan></text>
 <rect x="1463.4" y="312.9" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1533.9" y="328.84999999999997" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1533.9" dy="0">Quiet + no stdin</tspan></text>
+<text x="1533.9" y="328.84999999999997" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1533.9" dy="0">Quiet + stats</tspan></text>
 <rect x="1127.0" y="548.4" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="1197.5" y="564.35" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Quiet + no stdin (VR)</tspan></text>
+<text x="1197.5" y="564.35" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Quiet + stats (VR)</tspan></text>
 <rect x="2563.5" y="1147.2" width="141" height="26.9" rx="5" fill="#B0BEC5" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="2634.0" y="1163.15" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Fail: corrupt output</tspan></text>
 <rect x="3663.6" y="548.4" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
