@@ -298,7 +298,7 @@
       "version": "1.0.0",
       "sourceRepo": "Community",
       "fpEnabled": true,
-      "name": "\u23ed SKIP: Below bitrate threshold",
+      "name": "⏭ SKIP: Below bitrate threshold",
       "inputsDB": {},
       "position": {
         "x": -500,
@@ -1217,7 +1217,7 @@
       "fpEnabled": true
     },
     {
-      "name": "Too big \u2014 review",
+      "name": "Too big — review",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
@@ -2143,7 +2143,7 @@
         "y": 170
       },
       "inputsDB": {
-        "comment": "Flow errored. Do NOT replace original file \u2014 preserve it for diagnosis."
+        "comment": "Flow errored. Do NOT replace original file — preserve it for diagnosis."
       },
       "fpEnabled": true
     },
@@ -2281,7 +2281,7 @@
       "fpEnabled": true
     },
     {
-      "name": "Quiet + no stdin",
+      "name": "Quiet + stats",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandCustomArguments",
       "version": "1.0.0",
@@ -2291,13 +2291,13 @@
         "y": 850
       },
       "inputsDB": {
-        "inputArguments": "-loglevel warning -nostdin",
+        "inputArguments": "-loglevel warning -stats -nostdin",
         "outputArguments": "-avoid_negative_ts make_zero"
       },
       "fpEnabled": true
     },
     {
-      "name": "Quiet + no stdin (VR)",
+      "name": "Quiet + stats (VR)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandCustomArguments",
       "version": "1.0.0",
@@ -2307,7 +2307,7 @@
         "y": 1550
       },
       "inputsDB": {
-        "inputArguments": "-loglevel warning -nostdin",
+        "inputArguments": "-loglevel warning -stats -nostdin",
         "outputArguments": "-avoid_negative_ts make_zero"
       },
       "fpEnabled": true
