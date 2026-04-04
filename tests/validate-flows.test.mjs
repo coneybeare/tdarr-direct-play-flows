@@ -172,6 +172,12 @@ for (const file of flowFiles) {
       assert.strictEqual(grdMkv.pluginName, 'checkFileExtension');
       assert.strictEqual(grdMkv.inputsDB.extensions, 'mkv');
 
+      // grd_mkv_hevc exists and is a checkVideoCodec node
+      const grdMkvHevc = pluginMap.get('grd_mkv_hevc');
+      assert.ok(grdMkvHevc, 'Missing node grd_mkv_hevc');
+      assert.strictEqual(grdMkvHevc.pluginName, 'checkVideoCodec');
+      assert.strictEqual(grdMkvHevc.inputsDB.codec, 'hevc');
+
       // cmd_hevc_force exists with forceEncoding true
       const forceEnc = pluginMap.get('cmd_hevc_force');
       assert.ok(forceEnc, 'Missing node cmd_hevc_force');
@@ -179,17 +185,25 @@ for (const file of flowFiles) {
       assert.strictEqual(forceEnc.inputsDB.forceEncoding, 'true');
       assert.strictEqual(forceEnc.inputsDB.outputCodec, 'hevc');
 
-      // cmt_nvenc → grd_is_mkv (replaces cmt_nvenc → grd_av1)
+      // cmt_nvenc → grd_is_mkv
       assert.strictEqual(edgeMap.get('cmt_nvenc:1'), 'grd_is_mkv',
         'cmt_nvenc should route to grd_is_mkv');
 
-      // grd_is_mkv YES → cmd_hevc_force
-      assert.strictEqual(edgeMap.get('grd_is_mkv:1'), 'cmd_hevc_force',
-        'MKV files should route to force encoder');
+      // grd_is_mkv YES → grd_mkv_hevc (check if already HEVC)
+      assert.strictEqual(edgeMap.get('grd_is_mkv:1'), 'grd_mkv_hevc',
+        'MKV files should route to HEVC check');
 
       // grd_is_mkv NO → grd_av1 (existing path)
       assert.strictEqual(edgeMap.get('grd_is_mkv:2'), 'grd_av1',
         'Non-MKV files should route to existing AV1 check');
+
+      // grd_mkv_hevc YES → grd_av1 (stream-copy path)
+      assert.strictEqual(edgeMap.get('grd_mkv_hevc:1'), 'grd_av1',
+        'MKV+HEVC should stream-copy via normal path');
+
+      // grd_mkv_hevc NO → cmd_hevc_force (must transcode)
+      assert.strictEqual(edgeMap.get('grd_mkv_hevc:2'), 'cmd_hevc_force',
+        'MKV+non-HEVC should force encode');
 
       // cmd_hevc_force → chk_br_vlow (rejoin bitrate cap chain)
       assert.strictEqual(edgeMap.get('cmd_hevc_force:1'), 'chk_br_vlow',
