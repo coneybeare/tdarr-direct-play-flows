@@ -550,6 +550,21 @@
       "fpEnabled": true
     },
     {
+      "name": "Check: MKV is HEVC?",
+      "sourceRepo": "Community",
+      "pluginName": "checkVideoCodec",
+      "version": "1.0.0",
+      "id": "grd_mkv_hevc",
+      "position": {
+        "x": 3270,
+        "y": 3500
+      },
+      "inputsDB": {
+        "codec": "hevc"
+      },
+      "fpEnabled": true
+    },
+    {
       "name": "Encode: HEVC (force)",
       "sourceRepo": "Community",
       "pluginName": "ffmpegCommandSetVideoEncoder",
@@ -557,7 +572,7 @@
       "id": "cmd_hevc_force",
       "position": {
         "x": 3770,
-        "y": 3500
+        "y": 3670
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -580,7 +595,7 @@
       "id": "grd_av1",
       "position": {
         "x": 3270,
-        "y": 3500
+        "y": 3670
       },
       "inputsDB": {
         "streamType": "video",
@@ -598,7 +613,7 @@
       "id": "chk_nvenc",
       "position": {
         "x": 3270,
-        "y": 3670
+        "y": 3840
       },
       "inputsDB": {
         "hardwareEncoder": "hevc_nvenc"
@@ -613,7 +628,7 @@
       "id": "cmt_resolution",
       "position": {
         "x": 3270,
-        "y": 3840
+        "y": 4010
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -626,7 +641,7 @@
       "id": "chk_resolution",
       "position": {
         "x": 3270,
-        "y": 4030
+        "y": 4200
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -639,7 +654,7 @@
       "id": "cmd_hevc_sd",
       "position": {
         "x": 2770,
-        "y": 4200
+        "y": 4370
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -662,7 +677,7 @@
       "id": "cmd_hevc_1080",
       "position": {
         "x": 3270,
-        "y": 4200
+        "y": 4370
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -685,7 +700,7 @@
       "id": "cmd_hevc_4k",
       "position": {
         "x": 3770,
-        "y": 4200
+        "y": 4370
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -708,7 +723,7 @@
       "id": "cmt_sw",
       "position": {
         "x": 4270,
-        "y": 3840
+        "y": 4010
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -721,7 +736,7 @@
       "id": "cmd_hevc_sw",
       "position": {
         "x": 4270,
-        "y": 4030
+        "y": 4200
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -757,7 +772,7 @@
       "id": "chk_br_low",
       "position": {
         "x": 3270,
-        "y": 4540
+        "y": 4710
       },
       "inputsDB": {
         "unit": "kbps",
@@ -791,7 +806,7 @@
       "id": "chk_br_vlow",
       "position": {
         "x": 3270,
-        "y": 4370
+        "y": 4540
       },
       "inputsDB": {
         "unit": "kbps",
@@ -808,7 +823,7 @@
       "id": "cmd_cap_vlow",
       "position": {
         "x": 2770,
-        "y": 4540
+        "y": 4710
       },
       "inputsDB": {
         "inputArguments": "",
@@ -824,7 +839,7 @@
       "id": "cmd_cap_low",
       "position": {
         "x": 2770,
-        "y": 4710
+        "y": 4880
       },
       "inputsDB": {
         "inputArguments": "",
@@ -4048,9 +4063,9 @@
     {
       "source": "grd_is_mkv",
       "sourceHandle": "1",
-      "target": "cmd_hevc_force",
+      "target": "grd_mkv_hevc",
       "targetHandle": null,
-      "id": "e_mkv_force"
+      "id": "e_mkv_chkhevc"
     },
     {
       "source": "grd_is_mkv",
@@ -4058,6 +4073,20 @@
       "target": "grd_av1",
       "targetHandle": null,
       "id": "e_mkv_normal"
+    },
+    {
+      "source": "grd_mkv_hevc",
+      "sourceHandle": "1",
+      "target": "grd_av1",
+      "targetHandle": null,
+      "id": "e_mkv_hevc_copy"
+    },
+    {
+      "source": "grd_mkv_hevc",
+      "sourceHandle": "2",
+      "target": "cmd_hevc_force",
+      "targetHandle": null,
+      "id": "e_mkv_hevc_force"
     },
     {
       "source": "cmd_hevc_force",
