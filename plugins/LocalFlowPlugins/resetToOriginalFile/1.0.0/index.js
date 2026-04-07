@@ -25,7 +25,7 @@ function plugin(args) {
 
   return {
     outputFileObj: orig,
-    outputNumber: 1,
+    outputNumber: '1',
     variables: args.variables,
   };
 }
