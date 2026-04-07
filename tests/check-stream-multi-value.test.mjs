@@ -14,7 +14,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Import the plugin module
 const pluginPath = join(__dirname, '..', 'plugins', 'LocalFlowPlugins',
-  'checkStreamPropertyMultiValue', '1.0.0', 'index.js');
+  'file', 'checkStreamPropertyMultiValue', '1.0.0', 'index.js');
 // Plugin uses module.exports (CJS) for Tdarr compatibility; dynamic import wraps CJS as .default
 const mod = await import(pathToFileURL(pluginPath).href);
 const { plugin, details } = mod.default;
