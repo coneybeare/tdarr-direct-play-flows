@@ -10,7 +10,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const pluginPath = join(__dirname, '..', 'plugins', 'LocalFlowPlugins',
-  'resetToOriginalFile', '1.0.0', 'index.js');
+  'tools', 'resetToOriginalFile', '1.0.0', 'index.js');
 const mod = await import(pathToFileURL(pluginPath).href);
 const { plugin, details } = mod.default;
 

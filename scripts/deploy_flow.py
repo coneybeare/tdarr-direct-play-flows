@@ -5,17 +5,31 @@ Reads the local flow JSON and pushes it to each configured server via
 the Tdarr V2 cruddb API.  Per-server overrides (e.g. Radarr vs Sonarr
 notification settings) are applied before upload.
 
-Local plugins (``sourceRepo: "local"``) are deployed by copying the
-``plugins/LocalFlowPlugins/`` directory from this repo to the path
-specified by ``plugin_path`` in each server's config entry.  This must
-point to the Tdarr server's LocalFlowPlugins directory (typically a
-locally-mounted Docker volume).
+Local plugins (``sourceRepo: "Local"``) are deployed by streaming each
+file over SSH into the Tdarr container on the remote server.  For each
+server, two paths inside the container are populated:
+
+1. ``/app/server/Tdarr/Plugins/FlowPlugins/LocalFlowPlugins/`` — the
+   persistent plugin store, backed by the /app/server host-mount.
+   Plugins here survive container restarts.
+2. ``/app/Tdarr_Node/assets/app/plugins/FlowPlugins/LocalFlowPlugins/``
+   — the node-internal runtime copy that Tdarr Node actually executes
+   at job time.  Not persistent, but required for immediate use without
+   waiting for a container restart.
+
+Plugins are organised under category subdirectories (e.g. ``file/``,
+``tools/``) matching the CommunityFlowPlugins layout.  The source repo
+under ``plugins/LocalFlowPlugins/`` mirrors this structure.
 
 Configuration
 -------------
 Copy ``servers.local.json.example`` to ``servers.local.json`` and fill
 in your server hosts, flow IDs, API keys, and any per-node overrides.
-Set ``plugin_path`` on each server entry to enable plugin deployment.
+Optional per-server plugin-deploy fields:
+- ``ssh_host`` — override the SSH target (default: hostname of ``host``)
+- ``container_name`` — override the Docker container name (default: ``Tdarr``)
+- ``plugin_path`` — override the node-internal plugin path
+  (default: ``/app/Tdarr_Node/assets/app/plugins/FlowPlugins/LocalFlowPlugins``)
 
 Usage
 -----
@@ -28,9 +42,10 @@ Usage
 import argparse
 import copy
 import json
-import shutil
+import subprocess
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -38,6 +53,30 @@ ROOT = Path(__file__).resolve().parent.parent
 FLOW_PATH = ROOT / "flows" / "01_hevc_mp4_direct_play.json"
 CONFIG_PATH = ROOT / "servers.local.json"
 PLUGINS_DIR = ROOT / "plugins" / "LocalFlowPlugins"
+
+# Default paths inside the Tdarr container.
+#
+# Tdarr keeps local plugins in two places and we must populate both:
+#
+# 1. SERVER_PLUGIN_PATH is the persistent server store — backed by the
+#    /app/server host-mount, it survives container restarts.  On startup,
+#    Tdarr Node rebuilds its own internal plugin tree from this path.
+#    Writing here ensures the plugin will be present after any restart.
+#
+# 2. NODE_PLUGIN_PATH is the node-internal runtime copy that Tdarr Node
+#    actually executes at job time.  It is NOT persistent across
+#    container restarts.  Writing here makes the plugin available to
+#    jobs immediately without needing to restart the container.
+#
+# Plugins live under category subdirectories (e.g. file/, tools/) in
+# both paths, matching how CommunityFlowPlugins are organised.  The
+# source repo mirrors this layout under plugins/LocalFlowPlugins/.
+SERVER_PLUGIN_PATH = "/app/server/Tdarr/Plugins/FlowPlugins/LocalFlowPlugins"
+NODE_PLUGIN_PATH = "/app/Tdarr_Node/assets/app/plugins/FlowPlugins/LocalFlowPlugins"
+DEFAULT_CONTAINER_NAME = "Tdarr"
+# Synology/DSM: docker binary lives under /usr/local/bin which is not on
+# the default SSH PATH.  Prefix the remote command so it's always found.
+SSH_ENV_PREFIX = "PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 
 def _post(url, payload, api_key=None, timeout=30):
@@ -55,44 +94,109 @@ def _post(url, payload, api_key=None, timeout=30):
     return resp.status, body
 
 
+def _ssh_host_from_url(host_url):
+    """Derive an SSH hostname from a Tdarr API URL."""
+    parsed = urllib.parse.urlparse(host_url)
+    return parsed.hostname or host_url
+
+
+def _stream_file_to_container(local_path, container, remote_path, ssh_host):
+    """Stream a local file into a path inside a Docker container on a
+    remote host via SSH + ``docker exec -i``.
+
+    The remote directory is created if missing.  Raises subprocess errors
+    on failure.
+    """
+    remote_dir = remote_path.rsplit("/", 1)[0]
+    # Build a single remote shell command that makes the directory and
+    # writes the file from stdin.  Single-quote the paths to tolerate
+    # spaces, and escape any embedded single quotes in the path itself.
+    def shq(s):
+        return "'" + s.replace("'", "'\"'\"'") + "'"
+
+    remote_cmd = (
+        f"{SSH_ENV_PREFIX} docker exec -i {shq(container)} "
+        f"bash -c \"mkdir -p {shq(remote_dir)} && "
+        f"cat > {shq(remote_path)}\""
+    )
+    with open(local_path, "rb") as fh:
+        subprocess.run(
+            ["ssh", ssh_host, remote_cmd],
+            stdin=fh,
+            check=True,
+            capture_output=True,
+        )
+
+
 def deploy_plugins(server, dry_run=False):
-    """Copy local plugins to the server's LocalFlowPlugins directory.
+    """Deploy local flow plugins into the Tdarr container on the remote
+    server via SSH + ``docker exec``.
 
-    The ``plugin_path`` field in the server config must point to the
-    Tdarr server's LocalFlowPlugins directory (e.g. a Docker volume
-    mount).  If the field is absent or empty the step is skipped.
+    Writes each file to two paths inside the container:
+      - The persistent server store at ``/app/server/Tdarr/Plugins/...``
+        (backed by the /app/server host-mount; survives restarts)
+      - The node-internal runtime path at ``/app/Tdarr_Node/assets/...``
+        (not persistent, but required for the plugin to be usable
+        immediately without waiting for a container restart)
 
-    Returns True on success (or skip), False on error.
+    Server config fields (all optional):
+        ssh_host        SSH target hostname (default: hostname of `host`)
+        container_name  Docker container name (default: "Tdarr")
+        plugin_path     Override node-internal plugin path
+
+    Returns True on success or skip, False on error.
     """
     name = server["name"]
-    plugin_path = server.get("plugin_path", "").strip()
-
-    if not plugin_path:
-        print(f"  Plugins: skipping (no plugin_path configured)")
-        return True
-
-    dest = Path(plugin_path)
 
     if not PLUGINS_DIR.exists():
         print(f"  Plugins: FAILED — source directory not found: {PLUGINS_DIR}")
         return False
 
-    plugin_files = list(PLUGINS_DIR.rglob("*"))
-    file_count = sum(1 for p in plugin_files if p.is_file())
-    print(f"  Plugins: {file_count} file(s) from {PLUGINS_DIR} -> {dest}")
+    plugin_files = [p for p in PLUGINS_DIR.rglob("*") if p.is_file()]
+    if not plugin_files:
+        print("  Plugins: skipping (no local plugin files to deploy)")
+        return True
+
+    ssh_host = server.get("ssh_host") or _ssh_host_from_url(server["host"])
+    container = server.get("container_name") or DEFAULT_CONTAINER_NAME
+    node_path = server.get("plugin_path") or NODE_PLUGIN_PATH
+    server_path = SERVER_PLUGIN_PATH
+
+    print(
+        f"  Plugins: {len(plugin_files)} file(s) -> {ssh_host}:{container}"
+    )
+    print(f"    Persistent:  {server_path}")
+    print(f"    Runtime:     {node_path}")
 
     if dry_run:
         print("  Plugins: [DRY RUN] Skipping copy")
         return True
 
-    try:
-        shutil.copytree(str(PLUGINS_DIR), str(dest), dirs_exist_ok=True)
-        print(f"  Plugins: deployed {file_count} file(s) OK")
-    except Exception as e:
-        print(f"  Plugins: FAILED — {e}")
-        return False
+    ok = 0
+    failed = 0
+    for local_file in plugin_files:
+        rel = local_file.relative_to(PLUGINS_DIR).as_posix()
+        for base in (server_path, node_path):
+            remote_file = f"{base}/{rel}"
+            try:
+                _stream_file_to_container(
+                    local_file, container, remote_file, ssh_host
+                )
+                ok += 1
+            except subprocess.CalledProcessError as e:
+                stderr = (e.stderr or b"").decode(errors="replace").strip()
+                print(f"    FAIL {rel} -> {base}: {stderr or e}")
+                failed += 1
+            except Exception as e:
+                print(f"    FAIL {rel} -> {base}: {e}")
+                failed += 1
 
-    return True
+    total = len(plugin_files) * 2
+    if failed == 0:
+        print(f"  Plugins: deployed {ok}/{total} writes OK")
+        return True
+    print(f"  Plugins: FAILED — {failed}/{total} writes failed")
+    return False
 
 
 def apply_overrides(flow, overrides):
