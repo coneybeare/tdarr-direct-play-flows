@@ -41,9 +41,11 @@ Usage
 """
 import argparse
 import copy
+import io
 import json
 import subprocess
 import sys
+import tarfile
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -75,8 +77,10 @@ SERVER_PLUGIN_PATH = "/app/server/Tdarr/Plugins/FlowPlugins/LocalFlowPlugins"
 NODE_PLUGIN_PATH = "/app/Tdarr_Node/assets/app/plugins/FlowPlugins/LocalFlowPlugins"
 DEFAULT_CONTAINER_NAME = "Tdarr"
 # Synology/DSM: docker binary lives under /usr/local/bin which is not on
-# the default SSH PATH.  Prefix the remote command so it's always found.
-SSH_ENV_PREFIX = "PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+# the default non-interactive SSH PATH.  Prepend common system paths but
+# preserve $PATH so hosts with docker installed elsewhere (e.g. /snap/bin)
+# continue to work.
+SSH_ENV_PREFIX = 'PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"'
 
 
 def _post(url, payload, api_key=None, timeout=30):
@@ -95,37 +99,73 @@ def _post(url, payload, api_key=None, timeout=30):
 
 
 def _ssh_host_from_url(host_url):
-    """Derive an SSH hostname from a Tdarr API URL."""
-    parsed = urllib.parse.urlparse(host_url)
-    return parsed.hostname or host_url
+    """Derive an SSH hostname from a Tdarr API URL.
 
-
-def _stream_file_to_container(local_path, container, remote_path, ssh_host):
-    """Stream a local file into a path inside a Docker container on a
-    remote host via SSH + ``docker exec -i``.
-
-    The remote directory is created if missing.  Raises subprocess errors
-    on failure.
+    Tolerates inputs without a scheme (e.g. ``host.example.com:8266``)
+    by prepending ``http://`` so urlparse can extract the hostname.
     """
-    remote_dir = remote_path.rsplit("/", 1)[0]
-    # Build a single remote shell command that makes the directory and
-    # writes the file from stdin.  Single-quote the paths to tolerate
-    # spaces, and escape any embedded single quotes in the path itself.
-    def shq(s):
-        return "'" + s.replace("'", "'\"'\"'") + "'"
+    candidate = (host_url or "").strip()
+    if not candidate:
+        return candidate
+    parse_target = candidate if "://" in candidate else f"http://{candidate}"
+    parsed = urllib.parse.urlparse(parse_target)
+    return parsed.hostname or candidate
 
-    remote_cmd = (
-        f"{SSH_ENV_PREFIX} docker exec -i {shq(container)} "
-        f"bash -c \"mkdir -p {shq(remote_dir)} && "
-        f"cat > {shq(remote_path)}\""
+
+def _shq(s):
+    """Single-quote a string for safe shell embedding."""
+    return "'" + s.replace("'", "'\"'\"'") + "'"
+
+
+def _build_plugin_tarball(source_dir):
+    """Build an in-memory tar archive of a directory tree.
+
+    Returns the tar bytes.  Files are stored relative to ``source_dir``.
+    """
+    buf = io.BytesIO()
+    with tarfile.open(fileobj=buf, mode="w") as tar:
+        for path in sorted(source_dir.rglob("*")):
+            if path.is_file():
+                tar.add(str(path), arcname=str(path.relative_to(source_dir)))
+    return buf.getvalue()
+
+
+def _deploy_tar_to_container(tar_bytes, container, remote_dirs, ssh_host):
+    """Stream a tar archive over SSH and extract it into one or more
+    directories inside the running container in a single connection.
+
+    Each target directory is created if missing.  ``tar`` reads from
+    stdin so the archive needs to be re-streamed only once even when
+    extracting to multiple destinations: we tee stdin into a temporary
+    file inside the container and then extract from it.
+    """
+    if not remote_dirs:
+        return
+
+    # Build the remote command: write stdin to a temp file, then extract
+    # the same archive into each target directory.  This way we get N
+    # extractions for one SSH connection and one stdin stream.
+    extract_cmds = []
+    for d in remote_dirs:
+        extract_cmds.append(f"mkdir -p {_shq(d)}")
+        extract_cmds.append(f"tar -xf \"$tmp\" -C {_shq(d)}")
+    inner = (
+        "set -e; "
+        "tmp=$(mktemp); "
+        "trap 'rm -f \"$tmp\"' EXIT; "
+        "cat > \"$tmp\"; "
+        + "; ".join(extract_cmds)
     )
-    with open(local_path, "rb") as fh:
-        subprocess.run(
-            ["ssh", ssh_host, remote_cmd],
-            stdin=fh,
-            check=True,
-            capture_output=True,
-        )
+    remote_cmd = (
+        f"{SSH_ENV_PREFIX} docker exec -i {_shq(container)} "
+        f"bash -c {_shq(inner)}"
+    )
+    subprocess.run(
+        ["ssh", ssh_host, remote_cmd],
+        input=tar_bytes,
+        check=True,
+        capture_output=True,
+    )
 
 
 def deploy_plugins(server, dry_run=False):
@@ -161,9 +201,11 @@ def deploy_plugins(server, dry_run=False):
     container = server.get("container_name") or DEFAULT_CONTAINER_NAME
     node_path = server.get("plugin_path") or NODE_PLUGIN_PATH
     server_path = SERVER_PLUGIN_PATH
+    target_dirs = [server_path, node_path]
 
     print(
-        f"  Plugins: {len(plugin_files)} file(s) -> {ssh_host}:{container}"
+        f"  Plugins: {len(plugin_files)} file(s) -> {name} "
+        f"({ssh_host}:{container})"
     )
     print(f"    Persistent:  {server_path}")
     print(f"    Runtime:     {node_path}")
@@ -172,31 +214,23 @@ def deploy_plugins(server, dry_run=False):
         print("  Plugins: [DRY RUN] Skipping copy")
         return True
 
-    ok = 0
-    failed = 0
-    for local_file in plugin_files:
-        rel = local_file.relative_to(PLUGINS_DIR).as_posix()
-        for base in (server_path, node_path):
-            remote_file = f"{base}/{rel}"
-            try:
-                _stream_file_to_container(
-                    local_file, container, remote_file, ssh_host
-                )
-                ok += 1
-            except subprocess.CalledProcessError as e:
-                stderr = (e.stderr or b"").decode(errors="replace").strip()
-                print(f"    FAIL {rel} -> {base}: {stderr or e}")
-                failed += 1
-            except Exception as e:
-                print(f"    FAIL {rel} -> {base}: {e}")
-                failed += 1
+    try:
+        tar_bytes = _build_plugin_tarball(PLUGINS_DIR)
+        _deploy_tar_to_container(tar_bytes, container, target_dirs, ssh_host)
+    except subprocess.CalledProcessError as e:
+        stderr = (e.stderr or b"").decode(errors="replace").strip()
+        print(f"  Plugins: FAILED — {stderr or e}")
+        return False
+    except Exception as e:
+        print(f"  Plugins: FAILED — {e}")
+        return False
 
-    total = len(plugin_files) * 2
-    if failed == 0:
-        print(f"  Plugins: deployed {ok}/{total} writes OK")
-        return True
-    print(f"  Plugins: FAILED — {failed}/{total} writes failed")
-    return False
+    total_writes = len(plugin_files) * len(target_dirs)
+    print(
+        f"  Plugins: deployed {len(plugin_files)} file(s) "
+        f"({total_writes} writes) OK"
+    )
+    return True
 
 
 def apply_overrides(flow, overrides):
