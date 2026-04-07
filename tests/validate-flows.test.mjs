@@ -330,12 +330,29 @@ for (const file of flowFiles) {
         'ffe_001 should route to health check');
       assert.strictEqual(edgeMap.get('chk_health_002:1'), 'ffs_002',
         'Health check should route to AAC pass start');
-      assert.strictEqual(edgeMap.get('chk_health_002:2'), 'fail_health2',
-        'Health check failure must route to failFlow (corrupt pass 1 output)');
+      // Health check failure routes to retry gate (not directly to failFlow)
+      assert.strictEqual(edgeMap.get('chk_health_002:2'), 'chk_retried',
+        'Health check failure must route to retry gate');
+      assert.ok(pluginMap.has('chk_retried'),
+        'chk_retried plugin node must exist');
+      assert.strictEqual(pluginMap.get('chk_retried').pluginName, 'checkFlowVariable',
+        'chk_retried must be a checkFlowVariable node');
+
+      // Retry gate: already retried -> fail, first failure -> retry pipeline
+      assert.strictEqual(edgeMap.get('chk_retried:1'), 'fail_health2',
+        'Already retried must route to failFlow');
+      assert.strictEqual(edgeMap.get('chk_retried:2'), 'set_retry',
+        'First failure must route to retry pipeline');
       assert.ok(pluginMap.has('fail_health2'),
         'fail_health2 plugin node must exist');
       assert.strictEqual(pluginMap.get('fail_health2').pluginName, 'failFlow',
         'fail_health2 must be a failFlow node');
+
+      // Retry pipeline ends at health check -> pass 2 or fail
+      assert.strictEqual(edgeMap.get('chk_health_retry:1'), 'ffs_002',
+        'Retry health check pass must route to AAC pass');
+      assert.strictEqual(edgeMap.get('chk_health_retry:2'), 'fail_health2',
+        'Retry health check failure must route to failFlow');
       assert.strictEqual(edgeMap.get('ffs_002:1'), 'cmt_audio',
         'AAC pass start should route to AAC stereo section');
 

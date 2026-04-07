@@ -758,8 +758,8 @@
       "version": "1.0.0",
       "id": "cmt_tags",
       "position": {
-        "x": 6540,
-        "y": 510
+        "x": 3270,
+        "y": 5390
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -788,8 +788,8 @@
       "version": "1.0.0",
       "id": "chk_br_mid",
       "position": {
-        "x": 6540,
-        "y": 0
+        "x": 3270,
+        "y": 4880
       },
       "inputsDB": {
         "unit": "kbps",
@@ -854,8 +854,8 @@
       "version": "1.0.0",
       "id": "cmd_cap_mid",
       "position": {
-        "x": 6040,
-        "y": 170
+        "x": 2770,
+        "y": 5050
       },
       "inputsDB": {
         "inputArguments": "",
@@ -870,8 +870,8 @@
       "version": "1.0.0",
       "id": "cmd_cap_high",
       "position": {
-        "x": 6040,
-        "y": 340
+        "x": 2770,
+        "y": 5220
       },
       "inputsDB": {
         "inputArguments": "",
@@ -886,8 +886,8 @@
       "version": "1.0.0",
       "id": "cmd_tags",
       "position": {
-        "x": 6540,
-        "y": 700
+        "x": 3270,
+        "y": 5580
       },
       "inputsDB": {
         "inputArguments": "",
@@ -903,7 +903,7 @@
       "id": "cmt_audio",
       "position": {
         "x": 6540,
-        "y": 3500
+        "y": 4650
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -915,8 +915,8 @@
       "version": "1.0.0",
       "id": "cmd_ens_eng",
       "position": {
-        "x": 6540,
-        "y": 3860
+        "x": 9810,
+        "y": 0
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -936,8 +936,8 @@
       "version": "1.0.0",
       "id": "cmd_ens_und",
       "position": {
-        "x": 7040,
-        "y": 4200
+        "x": 10310,
+        "y": 340
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -957,8 +957,8 @@
       "version": "1.0.0",
       "id": "grd_dup_und",
       "position": {
-        "x": 6040,
-        "y": 4030
+        "x": 9310,
+        "y": 170
       },
       "inputsDB": {
         "streamType": "audio",
@@ -976,7 +976,7 @@
       "id": "grd_has_eng",
       "position": {
         "x": 6540,
-        "y": 3690
+        "y": 4840
       },
       "inputsDB": {
         "streamType": "audio",
@@ -993,8 +993,8 @@
       "version": "1.0.0",
       "id": "cmt_eac3",
       "position": {
-        "x": 6540,
-        "y": 870
+        "x": 3270,
+        "y": 5750
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1006,7 +1006,7 @@
       "version": "1.0.0",
       "position": {
         "x": 6540,
-        "y": 1060
+        "y": 0
       },
       "inputsDB": {
         "channelCount": "6"
@@ -1021,7 +1021,7 @@
       "version": "1.0.0",
       "position": {
         "x": 6040,
-        "y": 1230
+        "y": 170
       },
       "inputsDB": {
         "channelCount": "8"
@@ -1037,7 +1037,7 @@
       "id": "cmd_eac3_eng",
       "position": {
         "x": 6540,
-        "y": 1570
+        "y": 510
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -1058,7 +1058,7 @@
       "id": "grd_p3_has_aac",
       "position": {
         "x": 9810,
-        "y": 510
+        "y": 1190
       },
       "inputsDB": {
         "streamType": "audio",
@@ -1076,7 +1076,7 @@
       "id": "cmt_rmaudio",
       "position": {
         "x": 10310,
-        "y": 680
+        "y": 1360
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1089,7 +1089,7 @@
       "id": "cmd_rmaudio",
       "position": {
         "x": 10310,
-        "y": 870
+        "y": 1550
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -1106,7 +1106,7 @@
       "id": "cmt_reorder",
       "position": {
         "x": 6540,
-        "y": 1740
+        "y": 680
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1119,7 +1119,7 @@
       "id": "cmd_reorder",
       "position": {
         "x": 6540,
-        "y": 1930
+        "y": 870
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -1138,7 +1138,7 @@
       "id": "cmt_rmmux",
       "position": {
         "x": 6540,
-        "y": 2100
+        "y": 1040
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1151,7 +1151,7 @@
       "id": "cmd_rmmux",
       "position": {
         "x": 6540,
-        "y": 2290
+        "y": 1230
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -1168,7 +1168,7 @@
       "id": "cmt_exec",
       "position": {
         "x": 6540,
-        "y": 2460
+        "y": 1400
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1181,7 +1181,7 @@
       "id": "cmd_nochapters",
       "position": {
         "x": 6540,
-        "y": 2650
+        "y": 1590
       },
       "inputsDB": {
         "inputArguments": "",
@@ -1197,7 +1197,7 @@
       "id": "ffe_001",
       "position": {
         "x": 6540,
-        "y": 2820
+        "y": 1760
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1210,7 +1210,7 @@
       "id": "cmt_size",
       "position": {
         "x": 9810,
-        "y": 1890
+        "y": 2570
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1223,7 +1223,7 @@
       "id": "fl_size",
       "position": {
         "x": 9810,
-        "y": 2080
+        "y": 2760
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -1239,7 +1239,7 @@
       "id": "cmt_toobig",
       "position": {
         "x": 9310,
-        "y": 2250
+        "y": 2930
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1252,7 +1252,7 @@
       "id": "cmt_duration",
       "position": {
         "x": 9810,
-        "y": 2250
+        "y": 2930
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1265,7 +1265,7 @@
       "id": "fl_duration",
       "position": {
         "x": 9810,
-        "y": 2440
+        "y": 3120
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1281,7 +1281,7 @@
       "id": "grd_has_video",
       "position": {
         "x": 9810,
-        "y": 2610
+        "y": 3290
       },
       "inputsDB": {
         "streamType": "video",
@@ -1299,7 +1299,7 @@
       "id": "grd_has_audio",
       "position": {
         "x": 9810,
-        "y": 2780
+        "y": 3460
       },
       "inputsDB": {
         "streamType": "audio",
@@ -1317,7 +1317,7 @@
       "id": "fail_no_streams",
       "position": {
         "x": 9310,
-        "y": 2970
+        "y": 3650
       },
       "inputsDB": {
         "errorMessage": "Output file is missing video or audio streams"
@@ -1332,7 +1332,7 @@
       "id": "cmt_duration_fail",
       "position": {
         "x": 9310,
-        "y": 2610
+        "y": 3290
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1345,7 +1345,7 @@
       "id": "fl_review",
       "position": {
         "x": 9310,
-        "y": 2800
+        "y": 3480
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1358,7 +1358,7 @@
       "id": "cmt_replace",
       "position": {
         "x": 9810,
-        "y": 3120
+        "y": 3800
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1371,7 +1371,7 @@
       "id": "fl_replace",
       "position": {
         "x": 9810,
-        "y": 3310
+        "y": 3990
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1384,7 +1384,7 @@
       "id": "cmt_notify",
       "position": {
         "x": 9810,
-        "y": 3480
+        "y": 4160
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1397,7 +1397,7 @@
       "id": "chk_plex_notify",
       "position": {
         "x": 9810,
-        "y": 3670
+        "y": 4350
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_plex_notify",
@@ -1414,7 +1414,7 @@
       "id": "web_plex",
       "position": {
         "x": 10310,
-        "y": 3840
+        "y": 4520
       },
       "inputsDB": {
         "url": "http://YOUR_PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=YOUR_PLEX_TOKEN",
@@ -1430,7 +1430,7 @@
       "id": "chk_arr_notify",
       "position": {
         "x": 9810,
-        "y": 4010
+        "y": 4690
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_arr_notify",
@@ -1447,7 +1447,7 @@
       "id": "arr_notify",
       "position": {
         "x": 9810,
-        "y": 4180
+        "y": 4860
       },
       "inputsDB": {
         "arr": "radarr",
@@ -1894,7 +1894,7 @@
       "id": "chk_auto_accept",
       "position": {
         "x": 9810,
-        "y": 2950
+        "y": 3630
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1964,7 +1964,7 @@
       "id": "fl_manual_review",
       "position": {
         "x": 9310,
-        "y": 3140
+        "y": 3820
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2076,8 +2076,8 @@
       "version": "1.0.0",
       "id": "grd_fb_eng",
       "position": {
-        "x": 6040,
-        "y": 4200
+        "x": 9310,
+        "y": 340
       },
       "inputsDB": {
         "streamType": "audio",
@@ -2094,8 +2094,8 @@
       "version": "1.0.0",
       "id": "cmd_ens_fb",
       "position": {
-        "x": 6040,
-        "y": 4370
+        "x": 9310,
+        "y": 510
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -2170,7 +2170,7 @@
       "id": "grd_eac3_has_eng",
       "position": {
         "x": 6540,
-        "y": 1400
+        "y": 340
       },
       "inputsDB": {
         "streamType": "audio",
@@ -2188,7 +2188,7 @@
       "id": "ffs_002",
       "position": {
         "x": 6540,
-        "y": 3160
+        "y": 4480
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2201,7 +2201,7 @@
       "id": "cmd_reorder_002",
       "position": {
         "x": 9810,
-        "y": 1380
+        "y": 2060
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -2220,7 +2220,7 @@
       "id": "cmd_rm_ac3",
       "position": {
         "x": 10310,
-        "y": 1040
+        "y": 1720
       },
       "inputsDB": {
         "propertyToCheck": "codec_tag_string",
@@ -2237,7 +2237,7 @@
       "id": "ffe_002",
       "position": {
         "x": 9810,
-        "y": 1720
+        "y": 2400
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2250,7 +2250,7 @@
       "id": "cmd_rm_mp3",
       "position": {
         "x": 10310,
-        "y": 1210
+        "y": 1890
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -2267,7 +2267,7 @@
       "id": "cmd_eac3_fb",
       "position": {
         "x": 7040,
-        "y": 1570
+        "y": 510
       },
       "inputsDB": {
         "audioEncoder": "eac3",
@@ -2288,7 +2288,7 @@
       "id": "chk_health_002",
       "position": {
         "x": 6540,
-        "y": 2990
+        "y": 1930
       },
       "inputsDB": {
         "type": "quick"
@@ -2334,10 +2334,226 @@
       "version": "1.0.0",
       "id": "fail_health2",
       "position": {
-        "x": 6540,
-        "y": 3330
+        "x": 7040,
+        "y": 4480
       },
       "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Already retried?",
+      "sourceRepo": "Community",
+      "pluginName": "checkFlowVariable",
+      "version": "1.0.0",
+      "id": "chk_retried",
+      "position": {
+        "x": 6540,
+        "y": 2100
+      },
+      "inputsDB": {
+        "variable": "args.variables.user.retry_encode",
+        "condition": "==",
+        "value": "true"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Set: retry flag",
+      "sourceRepo": "Community",
+      "pluginName": "setFlowVariable",
+      "version": "1.0.0",
+      "id": "set_retry",
+      "position": {
+        "x": 6540,
+        "y": 2270
+      },
+      "inputsDB": {
+        "variable": "retry_encode",
+        "value": "true"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Reset to original",
+      "sourceRepo": "Local",
+      "pluginName": "resetToOriginalFile",
+      "version": "1.0.0",
+      "id": "rst_original",
+      "position": {
+        "x": 6540,
+        "y": 2440
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Begin retry encode",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandStart",
+      "version": "1.0.0",
+      "id": "ffs_retry",
+      "position": {
+        "x": 6540,
+        "y": 2610
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Quiet + stats (retry)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandCustomArguments",
+      "version": "1.0.0",
+      "id": "cmd_retry_loglevel",
+      "position": {
+        "x": 6540,
+        "y": 2780
+      },
+      "inputsDB": {
+        "inputArguments": "-loglevel warning -stats -nostdin",
+        "outputArguments": "-avoid_negative_ts make_zero"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Container: MP4 (retry)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandSetContainer",
+      "version": "1.0.0",
+      "id": "cmd_retry_mp4",
+      "position": {
+        "x": 6540,
+        "y": 2950
+      },
+      "inputsDB": {
+        "container": "mp4",
+        "forceConform": "true"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Remove subs (retry)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRemoveSubtitles",
+      "version": "1.0.0",
+      "id": "cmd_retry_rmsub",
+      "position": {
+        "x": 6540,
+        "y": 3120
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Remove data (retry)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRemoveDataStreams",
+      "version": "1.0.0",
+      "id": "cmd_retry_rmdata",
+      "position": {
+        "x": 6540,
+        "y": 3290
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Encode: HEVC (retry)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandSetVideoEncoder",
+      "version": "1.0.0",
+      "id": "cmd_retry_hevc",
+      "position": {
+        "x": 6540,
+        "y": 3460
+      },
+      "inputsDB": {
+        "outputCodec": "hevc",
+        "ffmpegPresetEnabled": "true",
+        "ffmpegPreset": "slow",
+        "ffmpegQualityEnabled": "true",
+        "ffmpegQuality": "24",
+        "hardwareEncoding": "true",
+        "hardwareType": "nvenc",
+        "hardwareDecoding": "false",
+        "forceEncoding": "true"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Has surround? (retry)",
+      "sourceRepo": "Community",
+      "pluginName": "checkChannelCount",
+      "version": "1.0.0",
+      "id": "grd_retry_ch",
+      "position": {
+        "x": 6540,
+        "y": 3630
+      },
+      "inputsDB": {
+        "channelCount": "6"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "EAC3 5.1 (retry)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandEnsureAudioStream",
+      "version": "1.0.0",
+      "id": "cmd_retry_eac3",
+      "position": {
+        "x": 7040,
+        "y": 3800
+      },
+      "inputsDB": {
+        "audioCodec": "eac3",
+        "language": "eng",
+        "channels": "6"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Tags: hvc1 (retry)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandCustomArguments",
+      "version": "1.0.0",
+      "id": "cmd_retry_tags",
+      "position": {
+        "x": 6540,
+        "y": 3970
+      },
+      "inputsDB": {
+        "inputArguments": "",
+        "outputArguments": "-tag:v hvc1 -profile:v main10 -map_chapters -1"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Execute retry",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandExecute",
+      "version": "1.0.0",
+      "id": "ffe_retry",
+      "position": {
+        "x": 6540,
+        "y": 4140
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Health check (retry)",
+      "sourceRepo": "Community",
+      "pluginName": "runHealthCheck",
+      "version": "1.0.0",
+      "id": "chk_health_retry",
+      "position": {
+        "x": 6540,
+        "y": 4310
+      },
+      "inputsDB": {
+        "type": "quick"
+      },
       "fpEnabled": true
     },
     {
@@ -2348,7 +2564,7 @@
       "id": "cmd_faststart2",
       "position": {
         "x": 9810,
-        "y": 1550
+        "y": 2230
       },
       "inputsDB": {
         "inputArguments": "",
@@ -2519,7 +2735,7 @@
       "id": "ffe_aac",
       "position": {
         "x": 9810,
-        "y": 0
+        "y": 680
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2532,7 +2748,7 @@
       "id": "ffs_003",
       "position": {
         "x": 9810,
-        "y": 170
+        "y": 850
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2545,7 +2761,7 @@
       "id": "cmd_rmdata_003",
       "position": {
         "x": 9810,
-        "y": 340
+        "y": 1020
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -4007,9 +4223,9 @@
     {
       "source": "chk_health_002",
       "sourceHandle": "2",
-      "target": "fail_health2",
+      "target": "chk_retried",
       "targetHandle": null,
-      "id": "e_health2_fail"
+      "id": "e_health2_retry"
     },
     {
       "source": "ffe_aac",
@@ -4206,6 +4422,125 @@
       "target": "fl_manual_review",
       "targetHandle": null,
       "id": "e_safeaudio_no_review"
+    },
+    {
+      "source": "chk_retried",
+      "sourceHandle": "1",
+      "target": "fail_health2",
+      "targetHandle": null,
+      "id": "e_retried_fail"
+    },
+    {
+      "source": "chk_retried",
+      "sourceHandle": "2",
+      "target": "set_retry",
+      "targetHandle": null,
+      "id": "e_retried_set"
+    },
+    {
+      "source": "set_retry",
+      "sourceHandle": "1",
+      "target": "rst_original",
+      "targetHandle": null,
+      "id": "e_set_rst"
+    },
+    {
+      "source": "rst_original",
+      "sourceHandle": "1",
+      "target": "ffs_retry",
+      "targetHandle": null,
+      "id": "e_rst_ffs"
+    },
+    {
+      "source": "ffs_retry",
+      "sourceHandle": "1",
+      "target": "cmd_retry_loglevel",
+      "targetHandle": null,
+      "id": "e_retry_loglevel"
+    },
+    {
+      "source": "cmd_retry_loglevel",
+      "sourceHandle": "1",
+      "target": "cmd_retry_mp4",
+      "targetHandle": null,
+      "id": "e_retry_mp4"
+    },
+    {
+      "source": "cmd_retry_mp4",
+      "sourceHandle": "1",
+      "target": "cmd_retry_rmsub",
+      "targetHandle": null,
+      "id": "e_retry_rmsub"
+    },
+    {
+      "source": "cmd_retry_rmsub",
+      "sourceHandle": "1",
+      "target": "cmd_retry_rmdata",
+      "targetHandle": null,
+      "id": "e_retry_rmdata"
+    },
+    {
+      "source": "cmd_retry_rmdata",
+      "sourceHandle": "1",
+      "target": "cmd_retry_hevc",
+      "targetHandle": null,
+      "id": "e_retry_hevc"
+    },
+    {
+      "source": "cmd_retry_hevc",
+      "sourceHandle": "1",
+      "target": "grd_retry_ch",
+      "targetHandle": null,
+      "id": "e_retry_chk_ch"
+    },
+    {
+      "source": "grd_retry_ch",
+      "sourceHandle": "1",
+      "target": "cmd_retry_eac3",
+      "targetHandle": null,
+      "id": "e_retry_eac3"
+    },
+    {
+      "source": "grd_retry_ch",
+      "sourceHandle": "2",
+      "target": "cmd_retry_tags",
+      "targetHandle": null,
+      "id": "e_retry_noeac3"
+    },
+    {
+      "source": "cmd_retry_eac3",
+      "sourceHandle": "1",
+      "target": "cmd_retry_tags",
+      "targetHandle": null,
+      "id": "e_retry_tags"
+    },
+    {
+      "source": "cmd_retry_tags",
+      "sourceHandle": "1",
+      "target": "ffe_retry",
+      "targetHandle": null,
+      "id": "e_retry_exec"
+    },
+    {
+      "source": "ffe_retry",
+      "sourceHandle": "1",
+      "target": "chk_health_retry",
+      "targetHandle": null,
+      "id": "e_retry_health"
+    },
+    {
+      "source": "chk_health_retry",
+      "sourceHandle": "1",
+      "target": "ffs_002",
+      "targetHandle": null,
+      "id": "e_retry_pass2"
+    },
+    {
+      "source": "chk_health_retry",
+      "sourceHandle": "2",
+      "target": "fail_health2",
+      "targetHandle": null,
+      "id": "e_retry_fail"
     }
   ]
 }

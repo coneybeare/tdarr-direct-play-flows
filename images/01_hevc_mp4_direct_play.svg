@@ -54,57 +54,57 @@
 <path d="M1702.1,1524.0 L1702.1,1537.7 Q1702.1,1541.1 1698.7,1541.1 L1553.8,1541.1 Q1550.4,1541.1 1550.4,1544.5 L1550.4,1554.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1484.6,1581.2 L1484.6,1594.9 Q1484.6,1598.3 1481.2,1598.3 L1369.1,1598.3 Q1365.7,1598.3 1365.7,1601.7 L1365.7,1611.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1583.2,1581.2 L1583.2,1594.9 Q1583.2,1598.3 1579.8,1598.3 L1537.3,1598.3 Q1533.9,1598.3 1533.9,1601.7 L1533.9,1611.4" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M1365.7,1638.3 L1365.7,1643.3 Q1365.7,1646.7 1369.1,1646.7 L2142.7,1646.7 Q2146.1,1646.7 2146.1,1643.3 L2146.1,193.5 Q2146.1,190.1 2149.5,190.1 L2581.2,190.1 Q2584.7,190.1 2584.7,193.5 L2584.7,198.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-ok)"/>
+<path d="M1365.7,1638.4 L1365.7,1662.5 Q1365.7,1665.9 1369.1,1665.9 L1481.2,1665.9 Q1484.6,1665.9 1484.6,1669.3 L1484.6,1840.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1484.6,1638.4 L1484.6,1652.1 Q1484.6,1655.5 1481.2,1655.5 L1369.1,1655.5 Q1365.7,1655.5 1365.7,1658.9 L1365.7,1668.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1583.2,1638.3 L1583.2,1643.3 Q1583.2,1646.7 1586.7,1646.7 L2147.1,1646.7 Q2150.5,1646.7 2150.5,1643.3 L2150.5,21.9 Q2150.5,18.5 2153.9,18.5 L2630.6,18.5 Q2634.0,18.5 2634.0,21.9 L2634.0,26.9" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
-<path d="M2584.7,53.8 L2584.7,67.5 Q2584.7,70.9 2581.2,70.9 L2469.2,70.9 Q2465.8,70.9 2465.8,74.3 L2465.8,84.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2683.3,53.8 L2683.3,88.5 Q2683.3,91.9 2679.9,91.9 L2469.2,91.9 Q2465.8,91.9 2465.8,95.3 L2465.8,141.3" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M1365.7,1695.5 L1365.7,1700.5 Q1365.7,1703.9 1369.1,1703.9 L2151.5,1703.9 Q2154.9,1703.9 2154.9,1700.5 L2154.9,189.5 Q2154.9,186.1 2158.3,186.1 L2605.9,186.1 Q2609.3,186.1 2609.3,189.5 L2609.3,198.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-ok)"/>
-<path d="M2465.8,111.0 L2465.8,135.2 Q2465.8,138.6 2469.2,138.6 L2655.3,138.6 Q2658.7,138.6 2658.7,142.0 L2658.7,198.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2465.8,168.2 L2465.8,181.9 Q2465.8,185.3 2469.2,185.3 L2679.9,185.3 Q2683.3,185.3 2683.3,188.7 L2683.3,198.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M1583.2,1638.4 L1583.2,1652.1 Q1583.2,1655.5 1579.8,1655.5 L1537.3,1655.5 Q1533.9,1655.5 1533.9,1658.9 L1533.9,1668.6" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M1484.6,1695.5 L1484.6,1709.2 Q1484.6,1712.6 1481.2,1712.6 L1369.1,1712.6 Q1365.7,1712.6 1365.7,1716.0 L1365.7,1725.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M1583.2,1695.5 L1583.2,1730.1 Q1583.2,1733.5 1579.8,1733.5 L1369.1,1733.5 Q1365.7,1733.5 1365.7,1737.0 L1365.7,1783.0" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M1365.7,1695.5 L1365.7,1703.5 Q1365.7,1706.9 1369.1,1706.9 L1505.8,1706.9 Q1509.2,1706.9 1509.2,1710.3 L1509.2,1840.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M1365.7,1752.7 L1365.7,1758.7 Q1365.7,1762.1 1369.1,1762.1 L1530.5,1762.1 Q1533.9,1762.1 1533.9,1765.5 L1533.9,1840.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M1365.7,1809.9 L1365.7,1823.6 Q1365.7,1827.0 1369.1,1827.0 L1555.2,1827.0 Q1558.6,1827.0 1558.6,1830.4 L1558.6,1840.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1870.3,1409.6 L1870.3,1439.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1870.3,1466.8 L1870.3,1471.8 Q1870.3,1475.2 1873.7,1475.2 L2155.8,1475.2 Q2159.2,1475.2 2159.2,1471.8 L2159.2,185.5 Q2159.2,182.1 2162.7,182.1 L2630.6,182.1 Q2634.0,182.1 2634.0,185.5 L2634.0,198.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-ok)"/>
-<path d="M2634.0,232.1 L2634.0,262.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M1870.3,1466.8 L1870.3,1644.4 Q1870.3,1647.8 1866.9,1647.8 L1586.7,1647.8 Q1583.2,1647.8 1583.2,1651.2 L1583.2,1840.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M1533.9,1873.8 L1533.9,1904.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M1533.9,1931.0 L1533.9,1961.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2634.0,1624.9 L2634.0,1655.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2683.3,1682.1 L2683.3,1691.1 Q2683.3,1694.5 2686.8,1694.5 L3176.7,1694.5 Q3180.1,1694.5 3180.1,1691.1 L3180.1,21.9 Q3180.1,18.5 3183.5,18.5 L3730.7,18.5 Q3734.1,18.5 3734.1,21.9 L3734.1,26.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-ok)"/>
+<path d="M2584.7,1682.1 L2584.7,1687.1 Q2584.7,1690.5 2588.1,1690.5 L3184.7,1690.5 Q3188.1,1690.5 3188.1,1687.1 L3188.1,79.1 Q3188.1,75.7 3191.5,75.7 L3513.2,75.7 Q3516.6,75.7 3516.6,79.1 L3516.6,84.1" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
+<path d="M3734.1,53.8 L3734.1,67.5 Q3734.1,70.9 3730.7,70.9 L3618.7,70.9 Q3615.2,70.9 3615.2,74.3 L3615.2,84.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3615.2,111.0 L3615.2,124.7 Q3615.2,128.1 3618.7,128.1 L3898.9,128.1 Q3902.3,128.1 3902.3,131.5 L3902.3,141.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3516.6,111.0 L3516.6,124.7 Q3516.6,128.1 3520.0,128.1 L3562.5,128.1 Q3565.9,128.1 3565.9,131.5 L3565.9,141.3" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M3902.3,168.2 L3902.3,202.8 Q3902.3,206.2 3898.9,206.2 L3786.8,206.2 Q3783.4,206.2 3783.4,209.7 L3783.4,255.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2634.0,225.4 L2634.0,255.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M2634.0,289.3 L2634.0,319.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2634.0,1238.0 L2634.0,1268.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2683.3,1295.2 L2683.3,1308.9 Q2683.3,1312.3 2679.9,1312.3 L2637.4,1312.3 Q2634.0,1312.3 2634.0,1315.7 L2634.0,1325.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2584.7,1295.2 L2584.7,1319.4 Q2584.7,1322.8 2581.2,1322.8 L2419.9,1322.8 Q2416.5,1322.8 2416.5,1326.2 L2416.5,1382.7" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M2634.0,1352.4 L2634.0,1366.1 Q2634.0,1369.5 2630.6,1369.5 L2518.6,1369.5 Q2515.2,1369.5 2515.2,1372.9 L2515.2,1382.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2515.2,1409.6 L2515.2,1423.3 Q2515.2,1426.7 2518.6,1426.7 L2798.8,1426.7 Q2802.2,1426.7 2802.2,1430.1 L2802.2,1439.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2416.5,1409.6 L2416.5,1423.3 Q2416.5,1426.7 2419.9,1426.7 L2462.4,1426.7 Q2465.8,1426.7 2465.8,1430.1 L2465.8,1439.9" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M2802.2,1466.8 L2802.2,1471.8 Q2802.2,1475.2 2805.6,1475.2 L3174.7,1475.2 Q3178.1,1475.2 3178.1,1471.8 L3178.1,13.9 Q3178.1,10.5 3181.5,10.5 L3780.0,10.5 Q3783.4,10.5 3783.4,13.9 L3783.4,26.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-ok)"/>
-<path d="M2634.0,582.0 L2634.0,612.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2634.0,645.9 L2634.0,676.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2634.0,703.1 L2634.0,733.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2634.0,767.0 L2634.0,797.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2634.0,824.2 L2634.0,854.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2634.0,888.1 L2634.0,918.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2634.0,945.3 L2634.0,975.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3734.1,696.4 L3734.1,726.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3783.4,753.6 L3783.4,767.3 Q3783.4,770.7 3780.0,770.7 L3737.5,770.7 Q3734.1,770.7 3734.1,774.1 L3734.1,783.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3684.8,753.6 L3684.8,767.3 Q3684.8,770.7 3681.3,770.7 L3618.7,770.7 Q3615.2,770.7 3615.2,774.1 L3615.2,783.9" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M3565.9,817.5 L3565.9,898.9 Q3565.9,902.3 3569.3,902.3 L3578.9,902.3 Q3582.3,902.3 3582.3,905.7 L3582.3,1083.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3734.1,817.5 L3734.1,847.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3783.4,874.7 L3783.4,888.4 Q3783.4,891.8 3780.0,891.8 L3737.5,891.8 Q3734.1,891.8 3734.1,895.2 L3734.1,905.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3783.4,931.9 L3783.4,945.6 Q3783.4,949.0 3780.0,949.0 L3737.5,949.0 Q3734.1,949.0 3734.1,952.4 L3734.1,962.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3684.8,931.9 L3684.8,956.1 Q3684.8,959.5 3681.3,959.5 L3585.8,959.5 Q3582.3,959.5 3582.3,962.9 L3582.3,1026.1" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M3783.4,989.1 L3783.4,1002.8 Q3783.4,1006.2 3780.0,1006.2 L3737.5,1006.2 Q3734.1,1006.2 3734.1,1009.6 L3734.1,1019.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3684.8,989.1 L3684.8,1002.8 Q3684.8,1006.2 3681.3,1006.2 L3618.7,1006.2 Q3615.2,1006.2 3615.2,1009.6 L3615.2,1026.1" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M3783.4,1046.3 L3783.4,1060.0 Q3783.4,1063.4 3780.0,1063.4 L3737.5,1063.4 Q3734.1,1063.4 3734.1,1066.8 L3734.1,1076.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3684.8,1046.3 L3684.8,1060.0 Q3684.8,1063.4 3681.3,1063.4 L3618.7,1063.4 Q3615.2,1063.4 3615.2,1066.8 L3615.2,1083.3" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M3684.8,874.7 L3684.8,888.4 Q3684.8,891.8 3681.3,891.8 L3618.7,891.8 Q3615.2,891.8 3615.2,895.2 L3615.2,905.0" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M3565.9,938.6 L3565.9,968.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3734.1,1110.2 L3734.1,1123.9 Q3734.1,1127.3 3737.5,1127.3 L3780.0,1127.3 Q3783.4,1127.3 3783.4,1130.7 L3783.4,1140.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3734.1,1167.4 L3734.1,1181.1 Q3734.1,1184.5 3737.5,1184.5 L3780.0,1184.5 Q3783.4,1184.5 3783.4,1187.9 L3783.4,1197.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3734.1,1231.3 L3734.1,1261.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3783.4,1288.5 L3783.4,1302.2 Q3783.4,1305.6 3786.8,1305.6 L3898.9,1305.6 Q3902.3,1305.6 3902.3,1309.0 L3902.3,1318.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3684.75,1288.5 L3684.75,1375.9" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M3902.3,1345.7 L3902.3,1359.4 Q3902.3,1362.8 3898.9,1362.8 L3786.8,1362.8 Q3783.4,1362.8 3783.4,1366.2 L3783.4,1375.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3734.1,1402.9 L3734.1,1433.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2683.35,410.4 L2683.35,497.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2584.7,410.4 L2584.7,424.1 Q2584.7,427.5 2581.2,427.5 L2469.2,427.5 Q2465.8,427.5 2465.8,430.9 L2465.8,440.7" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M2416.5,467.6 L2416.5,481.3 Q2416.5,484.7 2419.9,484.7 L2581.2,484.7 Q2584.7,484.7 2584.7,488.1 L2584.7,497.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2515.2,467.6 L2515.2,475.6 Q2515.2,479.0 2518.6,479.0 L2581.2,479.0 Q2584.7,479.0 2584.7,482.4 L2584.7,612.3" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M2634.0,346.5 L2634.0,376.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2634.0,410.4 L2634.0,440.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2634.0,467.6 L2634.0,497.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2634.0,531.5 L2634.0,561.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2634.0,588.7 L2634.0,619.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3734.1,925.1 L3734.1,955.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3783.4,982.3 L3783.4,996.0 Q3783.4,999.4 3780.0,999.4 L3737.5,999.4 Q3734.1,999.4 3734.1,1002.8 L3734.1,1012.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3684.8,982.3 L3684.8,996.0 Q3684.8,999.4 3681.3,999.4 L3618.7,999.4 Q3615.2,999.4 3615.2,1002.8 L3615.2,1012.6" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M3565.9,1046.3 L3565.9,1127.6 Q3565.9,1131.0 3569.3,1131.0 L3578.9,1131.0 Q3582.3,1131.0 3582.3,1134.4 L3582.3,1312.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3734.1,1046.3 L3734.1,1076.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3783.4,1103.4 L3783.4,1117.1 Q3783.4,1120.5 3780.0,1120.5 L3737.5,1120.5 Q3734.1,1120.5 3734.1,1123.9 L3734.1,1133.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3783.4,1160.6 L3783.4,1174.3 Q3783.4,1177.7 3780.0,1177.7 L3737.5,1177.7 Q3734.1,1177.7 3734.1,1181.1 L3734.1,1190.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3684.8,1160.6 L3684.8,1184.8 Q3684.8,1188.2 3681.3,1188.2 L3585.8,1188.2 Q3582.3,1188.2 3582.3,1191.6 L3582.3,1254.8" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M3783.4,1217.8 L3783.4,1231.5 Q3783.4,1234.9 3780.0,1234.9 L3737.5,1234.9 Q3734.1,1234.9 3734.1,1238.3 L3734.1,1248.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3684.8,1217.8 L3684.8,1231.5 Q3684.8,1234.9 3681.3,1234.9 L3618.7,1234.9 Q3615.2,1234.9 3615.2,1238.3 L3615.2,1254.8" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M3783.4,1275.0 L3783.4,1288.7 Q3783.4,1292.1 3780.0,1292.1 L3737.5,1292.1 Q3734.1,1292.1 3734.1,1295.5 L3734.1,1305.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3684.8,1275.0 L3684.8,1288.7 Q3684.8,1292.1 3681.3,1292.1 L3618.7,1292.1 Q3615.2,1292.1 3615.2,1295.5 L3615.2,1312.0" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M3684.8,1103.4 L3684.8,1117.1 Q3684.8,1120.5 3681.3,1120.5 L3618.7,1120.5 Q3615.2,1120.5 3615.2,1123.9 L3615.2,1133.7" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M3565.9,1167.4 L3565.9,1197.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3734.1,1338.9 L3734.1,1352.6 Q3734.1,1356.0 3737.5,1356.0 L3780.0,1356.0 Q3783.4,1356.0 3783.4,1359.4 L3783.4,1369.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3734.1,1396.1 L3734.1,1409.8 Q3734.1,1413.2 3737.5,1413.2 L3780.0,1413.2 Q3783.4,1413.2 3783.4,1416.6 L3783.4,1426.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3734.1,1460.1 L3734.1,1490.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3783.4,1517.2 L3783.4,1530.9 Q3783.4,1534.3 3786.8,1534.3 L3898.9,1534.3 Q3902.3,1534.3 3902.3,1537.7 L3902.3,1547.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3684.75,1517.2 L3684.75,1604.7" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M3902.3,1574.4 L3902.3,1588.1 Q3902.3,1591.5 3898.9,1591.5 L3786.8,1591.5 Q3783.4,1591.5 3783.4,1594.9 L3783.4,1604.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3734.1,1631.6 L3734.1,1661.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2683.35,53.8 L2683.35,141.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2584.7,53.8 L2584.7,67.5 Q2584.7,70.9 2581.2,70.9 L2469.2,70.9 Q2465.8,70.9 2465.8,74.3 L2465.8,84.1" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M2416.5,111.0 L2416.5,124.7 Q2416.5,128.1 2419.9,128.1 L2581.2,128.1 Q2584.7,128.1 2584.7,131.5 L2584.7,141.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2515.2,111.0 L2515.2,119.0 Q2515.2,122.4 2518.6,122.4 L2581.2,122.4 Q2584.7,122.4 2584.7,125.8 L2584.7,255.7" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
 <path d="M384.4,1345.7 L384.4,1359.4 Q384.4,1362.8 387.8,1362.8 L430.4,1362.8 Q433.8,1362.8 433.8,1366.2 L433.8,1375.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,460.9 L1197.5,491.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,518.1 L1197.5,548.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
@@ -126,16 +126,16 @@
 <path d="M1197.5,1490.3 L1197.5,1520.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,1547.5 L1197.5,1577.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1148.2,2011.8 L1148.2,2025.5 Q1148.2,2028.9 1151.6,2028.9 L1194.1,2028.9 Q1197.5,2028.9 1197.5,2032.3 L1197.5,2042.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1246.8,2011.8 L1246.8,2016.8 Q1246.8,2020.2 1250.2,2020.2 L2160.2,2020.2 Q2163.7,2020.2 2163.7,2016.8 L2163.7,778.9 Q2163.7,775.5 2167.1,775.5 L3513.2,775.5 Q3516.6,775.5 3516.6,778.9 L3516.6,783.9" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
+<path d="M1246.8,2011.8 L1246.8,2016.8 Q1246.8,2020.2 1250.2,2020.2 L2148.7,2020.2 Q2152.1,2020.2 2152.1,2016.8 L2152.1,1007.6 Q2152.1,1004.2 2155.5,1004.2 L3513.2,1004.2 Q3516.6,1004.2 3516.6,1007.6 L3516.6,1012.6" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
 <path d="M1148.2,2069.0 L1148.2,2082.7 Q1148.2,2086.1 1151.6,2086.1 L1194.1,2086.1 Q1197.5,2086.1 1197.5,2089.5 L1197.5,2099.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1246.8,2069.0 L1246.8,2074.0 Q1246.8,2077.4 1250.2,2077.4 L2164.7,2077.4 Q2168.1,2077.4 2168.1,2074.0 L2168.1,900.0 Q2168.1,896.6 2171.5,896.6 L3513.2,896.6 Q3516.6,896.6 3516.6,900.0 L3516.6,905.0" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
+<path d="M1246.8,2069.0 L1246.8,2074.0 Q1246.8,2077.4 1250.2,2077.4 L2153.2,2077.4 Q2156.6,2077.4 2156.6,2074.0 L2156.6,1128.7 Q2156.6,1125.3 2160.0,1125.3 L3513.2,1125.3 Q3516.6,1125.3 3516.6,1128.7 L3516.6,1133.7" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
 <path d="M1148.2,2126.2 L1148.2,2139.9 Q1148.2,2143.3 1151.6,2143.3 L1194.1,2143.3 Q1197.5,2143.3 1197.5,2146.7 L1197.5,2156.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1246.8,2126.1 L1246.8,2131.1 Q1246.8,2134.5 1250.2,2134.5 L2169.1,2134.5 Q2172.5,2134.5 2172.5,2131.1 L2172.5,1021.1 Q2172.5,1017.7 2175.9,1017.7 L3513.2,1017.7 Q3516.6,1017.7 3516.6,1021.1 L3516.6,1026.1" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
+<path d="M1246.8,2126.1 L1246.8,2131.1 Q1246.8,2134.5 1250.2,2134.5 L2157.8,2134.5 Q2161.2,2134.5 2161.2,2131.1 L2161.2,1249.8 Q2161.2,1246.4 2164.6,1246.4 L3513.2,1246.4 Q3516.6,1246.4 3516.6,1249.8 L3516.6,1254.8" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
 <path d="M1148.2,2183.3 L1148.2,2197.0 Q1148.2,2200.4 1151.6,2200.4 L1194.1,2200.4 Q1197.5,2200.4 1197.5,2203.8 L1197.5,2213.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1246.8,2183.3 L1246.8,2188.3 Q1246.8,2191.7 1250.2,2191.7 L2173.5,2191.7 Q2176.9,2191.7 2176.9,2188.3 L2176.9,1017.1 Q2176.9,1013.7 2180.3,1013.7 L3546.1,1013.7 Q3549.5,1013.7 3549.5,1017.1 L3549.5,1026.1" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
+<path d="M1246.8,2183.3 L1246.8,2188.3 Q1246.8,2191.7 1250.2,2191.7 L2162.4,2191.7 Q2165.8,2191.7 2165.8,2188.3 L2165.8,1245.8 Q2165.8,1242.4 2169.2,1242.4 L3546.1,1242.4 Q3549.5,1242.4 3549.5,1245.8 L3549.5,1254.8" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
 <path d="M1148.2,2240.5 L1148.2,2254.2 Q1148.2,2257.6 1151.6,2257.6 L1194.1,2257.6 Q1197.5,2257.6 1197.5,2261.0 L1197.5,2270.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1246.8,2240.5 L1246.8,2245.5 Q1246.8,2248.9 1250.2,2248.9 L2177.8,2248.9 Q2181.2,2248.9 2181.2,2245.5 L2181.2,1078.3 Q2181.2,1074.9 2184.7,1074.9 L3513.2,1074.9 Q3516.6,1074.9 3516.6,1078.3 L3516.6,1083.3" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
-<path d="M2634.0,1002.5 L2634.0,1032.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M1246.8,2240.5 L1246.8,2245.5 Q1246.8,2248.9 1250.2,2248.9 L2166.9,2248.9 Q2170.3,2248.9 2170.3,2245.5 L2170.3,1307.0 Q2170.3,1303.6 2173.7,1303.6 L3513.2,1303.6 Q3516.6,1303.6 3516.6,1307.0 L3516.6,1312.0" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
+<path d="M2634.0,645.9 L2634.0,676.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,1604.7 L1197.5,1635.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,1668.6 L1197.5,1698.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,1725.8 L1197.5,1756.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
@@ -148,9 +148,9 @@
 <path d="M483.2,1167.4 L483.2,1181.1 Q483.2,1184.5 479.8,1184.5 L437.2,1184.5 Q433.8,1184.5 433.8,1187.9 L433.8,1197.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M384.4,1167.4 L384.4,1181.1 Q384.4,1184.5 381.1,1184.5 L269.0,1184.5 Q265.6,1184.5 265.6,1187.9 L265.6,1197.6" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
 <path d="M265.6,1231.3 L265.6,1261.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1197.5,2297.7 L1197.5,2302.7 Q1197.5,2306.1 1200.9,2306.1 L2182.2,2306.1 Q2185.7,2306.1 2185.7,2302.7 L2185.7,1192.6 Q2185.7,1189.2 2189.1,1189.2 L3681.3,1189.2 Q3684.8,1189.2 3684.8,1192.6 L3684.8,1197.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-ok)"/>
-<path d="M3565.9,995.8 L3565.9,1020.0 Q3565.9,1023.4 3569.3,1023.4 L3681.3,1023.4 Q3684.8,1023.4 3684.8,1026.8 L3684.8,1140.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3565.9,1110.2 L3565.9,1123.9 Q3565.9,1127.3 3569.3,1127.3 L3730.7,1127.3 Q3734.1,1127.3 3734.1,1130.7 L3734.1,1140.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M1197.5,2297.7 L1197.5,2302.7 Q1197.5,2306.1 1200.9,2306.1 L2171.5,2306.1 Q2174.9,2306.1 2174.9,2302.7 L2174.9,1421.4 Q2174.9,1418.0 2178.3,1418.0 L3681.3,1418.0 Q3684.8,1418.0 3684.8,1421.4 L3684.8,1426.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-ok)"/>
+<path d="M3565.9,1224.6 L3565.9,1248.7 Q3565.9,1252.1 3569.3,1252.1 L3681.3,1252.1 Q3684.8,1252.1 3684.8,1255.5 L3684.8,1369.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3565.9,1338.9 L3565.9,1352.6 Q3565.9,1356.0 3569.3,1356.0 L3730.7,1356.0 Q3734.1,1356.0 3734.1,1359.4 L3734.1,1369.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M384.4,639.2 L384.4,652.9 Q384.4,656.3 387.8,656.3 L430.4,656.3 Q433.8,656.3 433.8,659.7 L433.8,669.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M483.2,639.2 L483.2,663.4 Q483.2,666.8 486.6,666.8 L591.6,666.8 Q595.0,666.8 595.0,670.2 L595.0,1012.6" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
 <path d="M97.4,53.8 L97.4,84.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
@@ -163,22 +163,22 @@
 <path d="M1365.7,975.6 L1365.7,989.3 Q1365.7,992.7 1362.3,992.7 L1250.2,992.7 Q1246.8,992.7 1246.8,996.1 L1246.8,1005.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M483.2,810.8 L483.2,816.8 Q483.2,820.2 486.6,820.2 L598.6,820.2 Q602.0,820.2 602.0,823.6 L602.0,841.0" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
 <path d="M651.4,868.0 L651.4,931.2 Q651.4,934.6 648.0,934.6 L640.6,934.6 Q637.2,934.6 637.2,938.0 L637.2,1012.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2515.2,1466.8 L2515.2,1471.8 Q2515.2,1475.2 2518.6,1475.2 L3180.7,1475.2 Q3184.1,1475.2 3184.1,1471.8 L3184.1,21.9 Q3184.1,18.5 3187.5,18.5 L3681.3,18.5 Q3684.8,18.5 3684.8,21.9 L3684.8,26.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-ok)"/>
-<path d="M2416.5,1466.8 L2416.5,1480.5 Q2416.5,1483.9 2419.9,1483.9 L2462.4,1483.9 Q2465.8,1483.9 2465.8,1487.3 L2465.8,1497.1" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M2465.8,1524.0 L2465.8,1529.0 Q2465.8,1532.4 2469.2,1532.4 L3186.7,1532.4 Q3190.1,1532.4 3190.1,1529.0 L3190.1,17.9 Q3190.1,14.5 3193.5,14.5 L3730.7,14.5 Q3734.1,14.5 3734.1,17.9 L3734.1,26.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-ok)"/>
+<path d="M3615.2,168.2 L3615.2,192.4 Q3615.2,195.8 3618.7,195.8 L3681.3,195.8 Q3684.8,195.8 3684.8,199.2 L3684.8,255.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3516.6,168.2 L3516.6,181.9 Q3516.6,185.3 3520.0,185.3 L3562.5,185.3 Q3565.9,185.3 3565.9,188.7 L3565.9,198.5" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M3565.9,225.4 L3565.9,239.1 Q3565.9,242.5 3569.3,242.5 L3730.7,242.5 Q3734.1,242.5 3734.1,245.9 L3734.1,255.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1078.6,1318.8 L1078.6,1342.9 Q1078.6,1346.3 1082.0,1346.3 L1144.8,1346.3 Q1148.2,1346.3 1148.2,1349.7 L1148.2,1406.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M979.9,1318.8 L979.9,1332.5 Q979.9,1335.9 983.3,1335.9 L1025.9,1335.9 Q1029.3,1335.9 1029.3,1339.3 L1029.3,1349.0" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
 <path d="M1029.3,1375.9 L1029.3,1389.6 Q1029.3,1393.0 1032.7,1393.0 L1194.1,1393.0 Q1197.5,1393.0 1197.5,1396.4 L1197.5,1406.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2584.7,524.8 L2584.7,530.9 Q2584.7,534.2 2588.1,534.2 L2630.6,534.2 Q2634.0,534.2 2634.0,537.6 L2634.0,555.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2683.3,524.8 L2683.3,538.5 Q2683.3,541.9 2686.8,541.9 L2798.8,541.9 Q2802.2,541.9 2802.2,545.3 L2802.2,555.1" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M3734.1,632.5 L3734.1,662.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2634.0,1116.9 L2634.0,1204.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3734.1,518.1 L3734.1,548.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3902.3,403.7 L3902.3,434.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3902.3,460.9 L3902.3,474.6 Q3902.3,478.0 3898.9,478.0 L3786.8,478.0 Q3783.4,478.0 3783.4,481.4 L3783.4,491.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2802.2,582.0 L2802.2,595.7 Q2802.2,599.1 2798.8,599.1 L2686.8,599.1 Q2683.3,599.1 2683.3,602.5 L2683.3,612.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2584.7,1059.7 L2584.7,1073.4 Q2584.7,1076.8 2588.1,1076.8 L2630.6,1076.8 Q2634.0,1076.8 2634.0,1080.2 L2634.0,1090.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3734.1,575.3 L3734.1,605.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2584.7,168.2 L2584.7,174.2 Q2584.7,177.7 2588.1,177.7 L2630.6,177.7 Q2634.0,177.7 2634.0,181.1 L2634.0,198.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2683.3,168.2 L2683.3,181.9 Q2683.3,185.3 2686.8,185.3 L2798.8,185.3 Q2802.2,185.3 2802.2,188.7 L2802.2,198.5" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M3734.1,861.2 L3734.1,891.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2634.0,1561.0 L2634.0,1591.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3734.1,746.8 L3734.1,777.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3902.3,632.5 L3902.3,662.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3902.3,689.7 L3902.3,703.4 Q3902.3,706.8 3898.9,706.8 L3786.8,706.8 Q3783.4,706.8 3783.4,710.2 L3783.4,719.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2802.2,225.4 L2802.2,239.1 Q2802.2,242.5 2798.8,242.5 L2686.8,242.5 Q2683.3,242.5 2683.3,245.9 L2683.3,255.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2584.65,703.1 L2584.65,1534.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3734.1,804.0 L3734.1,834.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M552.6,524.8 L552.6,365.1 Q552.6,361.7 549.2,361.7 L318.4,361.7 Q315.0,361.7 315.0,365.1 L315.0,1076.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M651.35,524.8 L651.35,1012.6" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
 <path d="M1583.2,1288.5 L1583.2,1312.7 Q1583.2,1316.1 1586.7,1316.1 L1916.2,1316.1 Q1919.6,1316.1 1919.6,1319.5 L1919.6,1375.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
@@ -195,17 +195,17 @@
 <path d="M1365.7,689.7 L1365.7,719.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1365.7,746.8 L1365.7,777.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1365.7,804.0 L1365.7,926.4 Q1365.7,929.8 1362.3,929.8 L1250.2,929.8 Q1246.8,929.8 1246.8,933.2 L1246.8,1984.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2634.0,353.2 L2634.0,383.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M1533.9,1994.9 L1533.9,1999.9 Q1533.9,2003.3 1537.3,2003.3 L2176.1,2003.3 Q2179.5,2003.3 2179.5,1999.9 L2179.5,21.9 Q2179.5,18.5 2182.9,18.5 L2630.6,18.5 Q2634.0,18.5 2634.0,21.9 L2634.0,26.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-ok)"/>
 <path d="M1533.9,339.8 L1533.9,427.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1197.5,575.3 L1197.5,605.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M2683.3,1059.7 L2683.3,1083.9 Q2683.3,1087.3 2679.9,1087.3 L2637.4,1087.3 Q2634.0,1087.3 2634.0,1090.7 L2634.0,1147.2" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M3734.1,53.8 L3734.1,84.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3734.1,111.0 L3734.1,141.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3734.1,168.2 L3734.1,198.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3783.4,225.4 L3783.4,239.1 Q3783.4,242.5 3786.8,242.5 L3898.9,242.5 Q3902.3,242.5 3902.3,245.9 L3902.3,255.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3684.75,225.4 L3684.75,491.2" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
-<path d="M3902.3,289.3 L3902.3,319.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M3902.3,346.5 L3902.3,376.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2683.3,703.1 L2683.3,716.8 Q2683.3,720.2 2679.9,720.2 L2637.4,720.2 Q2634.0,720.2 2634.0,723.6 L2634.0,733.4" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M3734.1,282.6 L3734.1,312.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3734.1,339.8 L3734.1,370.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3734.1,397.0 L3734.1,427.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3783.4,454.2 L3783.4,467.9 Q3783.4,471.3 3786.8,471.3 L3898.9,471.3 Q3902.3,471.3 3902.3,474.7 L3902.3,484.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3684.75,454.2 L3684.75,719.9" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M3902.3,518.1 L3902.3,548.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M3902.3,575.3 L3902.3,605.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1484.6,1174.1 L1484.6,1187.8 Q1484.6,1191.2 1488.0,1191.2 L1530.5,1191.2 Q1533.9,1191.2 1533.9,1194.6 L1533.9,1204.4" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1583.2,1174.1 L1583.2,1198.3 Q1583.2,1201.7 1579.8,1201.7 L1488.0,1201.7 Q1484.6,1201.7 1484.6,1205.1 L1484.6,1261.6" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
 <path d="M1484.6,1231.3 L1484.6,1245.0 Q1484.6,1248.4 1488.0,1248.4 L1579.8,1248.4 Q1583.2,1248.4 1583.2,1251.8 L1583.2,1261.6" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
@@ -226,7 +226,24 @@
 <path d="M1484.5500000000002,53.8 L1484.5500000000002,198.5" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
 <path d="M1583.2,53.8 L1583.2,67.5 Q1583.2,70.9 1586.7,70.9 L1698.7,70.9 Q1702.1,70.9 1702.1,74.3 L1702.1,84.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
 <path d="M1652.8,111.0 L1652.8,145.7 Q1652.8,149.1 1649.3,149.1 L1586.7,149.1 Q1583.2,149.1 1583.2,152.5 L1583.2,198.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
-<path d="M1751.4,111.0 L1751.4,116.0 Q1751.4,119.4 1754.8,119.4 L2186.7,119.4 Q2190.1,119.4 2190.1,122.8 L2190.1,1067.5 Q2190.1,1070.9 2193.5,1070.9 L3546.1,1070.9 Q3549.5,1070.9 3549.5,1074.3 L3549.5,1083.3" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
+<path d="M1751.4,111.0 L1751.4,116.0 Q1751.4,119.4 1754.8,119.4 L2180.7,119.4 Q2184.1,119.4 2184.1,122.8 L2184.1,1296.2 Q2184.1,1299.6 2187.5,1299.6 L3546.1,1299.6 Q3549.5,1299.6 3549.5,1303.0 L3549.5,1312.0" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" stroke-dasharray="6,3" marker-end="url(#arr-no)"/>
+<path d="M2683.3,760.3 L2683.3,784.5 Q2683.3,787.9 2686.8,787.9 L2749.4,787.9 Q2752.8,787.9 2752.8,791.3 L2752.8,1534.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2584.7,760.3 L2584.7,774.0 Q2584.7,777.4 2588.1,777.4 L2630.6,777.4 Q2634.0,777.4 2634.0,780.8 L2634.0,790.6" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M2634.0,817.5 L2634.0,847.8" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2634.0,874.7 L2634.0,905.0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2634.0,931.9 L2634.0,962.2" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2634.0,989.1 L2634.0,1019.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2634.0,1046.3 L2634.0,1076.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2634.0,1103.4 L2634.0,1133.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2634.0,1160.6 L2634.0,1190.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2634.0,1217.8 L2634.0,1248.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2683.3,1275.0 L2683.3,1288.7 Q2683.3,1292.1 2686.8,1292.1 L2798.8,1292.1 Q2802.2,1292.1 2802.2,1295.5 L2802.2,1305.3" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2584.65,1275.0 L2584.65,1362.5" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
+<path d="M2802.2,1332.2 L2802.2,1345.9 Q2802.2,1349.3 2798.8,1349.3 L2686.8,1349.3 Q2683.3,1349.3 2683.3,1352.7 L2683.3,1362.5" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2634.0,1389.4 L2634.0,1419.7" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2634.0,1446.6 L2634.0,1476.9" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2584.7,1503.8 L2584.7,1517.5 Q2584.7,1520.9 2588.1,1520.9 L2679.9,1520.9 Q2683.3,1520.9 2683.3,1524.3 L2683.3,1534.1" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-ok)"/>
+<path d="M2683.3,1503.8 L2683.3,1511.8 Q2683.3,1515.2 2686.8,1515.2 L2848.1,1515.2 Q2851.5,1515.2 2851.5,1518.6 L2851.5,1534.1" fill="none" stroke="#EF5350" stroke-width="1.5" opacity="0.7" marker-end="url(#arr-no)"/>
 <rect x="363.3" y="26.9" width="141" height="26.9" rx="5" fill="#90CAF9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="433.8" y="42.849999999999994" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="433.8" dy="0">Input File</tspan></text>
 <rect x="363.3" y="84.1" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
@@ -323,96 +340,96 @@
 <text x="1870.3" y="1395.2" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1870.3" dy="0">Software fallback</tspan></text>
 <rect x="1799.8" y="1439.9" width="141" height="26.9" rx="5" fill="#66BB6A" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1870.3" y="1455.8500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1870.3" dy="0">Encode: libx265 (SW)</tspan></text>
-<rect x="2563.5" y="198.5" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="217.8" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Set video tags</tspan></text>
+<rect x="1463.4" y="1840.2" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1533.9" y="1859.5" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1533.9" dy="0">Set video tags</tspan></text>
 <rect x="1463.4" y="1611.4" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1533.9" y="1627.3500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1533.9" dy="0">Check: low bitrate?</tspan></text>
-<rect x="2563.5" y="26.9" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="42.849999999999994" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Check: mid bitrate?</tspan></text>
+<rect x="1463.4" y="1668.6" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1533.9" y="1684.55" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1533.9" dy="0">Check: mid bitrate?</tspan></text>
 <rect x="1463.4" y="1554.2" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1533.9" y="1570.15" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1533.9" dy="0">Check: vlow bitrate?</tspan></text>
 <rect x="1295.2" y="1611.4" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1365.7" y="1627.3500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1365.7" dy="0">Cap: 1.5 Mbps</tspan></text>
 <rect x="1295.2" y="1668.6" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1365.7" y="1684.55" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1365.7" dy="0">Cap: 2 Mbps</tspan></text>
-<rect x="2395.3" y="84.1" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2465.8" y="100.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2465.8" dy="0">Cap: 6 Mbps</tspan></text>
-<rect x="2395.3" y="141.3" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2465.8" y="157.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2465.8" dy="0">Cap: 10 Mbps</tspan></text>
-<rect x="2563.5" y="262.4" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="278.34999999999997" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Set: hvc1 + 10bit</tspan></text>
-<rect x="2563.5" y="1204.4" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="1223.7" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Audio pipeline</tspan></text>
-<rect x="2563.5" y="1325.5" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="1341.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Ensure AAC 2.0 (eng)</tspan></text>
-<rect x="2731.7" y="1439.9" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2802.2" y="1455.8500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2802.2" dy="0">Ensure AAC 2.0 (und)</tspan></text>
-<rect x="2395.3" y="1382.7" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2465.8" y="1398.65" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2465.8" dy="0">Guard: und audio?</tspan></text>
-<rect x="2563.5" y="1268.3" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="1284.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Guard: has eng audio?</tspan></text>
-<rect x="2563.5" y="319.6" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="338.90000000000003" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">EAC3 5.1 surround</tspan></text>
-<rect x="2563.5" y="383.5" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="399.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Guard: 6+ ch surround?</tspan></text>
-<rect x="2395.3" y="440.7" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2465.8" y="456.65" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2465.8" dy="0">Guard: 8 ch surround?</tspan></text>
-<rect x="2563.5" y="555.1" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="571.0500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Ensure EAC3 5.1 (eng)</tspan></text>
-<rect x="3663.6" y="198.5" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="214.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Has AAC audio?</tspan></text>
-<rect x="3831.8" y="255.7" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3902.3" y="275.0" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3902.3" dy="0">Remove unwanted audio</tspan></text>
-<rect x="3831.8" y="319.6" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3902.3" y="335.55" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3902.3" dy="0">Remove incompatible audio</tspan></text>
-<rect x="2563.5" y="612.3" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="631.5999999999999" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Reorder streams</tspan></text>
-<rect x="2563.5" y="676.2" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="692.1500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Reorder (stereo first)</tspan></text>
-<rect x="2563.5" y="733.4" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="752.6999999999999" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Strip mux-incompatible audio</tspan></text>
-<rect x="2563.5" y="797.3" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="813.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Remove MP4-incompatible audio</tspan></text>
-<rect x="2563.5" y="854.5" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="873.8" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Execute FFmpeg</tspan></text>
-<rect x="2563.5" y="918.4" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="934.35" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Drop chapter data</tspan></text>
-<rect x="2563.5" y="975.6" width="141" height="26.9" rx="5" fill="#2E7D32" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="991.5500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFFFF"><tspan x="2634.0" dy="0">Execute FFmpeg</tspan></text>
-<rect x="3663.6" y="662.7" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="682.0" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Size check</tspan></text>
-<rect x="3663.6" y="726.7" width="141" height="26.9" rx="5" fill="#FFF176" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="742.6500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Check: file size ratio</tspan></text>
-<rect x="3495.4" y="783.9" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3565.9" y="803.1999999999999" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3565.9" dy="0">Too big — review</tspan></text>
-<rect x="3663.6" y="783.9" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="803.1999999999999" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Duration check</tspan></text>
-<rect x="3663.6" y="847.8" width="141" height="26.9" rx="5" fill="#FFF176" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="863.75" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Check: duration ratio</tspan></text>
-<rect x="3663.6" y="905.0" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="920.95" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Guard: has video?</tspan></text>
-<rect x="3663.6" y="962.2" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="978.1500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Guard: has audio?</tspan></text>
-<rect x="3495.4" y="1026.1" width="141" height="26.9" rx="5" fill="#B0BEC5" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3565.9" y="1042.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3565.9" dy="0">FAIL: missing streams</tspan></text>
-<rect x="3495.4" y="905.0" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3565.9" y="924.3" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3565.9" dy="0">Duration mismatch</tspan></text>
-<rect x="3495.4" y="968.9" width="141" height="26.9" rx="5" fill="#FF8A65" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3565.9" y="984.85" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3565.9" dy="0">Flag for review</tspan></text>
-<rect x="3663.6" y="1076.5" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="1095.8" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Replace original</tspan></text>
-<rect x="3663.6" y="1140.5" width="141" height="26.9" rx="5" fill="#EF5350" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="1156.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFFFF"><tspan x="3734.1" dy="0">Replace original file</tspan></text>
-<rect x="3663.6" y="1197.6" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="1216.8999999999999" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Notifications</tspan></text>
-<rect x="3663.6" y="1261.6" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="1277.55" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Check: plex notify?</tspan></text>
-<rect x="3831.8" y="1318.8" width="141" height="26.9" rx="5" fill="#4FC3F7" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3902.3" y="1334.75" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3902.3" dy="0">Notify Plex</tspan></text>
-<rect x="3663.6" y="1375.9" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="1391.8500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Check: arr notify?</tspan></text>
-<rect x="3663.6" y="1433.1" width="141" height="26.9" rx="5" fill="#4FC3F7" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="1449.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Notify Radarr/Sonarr</tspan></text>
+<rect x="1295.2" y="1725.8" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1365.7" y="1741.75" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1365.7" dy="0">Cap: 6 Mbps</tspan></text>
+<rect x="1295.2" y="1783.0" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1365.7" y="1798.95" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1365.7" dy="0">Cap: 10 Mbps</tspan></text>
+<rect x="1463.4" y="1904.1" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1533.9" y="1920.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1533.9" dy="0">Set: hvc1 + 10bit</tspan></text>
+<rect x="2563.5" y="1591.3" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="1610.6" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Audio pipeline</tspan></text>
+<rect x="3663.6" y="26.9" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="42.849999999999994" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Ensure AAC 2.0 (eng)</tspan></text>
+<rect x="3831.8" y="141.3" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3902.3" y="157.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3902.3" dy="0">Ensure AAC 2.0 (und)</tspan></text>
+<rect x="3495.4" y="84.1" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3565.9" y="100.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3565.9" dy="0">Guard: und audio?</tspan></text>
+<rect x="2563.5" y="1655.2" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="1671.15" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Guard: has eng audio?</tspan></text>
+<rect x="1463.4" y="1961.3" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="1533.9" y="1980.6" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1533.9" dy="0">EAC3 5.1 surround</tspan></text>
+<rect x="2563.5" y="26.9" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="42.849999999999994" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Guard: 6+ ch surround?</tspan></text>
+<rect x="2395.3" y="84.1" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2465.8" y="100.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2465.8" dy="0">Guard: 8 ch surround?</tspan></text>
+<rect x="2563.5" y="198.5" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="214.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Ensure EAC3 5.1 (eng)</tspan></text>
+<rect x="3663.6" y="427.2" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="443.15" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Has AAC audio?</tspan></text>
+<rect x="3831.8" y="484.4" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3902.3" y="503.7" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3902.3" dy="0">Remove unwanted audio</tspan></text>
+<rect x="3831.8" y="548.4" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3902.3" y="564.35" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3902.3" dy="0">Remove incompatible audio</tspan></text>
+<rect x="2563.5" y="255.7" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="275.0" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Reorder streams</tspan></text>
+<rect x="2563.5" y="319.6" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="335.55" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Reorder (stereo first)</tspan></text>
+<rect x="2563.5" y="376.8" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="396.1" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Strip mux-incompatible audio</tspan></text>
+<rect x="2563.5" y="440.7" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="456.65" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Remove MP4-incompatible audio</tspan></text>
+<rect x="2563.5" y="497.9" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="517.2" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Execute FFmpeg</tspan></text>
+<rect x="2563.5" y="561.8" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="577.75" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Drop chapter data</tspan></text>
+<rect x="2563.5" y="619.0" width="141" height="26.9" rx="5" fill="#2E7D32" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="634.95" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFFFF"><tspan x="2634.0" dy="0">Execute FFmpeg</tspan></text>
+<rect x="3663.6" y="891.5" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="910.8" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Size check</tspan></text>
+<rect x="3663.6" y="955.4" width="141" height="26.9" rx="5" fill="#FFF176" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="971.35" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Check: file size ratio</tspan></text>
+<rect x="3495.4" y="1012.6" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3565.9" y="1031.9" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3565.9" dy="0">Too big — review</tspan></text>
+<rect x="3663.6" y="1012.6" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="1031.9" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Duration check</tspan></text>
+<rect x="3663.6" y="1076.5" width="141" height="26.9" rx="5" fill="#FFF176" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="1092.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Check: duration ratio</tspan></text>
+<rect x="3663.6" y="1133.7" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="1149.65" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Guard: has video?</tspan></text>
+<rect x="3663.6" y="1190.9" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="1206.8500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Guard: has audio?</tspan></text>
+<rect x="3495.4" y="1254.8" width="141" height="26.9" rx="5" fill="#B0BEC5" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3565.9" y="1270.75" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3565.9" dy="0">FAIL: missing streams</tspan></text>
+<rect x="3495.4" y="1133.7" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3565.9" y="1153.0" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3565.9" dy="0">Duration mismatch</tspan></text>
+<rect x="3495.4" y="1197.6" width="141" height="26.9" rx="5" fill="#FF8A65" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3565.9" y="1213.55" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3565.9" dy="0">Flag for review</tspan></text>
+<rect x="3663.6" y="1305.3" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="1324.6" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Replace original</tspan></text>
+<rect x="3663.6" y="1369.2" width="141" height="26.9" rx="5" fill="#EF5350" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="1385.15" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFFFF"><tspan x="3734.1" dy="0">Replace original file</tspan></text>
+<rect x="3663.6" y="1426.4" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="1445.7" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Notifications</tspan></text>
+<rect x="3663.6" y="1490.3" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="1506.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Check: plex notify?</tspan></text>
+<rect x="3831.8" y="1547.5" width="141" height="26.9" rx="5" fill="#4FC3F7" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3902.3" y="1563.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3902.3" dy="0">Notify Plex</tspan></text>
+<rect x="3663.6" y="1604.7" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="1620.65" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Check: arr notify?</tspan></text>
+<rect x="3663.6" y="1661.9" width="141" height="26.9" rx="5" fill="#4FC3F7" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="1677.8500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Notify Radarr/Sonarr</tspan></text>
 <rect x="26.9" y="26.9" width="141" height="26.9" rx="5" fill="#B0BEC5" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="97.4" y="42.849999999999994" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="97.4" dy="0">On flow error</tspan></text>
 <rect x="363.3" y="1318.8" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
@@ -467,16 +484,16 @@
 <text x="1197.5" y="2058.0499999999997" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Check: duration ratio (VR)</tspan></text>
 <rect x="1127.0" y="2270.8" width="141" height="26.9" rx="5" fill="#EF5350" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1197.5" y="2286.75" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFFFF"><tspan x="1197.5" dy="0">Replace original file (VR)</tspan></text>
-<rect x="3663.6" y="1019.3" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="1035.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Auto-accept?</tspan></text>
+<rect x="3663.6" y="1248.1" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="1264.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Auto-accept?</tspan></text>
 <rect x="1127.0" y="2213.6" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1197.5" y="2229.5499999999997" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Auto-accept? (VR)</tspan></text>
 <rect x="1127.0" y="2099.2" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1197.5" y="2115.1499999999996" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Guard: has video? (VR)</tspan></text>
 <rect x="1127.0" y="2156.4" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1197.5" y="2172.35" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Guard: has audio? (VR)</tspan></text>
-<rect x="3495.4" y="1083.3" width="141" height="26.9" rx="5" fill="#FF8A65" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3565.9" y="1099.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3565.9" dy="0">Await acceptance</tspan></text>
+<rect x="3495.4" y="1312.0" width="141" height="26.9" rx="5" fill="#FF8A65" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3565.9" y="1327.95" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3565.9" dy="0">Await acceptance</tspan></text>
 <rect x="1127.0" y="891.5" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1197.5" y="907.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Check: VR bitrate?</tspan></text>
 <rect x="958.8" y="948.7" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
@@ -489,40 +506,68 @@
 <text x="433.8" y="799.85" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="433.8" dy="0">Guard: 6+ ch surround?</tspan></text>
 <rect x="531.5" y="841.0" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="602.0" y="856.95" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="602.0" dy="0">Guard: has EAC3?</tspan></text>
-<rect x="2395.3" y="1439.9" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2465.8" y="1455.8500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2465.8" dy="0">Guard: eng audio? (fb)</tspan></text>
-<rect x="2395.3" y="1497.1" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2465.8" y="1513.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2465.8" dy="0">Ensure AAC 2.0 (fallback)</tspan></text>
+<rect x="3495.4" y="141.3" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3565.9" y="157.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3565.9" dy="0">Guard: eng audio? (fb)</tspan></text>
+<rect x="3495.4" y="198.5" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3565.9" y="214.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3565.9" dy="0">Ensure AAC 2.0 (fallback)</tspan></text>
 <rect x="958.8" y="1291.8" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1029.3" y="1307.75" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1029.3" dy="0">Guard: eng audio? (VR fb)</tspan></text>
 <rect x="958.8" y="1349.0" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1029.3" y="1364.95" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1029.3" dy="0">Ensure AAC 2.0 (VR fallback)</tspan></text>
 <rect x="26.9" y="84.1" width="141" height="33.6" rx="5" fill="#E8EAF6" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="97.4" y="103.39999999999999" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="97.4" dy="0">Error Terminal</tspan></text>
-<rect x="2563.5" y="497.9" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="513.8499999999999" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Guard: eng audio? (EAC3)</tspan></text>
-<rect x="2563.5" y="1090.0" width="141" height="26.9" rx="5" fill="#A5D6A7" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="1105.95" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Begin AAC pass</tspan></text>
-<rect x="3663.6" y="491.2" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="507.15" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Reorder (cleanup)</tspan></text>
-<rect x="3831.8" y="376.8" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3902.3" y="392.75" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3902.3" dy="0">Remove: ac3</tspan></text>
-<rect x="3663.6" y="605.6" width="141" height="26.9" rx="5" fill="#2E7D32" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="621.5500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFFFF"><tspan x="3734.1" dy="0">Execute cleanup pass</tspan></text>
-<rect x="3831.8" y="434.0" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3902.3" y="449.95" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3902.3" dy="0">Remove: mp3</tspan></text>
-<rect x="2731.7" y="555.1" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2802.2" y="571.0500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2802.2" dy="0">EAC3: fallback</tspan></text>
-<rect x="2563.5" y="1032.8" width="141" height="26.9" rx="5" fill="#EF9A9A" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="1048.75" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Health Check (pass 2)</tspan></text>
+<rect x="2563.5" y="141.3" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="157.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Guard: eng audio? (EAC3)</tspan></text>
+<rect x="2563.5" y="1534.1" width="141" height="26.9" rx="5" fill="#A5D6A7" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="1550.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Begin AAC pass</tspan></text>
+<rect x="3663.6" y="719.9" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="735.85" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Reorder (cleanup)</tspan></text>
+<rect x="3831.8" y="605.6" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3902.3" y="621.5500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3902.3" dy="0">Remove: ac3</tspan></text>
+<rect x="3663.6" y="834.3" width="141" height="26.9" rx="5" fill="#2E7D32" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="850.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFFFF"><tspan x="3734.1" dy="0">Execute cleanup pass</tspan></text>
+<rect x="3831.8" y="662.7" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3902.3" y="678.6500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3902.3" dy="0">Remove: mp3</tspan></text>
+<rect x="2731.7" y="198.5" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2802.2" y="214.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2802.2" dy="0">EAC3: fallback</tspan></text>
+<rect x="2563.5" y="676.2" width="141" height="26.9" rx="5" fill="#EF9A9A" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="692.1500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Health Check (pass 2)</tspan></text>
 <rect x="1463.4" y="312.9" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1533.9" y="328.84999999999997" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1533.9" dy="0">Quiet + stats</tspan></text>
 <rect x="1127.0" y="548.4" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1197.5" y="564.35" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1197.5" dy="0">Quiet + stats (VR)</tspan></text>
-<rect x="2563.5" y="1147.2" width="141" height="26.9" rx="5" fill="#B0BEC5" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="2634.0" y="1163.15" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Fail: corrupt output</tspan></text>
-<rect x="3663.6" y="548.4" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="564.35" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Set: hvc1 + faststart</tspan></text>
+<rect x="2731.7" y="1534.1" width="141" height="26.9" rx="5" fill="#B0BEC5" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2802.2" y="1550.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2802.2" dy="0">Fail: corrupt output</tspan></text>
+<rect x="2563.5" y="733.4" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="749.35" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Already retried?</tspan></text>
+<rect x="2563.5" y="790.6" width="141" height="26.9" rx="5" fill="#CE93D8" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="806.5500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Set: retry flag</tspan></text>
+<rect x="2563.5" y="847.8" width="141" height="26.9" rx="5" fill="#ECEFF1" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="863.75" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Reset to original</tspan></text>
+<rect x="2563.5" y="905.0" width="141" height="26.9" rx="5" fill="#A5D6A7" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="920.95" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Begin retry encode</tspan></text>
+<rect x="2563.5" y="962.2" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="978.1500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Quiet + stats (retry)</tspan></text>
+<rect x="2563.5" y="1019.3" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="1035.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Container: MP4 (retry)</tspan></text>
+<rect x="2563.5" y="1076.5" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="1092.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Remove subs (retry)</tspan></text>
+<rect x="2563.5" y="1133.7" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="1149.65" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Remove data (retry)</tspan></text>
+<rect x="2563.5" y="1190.9" width="141" height="26.9" rx="5" fill="#66BB6A" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="1206.8500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Encode: HEVC (retry)</tspan></text>
+<rect x="2563.5" y="1248.1" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="1264.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Has surround? (retry)</tspan></text>
+<rect x="2731.7" y="1305.3" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2802.2" y="1321.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2802.2" dy="0">EAC3 5.1 (retry)</tspan></text>
+<rect x="2563.5" y="1362.5" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="1378.45" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Tags: hvc1 (retry)</tspan></text>
+<rect x="2563.5" y="1419.7" width="141" height="26.9" rx="5" fill="#2E7D32" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="1435.65" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFFFF"><tspan x="2634.0" dy="0">Execute retry</tspan></text>
+<rect x="2563.5" y="1476.9" width="141" height="26.9" rx="5" fill="#EF9A9A" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="2634.0" y="1492.8500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="2634.0" dy="0">Health check (retry)</tspan></text>
+<rect x="3663.6" y="777.1" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="793.0500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Set: hvc1 + faststart</tspan></text>
 <rect x="363.3" y="1375.9" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="433.8" y="1391.8500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="433.8" dy="0">VR: already MP4?</tspan></text>
 <rect x="1463.4" y="84.1" width="141" height="26.9" rx="5" fill="#FFB74D" stroke="#9E9E9E" stroke-width="0.7"/>
@@ -543,12 +588,12 @@
 <text x="1365.7" y="735.85" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="1365.7" dy="0">Set: hvc1 + faststart (VR reta…</tspan></text>
 <rect x="1295.2" y="777.1" width="141" height="26.9" rx="5" fill="#2E7D32" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="1365.7" y="793.0500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFFFF"><tspan x="1365.7" dy="0">Execute FFmpeg (VR retag)</tspan></text>
-<rect x="3663.6" y="26.9" width="141" height="26.9" rx="5" fill="#2E7D32" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="42.849999999999994" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFFFF"><tspan x="3734.1" dy="0">Execute AAC pass</tspan></text>
-<rect x="3663.6" y="84.1" width="141" height="26.9" rx="5" fill="#A5D6A7" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="100.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Begin cleanup pass</tspan></text>
-<rect x="3663.6" y="141.3" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
-<text x="3734.1" y="157.25" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Remove data streams</tspan></text>
+<rect x="3663.6" y="255.7" width="141" height="26.9" rx="5" fill="#2E7D32" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="271.65" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFFFF"><tspan x="3734.1" dy="0">Execute AAC pass</tspan></text>
+<rect x="3663.6" y="312.9" width="141" height="26.9" rx="5" fill="#A5D6A7" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="328.84999999999997" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Begin cleanup pass</tspan></text>
+<rect x="3663.6" y="370.1" width="141" height="26.9" rx="5" fill="#C8E6C9" stroke="#9E9E9E" stroke-width="0.7"/>
+<text x="3734.1" y="386.05" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="3734.1" dy="0">Remove data streams</tspan></text>
 <rect x="363.3" y="898.2" width="141" height="26.9" rx="5" fill="#ECEFF1" stroke="#9E9E9E" stroke-width="0.7"/>
 <text x="433.8" y="914.1500000000001" text-anchor="middle" font-family="monospace" font-size="7" fill="#212121"><tspan x="433.8" dy="0">Unwanted audio? (exact)</tspan></text>
 <rect x="363.3" y="955.4" width="141" height="26.9" rx="5" fill="#ECEFF1" stroke="#9E9E9E" stroke-width="0.7"/>
