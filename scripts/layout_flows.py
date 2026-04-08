@@ -983,8 +983,8 @@ def col_map_01() -> dict[str, int]:
         "cmt_rmmux": M, "cmd_rmmux": M,
         "cmt_exec": M, "cmd_nochapters": M, "ffe_001": M,
         # ── Pass 2: AAC creation ─────────────────────────────────────────
-        "chk_health_002": M, "chk_retried": M, "fail_health2": R,
-        "set_retry": M, "rst_original": M, "ffs_retry": M,
+        "chk_health_002": M, "chk_retried": M,
+        "set_retry": M, "rst_original": M, "rst_error": M, "ffs_retry": M,
         "cmd_retry_loglevel": M, "cmd_retry_mp4": M, "cmd_retry_rmsub": M,
         "cmd_retry_rmdata": M, "cmd_retry_hevc": M, "grd_retry_ch": M,
         "cmd_retry_eac3": R, "cmd_retry_tags": M, "ffe_retry": M,
