@@ -330,29 +330,47 @@ for (const file of flowFiles) {
         'ffe_001 should route to health check');
       assert.strictEqual(edgeMap.get('chk_health_002:1'), 'ffs_002',
         'Health check should route to AAC pass start');
-      // Health check failure routes to retry gate (not directly to failFlow)
+      // runHealthCheck throws on failure — pass 2 failure is caught by onFlowError,
+      // which routes through the retry gate. The handle-2 edge remains as
+      // defense-in-depth in case the community plugin is ever updated to emit it.
       assert.strictEqual(edgeMap.get('chk_health_002:2'), 'chk_retried',
-        'Health check failure must route to retry gate');
+        'Health check handle 2 must route to retry gate (defense-in-depth)');
       assert.ok(pluginMap.has('chk_retried'),
         'chk_retried plugin node must exist');
       assert.strictEqual(pluginMap.get('chk_retried').pluginName, 'checkFlowVariable',
         'chk_retried must be a checkFlowVariable node');
 
-      // Retry gate: already retried -> fail, first failure -> retry pipeline
-      assert.strictEqual(edgeMap.get('chk_retried:1'), 'fail_health2',
-        'Already retried must route to failFlow');
+      // onFlowError routes through the retry gate so runHealthCheck throws
+      // (the real failure mode) trigger the retry pipeline.
+      assert.strictEqual(edgeMap.get('err_on:1'), 'chk_retried',
+        'onFlowError must route to retry gate so thrown health check failures trigger retry');
+
+      // Retry gate: already retried -> error terminal, first failure -> retry pipeline
+      assert.strictEqual(edgeMap.get('chk_retried:1'), 'cmt_err_end',
+        'Already retried must route to error terminal (preserve original, no loop)');
       assert.strictEqual(edgeMap.get('chk_retried:2'), 'set_retry',
         'First failure must route to retry pipeline');
-      assert.ok(pluginMap.has('fail_health2'),
-        'fail_health2 plugin node must exist');
-      assert.strictEqual(pluginMap.get('fail_health2').pluginName, 'failFlow',
-        'fail_health2 must be a failFlow node');
+      assert.ok(!pluginMap.has('fail_health2'),
+        'fail_health2 must be removed — second-failure path goes through cmt_err_end');
 
-      // Retry pipeline ends at health check -> pass 2 or fail
+      // Retry pipeline must reset flowFailed before running, otherwise the
+      // engine keeps routing straight back to onFlowError.
+      assert.strictEqual(edgeMap.get('set_retry:1'), 'rst_original',
+        'set_retry must route to reset-original');
+      assert.strictEqual(edgeMap.get('rst_original:1'), 'rst_error',
+        'rst_original must route to rst_error to clear flowFailed before retry');
+      assert.strictEqual(edgeMap.get('rst_error:1'), 'ffs_retry',
+        'rst_error must route to ffs_retry (begin retry encode)');
+      assert.ok(pluginMap.has('rst_error'),
+        'rst_error plugin node must exist');
+      assert.strictEqual(pluginMap.get('rst_error').pluginName, 'resetFlowError',
+        'rst_error must be a resetFlowError node');
+
+      // Retry pipeline ends at health check -> pass 2 (success path only).
+      // If the retry's health check throws again, onFlowError fires and the
+      // retry gate sees retry_encode=true, routing to cmt_err_end. No infinite loop.
       assert.strictEqual(edgeMap.get('chk_health_retry:1'), 'ffs_002',
         'Retry health check pass must route to AAC pass');
-      assert.strictEqual(edgeMap.get('chk_health_retry:2'), 'fail_health2',
-        'Retry health check failure must route to failFlow');
       assert.strictEqual(edgeMap.get('ffs_002:1'), 'cmt_audio',
         'AAC pass start should route to AAC stereo section');
 
@@ -990,25 +1008,68 @@ for (const file of flowFiles) {
         `cmd_vr_retag_tags must include "${FLAG}" to prevent corrupt MP4 from non-monotonic DTS`);
     });
 
-    test('onFlowError does not replace original file', () => {
+    test('onFlowError gives up safely without replacing original file', () => {
       const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
 
-      // Collect ALL outgoing edges from err_on (not just one via Map)
+      // Walk every path reachable from err_on and verify that:
+      //   (a) any reachable replaceOriginalFile is gated behind a successful
+      //       retry health check (chk_health_retry handle 1) — never reached
+      //       directly from the error handler with a possibly-broken working
+      //       file, and
+      //   (b) every terminal (node with no outgoing edges) reachable without
+      //       passing chk_health_retry is a comment node, so giving up
+      //       preserves the original file.
       const errEdges = flow.flowEdges.filter((e) => e.source === 'err_on');
       assert.ok(errEdges.length > 0, 'onFlowError must have at least one outgoing edge');
 
-      for (const edge of errEdges) {
-        const targetNode = pluginMap.get(edge.target);
-        assert.ok(targetNode, `Missing target node ${edge.target}`);
-        assert.notStrictEqual(targetNode.pluginName, 'replaceOriginalFile',
-          `onFlowError edge ${edge.id} must NOT route to replaceOriginalFile — a failed transcode would overwrite the original with a broken working file`);
+      const adjacency = new Map();
+      for (const e of flow.flowEdges) {
+        if (!adjacency.has(e.source)) adjacency.set(e.source, []);
+        adjacency.get(e.source).push(e);
+      }
 
-        // Each target should be a safe terminal (comment node with no outgoing edges)
-        assert.strictEqual(targetNode.pluginName, 'comment',
-          `onFlowError target ${edge.target} should be a comment node to preserve the original file`);
-        const outgoing = flow.flowEdges.filter((e) => e.source === edge.target);
-        assert.strictEqual(outgoing.length, 0,
-          `onFlowError terminal ${edge.target} must have no outgoing edges`);
+      // BFS from each err_on target. State: node + whether we've passed the
+      // retry-success gate (chk_health_retry handle 1).
+      const visited = new Set();
+      const queue = [];
+      for (const edge of errEdges) {
+        queue.push({ nodeId: edge.target, passedRetryGate: false });
+      }
+
+      while (queue.length > 0) {
+        const { nodeId, passedRetryGate } = queue.shift();
+        const key = `${nodeId}:${passedRetryGate}`;
+        if (visited.has(key)) continue;
+        visited.add(key);
+
+        const node = pluginMap.get(nodeId);
+        assert.ok(node, `Missing reachable node ${nodeId} from err_on`);
+
+        // Safety: replaceOriginalFile must only be reachable after the retry
+        // health check has confirmed the working file is valid.
+        if (node.pluginName === 'replaceOriginalFile') {
+          assert.ok(passedRetryGate,
+            `replaceOriginalFile (${nodeId}) is reachable from onFlowError without passing chk_health_retry — a broken working file could overwrite the original`);
+        }
+
+        const outgoing = adjacency.get(nodeId) || [];
+        if (outgoing.length === 0) {
+          // Terminal reached. If we haven't passed the retry gate, this must
+          // be a comment node (safe give-up), so the original file stays.
+          if (!passedRetryGate) {
+            assert.strictEqual(node.pluginName, 'comment',
+              `onFlowError give-up terminal ${nodeId} must be a comment node to preserve the original file`);
+          }
+          continue;
+        }
+
+        for (const edge of outgoing) {
+          let nowPassed = passedRetryGate;
+          if (nodeId === 'chk_health_retry' && edge.sourceHandle === '1') {
+            nowPassed = true;
+          }
+          queue.push({ nodeId: edge.target, passedRetryGate: nowPassed });
+        }
       }
     });
   });
