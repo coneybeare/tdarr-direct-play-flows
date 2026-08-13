@@ -957,6 +957,8 @@ def col_map_01() -> dict[str, int]:
         # ── Health check ──────────────────────────────────────────────
         "cmt_health": M, "chk_health": M,
         "grd_has_muxincompat": M, "grd_has_safe_audio": R,
+        "grd_mux_lang_ok": R, "grd_mux_lang_foreign": R,
+        "grd_mux_ch6": R, "grd_mux_ch8": R, "var_need_p1_aac": R,
         # ── FFmpeg pipeline ───────────────────────────────────────────
         "ffs_001": M, "cmd_loglevel": M,
         "cmt_mp4": M, "cmd_mp4": M,
@@ -979,7 +981,7 @@ def col_map_01() -> dict[str, int]:
         "cmt_audio": M, "grd_has_eng": M, "cmd_ens_eng": M,
         "grd_dup_und": L, "cmd_ens_und": R,
         "grd_fb_eng": L, "cmd_ens_fb": L,
-        "cmt_reorder": M, "cmd_reorder": M,
+        "cmt_reorder": M, "chk_p1_aac": M, "cmd_p1_aac": L, "cmd_reorder": M,
         "cmt_rmmux": M, "cmd_rmmux": M,
         "cmt_exec": M, "cmd_nochapters": M, "ffe_001": M,
         # ── Pass 2: AAC creation ─────────────────────────────────────────

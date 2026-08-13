@@ -42,7 +42,7 @@ When a new permutation is discovered, add it here and verify the flow handles it
 | 3a | mkv | h264 | ac3 5.1 eng | srt subs | Transcode to HEVC/MP4, create EAC3+AAC, remove AC3, strip subs | pass (post-fix) |
 | 3b | mkv | h264 | aac 2.0 eng | none | Transcode to HEVC/MP4, keep AAC | pass |
 | 3c | mkv | mpeg2 | ac3 2.0 eng | none | Transcode to HEVC/MP4, create AAC, remove AC3 | pass (post-fix) |
-| 3d | mkv | vp9 | opus 2.0 eng | none | Transcode to HEVC/MP4, remove Opus, create AAC | pass |
+| 3d | mkv | vp9 | opus 2.0 eng | none | Transcode to HEVC/MP4, create AAC 2.0 from Opus in pass 1, remove Opus | pass |
 | 3e | mkv | av1 | aac 2.0 eng | none | Software transcode to HEVC/MP4 (AV1 can't hw decode on T400), keep AAC | pass |
 
 ### 4. AVI files
@@ -109,6 +109,32 @@ When a new permutation is discovered, add it here and verify the flow handles it
 | 10g | mp4 | hevc (hvc1) | aac 2.0 eng + eac3 5.1 eng | none | Skip — EAC3 surround is not unwanted | pass |
 | 10h | mp4 | hevc (hvc1) | eac3 6ch kor + eac3 6ch chi (no AAC) | none | Process — grd_aud catches missing AAC, fallback AAC creation | pass |
 
+### 11. MP4-incompatible audio codecs (mux-incompatible on first pass)
+
+| # | Container | Video | Audio | Other | Expected Outcome | Status |
+|---|-----------|-------|-------|-------|-----------------|--------|
+| 11a | wmv | wmv2 | wmav2 2.0 (no lang) | none | Transcode to HEVC/MP4, create AAC 2.0 from WMA in pass 1 | pass |
+| 11b | mkv | hevc | adpcm_ima_wav 2.0 | none | Remux to MP4, create AAC 2.0 from ADPCM in pass 1 | pass |
+| 11c | mkv | hevc | wmav2 2.0 hun + ac3 5.1 eng | none | Has safe audio — normal path, WMA stripped | pass |
+| 11d | mkv | hevc | ac3 5.1 eng | none | No mux-incompatible audio — normal path | pass |
+| 11e | wmv | vc1 | wmapro 5.1 + wmav2 2.0 (no lang) | none | EAC3 5.1 via fallback in pass 1, AAC 2.0 in pass 2, WMA stripped | pass |
+| 11f | mkv | hevc | opus 5.1 eng | none | EAC3 5.1 in pass 1, AAC 2.0 in pass 2, Opus stripped | pass |
+| 11g | mkv | av1 | opus 7.1 eng | none | Routes via 8ch gate; EAC3 + AAC, Opus stripped | pass |
+| 11h | wmv | wmv3 | wmav2 mono | none | Transcode to HEVC/MP4, create AAC from the mono source in pass 1 (stays mono — the plugin clamps to the source channel count) | pass |
+| 11i | mkv | hevc | vorbis 2.0 eng | none | Remux to MP4, create AAC 2.0 from Vorbis in pass 1, Vorbis stripped | pass |
+| 11j | mkv | hevc | opus 2.0 pol | none | Manual review — EnsureAudioStream cannot match `pol` | pass |
+| 11k | mkv | hevc | opus 5.1 jpn | none | Manual review — EAC3 has the same language limitation | pass |
+| 11l | wmv | wmv3 | wmav2 2.0 untagged | none | Converts — undefined language is matched | pass |
+| 11m | mkv | hevc | vorbis 2.0 eng + opus 2.0 pol | none | Converts via the eng stream | pass |
+
+**Pass 1 audio encoder invariant:** any single FFmpeg pass may contain at most
+one `ffmpegCommandEnsureAudioStream` node. The plugin emits `-ac <n>` with no
+stream specifier, so FFmpeg applies it to every audio output stream and the last
+node silently wins. `grd_mux_ch6` / `grd_mux_ch8` therefore mirror
+`grd_eac3_ch` / `grd_eac3_ch8` exactly: when the EAC3 section will fire, the
+pass-1 AAC node must not. This is enforced by the "Pass 1 audio encoder
+invariant" tests in `permutation-matrix.test.mjs`.
+
 ## Known Limitations
 
 ### Non-English/non-undefined audio language (permutations 6e, 6f)
@@ -120,8 +146,21 @@ built-in fallback then tries `"und"`. Neither matches language tags like `"swe"`
 **Affected files**: Any file where ALL audio streams have a non-English, non-undefined language tag (e.g. Swedish
 DTS, Czech AC3). Files with at least one "eng" or "und" stream are not affected.
 
-**Impact**: <0.1% of library (4 files out of ~5000). The flow correctly fails these files (Transcode error) rather
+**Impact**: for files that retain a safe audio track, the flow correctly fails these (Transcode error) rather
 than producing silent/broken output, because the post-pass-2 audio guard catches missing audio.
+
+For files whose ONLY audio is mux-incompatible (wma/vorbis/opus/adpcm), `grd_mux_lang_ok` /
+`grd_mux_lang_foreign` divert foreign-tagged files to `fl_manual_review` before they enter the pipeline, so they
+are left untouched rather than stripped of their only audio. `grd_mux_lang_foreign` holds a denylist of ISO
+639-2 language codes; a tag outside that set falls through and would fail as described above. Note that a
+single foreign-tagged stream is enough to divert a file: the check matches if ANY audio stream carries a
+denylisted tag, so a file mixing a foreign-tagged stream with an untagged one is diverted even though the
+untagged stream would have been usable.
+
+`grd_mux_lang_foreign` is only reached once `grd_mux_lang_ok` has already found no `eng`/`und` stream, so a
+file mixing `eng` with a foreign tag is never diverted — it takes the normal path and the AAC track is built
+from the `eng` stream (permutation 11m). The any-stream caveat above therefore applies only to files that have
+no `eng`/`und` stream at all.
 
 **Workaround**: Re-tag the audio language to "und" via `ffmpeg -c copy -metadata:s:a:0 language=und`, then requeue.
 The flow handles "und" audio correctly.

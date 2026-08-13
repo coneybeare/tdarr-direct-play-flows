@@ -483,14 +483,16 @@ describe('Permutation Matrix — Flow Routing', () => {
       assertPostEncodePasses(path);
     });
 
-    test('3d: mkv/vp9/opus 2.0 — manual review (opus is only audio, mux-incompatible)', () => {
-      // Opus is mux-incompatible with MP4. With no safe audio to clone from,
-      // the file routes to manual review instead of the encoding pipeline.
+    test('3d: mkv/vp9/opus 2.0 — converts opus to AAC in pass 1', () => {
+      // Opus cannot be stream-copied into MP4, but it decodes fine. Pass 1
+      // encodes AAC 2.0 from it before cmd_rmmux strips the opus stream.
       const path = walkFlow(file('mkv', [vid('vp9'), aud('opus', 2)]));
       has(path, 'grd_has_muxincompat', 'Should detect mux-incompatible opus');
       has(path, 'grd_has_safe_audio', 'Should check for safe audio');
-      has(path, 'fl_manual_review', 'Should route to manual review');
-      lacks(path, 'ffs_001', 'Should NOT enter encoding pipeline');
+      has(path, 'var_need_p1_aac', 'Should flag pass-1 AAC creation');
+      has(path, 'cmd_p1_aac', 'Should create AAC 2.0 in pass 1');
+      has(path, 'ffs_001', 'Should enter the encoding pipeline');
+      lacks(path, 'fl_manual_review', 'Should NOT dead-end at manual review');
     });
 
     test('3e: mkv/av1/aac 2.0 — force encode (MKV+non-HEVC routes to force encoder)', () => {
@@ -900,20 +902,22 @@ describe('Permutation Matrix — Flow Routing', () => {
   // Category 11: Mux-incompatible audio detection
   // ────────────────────────────────────────────────────────────────
   describe('11. Mux-incompatible audio detection', () => {
-    test('11a: wmv/wmv2/wmav2 2ch — routes to manual review (only mux-incompatible audio)', () => {
+    test('11a: wmv/wmv2/wmav2 2ch — converts wma to AAC in pass 1', () => {
       const path = walkFlow(file('wmv', [vid('wmv2', { tag: '' }), aud('wmav2', 2, '')]));
       has(path, 'grd_has_muxincompat', 'Should check for mux-incompatible audio');
       has(path, 'grd_has_safe_audio', 'Should check for safe audio');
-      has(path, 'fl_manual_review', 'Should route to manual review');
-      lacks(path, 'ffs_001', 'Should NOT enter encoding pipeline');
+      has(path, 'cmd_p1_aac', 'Should create AAC 2.0 in pass 1');
+      has(path, 'ffs_001', 'Should enter the encoding pipeline');
+      lacks(path, 'fl_manual_review', 'Should NOT dead-end at manual review');
     });
 
-    test('11b: mkv/hevc/adpcm_ima_wav 2ch — routes to manual review', () => {
+    test('11b: mkv/hevc/adpcm_ima_wav 2ch — converts adpcm to AAC in pass 1', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('adpcm_ima_wav', 2, '')]));
       has(path, 'grd_has_muxincompat', 'Should detect adpcm');
       has(path, 'grd_has_safe_audio', 'Should check for safe audio');
-      has(path, 'fl_manual_review', 'Should route to manual review');
-      lacks(path, 'ffs_001', 'Should NOT enter encoding pipeline');
+      has(path, 'cmd_p1_aac', 'Should create AAC 2.0 in pass 1');
+      has(path, 'ffs_001', 'Should enter the encoding pipeline');
+      lacks(path, 'fl_manual_review', 'Should NOT dead-end at manual review');
     });
 
     test('11c: mkv/hevc/wmav2 2ch + ac3 5.1 — processes normally (has safe audio)', () => {
@@ -929,6 +933,82 @@ describe('Permutation Matrix — Flow Routing', () => {
       has(path, 'grd_has_muxincompat', 'Should check mux-incompatible');
       lacks(path, 'grd_has_safe_audio', 'Should skip safe audio check (no mux-incompatible found)');
       has(path, 'ffs_001', 'Should enter encoding pipeline');
+    });
+
+    test('11e: wmv/vc1/wmapro 5.1 + wmav2 2.0 — EAC3 from surround, no pass-1 AAC', () => {
+      const path = walkFlow(file('wmv', [
+        vid('vc1', { tag: '' }), aud('wmapro', 6, ''), aud('wmav2', 2, ''),
+      ]));
+      has(path, 'grd_mux_ch6', 'Should check for 6ch surround');
+      has(path, 'ffs_001', 'Should enter the encoding pipeline');
+      has(path, 'cmd_eac3_fb', 'Untagged surround uses the EAC3 fallback node');
+      lacks(path, 'cmd_p1_aac', 'EAC3 already occupies the single -ac slot in pass 1');
+      lacks(path, 'fl_manual_review', 'Should NOT dead-end at manual review');
+    });
+
+    test('11f: mkv/hevc/opus 5.1 eng — EAC3 from surround, no pass-1 AAC', () => {
+      const path = walkFlow(file('mkv', [vid('hevc'), aud('opus', 6, 'eng')]));
+      has(path, 'grd_mux_ch6', 'Should check for 6ch surround');
+      has(path, 'cmd_eac3_eng', 'English surround uses the EAC3 eng node');
+      lacks(path, 'cmd_p1_aac', 'EAC3 already occupies the single -ac slot in pass 1');
+      lacks(path, 'fl_manual_review', 'Should NOT dead-end at manual review');
+    });
+
+    test('11g: mkv/av1/opus 7.1 eng — routes via the 8ch gate, no pass-1 AAC', () => {
+      const path = walkFlow(file('mkv', [vid('av1'), aud('opus', 8, 'eng')]));
+      has(path, 'grd_mux_ch6', 'Should check 6ch first');
+      has(path, 'grd_mux_ch8', 'Should fall through to the 8ch gate');
+      has(path, 'ffs_001', 'Should enter the encoding pipeline');
+      lacks(path, 'cmd_p1_aac', 'EAC3 already occupies the single -ac slot in pass 1');
+      lacks(path, 'fl_manual_review', 'Should NOT dead-end at manual review');
+    });
+
+    test('11h: wmv/wmv3/wmav2 mono — creates AAC in pass 1 (clamped to mono)', () => {
+      const path = walkFlow(file('wmv', [vid('wmv3', { tag: '' }), aud('wmav2', 1, '')]));
+      has(path, 'var_need_p1_aac', 'Mono is under 6ch, so the pass-1 flag is set');
+      has(path, 'cmd_p1_aac', 'Should create AAC from the mono source');
+      lacks(path, 'fl_manual_review', 'Should NOT dead-end at manual review');
+    });
+
+    test('11i: mkv/hevc/vorbis 2.0 — converts vorbis to AAC in pass 1', () => {
+      const path = walkFlow(file('mkv', [vid('hevc'), aud('vorbis', 2, 'eng')]));
+      has(path, 'var_need_p1_aac', 'Should flag pass-1 AAC creation');
+      has(path, 'cmd_p1_aac', 'Should create AAC 2.0 from the vorbis source');
+      lacks(path, 'fl_manual_review', 'Should NOT dead-end at manual review');
+    });
+
+    test('11j: mkv/hevc/opus 2.0 pol — manual review (EnsureAudioStream cannot match pol)', () => {
+      const path = walkFlow(file('mkv', [vid('hevc'), aud('opus', 2, 'pol')]));
+      has(path, 'grd_mux_lang_ok', 'Should check for eng/und audio');
+      has(path, 'grd_mux_lang_foreign', 'Should check the foreign denylist');
+      has(path, 'fl_manual_review', 'Foreign-only audio keeps the manual-review path');
+      lacks(path, 'cmd_p1_aac', 'Must not attempt an AAC encode that would match nothing');
+      lacks(path, 'ffs_001', 'Should NOT enter the encoding pipeline');
+    });
+
+    test('11k: mkv/hevc/opus 5.1 jpn — manual review (EAC3 has the same limitation)', () => {
+      const path = walkFlow(file('mkv', [vid('hevc'), aud('opus', 6, 'jpn')]));
+      has(path, 'grd_mux_lang_foreign', 'Should check the foreign denylist');
+      has(path, 'fl_manual_review', 'Surround with a foreign-tagged stream also keeps manual review');
+      lacks(path, 'cmd_eac3_eng', 'Must not attempt an EAC3 encode that would match nothing');
+      lacks(path, 'cmd_eac3_fb', 'Must not attempt an EAC3 encode that would match nothing');
+      lacks(path, 'ffs_001', 'Should NOT enter the encoding pipeline');
+    });
+
+    test('11l: wmv/wmv3/wmav2 2ch untagged — still converts (undefined language matches)', () => {
+      const path = walkFlow(file('wmv', [vid('wmv3', { tag: '' }), aud('wmav2', 2, '')]));
+      has(path, 'grd_mux_lang_foreign', 'Untagged falls through both language guards');
+      has(path, 'cmd_p1_aac', 'Untagged audio still gets an AAC track');
+      lacks(path, 'fl_manual_review', 'Untagged must NOT be diverted to manual review');
+    });
+
+    test('11m: mkv/hevc/vorbis 2.0 eng + opus 2.0 pol — converts via the eng stream', () => {
+      const path = walkFlow(file('mkv', [
+        vid('hevc'), aud('vorbis', 2, 'eng'), aud('opus', 2, 'pol'),
+      ]));
+      has(path, 'grd_mux_lang_ok', 'Should find the eng stream');
+      has(path, 'cmd_p1_aac', 'Should create AAC from the eng stream');
+      lacks(path, 'fl_manual_review', 'Should NOT be diverted to manual review');
     });
   });
 
@@ -1065,5 +1145,48 @@ describe('Permutation Matrix — Flow Routing', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('aac', 2, 'jpn')]));
       assertFallbackAAC(path);
     });
+  });
+
+  // ────────────────────────────────────────────────────────────────
+  // Invariant: pass 1 may contain at most one EnsureAudioStream node
+  // ────────────────────────────────────────────────────────────────
+  describe('Pass 1 audio encoder invariant', () => {
+    // ffmpegCommandEnsureAudioStream pushes a bare "-ac <n>" with no stream
+    // specifier. FFmpeg applies it to every audio output stream, so two nodes
+    // in one pass means the last one silently overwrites the first.
+    function pass1EnsureCount(path) {
+      const start = path.indexOf('ffs_001');
+      const end = path.indexOf('ffe_001');
+      // -1 signals "never entered pass 1" so the assertion fails loudly rather
+      // than passing vacuously if a future change re-routes one of these cases.
+      if (start === -1 || end === -1) return -1;
+      return path.slice(start, end + 1).filter((id) => {
+        const node = plugins.get(id);
+        return node && node.pluginName === 'ffmpegCommandEnsureAudioStream';
+      }).length;
+    }
+
+    const cases = [
+      ['wma mono', file('wmv', [vid('wmv3', { tag: '' }), aud('wmav2', 1, '')])],
+      ['wma stereo', file('wmv', [vid('wmv2', { tag: '' }), aud('wmav2', 2, '')])],
+      ['vorbis stereo', file('mkv', [vid('hevc'), aud('vorbis', 2, 'eng')])],
+      ['opus stereo', file('mkv', [vid('vp9'), aud('opus', 2)])],
+      ['opus 5.1', file('mkv', [vid('hevc'), aud('opus', 6, 'eng')])],
+      ['opus 7.1', file('mkv', [vid('av1'), aud('opus', 8, 'eng')])],
+      ['wmapro 5.1 + wma 2.0', file('wmv', [vid('vc1', { tag: '' }), aud('wmapro', 6, ''), aud('wmav2', 2, '')])],
+      ['ac3 5.1', file('mkv', [vid('hevc'), aud('ac3', 6, 'eng')])],
+      ['dts 5.1', file('mkv', [vid('hevc'), aud('dts', 6, 'eng')])],
+      ['aac stereo', file('mkv', [vid('h264'), aud('aac', 2, 'eng')])],
+    ];
+
+    for (const [label, mockFile] of cases) {
+      test(`${label}: pass 1 has at most one EnsureAudioStream node`, () => {
+        const count = pass1EnsureCount(walkFlow(mockFile));
+        assert.ok(count >= 0,
+          `${label}: never entered pass 1 (ffs_001/ffe_001 missing from path) — the invariant would pass vacuously`);
+        assert.ok(count <= 1,
+          `${label}: found ${count} EnsureAudioStream nodes in pass 1; a second one would overwrite the first's -ac value`);
+      });
+    }
   });
 });
