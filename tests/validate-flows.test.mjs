@@ -917,7 +917,7 @@ for (const file of flowFiles) {
         'VR retag must copy audio (no re-encode)');
     });
 
-    test('mux-incompatible-only audio routes to manual review', () => {
+    test('mux-incompatible-only audio converts instead of dead-ending', () => {
       const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
       const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
 
@@ -966,9 +966,104 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_has_safe_audio:1'), 'ffs_001',
         'grd_has_safe_audio YES should route to ffs_001 (proceed to processing)');
 
-      // grd_has_safe_audio NO → fl_manual_review (no safe audio = manual review)
-      assert.strictEqual(edgeMap.get('grd_has_safe_audio:2'), 'fl_manual_review',
-        'grd_has_safe_audio NO should route to fl_manual_review (no safe audio to preserve)');
+      // grd_has_safe_audio NO → channel-count split (converts instead of skipping)
+      // EnsureAudioStream only matches undefined or configured language, so files
+      // whose every audio stream is foreign-tagged cannot get an AAC/EAC3 track.
+      // They keep today's manual-review path instead of ending as transcode errors.
+      assert.strictEqual(edgeMap.get('grd_has_safe_audio:2'), 'grd_mux_lang_ok',
+        'grd_has_safe_audio NO should route to the language guard first');
+
+      const langOk = pluginMap.get('grd_mux_lang_ok');
+      const langForeign = pluginMap.get('grd_mux_lang_foreign');
+      assert.ok(langOk, 'Missing node grd_mux_lang_ok');
+      assert.ok(langForeign, 'Missing node grd_mux_lang_foreign');
+      assert.strictEqual(langOk.pluginName, 'checkStreamPropertyMultiValue');
+      assert.strictEqual(langForeign.pluginName, 'checkStreamPropertyMultiValue');
+      assert.strictEqual(langOk.sourceRepo, 'Local');
+      assert.strictEqual(langForeign.sourceRepo, 'Local');
+      assert.strictEqual(langOk.inputsDB.streamType, 'audio');
+      assert.strictEqual(langOk.inputsDB.propertyToCheck, 'tags.language');
+      assert.strictEqual(langOk.inputsDB.condition, 'includes');
+      for (const lang of ['eng', 'und']) {
+        assert.ok(langOk.inputsDB.valuesToMatch.split(',').includes(lang),
+          `grd_mux_lang_ok must match "${lang}"`);
+      }
+      assert.strictEqual(langForeign.inputsDB.propertyToCheck, 'tags.language');
+      assert.strictEqual(langForeign.inputsDB.condition, 'includes');
+      for (const lang of ['pol', 'jpn', 'rus', 'hun', 'ger', 'fre', 'ita', 'cze']) {
+        assert.ok(langForeign.inputsDB.valuesToMatch.split(',').includes(lang),
+          `grd_mux_lang_foreign must match "${lang}"`);
+      }
+      // The denylist must never contain eng/und, or every file would be skipped.
+      for (const lang of ['eng', 'und']) {
+        assert.ok(!langForeign.inputsDB.valuesToMatch.split(',').includes(lang),
+          `grd_mux_lang_foreign must NOT contain "${lang}"`);
+      }
+
+      assert.strictEqual(edgeMap.get('grd_mux_lang_ok:1'), 'grd_mux_ch6',
+        'eng/und audio proceeds to the channel-count split');
+      assert.strictEqual(edgeMap.get('grd_mux_lang_ok:2'), 'grd_mux_lang_foreign');
+      assert.strictEqual(edgeMap.get('grd_mux_lang_foreign:1'), 'fl_manual_review',
+        'audio with any foreign-tagged stream keeps the manual-review path');
+      assert.strictEqual(edgeMap.get('grd_mux_lang_foreign:2'), 'grd_mux_ch6',
+        'untagged audio proceeds — EnsureAudioStream matches undefined language');
+
+      // Surround sources ride the existing EAC3 path; sub-6ch get a pass-1 AAC node.
+      const ch6 = pluginMap.get('grd_mux_ch6');
+      const ch8 = pluginMap.get('grd_mux_ch8');
+      assert.ok(ch6, 'Missing node grd_mux_ch6');
+      assert.ok(ch8, 'Missing node grd_mux_ch8');
+      assert.strictEqual(ch6.pluginName, 'checkChannelCount');
+      assert.strictEqual(ch8.pluginName, 'checkChannelCount');
+
+      // Must mirror the EAC3 gates exactly, or the two conditions can drift apart.
+      assert.strictEqual(ch6.inputsDB.channelCount,
+        pluginMap.get('grd_eac3_ch').inputsDB.channelCount,
+        'grd_mux_ch6 must mirror grd_eac3_ch channelCount');
+      assert.strictEqual(ch8.inputsDB.channelCount,
+        pluginMap.get('grd_eac3_ch8').inputsDB.channelCount,
+        'grd_mux_ch8 must mirror grd_eac3_ch8 channelCount');
+
+      assert.strictEqual(edgeMap.get('grd_mux_ch6:1'), 'ffs_001',
+        'grd_mux_ch6 YES (surround) goes straight to the pipeline');
+      assert.strictEqual(edgeMap.get('grd_mux_ch6:2'), 'grd_mux_ch8');
+      assert.strictEqual(edgeMap.get('grd_mux_ch8:1'), 'ffs_001',
+        'grd_mux_ch8 YES (7.1) goes straight to the pipeline');
+      assert.strictEqual(edgeMap.get('grd_mux_ch8:2'), 'var_need_p1_aac');
+      assert.strictEqual(edgeMap.get('var_need_p1_aac:1'), 'ffs_001');
+
+      // var_need_p1_aac sets the short name; chk_p1_aac reads the prefixed path.
+      const setVar = pluginMap.get('var_need_p1_aac');
+      assert.strictEqual(setVar.pluginName, 'setFlowVariable');
+      assert.strictEqual(setVar.inputsDB.variable, 'need_p1_aac');
+      assert.strictEqual(setVar.inputsDB.value, 'true');
+
+      const chkVar = pluginMap.get('chk_p1_aac');
+      assert.ok(chkVar, 'Missing node chk_p1_aac');
+      assert.strictEqual(chkVar.pluginName, 'checkFlowVariable');
+      assert.strictEqual(chkVar.inputsDB.variable, 'args.variables.user.need_p1_aac',
+        'checkFlowVariable needs the full args.variables.user. prefix or it silently never matches');
+      assert.strictEqual(chkVar.inputsDB.value, 'true');
+      assert.strictEqual(chkVar.inputsDB.condition, '==');
+
+      // Pass-1 AAC sits between cmt_reorder and cmd_reorder: after the EAC3
+      // section, before reorder maps streams. Order matters for argument-build
+      // sequencing and to keep the single -ac slot unambiguous — NOT because
+      // cmd_rmmux would remove the source (EnsureAudioStream clones streams
+      // regardless of their removed flag).
+      assert.strictEqual(edgeMap.get('cmt_reorder:1'), 'chk_p1_aac',
+        'cmt_reorder must now feed chk_p1_aac');
+      assert.strictEqual(edgeMap.get('chk_p1_aac:1'), 'cmd_p1_aac');
+      assert.strictEqual(edgeMap.get('chk_p1_aac:2'), 'cmd_reorder');
+      assert.strictEqual(edgeMap.get('cmd_p1_aac:1'), 'cmd_reorder');
+
+      const p1aac = pluginMap.get('cmd_p1_aac');
+      assert.ok(p1aac, 'Missing node cmd_p1_aac');
+      assert.strictEqual(p1aac.pluginName, 'ffmpegCommandEnsureAudioStream');
+      assert.strictEqual(p1aac.inputsDB.audioEncoder, 'aac');
+      assert.strictEqual(p1aac.inputsDB.channels, '2');
+      assert.strictEqual(p1aac.inputsDB.language, '',
+        'Empty language: these sources usually carry no language tag');
     });
 
     test('ffmpegCommandRemoveStreamByProperty nodes use correct condition', () => {
