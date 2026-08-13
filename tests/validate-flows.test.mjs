@@ -1017,11 +1017,13 @@ for (const file of flowFiles) {
       assert.strictEqual(ch8.pluginName, 'checkChannelCount');
 
       // Must mirror the EAC3 gates exactly, or the two conditions can drift apart.
-      assert.strictEqual(ch6.inputsDB.channelCount,
-        pluginMap.get('grd_eac3_ch').inputsDB.channelCount,
+      const eac3Ch6 = pluginMap.get('grd_eac3_ch');
+      const eac3Ch8 = pluginMap.get('grd_eac3_ch8');
+      assert.ok(eac3Ch6, 'Missing node grd_eac3_ch');
+      assert.ok(eac3Ch8, 'Missing node grd_eac3_ch8');
+      assert.strictEqual(ch6.inputsDB.channelCount, eac3Ch6.inputsDB.channelCount,
         'grd_mux_ch6 must mirror grd_eac3_ch channelCount');
-      assert.strictEqual(ch8.inputsDB.channelCount,
-        pluginMap.get('grd_eac3_ch8').inputsDB.channelCount,
+      assert.strictEqual(ch8.inputsDB.channelCount, eac3Ch8.inputsDB.channelCount,
         'grd_mux_ch8 must mirror grd_eac3_ch8 channelCount');
 
       assert.strictEqual(edgeMap.get('grd_mux_ch6:1'), 'ffs_001',

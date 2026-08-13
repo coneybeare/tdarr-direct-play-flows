@@ -157,6 +157,11 @@ single foreign-tagged stream is enough to divert a file: the check matches if AN
 denylisted tag, so a file mixing a foreign-tagged stream with an untagged one is diverted even though the
 untagged stream would have been usable.
 
+`grd_mux_lang_foreign` is only reached once `grd_mux_lang_ok` has already found no `eng`/`und` stream, so a
+file mixing `eng` with a foreign tag is never diverted — it takes the normal path and the AAC track is built
+from the `eng` stream (permutation 11m). The any-stream caveat above therefore applies only to files that have
+no `eng`/`und` stream at all.
+
 **Workaround**: Re-tag the audio language to "und" via `ffmpeg -c copy -metadata:s:a:0 language=und`, then requeue.
 The flow handles "und" audio correctly.
 
