@@ -1003,8 +1003,56 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_mux_lang_ok:1'), 'grd_mux_ch6',
         'eng/und audio proceeds to the channel-count split');
       assert.strictEqual(edgeMap.get('grd_mux_lang_ok:2'), 'grd_mux_lang_foreign');
-      assert.strictEqual(edgeMap.get('grd_mux_lang_foreign:1'), 'fl_manual_review',
-        'audio with any foreign-tagged stream keeps the manual-review path');
+      // Foreign-tagged audio is re-tagged to "und" in a stream-copy pass rather
+      // than diverted, so the encoder's language matcher can then select it.
+      assert.strictEqual(edgeMap.get('grd_mux_lang_foreign:1'), 'cmt_retag',
+        'foreign-tagged audio should enter the re-tag pass, not a dead end');
+
+      const retagChain = [
+        ['cmt_retag', 'ffs_retag'],
+        ['ffs_retag', 'cmd_retag_container'],
+        ['cmd_retag_container', 'cmd_retag_rmsub'],
+        ['cmd_retag_rmsub', 'cmd_retag_rmdata'],
+        ['cmd_retag_rmdata', 'cmd_retag_lang'],
+        ['cmd_retag_lang', 'ffe_retag'],
+        ['ffe_retag', 'grd_mux_ch6'],
+      ];
+      for (const [from, to] of retagChain) {
+        assert.ok(pluginMap.get(from), `Missing node ${from}`);
+        assert.strictEqual(edgeMap.get(`${from}:1`), to,
+          `${from} should route to ${to}`);
+      }
+
+      const container = pluginMap.get('cmd_retag_container');
+      assert.strictEqual(container.pluginName, 'ffmpegCommandSetContainer');
+      assert.strictEqual(container.inputsDB.container, 'mkv',
+        'mkv accepts every source codec combination in scope; pass 1 still sets mp4');
+      assert.strictEqual(container.inputsDB.forceConform, 'false');
+
+      const lang = pluginMap.get('cmd_retag_lang');
+      assert.strictEqual(lang.pluginName, 'ffmpegCommandCustomArguments');
+      assert.ok(lang.inputsDB.outputArguments.includes('-metadata:s:a language=und'),
+        'cmd_retag_lang must rewrite the audio language to und');
+      assert.ok(lang.inputsDB.outputArguments.includes('-c copy'),
+        'the re-tag pass must be a stream copy');
+
+      assert.strictEqual(pluginMap.get('ffs_retag').pluginName, 'ffmpegCommandStart');
+      assert.strictEqual(pluginMap.get('ffe_retag').pluginName, 'ffmpegCommandExecute');
+      assert.strictEqual(pluginMap.get('cmd_retag_rmdata').pluginName,
+        'ffmpegCommandRemoveDataStreams');
+
+      // Load-bearing: an encoder node here would transcode wmv3/vc1 sources
+      // instead of copying them. Encoding belongs to pass 1.
+      const retagNodes = ['cmt_retag', 'ffs_retag', 'cmd_retag_container',
+        'cmd_retag_rmsub', 'cmd_retag_rmdata', 'cmd_retag_lang', 'ffe_retag'];
+      for (const id of retagNodes) {
+        assert.notStrictEqual(pluginMap.get(id).pluginName,
+          'ffmpegCommandSetVideoEncoder',
+          `${id} must not be a video encoder — the re-tag pass is a pure stream copy`);
+        assert.notStrictEqual(pluginMap.get(id).pluginName,
+          'ffmpegCommandEnsureAudioStream',
+          `${id} must not create audio — that happens in pass 1`);
+      }
       assert.strictEqual(edgeMap.get('grd_mux_lang_foreign:2'), 'grd_mux_ch6',
         'untagged audio proceeds — EnsureAudioStream matches undefined language');
 

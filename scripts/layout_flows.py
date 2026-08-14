@@ -958,6 +958,9 @@ def col_map_01() -> dict[str, int]:
         "cmt_health": M, "chk_health": M,
         "grd_has_muxincompat": M, "grd_has_safe_audio": R,
         "grd_mux_lang_ok": R, "grd_mux_lang_foreign": R,
+        "cmt_retag": R, "ffs_retag": R, "cmd_retag_container": R,
+        "cmd_retag_rmsub": R,
+        "cmd_retag_rmdata": R, "cmd_retag_lang": R, "ffe_retag": R,
         "grd_mux_ch6": R, "grd_mux_ch8": R, "var_need_p1_aac": R,
         # ── FFmpeg pipeline ───────────────────────────────────────────
         "ffs_001": M, "cmd_loglevel": M,
