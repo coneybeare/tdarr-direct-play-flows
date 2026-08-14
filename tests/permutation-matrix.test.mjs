@@ -1000,19 +1000,21 @@ describe('Permutation Matrix — Flow Routing', () => {
       lacks(path, 'fl_manual_review', 'Should NOT dead-end at manual review');
     });
 
-    test('11l: wmv/wmv3/wmav2 2ch untagged — still converts (undefined language matches)', () => {
+    test('11l: wmv/wmv3/wmav2 2ch untagged — converts directly, no re-tag', () => {
       const path = walkFlow(file('wmv', [vid('wmv3', { tag: '' }), aud('wmav2', 2, '')]));
       has(path, 'grd_mux_lang_foreign', 'Untagged falls through both language guards');
       has(path, 'cmd_p1_aac', 'Untagged audio still gets an AAC track');
+      lacks(path, 'cmt_retag', 'Untagged already matches the und fallback — no re-tag');
       lacks(path, 'fl_manual_review', 'Untagged must NOT be diverted to manual review');
     });
 
-    test('11m: mkv/hevc/vorbis 2.0 eng + opus 2.0 pol — converts via the eng stream', () => {
+    test('11m: mkv/hevc/vorbis 2.0 eng + opus 2.0 pol — converts via the eng stream, no re-tag', () => {
       const path = walkFlow(file('mkv', [
         vid('hevc'), aud('vorbis', 2, 'eng'), aud('opus', 2, 'pol'),
       ]));
       has(path, 'grd_mux_lang_ok', 'Should find the eng stream');
       has(path, 'cmd_p1_aac', 'Should create AAC from the eng stream');
+      lacks(path, 'cmt_retag', 'An eng stream is already matchable — no re-tag');
       lacks(path, 'fl_manual_review', 'Should NOT be diverted to manual review');
     });
 
@@ -1033,19 +1035,15 @@ describe('Permutation Matrix — Flow Routing', () => {
       lacks(path, 'fl_manual_review', 'Should NOT dead-end at manual review');
     });
 
-    test('11p: mkv/hevc/vorbis 2.0 eng + opus 2.0 pol — no re-tag needed', () => {
-      const path = walkFlow(file('mkv', [
-        vid('hevc'), aud('vorbis', 2, 'eng'), aud('opus', 2, 'pol'),
+    test('11p: mp4/hevc/opus 2.0 pol + mov_text subs — re-tag pass strips subs', () => {
+      // mov_text cannot be stream-copied into Matroska, so the re-tag pass
+      // removes subtitles rather than failing on them.
+      const path = walkFlow(file('mp4', [
+        vid('hevc'), aud('opus', 2, 'pol'), { codec_type: 'subtitle', codec_name: 'mov_text' },
       ]));
-      has(path, 'grd_mux_lang_ok', 'Should find the eng stream');
-      lacks(path, 'cmt_retag', 'An eng stream is already matchable — no re-tag');
-      has(path, 'cmd_p1_aac', 'Should create AAC from the eng stream');
-    });
-
-    test('11q: wmv/wmv3/wmav2 2.0 untagged — no re-tag needed', () => {
-      const path = walkFlow(file('wmv', [vid('wmv3', { tag: '' }), aud('wmav2', 2, '')]));
-      lacks(path, 'cmt_retag', 'Untagged audio already matches the und fallback');
-      has(path, 'cmd_p1_aac', 'Should create AAC directly in pass 1');
+      has(path, 'cmt_retag', 'Should enter the re-tag pass');
+      has(path, 'cmd_retag_rmsub', 'Should strip subtitles inside the re-tag pass');
+      has(path, 'cmd_p1_aac', 'Should then create AAC in pass 1');
       lacks(path, 'fl_manual_review', 'Should NOT dead-end at manual review');
     });
   });

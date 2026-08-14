@@ -124,12 +124,11 @@ When a new permutation is discovered, add it here and verify the flow handles it
 | 11i | mkv | hevc | vorbis 2.0 eng | none | Remux to MP4, create AAC 2.0 from Vorbis in pass 1, Vorbis stripped | pass |
 | 11j | mkv | hevc | opus 2.0 pol | none | Re-tag pass rewrites language to und, then creates AAC 2.0 in pass 1 | pass |
 | 11k | mkv | hevc | opus 5.1 jpn | none | Re-tag pass, then EAC3 5.1 + AAC 2.0 | pass |
-| 11l | wmv | wmv3 | wmav2 2.0 untagged | none | Converts — undefined language is matched | pass |
-| 11m | mkv | hevc | vorbis 2.0 eng + opus 2.0 pol | none | Converts via the eng stream | pass |
+| 11l | wmv | wmv3 | wmav2 2.0 untagged | none | Converts — undefined language is matched, no re-tag | pass |
+| 11m | mkv | hevc | vorbis 2.0 eng + opus 2.0 pol | none | Converts via the eng stream, no re-tag | pass |
 | 11n | wmv | wmv3 | wmav2 mono pol | none | Re-tag pass, then AAC in pass 1 (stays mono) | pass |
 | 11o | mkv | av1 | opus 7.1 rus | none | Re-tag pass, then 8ch gate → EAC3 + AAC | pass |
-| 11p | mkv | hevc | vorbis 2.0 eng + opus 2.0 pol | none | No re-tag — the eng stream is already matchable | pass |
-| 11q | wmv | wmv3 | wmav2 2.0 untagged | none | No re-tag — untagged already matches the und fallback | pass |
+| 11p | mp4 | hevc | opus 2.0 pol | mov_text subs | Re-tag pass strips subs (mov_text cannot be copied into Matroska), then AAC in pass 1 | pass |
 
 **Pass 1 audio encoder invariant:** any single FFmpeg pass may contain at most
 one `ffmpegCommandEnsureAudioStream` node. The plugin emits `-ac <n>` with no
