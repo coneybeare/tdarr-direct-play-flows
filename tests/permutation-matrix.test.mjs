@@ -977,22 +977,27 @@ describe('Permutation Matrix — Flow Routing', () => {
       lacks(path, 'fl_manual_review', 'Should NOT dead-end at manual review');
     });
 
-    test('11j: mkv/hevc/opus 2.0 pol — manual review (EnsureAudioStream cannot match pol)', () => {
+    test('11j: mkv/hevc/opus 2.0 pol — re-tagged to und, then converts', () => {
+      // pol matches neither "en" nor "und", so the encoder cannot select it.
+      // The re-tag pass rewrites the language, after which the normal path works.
       const path = walkFlow(file('mkv', [vid('hevc'), aud('opus', 2, 'pol')]));
       has(path, 'grd_mux_lang_ok', 'Should check for eng/und audio');
       has(path, 'grd_mux_lang_foreign', 'Should check the foreign denylist');
-      has(path, 'fl_manual_review', 'Foreign-only audio keeps the manual-review path');
-      lacks(path, 'cmd_p1_aac', 'Must not attempt an AAC encode that would match nothing');
-      lacks(path, 'ffs_001', 'Should NOT enter the encoding pipeline');
+      has(path, 'cmt_retag', 'Should enter the re-tag pass');
+      has(path, 'ffe_retag', 'Should execute the re-tag pass');
+      has(path, 'cmd_p1_aac', 'Should then create AAC 2.0 in pass 1');
+      has(path, 'ffs_001', 'Should enter the encoding pipeline');
+      lacks(path, 'fl_manual_review', 'Should NOT dead-end at manual review');
     });
 
-    test('11k: mkv/hevc/opus 5.1 jpn — manual review (EAC3 has the same limitation)', () => {
+    test('11k: mkv/hevc/opus 5.1 jpn — re-tagged to und, then converts via EAC3', () => {
       const path = walkFlow(file('mkv', [vid('hevc'), aud('opus', 6, 'jpn')]));
       has(path, 'grd_mux_lang_foreign', 'Should check the foreign denylist');
-      has(path, 'fl_manual_review', 'Surround with a foreign-tagged stream also keeps manual review');
-      lacks(path, 'cmd_eac3_eng', 'Must not attempt an EAC3 encode that would match nothing');
-      lacks(path, 'cmd_eac3_fb', 'Must not attempt an EAC3 encode that would match nothing');
-      lacks(path, 'ffs_001', 'Should NOT enter the encoding pipeline');
+      has(path, 'cmt_retag', 'Should enter the re-tag pass');
+      has(path, 'ffe_retag', 'Should execute the re-tag pass');
+      has(path, 'ffs_001', 'Should enter the encoding pipeline');
+      lacks(path, 'cmd_p1_aac', 'Surround uses EAC3; the -ac slot must stay free');
+      lacks(path, 'fl_manual_review', 'Should NOT dead-end at manual review');
     });
 
     test('11l: wmv/wmv3/wmav2 2ch untagged — still converts (undefined language matches)', () => {
@@ -1009,6 +1014,39 @@ describe('Permutation Matrix — Flow Routing', () => {
       has(path, 'grd_mux_lang_ok', 'Should find the eng stream');
       has(path, 'cmd_p1_aac', 'Should create AAC from the eng stream');
       lacks(path, 'fl_manual_review', 'Should NOT be diverted to manual review');
+    });
+
+    test('11n: wmv/wmv3/wmav2 mono pol — re-tag pass then AAC in pass 1', () => {
+      const path = walkFlow(file('wmv', [vid('wmv3', { tag: '' }), aud('wmav2', 1, 'pol')]));
+      has(path, 'cmt_retag', 'Should enter the re-tag pass');
+      has(path, 'cmd_retag_lang', 'Should rewrite the audio language');
+      has(path, 'var_need_p1_aac', 'Mono is under 6ch, so the pass-1 flag is set');
+      has(path, 'cmd_p1_aac', 'Should create AAC from the re-tagged mono source');
+      lacks(path, 'fl_manual_review', 'Should NOT dead-end at manual review');
+    });
+
+    test('11o: mkv/av1/opus 7.1 rus — re-tag pass then EAC3, no pass-1 AAC', () => {
+      const path = walkFlow(file('mkv', [vid('av1'), aud('opus', 8, 'rus')]));
+      has(path, 'cmt_retag', 'Should enter the re-tag pass');
+      has(path, 'grd_mux_ch8', 'Should fall through to the 8ch gate after re-tagging');
+      lacks(path, 'cmd_p1_aac', 'EAC3 occupies the single -ac slot in pass 1');
+      lacks(path, 'fl_manual_review', 'Should NOT dead-end at manual review');
+    });
+
+    test('11p: mkv/hevc/vorbis 2.0 eng + opus 2.0 pol — no re-tag needed', () => {
+      const path = walkFlow(file('mkv', [
+        vid('hevc'), aud('vorbis', 2, 'eng'), aud('opus', 2, 'pol'),
+      ]));
+      has(path, 'grd_mux_lang_ok', 'Should find the eng stream');
+      lacks(path, 'cmt_retag', 'An eng stream is already matchable — no re-tag');
+      has(path, 'cmd_p1_aac', 'Should create AAC from the eng stream');
+    });
+
+    test('11q: wmv/wmv3/wmav2 2.0 untagged — no re-tag needed', () => {
+      const path = walkFlow(file('wmv', [vid('wmv3', { tag: '' }), aud('wmav2', 2, '')]));
+      lacks(path, 'cmt_retag', 'Untagged audio already matches the und fallback');
+      has(path, 'cmd_p1_aac', 'Should create AAC directly in pass 1');
+      lacks(path, 'fl_manual_review', 'Should NOT dead-end at manual review');
     });
   });
 
@@ -1177,6 +1215,7 @@ describe('Permutation Matrix — Flow Routing', () => {
       ['ac3 5.1', file('mkv', [vid('hevc'), aud('ac3', 6, 'eng')])],
       ['dts 5.1', file('mkv', [vid('hevc'), aud('dts', 6, 'eng')])],
       ['aac stereo', file('mkv', [vid('h264'), aud('aac', 2, 'eng')])],
+      ['wma mono foreign-tagged', file('wmv', [vid('wmv3', { tag: '' }), aud('wmav2', 1, 'pol')])],
     ];
 
     for (const [label, mockFile] of cases) {

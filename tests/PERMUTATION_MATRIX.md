@@ -122,10 +122,14 @@ When a new permutation is discovered, add it here and verify the flow handles it
 | 11g | mkv | av1 | opus 7.1 eng | none | Routes via 8ch gate; EAC3 + AAC, Opus stripped | pass |
 | 11h | wmv | wmv3 | wmav2 mono | none | Transcode to HEVC/MP4, create AAC from the mono source in pass 1 (stays mono — the plugin clamps to the source channel count) | pass |
 | 11i | mkv | hevc | vorbis 2.0 eng | none | Remux to MP4, create AAC 2.0 from Vorbis in pass 1, Vorbis stripped | pass |
-| 11j | mkv | hevc | opus 2.0 pol | none | Manual review — EnsureAudioStream cannot match `pol` | pass |
-| 11k | mkv | hevc | opus 5.1 jpn | none | Manual review — EAC3 has the same language limitation | pass |
+| 11j | mkv | hevc | opus 2.0 pol | none | Re-tag pass rewrites language to und, then creates AAC 2.0 in pass 1 | pass |
+| 11k | mkv | hevc | opus 5.1 jpn | none | Re-tag pass, then EAC3 5.1 + AAC 2.0 | pass |
 | 11l | wmv | wmv3 | wmav2 2.0 untagged | none | Converts — undefined language is matched | pass |
 | 11m | mkv | hevc | vorbis 2.0 eng + opus 2.0 pol | none | Converts via the eng stream | pass |
+| 11n | wmv | wmv3 | wmav2 mono pol | none | Re-tag pass, then AAC in pass 1 (stays mono) | pass |
+| 11o | mkv | av1 | opus 7.1 rus | none | Re-tag pass, then 8ch gate → EAC3 + AAC | pass |
+| 11p | mkv | hevc | vorbis 2.0 eng + opus 2.0 pol | none | No re-tag — the eng stream is already matchable | pass |
+| 11q | wmv | wmv3 | wmav2 2.0 untagged | none | No re-tag — untagged already matches the und fallback | pass |
 
 **Pass 1 audio encoder invariant:** any single FFmpeg pass may contain at most
 one `ffmpegCommandEnsureAudioStream` node. The plugin emits `-ac <n>` with no
@@ -149,21 +153,30 @@ DTS, Czech AC3). Files with at least one "eng" or "und" stream are not affected.
 **Impact**: for files that retain a safe audio track, the flow correctly fails these (Transcode error) rather
 than producing silent/broken output, because the post-pass-2 audio guard catches missing audio.
 
-For files whose ONLY audio is mux-incompatible (wma/vorbis/opus/adpcm), `grd_mux_lang_ok` /
-`grd_mux_lang_foreign` divert foreign-tagged files to `fl_manual_review` before they enter the pipeline, so they
-are left untouched rather than stripped of their only audio. `grd_mux_lang_foreign` holds a denylist of ISO
-639-2 language codes; a tag outside that set falls through and would fail as described above. Note that a
-single foreign-tagged stream is enough to divert a file: the check matches if ANY audio stream carries a
-denylisted tag, so a file mixing a foreign-tagged stream with an untagged one is diverted even though the
-untagged stream would have been usable.
+For files whose ONLY audio is mux-incompatible (wma/vorbis/opus/adpcm),
+`grd_mux_lang_foreign` routes foreign-tagged files through a stream-copy re-tag pass
+(`cmt_retag` → `ffe_retag`) that rewrites the audio language to `und` before they enter the pipeline.
+The encoder's fallback pass matches `und`, so these files convert normally. The trade-off is that the
+converted file reports its audio language as `und` rather than the original tag.
 
-`grd_mux_lang_foreign` is only reached once `grd_mux_lang_ok` has already found no `eng`/`und` stream, so a
-file mixing `eng` with a foreign tag is never diverted — it takes the normal path and the AAC track is built
-from the `eng` stream (permutation 11m). The any-stream caveat above therefore applies only to files that have
-no `eng`/`und` stream at all.
+Note that the re-tag pass writes an MKV working file, so `grd_is_mkv` sees `.mkv` for re-tagged sources that
+were originally wmv/avi/mp4. Those files therefore take the MKV force-encode gate (`cmd_hevc_force`, NVENC with
+`hardwareDecoding: false`) rather than the resolution-tier encoders. This is intended for these sources — they
+all require a video encode regardless, and disabling hardware decoding is safer for older codecs like `wmv3` —
+but it does mean the libx265 software fallback is not reachable for them, and 1080p re-tagged sources encode at
+QP 24 rather than the resolution tier's QP 22.
 
-**Workaround**: Re-tag the audio language to "und" via `ffmpeg -c copy -metadata:s:a:0 language=und`, then requeue.
-The flow handles "und" audio correctly.
+`grd_mux_lang_foreign` matches if ANY audio stream carries a denylisted tag, and it is only reached
+once `grd_mux_lang_ok` has already found no `eng`/`und` stream — so a file mixing `eng` with a foreign
+tag is never re-tagged; it takes the normal path and the AAC track is built from the `eng` stream
+(permutation 11m). The denylist holds ISO 639-2 codes, so an audio tag outside that set — for example a
+BCP-47 form like `en-US` — matches neither the `eng`/`und` guard nor the denylist, falls through to the
+pipeline without being re-tagged, and dead-ends at `fail_no_streams`.
+
+**Workaround**: only needed for files that still hit this limitation — those that retain a safe audio track,
+since they are not routed through the re-tag pass. Re-tag the audio language to "und" via
+`ffmpeg -c copy -metadata:s:a:0 language=und`, then requeue. Files whose only audio is mux-incompatible are
+handled automatically by `cmt_retag` → `ffe_retag`.
 
 **Potential fix**: A Tdarr plugin update to support `language: "*"` (match any) or a special sentinel value that
 bypasses `loadDefaultValues`. Until then, this is a known limitation of the community `EnsureAudioStream` plugin.
