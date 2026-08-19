@@ -542,7 +542,7 @@
       "id": "grd_is_mkv",
       "position": {
         "x": 3270,
-        "y": 2480
+        "y": 2650
       },
       "inputsDB": {
         "extensions": "mkv"
@@ -557,7 +557,7 @@
       "id": "grd_mkv_hevc",
       "position": {
         "x": 3270,
-        "y": 2650
+        "y": 2820
       },
       "inputsDB": {
         "codec": "hevc"
@@ -572,7 +572,7 @@
       "id": "cmd_hevc_force",
       "position": {
         "x": 3770,
-        "y": 2820
+        "y": 2990
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -595,7 +595,7 @@
       "id": "grd_av1",
       "position": {
         "x": 3270,
-        "y": 2820
+        "y": 2990
       },
       "inputsDB": {
         "streamType": "video",
@@ -613,7 +613,7 @@
       "id": "chk_nvenc",
       "position": {
         "x": 3270,
-        "y": 2990
+        "y": 3160
       },
       "inputsDB": {
         "hardwareEncoder": "hevc_nvenc"
@@ -628,7 +628,7 @@
       "id": "cmt_resolution",
       "position": {
         "x": 3270,
-        "y": 3160
+        "y": 3330
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -641,7 +641,7 @@
       "id": "chk_resolution",
       "position": {
         "x": 3270,
-        "y": 3350
+        "y": 3520
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -654,7 +654,7 @@
       "id": "cmd_hevc_sd",
       "position": {
         "x": 2770,
-        "y": 3520
+        "y": 3690
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -677,7 +677,7 @@
       "id": "cmd_hevc_1080",
       "position": {
         "x": 3270,
-        "y": 3520
+        "y": 3690
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -700,7 +700,7 @@
       "id": "cmd_hevc_4k",
       "position": {
         "x": 3770,
-        "y": 3520
+        "y": 3690
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -723,7 +723,7 @@
       "id": "cmt_sw",
       "position": {
         "x": 4270,
-        "y": 3160
+        "y": 3330
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -736,7 +736,7 @@
       "id": "cmd_hevc_sw",
       "position": {
         "x": 4270,
-        "y": 3350
+        "y": 3520
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -772,7 +772,7 @@
       "id": "chk_br_low",
       "position": {
         "x": 3270,
-        "y": 3860
+        "y": 4030
       },
       "inputsDB": {
         "unit": "kbps",
@@ -789,7 +789,7 @@
       "id": "chk_br_mid",
       "position": {
         "x": 3270,
-        "y": 4030
+        "y": 4200
       },
       "inputsDB": {
         "unit": "kbps",
@@ -806,7 +806,7 @@
       "id": "chk_br_vlow",
       "position": {
         "x": 3270,
-        "y": 3690
+        "y": 3860
       },
       "inputsDB": {
         "unit": "kbps",
@@ -823,7 +823,7 @@
       "id": "cmd_cap_vlow",
       "position": {
         "x": 2770,
-        "y": 3860
+        "y": 4030
       },
       "inputsDB": {
         "inputArguments": "",
@@ -839,7 +839,7 @@
       "id": "cmd_cap_low",
       "position": {
         "x": 2770,
-        "y": 4030
+        "y": 4200
       },
       "inputsDB": {
         "inputArguments": "",
@@ -855,7 +855,7 @@
       "id": "cmd_cap_mid",
       "position": {
         "x": 2770,
-        "y": 4200
+        "y": 4370
       },
       "inputsDB": {
         "inputArguments": "",
@@ -871,7 +871,7 @@
       "id": "cmd_cap_high",
       "position": {
         "x": 2770,
-        "y": 4370
+        "y": 4540
       },
       "inputsDB": {
         "inputArguments": "",
@@ -1226,7 +1226,7 @@
         "y": 3290
       },
       "inputsDB": {
-        "greaterThan": "0",
+        "greaterThan": "10",
         "lessThan": "150"
       },
       "fpEnabled": true
@@ -1239,7 +1239,7 @@
       "id": "cmt_toobig",
       "position": {
         "x": 9310,
-        "y": 3460
+        "y": 3820
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1265,7 +1265,7 @@
       "id": "fl_duration",
       "position": {
         "x": 9810,
-        "y": 3650
+        "y": 3820
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1281,7 +1281,7 @@
       "id": "grd_has_video",
       "position": {
         "x": 9810,
-        "y": 3820
+        "y": 3990
       },
       "inputsDB": {
         "streamType": "video",
@@ -1299,7 +1299,7 @@
       "id": "grd_has_audio",
       "position": {
         "x": 9810,
-        "y": 3990
+        "y": 4160
       },
       "inputsDB": {
         "streamType": "audio",
@@ -1317,7 +1317,7 @@
       "id": "fail_no_streams",
       "position": {
         "x": 9310,
-        "y": 4180
+        "y": 4370
       },
       "inputsDB": {
         "errorMessage": "Output file is missing video or audio streams"
@@ -1332,7 +1332,7 @@
       "id": "cmt_duration_fail",
       "position": {
         "x": 9310,
-        "y": 3820
+        "y": 4010
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1345,7 +1345,7 @@
       "id": "fl_review",
       "position": {
         "x": 9310,
-        "y": 4010
+        "y": 4200
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1358,7 +1358,7 @@
       "id": "cmt_replace",
       "position": {
         "x": 9810,
-        "y": 4330
+        "y": 4500
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1371,7 +1371,7 @@
       "id": "fl_replace",
       "position": {
         "x": 9810,
-        "y": 4520
+        "y": 4710
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1384,7 +1384,7 @@
       "id": "cmt_notify",
       "position": {
         "x": 9810,
-        "y": 4690
+        "y": 4880
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1397,7 +1397,7 @@
       "id": "chk_plex_notify",
       "position": {
         "x": 9810,
-        "y": 4880
+        "y": 5070
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_plex_notify",
@@ -1414,7 +1414,7 @@
       "id": "web_plex",
       "position": {
         "x": 10310,
-        "y": 5050
+        "y": 5240
       },
       "inputsDB": {
         "url": "http://YOUR_PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=YOUR_PLEX_TOKEN",
@@ -1430,7 +1430,7 @@
       "id": "chk_arr_notify",
       "position": {
         "x": 9810,
-        "y": 5220
+        "y": 5410
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_arr_notify",
@@ -1447,7 +1447,7 @@
       "id": "arr_notify",
       "position": {
         "x": 9810,
-        "y": 5390
+        "y": 5580
       },
       "inputsDB": {
         "arr": "radarr",
@@ -1894,7 +1894,7 @@
       "id": "chk_auto_accept",
       "position": {
         "x": 9810,
-        "y": 4160
+        "y": 4330
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1964,7 +1964,7 @@
       "id": "fl_manual_review",
       "position": {
         "x": 9310,
-        "y": 4350
+        "y": 4540
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -3090,6 +3090,70 @@
       },
       "inputsDB": {},
       "fpEnabled": true
+    },
+    {
+      "name": "VC-1/WMV source?",
+      "sourceRepo": "Local",
+      "pluginName": "checkStreamPropertyMultiValue",
+      "version": "1.0.0",
+      "id": "grd_vc1",
+      "position": {
+        "x": 3270,
+        "y": 2480
+      },
+      "inputsDB": {
+        "streamType": "video",
+        "propertyToCheck": "codec_name",
+        "valuesToMatch": "vc1,wmv",
+        "condition": "includes"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Undersized output?",
+      "sourceRepo": "Community",
+      "pluginName": "compareFileSizeRatio",
+      "version": "1.0.0",
+      "id": "fl_size_small",
+      "position": {
+        "x": 9810,
+        "y": 3650
+      },
+      "inputsDB": {
+        "greaterThan": "0",
+        "lessThan": "10"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Undersized — fail",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cmt_undersize",
+      "position": {
+        "x": 10310,
+        "y": 3820
+      },
+      "inputsDB": {
+        "comment": "Output is <10% of source: the decoder almost certainly produced frozen/blank video (e.g. NVDEC failing on VC-1). Fail so onFlowError retries with software decoding; never replace the original."
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Fail: undersized output",
+      "sourceRepo": "Community",
+      "pluginName": "failFlow",
+      "version": "1.0.0",
+      "id": "fail_undersize",
+      "position": {
+        "x": 10310,
+        "y": 4010
+      },
+      "inputsDB": {
+        "errorMessage": "Output file is under 10% of the source size - likely frozen or blank video"
+      },
+      "fpEnabled": true
     }
   ],
   "flowEdges": [
@@ -3306,7 +3370,7 @@
     {
       "source": "cmt_nvenc",
       "sourceHandle": "1",
-      "target": "grd_is_mkv",
+      "target": "grd_vc1",
       "targetHandle": null,
       "id": "e_cmt_nvenc_mkv"
     },
@@ -3621,7 +3685,7 @@
     {
       "source": "fl_size",
       "sourceHandle": "2",
-      "target": "cmt_toobig",
+      "target": "fl_size_small",
       "targetHandle": null,
       "id": "e_size_fail"
     },
@@ -4891,6 +4955,41 @@
       "target": "cmd_retag_rmdata",
       "targetHandle": null,
       "id": "e_retag_rmsub_rmdata"
+    },
+    {
+      "source": "grd_vc1",
+      "sourceHandle": "1",
+      "target": "cmd_hevc_force",
+      "targetHandle": null,
+      "id": "e_vc1_sw"
+    },
+    {
+      "source": "grd_vc1",
+      "sourceHandle": "2",
+      "target": "grd_is_mkv",
+      "targetHandle": null,
+      "id": "e_vc1_no"
+    },
+    {
+      "source": "fl_size_small",
+      "sourceHandle": "1",
+      "target": "cmt_undersize",
+      "targetHandle": null,
+      "id": "e_undersize_yes"
+    },
+    {
+      "source": "fl_size_small",
+      "sourceHandle": "2",
+      "target": "cmt_toobig",
+      "targetHandle": null,
+      "id": "e_undersize_no"
+    },
+    {
+      "source": "cmt_undersize",
+      "sourceHandle": "1",
+      "target": "fail_undersize",
+      "targetHandle": null,
+      "id": "e_undersize_fail"
     }
   ]
 }

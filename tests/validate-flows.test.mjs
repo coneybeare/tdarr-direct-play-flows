@@ -185,9 +185,11 @@ for (const file of flowFiles) {
       assert.strictEqual(forceEnc.inputsDB.forceEncoding, 'true');
       assert.strictEqual(forceEnc.inputsDB.outputCodec, 'hevc');
 
-      // cmt_nvenc → grd_is_mkv
-      assert.strictEqual(edgeMap.get('cmt_nvenc:1'), 'grd_is_mkv',
-        'cmt_nvenc should route to grd_is_mkv');
+      // cmt_nvenc → grd_vc1 → (NO) → grd_is_mkv
+      assert.strictEqual(edgeMap.get('cmt_nvenc:1'), 'grd_vc1',
+        'cmt_nvenc should route to the VC-1/WMV guard first');
+      assert.strictEqual(edgeMap.get('grd_vc1:2'), 'grd_is_mkv',
+        'non-VC-1 sources should continue to the MKV gate');
 
       // grd_is_mkv YES → grd_mkv_hevc (check if already HEVC)
       assert.strictEqual(edgeMap.get('grd_is_mkv:1'), 'grd_mkv_hevc',
@@ -1151,6 +1153,93 @@ for (const file of flowFiles) {
       assert.ok(cmdVrRetagTags, 'cmd_vr_retag_tags node must exist');
       assert.ok(cmdVrRetagTags.inputsDB.outputArguments.includes(FLAG),
         `cmd_vr_retag_tags must include "${FLAG}" to prevent corrupt MP4 from non-monotonic DTS`);
+    });
+
+    test('VC-1/WMV sources bypass NVDEC hardware decoding', () => {
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      // NVDEC on Turing silently emits a single frame for VC-1 in ASF, which the
+      // encoder then duplicates for the whole duration (frozen video, ~88 B/frame).
+      // Those sources must reach an encoder node that does NOT pass -hwaccel cuda.
+      const guard = pluginMap.get('grd_vc1');
+      assert.ok(guard, 'Missing node grd_vc1');
+      assert.strictEqual(guard.pluginName, 'checkStreamPropertyMultiValue');
+      assert.strictEqual(guard.inputsDB.streamType, 'video');
+      assert.strictEqual(guard.inputsDB.propertyToCheck, 'codec_name');
+      assert.strictEqual(guard.inputsDB.condition, 'includes');
+      for (const codec of ['vc1', 'wmv']) {
+        assert.ok(guard.inputsDB.valuesToMatch.split(',').includes(codec),
+          `grd_vc1 should match ${codec} sources`);
+      }
+
+      const target = edgeMap.get('grd_vc1:1');
+      assert.ok(target, 'grd_vc1 YES handle must be wired');
+      const encoder = pluginMap.get(target);
+      assert.ok(encoder, `grd_vc1 YES target ${target} missing`);
+      assert.strictEqual(encoder.pluginName, 'ffmpegCommandSetVideoEncoder');
+      assert.strictEqual(encoder.inputsDB.hardwareDecoding, 'false',
+        'VC-1/WMV sources must be decoded in software');
+      assert.strictEqual(encoder.inputsDB.forceEncoding, 'true',
+        'VC-1/WMV sources cannot be stream-copied to HEVC');
+    });
+
+    test('every NVENC encoder reachable from the resolution tiers is accounted for', () => {
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+      // Any encoder still using hardware decoding must only be reachable by
+      // sources that NVDEC handles. Keep an explicit inventory so a new encoder
+      // node cannot quietly inherit -hwaccel cuda.
+      const hwDecoders = flow.flowPlugins
+        .filter((p) => p.pluginName === 'ffmpegCommandSetVideoEncoder')
+        .filter((p) => p.inputsDB.hardwareDecoding === 'true')
+        .map((p) => p.id)
+        .sort();
+      assert.deepStrictEqual(hwDecoders,
+        ['cmd_hevc_1080', 'cmd_hevc_4k', 'cmd_hevc_sd', 'cmd_vr_hevc'],
+        'Unexpected encoder node with hardwareDecoding=true; confirm NVDEC can decode its sources');
+      // The recovery paths must stay on software decoding.
+      for (const id of ['cmd_hevc_force', 'cmd_retry_hevc']) {
+        assert.strictEqual(pluginMap.get(id).inputsDB.hardwareDecoding, 'false',
+          `${id} must decode in software so it can recover NVDEC failures`);
+      }
+    });
+
+    test('undersized output fails the flow instead of replacing the original', () => {
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      // A frozen-video encode lands around 3-4% of the source size, well under
+      // any legitimate transcode, so the size ratio is the general safety net.
+      const size = pluginMap.get('fl_size');
+      assert.strictEqual(size.pluginName, 'compareFileSizeRatio');
+      assert.ok(Number(size.inputsDB.greaterThan) >= 10,
+        'fl_size needs a lower bound so frozen/blank output cannot pass');
+
+      // Out of range → distinguish undersized from oversized.
+      assert.strictEqual(edgeMap.get('fl_size:2'), 'fl_size_small');
+      const small = pluginMap.get('fl_size_small');
+      assert.strictEqual(small.pluginName, 'compareFileSizeRatio');
+      assert.strictEqual(small.inputsDB.greaterThan, '0');
+      assert.strictEqual(small.inputsDB.lessThan, String(size.inputsDB.greaterThan));
+
+      // Oversized keeps the existing review path.
+      assert.strictEqual(edgeMap.get('fl_size_small:2'), 'cmt_toobig');
+
+      // Undersized must reach failFlow, not requireReview: Tdarr's global
+      // "auto-approve successful transcodes" setting can bypass requireReview.
+      let node = edgeMap.get('fl_size_small:1');
+      const seen = new Set();
+      while (node && !seen.has(node)) {
+        seen.add(node);
+        const plugin = pluginMap.get(node);
+        assert.ok(plugin, `Missing node ${node}`);
+        assert.notStrictEqual(plugin.pluginName, 'requireReview',
+          'undersized output must not route to an auto-approvable review');
+        if (plugin.pluginName === 'failFlow') break;
+        node = edgeMap.get(`${node}:1`);
+      }
+      assert.ok(node && pluginMap.get(node).pluginName === 'failFlow',
+        'undersized output must terminate in failFlow');
     });
 
     test('onFlowError gives up safely without replacing original file', () => {
