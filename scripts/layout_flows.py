@@ -970,6 +970,7 @@ def col_map_01() -> dict[str, int]:
         "cmd_rmcommentary": R,
         "cmt_data": M, "cmd_rmdata": M, "cmd_rmimages": M, "cmd_rmattach": M,
         # ── NVENC / resolution / encoders ─────────────────────────────
+        "cmt_nvenc": M, "grd_vc1": M,
         "cmt_nvenc": M, "grd_is_mkv": M, "grd_mkv_hevc": M, "cmd_hevc_force": R,
         "grd_av1": M, "chk_nvenc": M,
         "cmt_resolution": M, "chk_resolution": M,
@@ -1000,6 +1001,8 @@ def col_map_01() -> dict[str, int]:
         "cmd_rmdata_003": M, "grd_p3_has_aac": M, "cmt_rmaudio": R, "cmd_rmaudio": R, "cmd_rm_ac3": R, "cmd_rm_mp3": R, "cmd_reorder_002": M, "cmd_faststart2": M, "ffe_002": M,
         # ── Validation ────────────────────────────────────────────────
         "cmt_size": M, "fl_size": M,
+        "fl_size_small": M,
+        "cmt_undersize": R, "fail_undersize": R,
         "cmt_toobig": L,
         "fl_review": L,
         "cmt_duration": M, "fl_duration": M,
