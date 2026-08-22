@@ -1155,6 +1155,55 @@ for (const file of flowFiles) {
         `cmd_vr_retag_tags must include "${FLAG}" to prevent corrupt MP4 from non-monotonic DTS`);
     });
 
+    test('sources with no usable duration fail before any encode starts', () => {
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+
+      // A raw elementary stream carrying a container extension reports no duration.
+      // Transcoding it pads the output with duplicate frames until the worker is
+      // effectively stuck, so it must be rejected before the pipeline starts.
+      const guard = pluginMap.get('grd_duration');
+      assert.ok(guard, 'Missing node grd_duration');
+      assert.strictEqual(guard.pluginName, 'checkFileDuration');
+      assert.strictEqual(guard.sourceRepo, 'Local');
+
+      // Sits at the head of processing, before the health check and any FFmpeg pass.
+      assert.strictEqual(edgeMap.get('cmt_proc:1'), 'grd_duration',
+        'duration guard must be the first thing in the processing section');
+      assert.strictEqual(edgeMap.get('grd_duration:1'), 'cmt_lowbit',
+        'files with a usable duration continue to the existing flow');
+
+      // No encoder or FFmpeg pass may be reachable before the guard runs.
+      const before = new Set();
+      const queue = ['inp_001'];
+      while (queue.length) {
+        const id = queue.shift();
+        if (id === 'grd_duration' || before.has(id)) continue;
+        before.add(id);
+        for (const edge of flow.flowEdges.filter((e) => e.source === id)) queue.push(edge.target);
+      }
+      for (const id of before) {
+        const name = pluginMap.get(id)?.pluginName || '';
+        assert.ok(!name.startsWith('ffmpegCommand'),
+          `${id} (${name}) runs before the duration guard; nothing may encode first`);
+      }
+
+      // Rejection path terminates in failFlow, never an auto-approvable review.
+      let node = edgeMap.get('grd_duration:2');
+      const seen = new Set();
+      while (node && !seen.has(node)) {
+        seen.add(node);
+        const plugin = pluginMap.get(node);
+        assert.ok(plugin, `Missing node ${node}`);
+        assert.notStrictEqual(plugin.pluginName, 'requireReview',
+          'no-duration sources must not route to an auto-approvable review');
+        if (plugin.pluginName === 'failFlow') break;
+        node = edgeMap.get(`${node}:1`);
+      }
+      assert.ok(node && pluginMap.get(node).pluginName === 'failFlow',
+        'no-duration sources must terminate in failFlow');
+    });
+
     test('VC-1/WMV sources bypass NVDEC hardware decoding', () => {
       const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
       const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));

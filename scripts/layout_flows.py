@@ -951,6 +951,8 @@ def col_map_01() -> dict[str, int]:
         "grd_unwanted_exact": M, "grd_unwanted_partial": M,
         "cmt_optimal": L, "fl_noop": L,
         "cmt_proc": R,
+        "grd_duration": M,
+        "cmt_noduration": L, "fail_noduration": L,
         # ── Low-bitrate skip ──────────────────────────────────────────
         "cmt_lowbit": M, "chk_lowbit": M,
         "cmt_skip_lowbit": L, "fl_skip_lowbit": L,
