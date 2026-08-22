@@ -22,7 +22,7 @@ Usage:
 Start with --once --dry-run to see what it would do.
 
 Requires SSH access to the Tdarr hosts (key-based) and the Tdarr Docker
-container, same as cleanup_stereo_eac3.py.
+container. Shared helpers live in tdarr_ssh.py.
 """
 
 from __future__ import annotations
@@ -36,7 +36,7 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-import cleanup_stereo_eac3 as C  # noqa: E402
+import tdarr_ssh as T  # noqa: E402
 
 # A job must run at least this long before it is eligible to be killed, so a
 # slow-starting encode is never mistaken for a stalled one.
@@ -94,7 +94,7 @@ class Job:
 
 def list_jobs(host: str) -> list[Job]:
     """Running tdarr-ffmpeg processes on one host."""
-    rc, out, _ = C._docker_exec(host, "sh -c " + C._shq(PS_COMMAND), timeout=300)
+    rc, out, _ = T.docker_exec(host, "sh -c " + T.shq(PS_COMMAND), timeout=300)
     if rc != 0:
         return []
     jobs = []
@@ -113,10 +113,10 @@ def output_sizes(host: str, jobs: list[Job]) -> dict[str, int]:
     if not jobs:
         return {}
     parts = [
-        f'printf "%s " {C._shq(j.output)}; (stat -c %s {C._shq(j.output)} 2>/dev/null || echo -1)'
+        f'printf "%s " {T.shq(j.output)}; (stat -c %s {T.shq(j.output)} 2>/dev/null || echo -1)'
         for j in jobs
     ]
-    rc, out, _ = C._docker_exec(host, "sh -c " + C._shq("; ".join(parts)), timeout=300)
+    rc, out, _ = T.docker_exec(host, "sh -c " + T.shq("; ".join(parts)), timeout=300)
     sizes: dict[str, int] = {}
     if rc != 0:
         return sizes
@@ -133,7 +133,7 @@ def output_sizes(host: str, jobs: list[Job]) -> dict[str, int]:
 
 
 def kill(host: str, pid: str) -> bool:
-    rc, _, _ = C._docker_exec(host, "sh -c " + C._shq(f"kill -9 {pid}"), timeout=180)
+    rc, _, _ = T.docker_exec(host, "sh -c " + T.shq(f"kill -9 {pid}"), timeout=180)
     return rc == 0
 
 
@@ -196,9 +196,9 @@ def main() -> int:
         repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         with open(os.path.join(repo, "servers.local.json")) as fh:
             for srv in json.load(fh)["servers"]:
-                targets.append((srv["name"], C._ssh_host_from_tdarr(srv["host"])))
+                targets.append((srv["name"], T.ssh_host_from_tdarr(srv["host"])))
     for host in args.hosts:
-        targets.append((host, C._ssh_host_from_tdarr(host)))
+        targets.append((host, T.ssh_host_from_tdarr(host)))
 
     if not targets:
         ap.error("no hosts given; pass HOST or --servers")
@@ -206,18 +206,20 @@ def main() -> int:
     stall_seconds = args.stall_minutes * 60
 
     # A single sweep can only observe one size per job, so it cannot conclude
-    # anything about growth. Take a second sample after a short pause.
+    # anything about growth. Take a second sample after a pause.
+    #
+    # The pause must be at least stall_seconds: judging on a shorter one would
+    # silently ignore --stall-minutes and kill jobs that are merely slow. If
+    # that wait is unwanted, lower --stall-minutes rather than shortening it
+    # here, so the threshold being applied is always the one that was asked for.
     if args.once:
         state: dict = {}
         print(f"sweep 1/2 (sampling)  hosts={[t[0] for t in targets]}")
         sweep(targets, state, stall_seconds, args.dry_run)
-        wait = min(args.interval, 120)
-        print(f"waiting {wait:.0f}s to see which outputs grow...")
-        time.sleep(wait)
-        # Anything that did not grow across the pause has been stalled at least
-        # as long as it has been running, so judge against the elapsed pause.
+        print(f"waiting {stall_seconds / 60:.1f}m (--stall-minutes) to see which outputs grow...")
+        time.sleep(stall_seconds)
         print("sweep 2/2 (judging)")
-        n = sweep(targets, state, min(stall_seconds, wait), args.dry_run)
+        n = sweep(targets, state, stall_seconds, args.dry_run)
         print(f"\n{n} stalled job(s) {'identified' if args.dry_run else 'killed'}")
         return 0
 

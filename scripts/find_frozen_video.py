@@ -43,7 +43,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import analyze_tdarr as A  # noqa: E402
-import cleanup_stereo_eac3 as C  # noqa: E402
+import tdarr_ssh as T  # noqa: E402
 
 # Minimum plausible video bitrate (bits/sec) for a real encode at a given width.
 # The frozen files sit at 10-25 kbps; the lowest legitimate encodes observed in
@@ -115,10 +115,10 @@ def screen(records: list[dict]) -> list[dict]:
 
 def _duration(ssh_host: str, path: str) -> float | None:
     cmd = (
-        f"{C.DOCKER_FFPROBE} -v error -show_entries format=duration "
-        f"-of default=nw=1:nk=1 {C._shq(path)}"
+        f"{T.DOCKER_FFPROBE} -v error -show_entries format=duration "
+        f"-of default=nw=1:nk=1 {T.shq(path)}"
     )
-    rc, out, _ = C._docker_exec(ssh_host, f"sh -c {C._shq(cmd)}", timeout=300)
+    rc, out, _ = T.docker_exec(ssh_host, f"sh -c {T.shq(cmd)}", timeout=300)
     if rc != 0:
         return None
     try:
@@ -131,11 +131,11 @@ def _duration(ssh_host: str, path: str) -> float | None:
 def _frame_signature(ssh_host: str, path: str, offset: float) -> tuple | None:
     """Brightness/saturation of a single frame at `offset` seconds."""
     cmd = (
-        f"{C.DOCKER_FFMPEG} -nostdin -hide_banner -ss {offset:.2f} -i {C._shq(path)} "
+        f"{T.DOCKER_FFMPEG} -nostdin -hide_banner -ss {offset:.2f} -i {T.shq(path)} "
         f"-frames:v 1 -an -vf signalstats,metadata=print:file=- -f null /dev/null 2>&1 "
         f"| grep -E 'YMIN|YAVG|YMAX|SATAVG'"
     )
-    rc, out, _ = C._docker_exec(ssh_host, f"sh -c {C._shq(cmd)}", timeout=300)
+    rc, out, _ = T.docker_exec(ssh_host, f"sh -c {T.shq(cmd)}", timeout=300)
     values = []
     for line in out.split("\n"):
         if "=" not in line:
@@ -215,7 +215,7 @@ def main() -> int:
         if not suspects:
             continue
 
-        ssh_host = C._ssh_host_from_tdarr(host)
+        ssh_host = T.ssh_host_from_tdarr(host)
         for suspect in suspects:
             line = (
                 f"    {suspect['bitrate']:>8} bps {suspect['width']:>5}px "
