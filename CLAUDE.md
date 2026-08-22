@@ -159,3 +159,37 @@ scripts/fix_dts_files.sh --from-file /tmp/affected_files.txt
 # Dry run
 scripts/fix_dts_files.sh --dry-run /path/to/file.mkv
 ```
+
+### Detecting stalled workers
+
+A transcode can occupy a worker slot indefinitely without ever failing. The known
+trigger is a source with no usable duration — a raw elementary stream carrying a
+container extension — where constant-frame-rate conversion pads the timeline with
+duplicate frames. `grd_duration` now rejects those before the pipeline starts, but
+the watchdog is the backstop for causes not yet seen.
+
+```bash
+# See what would be killed, without killing anything
+python3 scripts/watch_stalled_workers.py --servers --once --dry-run
+
+# Single sweep, kill anything stalled
+python3 scripts/watch_stalled_workers.py --servers --once
+
+# Run continuously (default: kill after 15 min with no output growth)
+python3 scripts/watch_stalled_workers.py --servers --stall-minutes 30
+```
+
+It watches one thing — whether the job's output file is still growing — so it does
+not care why a job is stuck. Killing the FFmpeg process is the whole action; Tdarr
+requeues the file itself. It never touches library files.
+
+### Finding frozen (still-image) video
+
+```bash
+python3 scripts/find_frozen_video.py --servers --verify --out list.txt
+```
+
+Screens on video bitrate far below any real encode at that resolution, then confirms
+each hit by decoding frames at five points across the runtime and comparing them.
+Packet-size variance does *not* work as a signal — a frozen encode has a higher
+coefficient of variation than real content.
