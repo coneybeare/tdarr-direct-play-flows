@@ -20,11 +20,17 @@ Packet-size variance does NOT work as a signal here: a frozen encode is mostly
 tiny duplicate frames punctuated by periodic keyframes of the still image, which
 gives it a *higher* coefficient of variation than real content.
 
+Nor do YMIN/YMAX: they are integer extremes over millions of pixels and still
+wobble by +/-1 on a frozen picture. Deciding on the largest spread across all
+metrics let that wobble clear the threshold and pass genuinely frozen files.
+Only the frame-wide averages decide. Run --self-test to check that logic.
+
 Usage:
     python3 scripts/find_frozen_video.py --servers
     python3 scripts/find_frozen_video.py --servers --verify
     python3 scripts/find_frozen_video.py --servers --verify --out frozen.txt
     python3 scripts/find_frozen_video.py --api-key SECRET http://HOST:PORT
+    python3 scripts/find_frozen_video.py --self-test
 
 Screening only reports suspects. Pass --verify before acting on the results:
 a genuinely tiny-but-fine encode (a static-camera clip, a slideshow) screens the
@@ -60,9 +66,15 @@ BITRATE_FLOOR_BY_WIDTH = [
 SAMPLE_POINTS = (0.10, 0.30, 0.50, 0.70, 0.90)
 
 # Largest spread across samples (in 0-255 luma units) still considered "identical".
-# Real footage moves by tens of units between distant points; re-decoding the same
-# frame reproduces it bit-for-bit, so the observed spread on frozen files is 0.
+# Real footage moves by tens of units between distant points.
 FROZEN_SPREAD_THRESHOLD = 0.5
+
+# Only the frame-wide averages are used to decide. YMIN and YMAX are integer
+# extremes over millions of pixels: on a frozen picture they still wobble by +/-1
+# between decodes, and judging on the largest spread across all metrics let that
+# wobble mask genuinely frozen files (observed: YAVG/YMAX/SATAVG identical to
+# three decimal places while YMIN moved 16 -> 15 -> 16, scoring 1.00 and passing).
+DECIDING_METRICS = ("YAVG", "SATAVG")
 
 
 def bitrate_floor(width: int) -> int:
@@ -128,23 +140,79 @@ def _duration(ssh_host: str, path: str) -> float | None:
     return value if value > 0 else None
 
 
-def _frame_signature(ssh_host: str, path: str, offset: float) -> tuple | None:
-    """Brightness/saturation of a single frame at `offset` seconds."""
+def _frame_signature(ssh_host: str, path: str, offset: float) -> dict | None:
+    """Brightness/saturation of a single frame at `offset` seconds, by metric name."""
     cmd = (
         f"{T.DOCKER_FFMPEG} -nostdin -hide_banner -ss {offset:.2f} -i {T.shq(path)} "
         f"-frames:v 1 -an -vf signalstats,metadata=print:file=- -f null /dev/null 2>&1 "
         f"| grep -E 'YMIN|YAVG|YMAX|SATAVG'"
     )
     rc, out, _ = T.docker_exec(ssh_host, f"sh -c {T.shq(cmd)}", timeout=300)
-    values = []
+    values: dict[str, float] = {}
     for line in out.split("\n"):
         if "=" not in line:
             continue
+        key, _, raw = line.rpartition("=")
+        name = key.rsplit(".", 1)[-1].strip()
         try:
-            values.append(float(line.rsplit("=", 1)[1].strip()))
+            values[name] = float(raw.strip())
         except ValueError:
             continue
-    return tuple(values) if len(values) >= 4 else None
+    # Parse by name rather than position: relying on ffmpeg's print order would
+    # silently mis-assign metrics if that order ever changed.
+    return values if all(m in values for m in DECIDING_METRICS) else None
+
+
+def decide(signatures: list[dict]) -> tuple[bool, dict]:
+    """Frozen or not, from frame signatures. Pure, so it can be tested offline."""
+    spreads = {
+        m: max(sig[m] for sig in signatures) - min(sig[m] for sig in signatures)
+        for m in DECIDING_METRICS
+    }
+    return max(spreads.values()) < FROZEN_SPREAD_THRESHOLD, spreads
+
+
+def _self_test() -> int:
+    """Regression cases taken from real files, including the one that got away."""
+    cases = [
+        # The false negative this check exists for: the picture is identical to
+        # three decimals, but YMIN wobbled 16 -> 15 -> 16. Judging on the largest
+        # spread across all metrics scored that 1.00 and cleared the threshold,
+        # leaving genuinely frozen files on disk through two full scans.
+        ("frozen, YMIN wobbles by 1", [
+            {"YMIN": 16.0, "YAVG": 72.0, "YMAX": 129.0, "SATAVG": 181.0},
+            {"YMIN": 15.0, "YAVG": 71.996, "YMAX": 129.0, "SATAVG": 181.0},
+            {"YMIN": 16.0, "YAVG": 72.0, "YMAX": 129.0, "SATAVG": 181.0},
+        ], True),
+        ("frozen, bit-identical", [
+            {"YMIN": 16.0, "YAVG": 72.0, "YMAX": 129.0, "SATAVG": 181.0},
+            {"YMIN": 16.0, "YAVG": 72.0, "YMAX": 129.0, "SATAVG": 181.0},
+        ], True),
+        ("healthy live action", [
+            {"YMIN": 12.0, "YAVG": 90.1742, "YMAX": 247.0, "SATAVG": 7.50073},
+            {"YMIN": 15.0, "YAVG": 74.7297, "YMAX": 239.0, "SATAVG": 9.4826},
+            {"YMIN": 11.0, "YAVG": 78.4495, "YMAX": 247.0, "SATAVG": 8.4326},
+        ], False),
+        ("healthy animation, low bitrate", [
+            {"YMIN": 0.0, "YAVG": 20.0, "YMAX": 255.0, "SATAVG": 5.0},
+            {"YMIN": 0.0, "YAVG": 148.0, "YMAX": 255.0, "SATAVG": 186.0},
+        ], False),
+        # A static shot still breathes: compression noise moves the frame mean
+        # far more than a duplicated frame does.
+        ("near-static but real", [
+            {"YMIN": 16.0, "YAVG": 72.0, "YMAX": 129.0, "SATAVG": 181.0},
+            {"YMIN": 16.0, "YAVG": 73.2, "YMAX": 129.0, "SATAVG": 181.0},
+        ], False),
+    ]
+    failures = 0
+    for name, signatures, expected in cases:
+        got, spreads = decide(signatures)
+        ok = got is expected
+        failures += 0 if ok else 1
+        detail = ", ".join(f"{m} {v:.3f}" for m, v in spreads.items())
+        print(f"  {'PASS' if ok else 'FAIL'}  {name}: frozen={got} ({detail})")
+    print("self-test passed" if not failures else f"{failures} FAILURE(S)")
+    return 1 if failures else 0
 
 
 def verify(ssh_host: str, path: str) -> tuple[bool | None, str]:
@@ -165,13 +233,12 @@ def verify(ssh_host: str, path: str) -> tuple[bool | None, str]:
     if len(signatures) < 2:
         return None, f"only {len(signatures)} frame(s) decoded"
 
-    spreads = [max(col) - min(col) for col in zip(*signatures)]
-    spread = max(spreads)
+    frozen, spreads = decide(signatures)
     detail = (
         f"{len(signatures)} frames across {duration / 60:.0f} min, "
-        f"max spread {spread:.2f}"
+        + ", ".join(f"{m} spread {v:.3f}" for m, v in spreads.items())
     )
-    return spread < FROZEN_SPREAD_THRESHOLD, detail
+    return frozen, detail
 
 
 def main() -> int:
@@ -187,7 +254,12 @@ def main() -> int:
         help="Confirm each suspect by comparing frames across the runtime over SSH",
     )
     ap.add_argument("--out", help="Write confirmed (or screened) paths, one per line")
+    ap.add_argument("--self-test", action="store_true",
+                    help="Check the frozen/not decision against known real-world cases and exit")
     args = ap.parse_args()
+
+    if args.self_test:
+        return _self_test()
 
     targets = []
     if args.servers:
