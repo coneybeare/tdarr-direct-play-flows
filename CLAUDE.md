@@ -191,5 +191,11 @@ python3 scripts/find_frozen_video.py --servers --verify --out list.txt
 
 Screens on video bitrate far below any real encode at that resolution, then confirms
 each hit by decoding frames at five points across the runtime and comparing them.
-Packet-size variance does *not* work as a signal — a frozen encode has a higher
-coefficient of variation than real content.
+
+Two signals that look plausible and do *not* work: packet-size variance (a frozen
+encode has a *higher* coefficient of variation than real content), and YMIN/YMAX
+(integer extremes that wobble by ±1 even on a frozen picture, which is enough to
+clear the threshold and pass a frozen file). Only the frame-wide averages decide.
+
+`python3 scripts/find_frozen_video.py --self-test` checks that decision against
+real-world cases, including the false negative that motivated it.
