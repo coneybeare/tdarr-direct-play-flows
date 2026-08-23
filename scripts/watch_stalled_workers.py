@@ -14,15 +14,21 @@ Deliberately does not use the Tdarr API -- /api/v2/get-nodes is prone to timing
 out on a busy server, and the process table is both cheaper and more direct.
 
 Usage:
+    # From a workstation, over SSH, watching every configured server
     python3 scripts/watch_stalled_workers.py --servers --once --dry-run
+
+    # Scheduled on a Tdarr host itself, watching only that host (no SSH needed)
+    python3 scripts/watch_stalled_workers.py --local
     python3 scripts/watch_stalled_workers.py --servers --once
     python3 scripts/watch_stalled_workers.py --servers            # run forever
     python3 scripts/watch_stalled_workers.py --servers --stall-minutes 30
 
 Start with --once --dry-run to see what it would do.
 
-Requires SSH access to the Tdarr hosts (key-based) and the Tdarr Docker
-container. Shared helpers live in tdarr_ssh.py.
+With --servers this needs key-based SSH to the Tdarr hosts. With --local it
+needs neither SSH nor keys, only the Docker socket on the machine it runs on,
+which is what makes it schedulable on a Tdarr host itself.
+Shared helpers live in tdarr_ssh.py.
 """
 
 from __future__ import annotations
@@ -138,14 +144,21 @@ def kill(host: str, pid: str) -> bool:
 
 
 def sweep(hosts: list[tuple[str, str]], state: dict, stall_seconds: int,
-          dry_run: bool) -> int:
-    """One pass. Returns how many jobs were killed (or would have been)."""
+          dry_run: bool) -> tuple[int, int]:
+    """One pass. Returns (killed, watched).
+
+    `watched` exists so the caller can log a heartbeat: a watchdog that has
+    silently died and one that has simply found nothing look identical in a log
+    otherwise, and this one is meant to run unattended for months.
+    """
     killed = 0
+    watched = 0
     for name, host in hosts:
         jobs = list_jobs(host)
         sizes = output_sizes(host, jobs)
         live = set()
 
+        watched += len(jobs)
         for job in jobs:
             live.add(job.key)
             size = sizes.get(job.output, -1)
@@ -174,7 +187,7 @@ def sweep(hosts: list[tuple[str, str]], state: dict, stall_seconds: int,
         # Forget jobs that are no longer running.
         for key in [k for k in state if k[0] == host and k not in live]:
             state.pop(key, None)
-    return killed
+    return killed, watched
 
 
 def main() -> int:
@@ -187,11 +200,16 @@ def main() -> int:
                     help="Kill after the output has not grown for this long (default 15)")
     ap.add_argument("--interval", type=float, default=300,
                     help="Seconds between sweeps (default 300)")
+    ap.add_argument("--local", action="store_true",
+                    help="Watch this machine's own Tdarr container, without SSH. "
+                         "Use when scheduling the watchdog on the Tdarr host itself.")
     ap.add_argument("--once", action="store_true", help="Run a single sweep and exit")
     ap.add_argument("--dry-run", action="store_true", help="Report without killing anything")
     args = ap.parse_args()
 
     targets: list[tuple[str, str]] = []
+    if args.local:
+        targets.append(("this host", "localhost"))
     if args.servers:
         repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         with open(os.path.join(repo, "servers.local.json")) as fh:
@@ -201,7 +219,8 @@ def main() -> int:
         targets.append((host, T.ssh_host_from_tdarr(host)))
 
     if not targets:
-        ap.error("no hosts given; pass HOST or --servers")
+        ap.error("no target selected; pass --local to watch this machine, "
+                 "--servers to read servers.local.json, or one or more HOST arguments")
 
     stall_seconds = args.stall_minutes * 60
 
@@ -219,19 +238,23 @@ def main() -> int:
         print(f"waiting {stall_seconds / 60:.1f}m (--stall-minutes) to see which outputs grow...")
         time.sleep(stall_seconds)
         print("sweep 2/2 (judging)")
-        n = sweep(targets, state, stall_seconds, args.dry_run)
-        print(f"\n{n} stalled job(s) {'identified' if args.dry_run else 'killed'}")
+        n, watched = sweep(targets, state, stall_seconds, args.dry_run)
+        print(f"\n{watched} job(s) watched, "
+              f"{n} stalled {'identified' if args.dry_run else 'killed'}")
         return 0
 
     print(f"watching {[t[0] for t in targets]} "
           f"(stall={args.stall_minutes}m, interval={args.interval}s"
-          f"{', DRY RUN' if args.dry_run else ''})")
+          f"{', DRY RUN' if args.dry_run else ''})", flush=True)
     state = {}
     while True:
         try:
-            n = sweep(targets, state, stall_seconds, args.dry_run)
-            if n:
-                print(f"  -> {n} job(s) {'flagged' if args.dry_run else 'killed'}", flush=True)
+            n, watched = sweep(targets, state, stall_seconds, args.dry_run)
+            # Heartbeat every sweep. Without it an empty log cannot be told
+            # apart from a watchdog that died on startup.
+            stamp = time.strftime("%Y-%m-%d %H:%M:%S")
+            note = f", {n} {'flagged' if args.dry_run else 'killed'}" if n else ""
+            print(f"{stamp}  watching {watched} job(s){note}", flush=True)
         except Exception as exc:  # noqa: BLE001 - a bad sweep must not end the watch
             print(f"  sweep error (continuing): {exc}", flush=True)
         time.sleep(args.interval)
