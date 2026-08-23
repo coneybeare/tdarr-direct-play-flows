@@ -39,16 +39,38 @@ def shq(s: str) -> str:
     return "'" + s.replace("'", "'\\''") + "'"
 
 
+# Hostnames meaning "run here, no SSH". A process scheduled on a Tdarr host
+# itself may have no SSH credentials, so it must talk to Docker directly.
+LOCAL_HOSTS = {"", "local", "localhost", "127.0.0.1", "::1"}
+
+
+def is_local(host: str) -> bool:
+    return (host or "").strip().lower() in LOCAL_HOSTS
+
+
 def ssh_run(ssh_host: str, cmd: str, timeout: int = 600) -> tuple[int, str, str]:
-    """Run a command on a remote host via SSH. Returns (rc, stdout, stderr)."""
-    ssh_cmd = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=10", ssh_host, cmd]
+    """Run a command on a Tdarr host. Returns (rc, stdout, stderr).
+
+    Runs locally when the host is one of LOCAL_HOSTS, otherwise over SSH, so the
+    same code works from a workstation and from a Tdarr host itself.
+    """
+    if is_local(ssh_host):
+        argv: list[str] | str = cmd
+        shell = True
+        missing = "shell not available"
+    else:
+        argv = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=10", ssh_host, cmd]
+        shell = False
+        missing = "ssh not found on PATH"
     try:
-        result = subprocess.run(ssh_cmd, capture_output=True, text=True, timeout=timeout)
+        result = subprocess.run(
+            argv, shell=shell, capture_output=True, text=True, timeout=timeout,
+        )
         return result.returncode, result.stdout, result.stderr
     except subprocess.TimeoutExpired:
-        return -1, "", f"SSH command timed out after {timeout}s"
+        return -1, "", f"Command timed out after {timeout}s"
     except FileNotFoundError:
-        return -1, "", "ssh not found on PATH"
+        return -1, "", missing
 
 
 def docker_exec(ssh_host: str, cmd: str, timeout: int = 600) -> tuple[int, str, str]:
