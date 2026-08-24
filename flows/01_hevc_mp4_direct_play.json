@@ -572,7 +572,7 @@
       "id": "cmd_hevc_force",
       "position": {
         "x": 3770,
-        "y": 2990
+        "y": 3330
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -613,7 +613,7 @@
       "id": "chk_nvenc",
       "position": {
         "x": 3270,
-        "y": 3160
+        "y": 3330
       },
       "inputsDB": {
         "hardwareEncoder": "hevc_nvenc"
@@ -628,7 +628,7 @@
       "id": "cmt_resolution",
       "position": {
         "x": 3270,
-        "y": 3330
+        "y": 3500
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -641,7 +641,7 @@
       "id": "chk_resolution",
       "position": {
         "x": 3270,
-        "y": 3520
+        "y": 3690
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -654,7 +654,7 @@
       "id": "cmd_hevc_sd",
       "position": {
         "x": 2770,
-        "y": 3690
+        "y": 3860
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -677,7 +677,7 @@
       "id": "cmd_hevc_1080",
       "position": {
         "x": 3270,
-        "y": 3690
+        "y": 3860
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -700,7 +700,7 @@
       "id": "cmd_hevc_4k",
       "position": {
         "x": 3770,
-        "y": 3690
+        "y": 3860
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -723,7 +723,7 @@
       "id": "cmt_sw",
       "position": {
         "x": 4270,
-        "y": 3330
+        "y": 3500
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -736,7 +736,7 @@
       "id": "cmd_hevc_sw",
       "position": {
         "x": 4270,
-        "y": 3520
+        "y": 3690
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -772,7 +772,7 @@
       "id": "chk_br_low",
       "position": {
         "x": 3270,
-        "y": 4030
+        "y": 4200
       },
       "inputsDB": {
         "unit": "kbps",
@@ -789,7 +789,7 @@
       "id": "chk_br_mid",
       "position": {
         "x": 3270,
-        "y": 4200
+        "y": 4370
       },
       "inputsDB": {
         "unit": "kbps",
@@ -806,7 +806,7 @@
       "id": "chk_br_vlow",
       "position": {
         "x": 3270,
-        "y": 3860
+        "y": 4030
       },
       "inputsDB": {
         "unit": "kbps",
@@ -823,7 +823,7 @@
       "id": "cmd_cap_vlow",
       "position": {
         "x": 2770,
-        "y": 4030
+        "y": 4200
       },
       "inputsDB": {
         "inputArguments": "",
@@ -839,7 +839,7 @@
       "id": "cmd_cap_low",
       "position": {
         "x": 2770,
-        "y": 4200
+        "y": 4370
       },
       "inputsDB": {
         "inputArguments": "",
@@ -855,7 +855,7 @@
       "id": "cmd_cap_mid",
       "position": {
         "x": 2770,
-        "y": 4370
+        "y": 4540
       },
       "inputsDB": {
         "inputArguments": "",
@@ -871,7 +871,7 @@
       "id": "cmd_cap_high",
       "position": {
         "x": 2770,
-        "y": 4540
+        "y": 4710
       },
       "inputsDB": {
         "inputArguments": "",
@@ -903,7 +903,7 @@
       "id": "cmt_audio",
       "position": {
         "x": 9810,
-        "y": 170
+        "y": 340
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -916,7 +916,7 @@
       "id": "cmd_ens_eng",
       "position": {
         "x": 9810,
-        "y": 530
+        "y": 700
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -937,7 +937,7 @@
       "id": "cmd_ens_und",
       "position": {
         "x": 10310,
-        "y": 870
+        "y": 1040
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -958,7 +958,7 @@
       "id": "grd_dup_und",
       "position": {
         "x": 9310,
-        "y": 700
+        "y": 870
       },
       "inputsDB": {
         "streamType": "audio",
@@ -976,7 +976,7 @@
       "id": "grd_has_eng",
       "position": {
         "x": 9810,
-        "y": 360
+        "y": 530
       },
       "inputsDB": {
         "streamType": "audio",
@@ -1058,7 +1058,7 @@
       "id": "grd_p3_has_aac",
       "position": {
         "x": 9810,
-        "y": 1720
+        "y": 1890
       },
       "inputsDB": {
         "streamType": "audio",
@@ -1076,7 +1076,7 @@
       "id": "cmt_rmaudio",
       "position": {
         "x": 10310,
-        "y": 1890
+        "y": 2060
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1089,7 +1089,7 @@
       "id": "cmd_rmaudio",
       "position": {
         "x": 10310,
-        "y": 2080
+        "y": 2250
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -1210,7 +1210,7 @@
       "id": "cmt_size",
       "position": {
         "x": 9810,
-        "y": 3100
+        "y": 3270
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1223,7 +1223,7 @@
       "id": "fl_size",
       "position": {
         "x": 9810,
-        "y": 3290
+        "y": 3460
       },
       "inputsDB": {
         "greaterThan": "10",
@@ -1239,7 +1239,7 @@
       "id": "cmt_toobig",
       "position": {
         "x": 9310,
-        "y": 3820
+        "y": 3990
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1252,7 +1252,7 @@
       "id": "cmt_duration",
       "position": {
         "x": 9810,
-        "y": 3460
+        "y": 3630
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1265,7 +1265,7 @@
       "id": "fl_duration",
       "position": {
         "x": 9810,
-        "y": 3820
+        "y": 3990
       },
       "inputsDB": {
         "greaterThan": "98",
@@ -1281,7 +1281,7 @@
       "id": "grd_has_video",
       "position": {
         "x": 9810,
-        "y": 3990
+        "y": 4160
       },
       "inputsDB": {
         "streamType": "video",
@@ -1299,7 +1299,7 @@
       "id": "grd_has_audio",
       "position": {
         "x": 9810,
-        "y": 4160
+        "y": 4330
       },
       "inputsDB": {
         "streamType": "audio",
@@ -1317,7 +1317,7 @@
       "id": "fail_no_streams",
       "position": {
         "x": 9310,
-        "y": 4370
+        "y": 4540
       },
       "inputsDB": {
         "errorMessage": "Output file is missing video or audio streams"
@@ -1332,7 +1332,7 @@
       "id": "cmt_duration_fail",
       "position": {
         "x": 9310,
-        "y": 4010
+        "y": 4180
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1345,7 +1345,7 @@
       "id": "fl_review",
       "position": {
         "x": 9310,
-        "y": 4200
+        "y": 4370
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1358,7 +1358,7 @@
       "id": "cmt_replace",
       "position": {
         "x": 9810,
-        "y": 4500
+        "y": 4670
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1371,7 +1371,7 @@
       "id": "fl_replace",
       "position": {
         "x": 9810,
-        "y": 4710
+        "y": 4880
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1384,7 +1384,7 @@
       "id": "cmt_notify",
       "position": {
         "x": 9810,
-        "y": 4880
+        "y": 5050
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -1397,7 +1397,7 @@
       "id": "chk_plex_notify",
       "position": {
         "x": 9810,
-        "y": 5070
+        "y": 5240
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_plex_notify",
@@ -1414,7 +1414,7 @@
       "id": "web_plex",
       "position": {
         "x": 10310,
-        "y": 5240
+        "y": 5410
       },
       "inputsDB": {
         "url": "http://YOUR_PLEX_IP:32400/library/sections/all/refresh?X-Plex-Token=YOUR_PLEX_TOKEN",
@@ -1430,7 +1430,7 @@
       "id": "chk_arr_notify",
       "position": {
         "x": 9810,
-        "y": 5410
+        "y": 5580
       },
       "inputsDB": {
         "variable": "args.variables.user.enable_arr_notify",
@@ -1447,7 +1447,7 @@
       "id": "arr_notify",
       "position": {
         "x": 9810,
-        "y": 5580
+        "y": 5750
       },
       "inputsDB": {
         "arr": "radarr",
@@ -1894,7 +1894,7 @@
       "id": "chk_auto_accept",
       "position": {
         "x": 9810,
-        "y": 4330
+        "y": 4500
       },
       "inputsDB": {
         "variable": "args.variables.user.auto_accept",
@@ -1964,7 +1964,7 @@
       "id": "fl_manual_review",
       "position": {
         "x": 9310,
-        "y": 4540
+        "y": 4710
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2077,7 +2077,7 @@
       "id": "grd_fb_eng",
       "position": {
         "x": 9310,
-        "y": 870
+        "y": 1040
       },
       "inputsDB": {
         "streamType": "audio",
@@ -2095,7 +2095,7 @@
       "id": "cmd_ens_fb",
       "position": {
         "x": 9310,
-        "y": 1040
+        "y": 1210
       },
       "inputsDB": {
         "audioEncoder": "aac",
@@ -2188,7 +2188,7 @@
       "id": "ffs_002",
       "position": {
         "x": 9810,
-        "y": 0
+        "y": 170
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2201,7 +2201,7 @@
       "id": "cmd_reorder_002",
       "position": {
         "x": 9810,
-        "y": 2590
+        "y": 2760
       },
       "inputsDB": {
         "processOrder": "codecs,channels,streamTypes",
@@ -2220,7 +2220,7 @@
       "id": "cmd_rm_ac3",
       "position": {
         "x": 10310,
-        "y": 2250
+        "y": 2420
       },
       "inputsDB": {
         "propertyToCheck": "codec_tag_string",
@@ -2237,7 +2237,7 @@
       "id": "ffe_002",
       "position": {
         "x": 9810,
-        "y": 2930
+        "y": 3100
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2250,7 +2250,7 @@
       "id": "cmd_rm_mp3",
       "position": {
         "x": 10310,
-        "y": 2420
+        "y": 2590
       },
       "inputsDB": {
         "propertyToCheck": "codec_name",
@@ -2394,7 +2394,7 @@
       "id": "ffs_retry",
       "position": {
         "x": 6540,
-        "y": 3670
+        "y": 3840
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2407,7 +2407,7 @@
       "id": "cmd_retry_loglevel",
       "position": {
         "x": 6540,
-        "y": 3840
+        "y": 4010
       },
       "inputsDB": {
         "inputArguments": "-loglevel warning -stats -nostdin",
@@ -2423,7 +2423,7 @@
       "id": "cmd_retry_mp4",
       "position": {
         "x": 6540,
-        "y": 4010
+        "y": 4180
       },
       "inputsDB": {
         "container": "mp4",
@@ -2439,7 +2439,7 @@
       "id": "cmd_retry_rmsub",
       "position": {
         "x": 6540,
-        "y": 4180
+        "y": 4350
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2452,7 +2452,7 @@
       "id": "cmd_retry_rmdata",
       "position": {
         "x": 6540,
-        "y": 4350
+        "y": 4520
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2465,7 +2465,7 @@
       "id": "cmd_retry_hevc",
       "position": {
         "x": 6540,
-        "y": 4520
+        "y": 4690
       },
       "inputsDB": {
         "outputCodec": "hevc",
@@ -2488,7 +2488,7 @@
       "id": "grd_retry_ch",
       "position": {
         "x": 6540,
-        "y": 4690
+        "y": 4860
       },
       "inputsDB": {
         "channelCount": "6"
@@ -2503,7 +2503,7 @@
       "id": "cmd_retry_eac3",
       "position": {
         "x": 7040,
-        "y": 4860
+        "y": 5200
       },
       "inputsDB": {
         "audioCodec": "eac3",
@@ -2520,7 +2520,7 @@
       "id": "cmd_retry_tags",
       "position": {
         "x": 6540,
-        "y": 5030
+        "y": 5370
       },
       "inputsDB": {
         "inputArguments": "",
@@ -2536,7 +2536,7 @@
       "id": "ffe_retry",
       "position": {
         "x": 6540,
-        "y": 5200
+        "y": 5540
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2548,8 +2548,8 @@
       "version": "1.0.0",
       "id": "chk_health_retry",
       "position": {
-        "x": 6540,
-        "y": 5370
+        "x": 9810,
+        "y": 0
       },
       "inputsDB": {
         "type": "quick"
@@ -2564,7 +2564,7 @@
       "id": "cmd_faststart2",
       "position": {
         "x": 9810,
-        "y": 2760
+        "y": 2930
       },
       "inputsDB": {
         "inputArguments": "",
@@ -2735,7 +2735,7 @@
       "id": "ffe_aac",
       "position": {
         "x": 9810,
-        "y": 1210
+        "y": 1380
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2748,7 +2748,7 @@
       "id": "ffs_003",
       "position": {
         "x": 9810,
-        "y": 1380
+        "y": 1550
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -2761,7 +2761,7 @@
       "id": "cmd_rmdata_003",
       "position": {
         "x": 9810,
-        "y": 1550
+        "y": 1720
       },
       "inputsDB": {},
       "fpEnabled": true
@@ -3117,7 +3117,7 @@
       "id": "fl_size_small",
       "position": {
         "x": 9810,
-        "y": 3650
+        "y": 3820
       },
       "inputsDB": {
         "greaterThan": "0",
@@ -3133,7 +3133,7 @@
       "id": "cmt_undersize",
       "position": {
         "x": 10310,
-        "y": 3820
+        "y": 3990
       },
       "inputsDB": {
         "comment": "Output is <10% of source: the decoder almost certainly produced frozen/blank video (e.g. NVDEC failing on VC-1). Fail so onFlowError retries with software decoding; never replace the original."
@@ -3148,7 +3148,7 @@
       "id": "fail_undersize",
       "position": {
         "x": 10310,
-        "y": 4010
+        "y": 4180
       },
       "inputsDB": {
         "errorMessage": "Output file is under 10% of the source size - likely frozen or blank video"
@@ -3198,6 +3198,197 @@
       "inputsDB": {
         "errorMessage": "Source has no usable duration - cannot be transcoded safely"
       },
+      "fpEnabled": true
+    },
+    {
+      "name": "HDR source? (encode)",
+      "sourceRepo": "Local",
+      "pluginName": "checkStreamPropertyMultiValue",
+      "version": "1.0.0",
+      "id": "grd_hdr_force",
+      "position": {
+        "x": 3270,
+        "y": 3160
+      },
+      "inputsDB": {
+        "streamType": "video",
+        "propertyToCheck": "color_transfer",
+        "valuesToMatch": "smpte2084,arib-std-b67",
+        "condition": "equals"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "HDR source? (retry)",
+      "sourceRepo": "Local",
+      "pluginName": "checkStreamPropertyMultiValue",
+      "version": "1.0.0",
+      "id": "grd_hdr_retry",
+      "position": {
+        "x": 6540,
+        "y": 3670
+      },
+      "inputsDB": {
+        "streamType": "video",
+        "propertyToCheck": "color_transfer",
+        "valuesToMatch": "smpte2084,arib-std-b67",
+        "condition": "equals"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Begin HDR retry encode",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandStart",
+      "version": "1.0.0",
+      "id": "ffs_retry_sw",
+      "position": {
+        "x": 7540,
+        "y": 3840
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Quiet + stats (HDR retry)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandCustomArguments",
+      "version": "1.0.0",
+      "id": "cmd_retry_sw_loglevel",
+      "position": {
+        "x": 7540,
+        "y": 4010
+      },
+      "inputsDB": {
+        "inputArguments": "-loglevel warning -stats -nostdin",
+        "outputArguments": "-avoid_negative_ts make_zero"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Container: MP4 (HDR retry)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandSetContainer",
+      "version": "1.0.0",
+      "id": "cmd_retry_sw_mp4",
+      "position": {
+        "x": 7540,
+        "y": 4180
+      },
+      "inputsDB": {
+        "container": "mp4",
+        "forceConform": "true"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Remove subs (HDR retry)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRemoveSubtitles",
+      "version": "1.0.0",
+      "id": "cmd_retry_sw_rmsub",
+      "position": {
+        "x": 7540,
+        "y": 4350
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Remove data (HDR retry)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandRemoveDataStreams",
+      "version": "1.0.0",
+      "id": "cmd_retry_sw_rmdata",
+      "position": {
+        "x": 7540,
+        "y": 4520
+      },
+      "inputsDB": {},
+      "fpEnabled": true
+    },
+    {
+      "name": "Encode: libx265 (HDR retry)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandSetVideoEncoder",
+      "version": "1.0.0",
+      "id": "cmd_retry_sw_hevc",
+      "position": {
+        "x": 7540,
+        "y": 4690
+      },
+      "inputsDB": {
+        "outputCodec": "hevc",
+        "ffmpegPresetEnabled": "true",
+        "ffmpegPreset": "slow",
+        "ffmpegQualityEnabled": "true",
+        "ffmpegQuality": "20",
+        "hardwareEncoding": "false",
+        "hardwareType": "auto",
+        "hardwareDecoding": "false",
+        "forceEncoding": "true"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Has surround? (HDR retry)",
+      "sourceRepo": "Community",
+      "pluginName": "checkChannelCount",
+      "version": "1.0.0",
+      "id": "grd_retry_sw_ch",
+      "position": {
+        "x": 7540,
+        "y": 4860
+      },
+      "inputsDB": {
+        "channelCount": "6"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "EAC3 5.1 (HDR retry)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandEnsureAudioStream",
+      "version": "1.0.0",
+      "id": "cmd_retry_sw_eac3",
+      "position": {
+        "x": 7040,
+        "y": 5030
+      },
+      "inputsDB": {
+        "audioCodec": "eac3",
+        "language": "eng",
+        "channels": "6"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Tags: hvc1 (HDR retry)",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandCustomArguments",
+      "version": "1.0.0",
+      "id": "cmd_retry_sw_tags",
+      "position": {
+        "x": 7540,
+        "y": 5200
+      },
+      "inputsDB": {
+        "inputArguments": "",
+        "outputArguments": "-tag:v hvc1 -profile:v main10 -map_chapters -1"
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Execute HDR retry",
+      "sourceRepo": "Community",
+      "pluginName": "ffmpegCommandExecute",
+      "version": "1.0.0",
+      "id": "ffe_retry_sw",
+      "position": {
+        "x": 7540,
+        "y": 5370
+      },
+      "inputsDB": {},
       "fpEnabled": true
     }
   ],
@@ -4612,7 +4803,7 @@
     {
       "source": "grd_mkv_hevc",
       "sourceHandle": "2",
-      "target": "cmd_hevc_force",
+      "target": "grd_hdr_force",
       "targetHandle": null,
       "id": "e_mkv_hevc_force"
     },
@@ -4850,7 +5041,7 @@
     {
       "source": "rst_error",
       "sourceHandle": "1",
-      "target": "ffs_retry",
+      "target": "grd_hdr_retry",
       "targetHandle": null,
       "id": "e_rst_err_ffs"
     },
@@ -5004,7 +5195,7 @@
     {
       "source": "grd_vc1",
       "sourceHandle": "1",
-      "target": "cmd_hevc_force",
+      "target": "grd_hdr_force",
       "targetHandle": null,
       "id": "e_vc1_sw"
     },
@@ -5056,6 +5247,111 @@
       "target": "fail_noduration",
       "targetHandle": null,
       "id": "e_noduration_fail"
+    },
+    {
+      "source": "grd_hdr_force",
+      "sourceHandle": "1",
+      "target": "cmt_sw",
+      "targetHandle": null,
+      "id": "e_hdr_force_sw"
+    },
+    {
+      "source": "grd_hdr_force",
+      "sourceHandle": "2",
+      "target": "cmd_hevc_force",
+      "targetHandle": null,
+      "id": "e_hdr_force_nvenc"
+    },
+    {
+      "source": "grd_hdr_retry",
+      "sourceHandle": "1",
+      "target": "ffs_retry_sw",
+      "targetHandle": null,
+      "id": "e_hdr_retry_sw"
+    },
+    {
+      "source": "grd_hdr_retry",
+      "sourceHandle": "2",
+      "target": "ffs_retry",
+      "targetHandle": null,
+      "id": "e_hdr_retry_nvenc"
+    },
+    {
+      "source": "ffs_retry_sw",
+      "sourceHandle": "1",
+      "target": "cmd_retry_sw_loglevel",
+      "targetHandle": null,
+      "id": "e_retry_sw_loglevel"
+    },
+    {
+      "source": "cmd_retry_sw_loglevel",
+      "sourceHandle": "1",
+      "target": "cmd_retry_sw_mp4",
+      "targetHandle": null,
+      "id": "e_retry_sw_mp4"
+    },
+    {
+      "source": "cmd_retry_sw_mp4",
+      "sourceHandle": "1",
+      "target": "cmd_retry_sw_rmsub",
+      "targetHandle": null,
+      "id": "e_retry_sw_rmsub"
+    },
+    {
+      "source": "cmd_retry_sw_rmsub",
+      "sourceHandle": "1",
+      "target": "cmd_retry_sw_rmdata",
+      "targetHandle": null,
+      "id": "e_retry_sw_rmdata"
+    },
+    {
+      "source": "cmd_retry_sw_rmdata",
+      "sourceHandle": "1",
+      "target": "cmd_retry_sw_hevc",
+      "targetHandle": null,
+      "id": "e_retry_sw_hevc"
+    },
+    {
+      "source": "cmd_retry_sw_hevc",
+      "sourceHandle": "1",
+      "target": "grd_retry_sw_ch",
+      "targetHandle": null,
+      "id": "e_retry_sw_ch"
+    },
+    {
+      "source": "grd_retry_sw_ch",
+      "sourceHandle": "1",
+      "target": "cmd_retry_sw_eac3",
+      "targetHandle": null,
+      "id": "e_retry_sw_eac3"
+    },
+    {
+      "source": "grd_retry_sw_ch",
+      "sourceHandle": "2",
+      "target": "cmd_retry_sw_tags",
+      "targetHandle": null,
+      "id": "e_retry_sw_noeac3"
+    },
+    {
+      "source": "cmd_retry_sw_eac3",
+      "sourceHandle": "1",
+      "target": "cmd_retry_sw_tags",
+      "targetHandle": null,
+      "id": "e_retry_sw_eac3_tags"
+    },
+    {
+      "source": "cmd_retry_sw_tags",
+      "sourceHandle": "1",
+      "target": "ffe_retry_sw",
+      "targetHandle": null,
+      "id": "e_retry_sw_exec"
+    },
+    {
+      "source": "ffe_retry_sw",
+      "sourceHandle": "1",
+      "target": "chk_health_retry",
+      "targetHandle": null,
+      "id": "e_retry_sw_health"
     }
   ]
 }

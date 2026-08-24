@@ -203,9 +203,12 @@ for (const file of flowFiles) {
       assert.strictEqual(edgeMap.get('grd_mkv_hevc:1'), 'grd_av1',
         'MKV+HEVC should stream-copy via normal path');
 
-      // grd_mkv_hevc NO → cmd_hevc_force (must transcode)
-      assert.strictEqual(edgeMap.get('grd_mkv_hevc:2'), 'cmd_hevc_force',
-        'MKV+non-HEVC should force encode');
+      // grd_mkv_hevc NO → grd_hdr_force → cmd_hevc_force (must transcode).
+      // The HDR guard sits in between so HDR never reaches NVENC.
+      assert.strictEqual(edgeMap.get('grd_mkv_hevc:2'), 'grd_hdr_force',
+        'MKV+non-HEVC should be checked for HDR before force-encoding');
+      assert.strictEqual(edgeMap.get('grd_hdr_force:2'), 'cmd_hevc_force',
+        'SDR MKV+non-HEVC should force encode');
 
       // cmd_hevc_force → chk_br_vlow (rejoin bitrate cap chain)
       assert.strictEqual(edgeMap.get('cmd_hevc_force:1'), 'chk_br_vlow',
@@ -361,8 +364,12 @@ for (const file of flowFiles) {
         'set_retry must route to reset-original');
       assert.strictEqual(edgeMap.get('rst_original:1'), 'rst_error',
         'rst_original must route to rst_error to clear flowFailed before retry');
-      assert.strictEqual(edgeMap.get('rst_error:1'), 'ffs_retry',
-        'rst_error must route to ffs_retry (begin retry encode)');
+      // The HDR guard reads the original file's colour tags, so it sits after
+      // rst_original/rst_error rather than duplicating that prologue.
+      assert.strictEqual(edgeMap.get('rst_error:1'), 'grd_hdr_retry',
+        'rst_error must route to the HDR guard before picking a retry encoder');
+      assert.strictEqual(edgeMap.get('grd_hdr_retry:2'), 'ffs_retry',
+        'non-HDR retries must reach ffs_retry (begin retry encode)');
       assert.ok(pluginMap.has('rst_error'),
         'rst_error plugin node must exist');
       assert.strictEqual(pluginMap.get('rst_error').pluginName, 'resetFlowError',
@@ -1222,10 +1229,13 @@ for (const file of flowFiles) {
           `grd_vc1 should match ${codec} sources`);
       }
 
-      const target = edgeMap.get('grd_vc1:1');
-      assert.ok(target, 'grd_vc1 YES handle must be wired');
+      // VC-1 sources reach the force encoder through the HDR guard.
+      assert.strictEqual(edgeMap.get('grd_vc1:1'), 'grd_hdr_force',
+        'VC-1/WMV must be checked for HDR before force-encoding');
+      const target = edgeMap.get('grd_hdr_force:2');
+      assert.ok(target, 'grd_hdr_force NO handle must be wired');
       const encoder = pluginMap.get(target);
-      assert.ok(encoder, `grd_vc1 YES target ${target} missing`);
+      assert.ok(encoder, `grd_hdr_force NO target ${target} missing`);
       assert.strictEqual(encoder.pluginName, 'ffmpegCommandSetVideoEncoder');
       assert.strictEqual(encoder.inputsDB.hardwareDecoding, 'false',
         'VC-1/WMV sources must be decoded in software');
@@ -1251,6 +1261,105 @@ for (const file of flowFiles) {
         assert.strictEqual(pluginMap.get(id).inputsDB.hardwareDecoding, 'false',
           `${id} must decode in software so it can recover NVDEC failures`);
       }
+    });
+
+    test('HDR sources never reach an NVENC encoder', () => {
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+
+      // NVENC on Turing cannot re-encode HDR. It strips the VUI colour tags and
+      // emits YUV values that match no standard colour space, so the result
+      // cannot be repaired by a lossless metadata retag — the source has to be
+      // re-acquired. Both force-encode entry points must divert HDR to libx265.
+      for (const id of ['grd_hdr_force', 'grd_hdr_retry']) {
+        const guard = pluginMap.get(id);
+        assert.ok(guard, `Missing node ${id}`);
+        assert.strictEqual(guard.pluginName, 'checkStreamPropertyMultiValue');
+        assert.strictEqual(guard.inputsDB.streamType, 'video');
+        assert.strictEqual(guard.inputsDB.propertyToCheck, 'color_transfer');
+        assert.strictEqual(guard.inputsDB.condition, 'equals',
+          `${id} must match whole transfer values, not substrings`);
+        const values = guard.inputsDB.valuesToMatch.split(',').map((v) => v.trim());
+        for (const transfer of ['smpte2084', 'arib-std-b67']) {
+          assert.ok(values.includes(transfer),
+            `${id} should match ${transfer} (HDR10 PQ / HLG)`);
+        }
+      }
+
+      // Every edge into a force-encode chain passes through a guard first.
+      for (const src of ['grd_vc1:1', 'grd_mkv_hevc:2']) {
+        assert.strictEqual(edgeMap.get(src), 'grd_hdr_force',
+          `${src} must route through grd_hdr_force before force-encoding`);
+      }
+      assert.strictEqual(edgeMap.get('grd_hdr_force:2'), 'cmd_hevc_force',
+        'Non-HDR sources keep using the NVENC force encoder');
+      assert.strictEqual(edgeMap.get('rst_error:1'), 'grd_hdr_retry',
+        'Retry pipeline must check for HDR after resetting to the original file');
+      assert.strictEqual(edgeMap.get('grd_hdr_retry:2'), 'ffs_retry',
+        'Non-HDR retries keep using the NVENC retry chain');
+
+      // Walk forward from each guard's HDR handle. Every encoder reachable
+      // before the command executes must be software-only.
+      const outEdges = {};
+      for (const edge of flow.flowEdges) {
+        (outEdges[edge.source] ||= []).push(edge.target);
+      }
+      for (const id of ['grd_hdr_force', 'grd_hdr_retry']) {
+        const seen = new Set();
+        const stack = [edgeMap.get(`${id}:1`)];
+        let sawSoftwareEncoder = false;
+        while (stack.length) {
+          const nodeId = stack.pop();
+          if (!nodeId || seen.has(nodeId)) continue;
+          seen.add(nodeId);
+          const node = pluginMap.get(nodeId);
+          if (!node) continue;
+          if (node.pluginName === 'ffmpegCommandSetVideoEncoder') {
+            assert.strictEqual(node.inputsDB.hardwareEncoding, 'false',
+              `${id} HDR branch reaches hardware encoder ${nodeId}`);
+            assert.strictEqual(node.inputsDB.hardwareDecoding, 'false',
+              `${id} HDR branch reaches hardware decoder ${nodeId}`);
+            sawSoftwareEncoder = true;
+          }
+          // The command is fully built at execute; anything past it is a new pass.
+          if (node.pluginName === 'ffmpegCommandExecute') continue;
+          for (const target of outEdges[nodeId] || []) stack.push(target);
+        }
+        assert.ok(sawSoftwareEncoder,
+          `${id} HDR branch must reach a software encoder`);
+      }
+    });
+
+    test('HDR retry pipeline mirrors the NVENC retry chain in software', () => {
+      const pluginMap = new Map(flow.flowPlugins.map((p) => [p.id, p]));
+      const edgeMap = new Map(flow.flowEdges.map((e) => [`${e.source}:${e.sourceHandle}`, e.target]));
+
+      const encoder = pluginMap.get('cmd_retry_sw_hevc');
+      assert.ok(encoder, 'Missing node cmd_retry_sw_hevc');
+      assert.strictEqual(encoder.inputsDB.outputCodec, 'hevc');
+      assert.strictEqual(encoder.inputsDB.hardwareEncoding, 'false',
+        'HDR retry must encode in software so libx265 carries the colour tags through');
+      assert.strictEqual(encoder.inputsDB.forceEncoding, 'true',
+        'A stream copy would preserve the broken timestamps the retry exists to fix');
+
+      // Same corruption guards as every other pipeline.
+      const loglevel = pluginMap.get('cmd_retry_sw_loglevel');
+      assert.ok(loglevel, 'Missing node cmd_retry_sw_loglevel');
+      assert.ok(loglevel.inputsDB.outputArguments.includes('-avoid_negative_ts make_zero'),
+        'cmd_retry_sw_loglevel must normalize timestamps');
+
+      const tags = pluginMap.get('cmd_retry_sw_tags');
+      assert.ok(tags, 'Missing node cmd_retry_sw_tags');
+      assert.ok(tags.inputsDB.outputArguments.includes('-tag:v hvc1'),
+        'cmd_retry_sw_tags must include -tag:v hvc1');
+      assert.ok(tags.inputsDB.outputArguments.includes('-profile:v main10'),
+        'cmd_retry_sw_tags must include -profile:v main10 for 10-bit HEVC output');
+
+      // Both retry chains converge on the one health check.
+      assert.strictEqual(edgeMap.get('ffe_retry_sw:1'), 'chk_health_retry',
+        'Software retry must be verified by the same health check as the NVENC retry');
+      assert.strictEqual(edgeMap.get('ffe_retry:1'), 'chk_health_retry',
+        'NVENC retry must still be verified by the shared health check');
     });
 
     test('undersized output fails the flow instead of replacing the original', () => {

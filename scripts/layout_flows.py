@@ -973,7 +973,8 @@ def col_map_01() -> dict[str, int]:
         "cmt_data": M, "cmd_rmdata": M, "cmd_rmimages": M, "cmd_rmattach": M,
         # ── NVENC / resolution / encoders ─────────────────────────────
         "cmt_nvenc": M, "grd_vc1": M,
-        "cmt_nvenc": M, "grd_is_mkv": M, "grd_mkv_hevc": M, "cmd_hevc_force": R,
+        "cmt_nvenc": M, "grd_is_mkv": M, "grd_mkv_hevc": M,
+        "grd_hdr_force": M, "cmd_hevc_force": R,
         "grd_av1": M, "chk_nvenc": M,
         "cmt_resolution": M, "chk_resolution": M,
         "cmd_hevc_sd": sd, "cmd_hevc_1080": M, "cmd_hevc_4k": hi,
@@ -996,6 +997,12 @@ def col_map_01() -> dict[str, int]:
         "cmd_retry_loglevel": M, "cmd_retry_mp4": M, "cmd_retry_rmsub": M,
         "cmd_retry_rmdata": M, "cmd_retry_hevc": M, "grd_retry_ch": M,
         "cmd_retry_eac3": R, "cmd_retry_tags": M, "ffe_retry": M,
+        # HDR retry: software twin of the chain above, in its own column
+        "grd_hdr_retry": M, "ffs_retry_sw": sw,
+        "cmd_retry_sw_loglevel": sw, "cmd_retry_sw_mp4": sw,
+        "cmd_retry_sw_rmsub": sw, "cmd_retry_sw_rmdata": sw,
+        "cmd_retry_sw_hevc": sw, "grd_retry_sw_ch": sw,
+        "cmd_retry_sw_eac3": hi, "cmd_retry_sw_tags": sw, "ffe_retry_sw": sw,
         "chk_health_retry": M, "ffs_002": M,
         # ── Pass 2→3 boundary: execute AAC, rescan ───────────────────
         "ffe_aac": M, "ffs_003": M,
