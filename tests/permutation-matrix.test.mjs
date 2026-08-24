@@ -180,12 +180,17 @@ function walkFlow(mockFile) {
 
 // ── Mock file factories ───────────────────────────────────────────
 function vid(codec, opts = {}) {
-  return {
+  const stream = {
     codec_type: 'video',
     codec_name: codec,
     codec_tag_string: opts.tag || (codec === 'hevc' ? 'hvc1' : ''),
     height: opts.height || 1080,
   };
+  // HDR sources carry a PQ (smpte2084) or HLG (arib-std-b67) transfer function.
+  // SDR sources are left without the property, matching how ffprobe reports
+  // untagged files.
+  if (opts.colorTransfer) stream.color_transfer = opts.colorTransfer;
+  return stream;
 }
 
 function aud(codec, channels, lang = 'eng') {
@@ -677,6 +682,64 @@ describe('Permutation Matrix — Flow Routing', () => {
       ]));
       assertSkip(path);
       has(path, 'grd_dovi', 'DoVi guard should be reached');
+    });
+
+    // NVENC on Turing cannot re-encode HDR. It strips the VUI colour tags and
+    // emits YUV values that match no standard colour space, so the damage
+    // survives any metadata retag. Both force-encode entry points must divert
+    // HDR to the libx265 software encoder instead.
+    test('8c: mkv/h264 HDR10 (PQ)/ac3 5.1 — software encode, never NVENC force', () => {
+      const path = walkFlow(file('mkv', [
+        vid('h264', { colorTransfer: 'smpte2084' }),
+        aud('ac3', 6),
+      ]));
+      has(path, 'grd_hdr_force', 'HDR guard should gate the force encoder');
+      has(path, 'cmd_hevc_sw', 'HDR must route to the libx265 software encoder');
+      lacks(path, 'cmd_hevc_force', 'HDR must never reach the NVENC force encoder');
+    });
+
+    test('8d: mkv/h264 HLG/ac3 5.1 — software encode, never NVENC force', () => {
+      const path = walkFlow(file('mkv', [
+        vid('h264', { colorTransfer: 'arib-std-b67' }),
+        aud('ac3', 6),
+      ]));
+      has(path, 'cmd_hevc_sw', 'HLG must route to the libx265 software encoder');
+      lacks(path, 'cmd_hevc_force', 'HLG must never reach the NVENC force encoder');
+    });
+
+    test('8e: wmv/vc1 HDR/ac3 5.1 — software encode (guard covers the VC-1 entry too)', () => {
+      const path = walkFlow(file('wmv', [
+        vid('vc1', { tag: '', colorTransfer: 'smpte2084' }),
+        aud('ac3', 6),
+      ]));
+      has(path, 'grd_vc1', 'VC-1 guard should be reached');
+      has(path, 'cmd_hevc_sw', 'HDR VC-1 must route to the libx265 software encoder');
+      lacks(path, 'cmd_hevc_force', 'HDR VC-1 must never reach the NVENC force encoder');
+    });
+
+    test('8f: mkv/h264 SDR/ac3 5.1 — still uses the NVENC force encoder', () => {
+      const path = walkFlow(file('mkv', [vid('h264'), aud('ac3', 6)]));
+      assertForceEncode(path);
+      lacks(path, 'cmd_hevc_sw', 'SDR must not be pushed onto the slow software encoder');
+    });
+
+    test('8g: mkv/hevc HDR10/ac3 5.1 — stream-copies, force encoder never involved', () => {
+      const path = walkFlow(file('mkv', [
+        vid('hevc', { colorTransfer: 'smpte2084' }),
+        aud('ac3', 6),
+      ]));
+      assertMkvStreamCopy(path);
+      lacks(path, 'cmd_hevc_sw', 'HDR HEVC should stream-copy, not re-encode');
+    });
+
+    test('8h: mp4/hevc(hev1) HDR10/aac 2.0 — normal retag path unchanged', () => {
+      const path = walkFlow(file('mp4', [
+        vid('hevc', { tag: 'hev1', colorTransfer: 'smpte2084' }),
+        aud('aac', 2),
+      ]));
+      assertProcess(path);
+      lacks(path, 'cmd_hevc_force', 'HDR retag must not force-encode');
+      lacks(path, 'cmd_hevc_sw', 'HDR retag must not re-encode in software either');
     });
   });
 
