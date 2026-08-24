@@ -973,7 +973,7 @@ def col_map_01() -> dict[str, int]:
         "cmt_data": M, "cmd_rmdata": M, "cmd_rmimages": M, "cmd_rmattach": M,
         # ── NVENC / resolution / encoders ─────────────────────────────
         "cmt_nvenc": M, "grd_vc1": M,
-        "cmt_nvenc": M, "grd_is_mkv": M, "grd_mkv_hevc": M,
+        "grd_is_mkv": M, "grd_mkv_hevc": M,
         "grd_hdr_force": M, "cmd_hevc_force": R,
         "grd_av1": M, "chk_nvenc": M,
         "cmt_resolution": M, "chk_resolution": M,
